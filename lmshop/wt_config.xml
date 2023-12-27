@@ -1,0 +1,72 @@
+<server>
+    <application-settings location="*">
+	<session-management>
+	    <shared-process>
+	        <num-processes>1</num-processes>
+	    </shared-process>
+	    <tracking>URL</tracking>
+            <reload-is-new-session>true</reload-is-new-session>
+	    <timeout>600</timeout>
+            <idle-timeout>600</idle-timeout>
+	    <server-push-timeout>50</server-push-timeout>
+	</session-management>
+	<connector-fcgi>
+	    <valgrind-path></valgrind-path>
+	    <run-directory>/var/run/wt</run-directory>
+	</connector-fcgi>
+	<connector-isapi>
+	    <max-memory-request-size>128</max-memory-request-size>
+	</connector-isapi>
+	<debug>false</debug>
+        <log-file>/var/log/dxfcv.log</log-file>
+        <log-config>* -debug -info</log-config>
+        <max-request-size>65536</max-request-size>
+	<max-formdata-size>5120</max-formdata-size>
+        <max-pending-events>1000</max-pending-events>
+        <num-threads>10</num-threads>
+	<session-id-length>16</session-id-length>
+	<plain-ajax-sessions-ratio-limit>1</plain-ajax-sessions-ratio-limit>
+	<ajax-puzzle>false</ajax-puzzle>
+	<strict-event-serialization>false</strict-event-serialization>
+	<web-sockets>false</web-sockets>
+	<webgl-detection>true</webgl-detection>
+	<redirect-message>Load basic HTML</redirect-message>
+        <trusted-proxy-config>
+          <original-ip-header>X-Forwarded-For</original-ip-header>
+          <trusted-proxies>
+          </trusted-proxies>
+        </trusted-proxy-config>
+	<inline-css>true</inline-css>
+	<indicator-timeout>500</indicator-timeout>
+	<double-click-timeout>200</double-click-timeout>
+	<user-agents type="ajax" mode="black-list">
+	</user-agents>
+	<user-agents type="bot">
+            <user-agent>.*Googlebot.*</user-agent>
+            <user-agent>.*msnbot.*</user-agent>
+            <user-agent>.*Slurp.*</user-agent>
+            <user-agent>.*Crawler.*</user-agent>
+            <user-agent>.*Bot.*</user-agent>
+            <user-agent>.*ia_archiver.*</user-agent>
+            <user-agent>.*Twiceler.*</user-agent>
+            <user-agent>.*Yandex.*</user-agent>
+            <user-agent>.*Nutch.*</user-agent>
+            <user-agent>.*MJ12bot.*</user-agent>
+            <user-agent>.*Baiduspider.*</user-agent>
+            <user-agent>.*Ezooms.*</user-agent>
+            <user-agent>.*Sogou web spider.*</user-agent>
+            <user-agent>.*AhrefsBot.*</user-agent>
+	</user-agents>
+	<UA-Compatible></UA-Compatible>
+	<progressive-bootstrap>false</progressive-bootstrap>
+	<session-id-cookie>false</session-id-cookie>
+	<cookie-checks>true</cookie-checks>
+	<head-matter user-agent=".*MSIE.*">
+	  <meta name="robots" content="noindex" />
+	</head-matter>
+        <allowed-origins>*</allowed-origins>
+	<properties>
+            <property name="name">string value</property>
+        </properties>
+    </application-settings>
+</server>
