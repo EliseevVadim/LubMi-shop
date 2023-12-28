@@ -13,6 +13,7 @@ bool Db::_initiated = []()->bool{
     Db::session().mapClass<AvailableSize>("tab_available_size");
     Db::session().mapClass<Attribute>("tab_attribute");
     Db::session().mapClass<Image>("tab_image");
+    Db::session().mapClass<Order>("tab_order");
 
     try {
         Db::session().createTables();

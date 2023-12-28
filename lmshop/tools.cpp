@@ -8,8 +8,16 @@
 #include <array>
 #include <algorithm>
 #include <map>
-#include <list>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
 #include <Wt/WApplication.h>
+
+std::string Tools::gen_uuid() noexcept {
+    using namespace boost;
+    static auto gen { uuids::random_generator() };
+    return uuids::to_string(gen());
+}
 
 std::string Tools::read_stream(std::istream &ifs) {
     using namespace std;

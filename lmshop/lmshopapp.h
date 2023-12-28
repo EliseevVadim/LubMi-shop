@@ -18,6 +18,7 @@ class LmShopApp : public EmbeddableApp {
   private:
     std::list<Wt::Signals::connection> connections_;
     static Wt::Signal<const LmShopApp *, const std::string &> broadcast_message_;
+    Wt::JSignal<std::string> jsig {this, "test"};
 };
 
 #endif // LMSHOPAPP_H

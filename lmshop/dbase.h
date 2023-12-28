@@ -19,6 +19,7 @@ class Product;
 class AvailableSize;
 class Attribute;
 class Image;
+class Order;
 
 #define CATEGORY "category"
 #define CATEGORIES_PRODUCTS "categories_products"
@@ -29,6 +30,10 @@ enum class ImageFormat : int {
     JPEG,   // jpeg
     PNG,    // png
     GIF     // gif
+};
+
+enum class CategoryKind : int {
+    ProductTaxonomy // классификация товаров в магазине
 };
 
 class DbItem {
@@ -45,13 +50,15 @@ class DbItem {
 
 class Category: virtual public DbItem {
   public:
-    std::string title;                          // название
-    std::optional<std::string> description;     // описание
-    dbo_ptr<Category> category;                 // объемлющая категория
-    dbo_ptr_collection<Category> categories;    // вложенные категории
-    dbo_ptr_collection<Product> products;       // товары
+    CategoryKind kind = CategoryKind::ProductTaxonomy;  // назначение категории
+    std::string title;                                  // название
+    std::optional<std::string> description;             // описание
+    dbo_ptr<Category> category;                         // объемлющая категория
+    dbo_ptr_collection<Category> categories;            // вложенные категории
+    dbo_ptr_collection<Product> products;               // товары
 
     template<class Action> void persist(Action &a) {
+        dbo::field(a, kind, "kind");
         dbo::field(a, title, "title");
         dbo::field(a, description, "description");
         dbo::belongsTo(a, category, CATEGORY);
@@ -61,24 +68,47 @@ class Category: virtual public DbItem {
     }
 };
 
+namespace Wt {
+namespace Dbo {
+
+/*
+ * Переопределяем параметры идентификатора для Product:
+ * используем поле article как идентификатор
+*/
+
+template<>
+struct dbo_traits<Product>: public dbo_default_traits {
+    using IdType = std::string;
+    static constexpr IdType invalidId() noexcept {
+        return {};
+    }
+    static constexpr const char *surrogateIdField() noexcept {
+        return nullptr;
+    }
+};
+
+}
+}
+
 class Product: virtual public DbItem {
   public:
+    std::string article;                                        // внутренний артикул, он же идентификатор
     std::string title;                                          // название
     std::optional<std::string> description;                     // описание
-    std::string article;                                        // внутренний артикул
     std::optional<std::string> color;                           // цвет
     int actual_price;                                           // цена в копейках
     std::optional<int> old_price;                               // старая цена в копейках
     int sales_quantity;                                         // количество продаж
-    std::optional<timestamp> published_at = created_at;     // время публикации (опубликован, если published_at > now())
+    std::optional<timestamp> published_at = created_at;         // время публикации (опубликован, если published_at > now())
     dbo_ptr_collection<Category> categories;                    // категории
-    dbo_ptr_collection<AvailableSize> sizes;
-    dbo_ptr_collection<Image> images;
+    dbo_ptr_collection<AvailableSize> sizes;                    // размеры в наличии
+    dbo_ptr_collection<Image> images;                           // изображения
+    dbo_ptr_collection<Order> orders;                           // заказы
 
     template<class Action> void persist(Action &a) {
+        dbo::id(a, article, "article");
         dbo::field(a, title, "title");
         dbo::field(a, description, "description");
-        dbo::field(a, article, "article");
         dbo::field(a, color, "color");
         dbo::field(a, actual_price, "actual_price");
         dbo::field(a, old_price, "old_price");
@@ -87,6 +117,7 @@ class Product: virtual public DbItem {
         dbo::hasMany(a, categories, dbo::ManyToMany, CATEGORIES_PRODUCTS);
         dbo::hasMany(a, sizes, dbo::ManyToOne, PRODUCT);
         dbo::hasMany(a, images, dbo::ManyToOne, PRODUCT);
+        dbo::hasMany(a, orders, dbo::ManyToOne, PRODUCT);
         DbItem::persist(a);
     }
 };
@@ -132,6 +163,22 @@ class Image: virtual public DbItem {
         dbo::field(a, format, "format");
         dbo::field(a, data, "data");
         dbo::field(a, thumbnail, "thumbnail");
+        dbo::belongsTo(a, product, PRODUCT);
+        DbItem::persist(a);
+    }
+};
+
+class Order: virtual public DbItem {
+  public:
+    std::string scart_uuid;     // ид.корзины
+    std::string size;           // размер
+    int quantity;               // количество
+    dbo_ptr<Product> product;   // заказанный товар
+
+    template<class Action> void persist(Action &a) {
+        dbo::field(a, scart_uuid, "scart_uuid");
+        dbo::field(a, size, "size");
+        dbo::field(a, quantity, "quantity");
         dbo::belongsTo(a, product, PRODUCT);
         DbItem::persist(a);
     }

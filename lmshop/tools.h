@@ -6,35 +6,11 @@
 #include <format>
 #include <string>
 #include <istream>
-#include <chrono>
-#include <cmath>
-#include <numbers>
 #include <functional>
 #include <optional>
+#include <sys/resource.h>
 #include <Wt/WEnvironment.h>
 #include <Wt/WString.h>
-#include <sys/resource.h>
-
-class generator {
-  public:
-    generator(double x0, double h):
-        a0{cos(x0 - h - h)},
-        a1 {cos(x0 - h)},
-        ch{2.0 * cos(h)} {
-    }
-
-    double operator()() const {
-        auto a2 = a1 * ch - a0;
-        a0 = a1;
-        a1 = a2;
-        return a2;
-    }
-  private:
-    mutable double a0;
-    mutable double a1;
-    const double ch;
-
-};
 
 struct finalizer {
     explicit finalizer(std::function<void()> fin):
@@ -50,6 +26,7 @@ class Tools final {
     Tools() = delete;
 
   public:
+    static std::string gen_uuid() noexcept ;
     static std::string read_stream(std::istream &ifs);
     static std::string read_stream(const std::string &file);
     static std::function<std::string(const std::string &)> create_transcoder(const std::string &code_page);
