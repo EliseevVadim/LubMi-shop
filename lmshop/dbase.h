@@ -21,10 +21,10 @@ class Attribute;
 class Image;
 class Order;
 
+#define SQLITE_DBASE "lmshop.db"
 #define CATEGORY "category"
 #define CATEGORIES_PRODUCTS "categories_products"
 #define PRODUCT "product"
-#define SQLITE_DBASE "lmshop.db"
 
 enum class ImageFormat : int {
     JPEG,   // jpeg

@@ -2,9 +2,7 @@
 #define LMSHOPAPP_H
 
 #include "embeddableapp.h"
-#include "dbase.h"
-#include <pthread.h>
-#include <shared_mutex>
+#include "persistinfo.h"
 
 class LmShopApp : public EmbeddableApp {
   public:
@@ -16,9 +14,10 @@ class LmShopApp : public EmbeddableApp {
     std::string title() const override;
 
   private:
+
     std::list<Wt::Signals::connection> connections_;
-    static Wt::Signal<const LmShopApp *, const std::string &> broadcast_message_;
-    Wt::JSignal<std::string> jsig {this, "test"};
+    static Wt::Signal<const LmShopApp *, const std::string &> broadcast_message_; //TODO map of string -> signal
+    PersistInfo persist_info;
 };
 
 #endif // LMSHOPAPP_H

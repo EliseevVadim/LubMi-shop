@@ -1,5 +1,4 @@
 #include "lmshopapp.h"
-#include "tools.h"
 #include <Wt/WContainerWidget.h>
 #include <Wt/WBorderLayout.h>
 #include <Wt/WPushButton.h>
@@ -21,14 +20,9 @@ void LmShopApp::populateInterior() {
     using namespace std;
     EmbeddableApp::populateInterior();
     auto cw = interior()->addWidget(make_unique<WContainerWidget>(), LayoutPosition::Center);
-    auto button = cw->addNew<WPushButton>("XXX");
+    auto button = cw->addNew<WPushButton>("Yes");
     button->clicked().connect([this]() {
-        doJavaScript("alert(localStorage.boo ? localStorage.boo : 'not set');");
-        doJavaScript("localStorage.boo = 777;");
-        doJavaScript("Wt.emit(Wt, 'test', localStorage.boo);");
-    });
-    jsig.connect([](std::string x) {
-        std::cout << "It Works: " << x << " " << Tools::gen_uuid() << std::endl;
+        doJavaScript("alert('Yes!');");
     });
 }
 
