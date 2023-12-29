@@ -14,8 +14,8 @@ PersistInfo::PersistInfo() {
     sig_info_exists.connect([this](const string & str) {
         try {
             Json::parse(str, json);
-        } catch (WException) {
-            create_default();
+        } catch (const WException &) {
+            createDefault();
             return;
         }
 
@@ -23,7 +23,7 @@ PersistInfo::PersistInfo() {
 
         for (auto &key : keys) {
             if (!json.contains(key)) {
-                create_default();
+                createDefault();
                 break;
             }
         }
@@ -31,17 +31,17 @@ PersistInfo::PersistInfo() {
     });
 
     sig_info_missed.connect([this] {
-        create_default();
+        createDefault();
     });
 
-    auto js = format(R"(if(localStorage.lubmi_shop_persist_info) {{{}}} else {{{}}})",
+    auto js = format(R"(alert(localStorage.lubmi_shop_persist_info); if(localStorage.lubmi_shop_persist_info) {{{}}} else {{{}}})",
                      sig_info_exists.createCall({"localStorage.lubmi_shop_persist_info"}),
                      sig_info_missed.createCall({}));
     WApplication::instance()->doJavaScript(js);
 }
 
 std::string PersistInfo::uuid() const noexcept {
-    return {};
+    return "uuid";
 }
 
 PersistInfo &PersistInfo::update(const std::optional<std::string> &full_name,
@@ -95,9 +95,10 @@ PersistInfo &PersistInfo::update(const std::optional<std::string> &full_name,
         save();
     }
 
+    return *this;
 }
 
-void PersistInfo::create_default(bool save) {
+void PersistInfo::createDefault(bool save) {
     using namespace std;
     using namespace Wt;
 

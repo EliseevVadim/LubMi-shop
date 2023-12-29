@@ -4,6 +4,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+    business.cpp \
     dbase.cpp \
     embeddableapp.cpp \
     lmshopapp.cpp \
@@ -382,6 +383,7 @@ DISTFILES += \
     wt_config.xml
 
 HEADERS += \
+    business.h \
     config.h \
     dbase.h \
     embeddableapp.h \

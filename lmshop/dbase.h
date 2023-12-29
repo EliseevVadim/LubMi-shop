@@ -98,7 +98,7 @@ class Product: virtual public DbItem {
     std::optional<std::string> color;                           // цвет
     int actual_price;                                           // цена в копейках
     std::optional<int> old_price;                               // старая цена в копейках
-    int sales_quantity;                                         // количество продаж
+    int sales_quantity = 0;                                         // количество продаж
     std::optional<timestamp> published_at = created_at;         // время публикации (опубликован, если published_at > now())
     dbo_ptr_collection<Category> categories;                    // категории
     dbo_ptr_collection<AvailableSize> sizes;                    // размеры в наличии

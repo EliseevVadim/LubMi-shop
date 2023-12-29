@@ -22,7 +22,7 @@ class PersistInfo final {
     Wt::Json::Object json {};
     Wt::JSignal<std::string> sig_info_exists {Wt::WApplication::instance(), "info-exists"};
     Wt::JSignal<> sig_info_missed {Wt::WApplication::instance(), "info-missed"};
-    void create_default(bool save = true);
+    void createDefault(bool save = true);
     void save();
 };
 
