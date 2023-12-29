@@ -41,7 +41,7 @@ PersistInfo::PersistInfo() {
 }
 
 std::string PersistInfo::uuid() const noexcept {
-    return "uuid";
+    return json.get("uuid");
 }
 
 PersistInfo &PersistInfo::update(const std::optional<std::string> &full_name,
