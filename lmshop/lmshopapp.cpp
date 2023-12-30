@@ -22,7 +22,7 @@ void LmShopApp::populateInterior() {
     auto cw = interior()->addWidget(make_unique<WContainerWidget>(), LayoutPosition::Center);
     auto button = cw->addNew<WPushButton>("Yes");
     button->clicked().connect([this]() {
-        doJavaScript(format("alert('{}');", persist_info.uuid()));
+        doJavaScript(format("alert('{}');", _persist_data.uuid()));
     });
 }
 

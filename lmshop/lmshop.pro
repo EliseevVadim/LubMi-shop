@@ -9,7 +9,7 @@ SOURCES += \
     embeddableapp.cpp \
     lmshopapp.cpp \
     main.cpp \
-    persistinfo.cpp \
+    persistdata.cpp \
     tools.cpp
 
 DISTFILES += \
@@ -388,7 +388,7 @@ HEADERS += \
     dbase.h \
     embeddableapp.h \
     lmshopapp.h \
-    persistinfo.h \
+    persistdata.h \
     tools.h \
     wthelpers.h
 

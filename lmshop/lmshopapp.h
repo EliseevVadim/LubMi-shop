@@ -2,7 +2,7 @@
 #define LMSHOPAPP_H
 
 #include "embeddableapp.h"
-#include "persistinfo.h"
+#include "persistdata.h"
 
 class LmShopApp : public EmbeddableApp {
   public:
@@ -17,7 +17,7 @@ class LmShopApp : public EmbeddableApp {
 
     std::list<Wt::Signals::connection> connections_;
     static Wt::Signal<const LmShopApp *, const std::string &> broadcast_message_; //TODO map of string -> signal
-    PersistInfo persist_info;
+    PersistData _persist_data;
 };
 
 #endif // LMSHOPAPP_H
