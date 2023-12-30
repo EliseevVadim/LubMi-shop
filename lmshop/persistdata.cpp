@@ -1,6 +1,7 @@
 #include "persistdata.h"
 #include "tools.h"
 #include <format>
+#include <memory>
 
 #include <Wt/Json/Array.h>
 #include <Wt/Json/Serializer.h>
@@ -19,7 +20,24 @@ PersistData::PersistData() {
     using namespace std;
     using namespace Wt;
 
-    _signal_data_exists.connect([this](const string & str) {
+    shared_ptr<Signals::connection> conn_exists, conn_missed;
+
+    auto disconnect = [conn_exists, conn_missed] () mutable {
+        if (conn_exists && conn_exists->isConnected()) {
+            conn_exists->disconnect();
+        }
+
+        if (conn_missed && conn_missed->isConnected()) {
+            conn_missed->disconnect();
+        }
+
+        conn_exists.reset();
+        conn_missed.reset();
+    };
+
+    conn_exists = make_shared<Signals::connection>(_signal_data_exists.connect([this, disconnect](const string & str) mutable {
+        disconnect();
+
         try {
             Json::parse(str, _json);
         } catch (const Json::ParseError &) {
@@ -38,12 +56,12 @@ PersistData::PersistData() {
                 break;
             }
         }
+    }));
 
-    });
-
-    _signal_data_missed.connect([this] {
+    conn_missed = make_shared<Signals::connection>(_signal_data_missed.connect([this, disconnect]() mutable {
+        disconnect();
         createDefault();
-    });
+    }));
 
     auto jscript = format(R"(if(localStorage.)" PSDATANAME R"() {{{}}} else {{{}}})",
                           _signal_data_exists.createCall({"localStorage." PSDATANAME }),
