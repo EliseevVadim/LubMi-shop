@@ -55,6 +55,32 @@ std::string PersistData::uuid() const noexcept {
     return _json.get(UUID);
 }
 
+std::string PersistData::fullName() const noexcept {
+    return _json.get(FULL_NAME);
+}
+
+std::string PersistData::city() const noexcept {
+    return _json.get(CITY);
+}
+
+std::string PersistData::street() const noexcept {
+    return _json.get(STREET);
+}
+
+std::string PersistData::building() const noexcept {
+    return _json.get(BUILDING);
+}
+
+std::string PersistData::apartment() const noexcept {
+    return _json.get(APARTMENT);
+}
+
+std::unordered_set<std::string> PersistData::favorites() const noexcept {
+    using namespace Wt;
+    Json::Array array = _json.get(FAVORITES);
+    return {array.begin(), array.end()};
+}
+
 PersistData &PersistData::update(const std::optional<std::string> &full_name,
                                  const std::optional<std::string> &city,
                                  const std::optional<std::string> &street,

@@ -12,12 +12,12 @@ class PersistData final {
   public:
     PersistData();
     std::string uuid() const noexcept;
-    std::string fullName() const noexcept; //TODO
+    std::string fullName() const noexcept;
     std::string city() const noexcept;
     std::string street() const noexcept;
     std::string building() const noexcept;
     std::string apartment() const noexcept;
-    std::set<std::string> favorites() const noexcept;
+    std::unordered_set<std::string> favorites() const noexcept;
 
     PersistData &update(const std::optional<std::string> &full_name,
                         const std::optional<std::string> &city = {},
