@@ -18,9 +18,10 @@ LmShopApp::~LmShopApp() {
 void LmShopApp::populateInterior() {
     using namespace Wt;
     using namespace std;
+
     EmbeddableApp::populateInterior();
     auto cw = interior()->addWidget(make_unique<WContainerWidget>(), LayoutPosition::Center);
-    auto button = cw->addNew<WPushButton>("Yes");
+    auto button = cw->addNew<WPushButton>("Uuid");
     button->clicked().connect([this]() {
         doJavaScript(format("alert('{}');", _persist_data.uuid()));
     });

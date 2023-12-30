@@ -1,4 +1,5 @@
 #include "business.h"
+#include <format>
 #include <Wt/WException.h>
 
 namespace {
@@ -11,6 +12,12 @@ inline auto create(std::unique_ptr<T> p) {
     } else {
         throw Wt::WException("");
     }
+}
+
+template<typename T, typename K>
+inline auto find(const std::string &field, const K &key) {
+    dbo::Transaction _(Db::session());
+    return Db::session().find<T>().where(format("{} = ?", field)).bind(key);
 }
 
 template<typename T>
@@ -42,7 +49,7 @@ CategoryPtr Business::createCategory(std::unique_ptr<Category> category) {
 }
 
 CategoryPtr Business::findCategory(int category_id) {
-
+    return find<Category, int>("id", category_id);
 }
 
 CategoryPtr Business::updateCategory(CategoryPtr category, const Category &source) {
@@ -58,7 +65,7 @@ ProductPtr Business::createProduct(std::unique_ptr<Product> product) {
 }
 
 ProductPtr Business::findProduct(const std::string &article) {
-
+    return find<Product, std::string>("article", article);
 }
 
 ProductPtr Business::updateProduct(ProductPtr product, const Product &source) {
@@ -74,7 +81,7 @@ AttributePtr Business::createAttribute(std::unique_ptr<Attribute> attribute) {
 }
 
 AttributePtr Business::findAttribute(int attribute_id) {
-
+    return find<Attribute, int>("id", attribute_id);
 }
 
 AttributePtr Business::updateAttribute(AttributePtr attribute, const Attribute &source) {
@@ -90,7 +97,7 @@ AvailableSizePtr Business::createAvailableSize(std::unique_ptr<AvailableSize> av
 }
 
 AvailableSizePtr Business::findAvailableSize(int available_size_id) {
-
+    return find<AvailableSize, int>("id", available_size_id);
 }
 
 AvailableSizePtr Business::updateAvailableSize(AvailableSizePtr available_size, const AvailableSize &source) {
@@ -106,7 +113,7 @@ ImagePtr Business::createImage(std::unique_ptr<Image> image) {
 }
 
 ImagePtr Business::findImage(int image_id) {
-
+    return find<Image, int>("id", image_id);
 }
 
 ImagePtr Business::updateImage(ImagePtr image, const Image &source) {
@@ -122,7 +129,7 @@ OrderPtr Business::createOrder(std::unique_ptr<Order> order) {
 }
 
 OrderPtr Business::findOrder(int order_id) {
-
+    return find<Order, int>("id", order_id);
 }
 
 OrderPtr Business::updateOrder(OrderPtr order, const Order &source) {
