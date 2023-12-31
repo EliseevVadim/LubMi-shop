@@ -1,4 +1,5 @@
 #include "lmshopapp.h"
+#include "imageprocessor.h"
 #include <Wt/WContainerWidget.h>
 #include <Wt/WBorderLayout.h>
 #include <Wt/WPushButton.h>
@@ -23,6 +24,7 @@ void LmShopApp::populateInterior() {
     auto cw = interior()->addWidget(make_unique<WContainerWidget>(), LayoutPosition::Center);
     auto button = cw->addNew<WPushButton>("Uuid");
     button->clicked().connect([this]() {
+        //
         doJavaScript(format("alert('{}');", _persist_data.uuid()));
     });
 }

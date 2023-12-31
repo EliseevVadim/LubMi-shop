@@ -1,5 +1,5 @@
 TEMPLATE = app
-CONFIG += console c++2a
+CONFIG += console c++2b
 CONFIG -= app_bundle
 CONFIG -= qt
 
@@ -7,6 +7,7 @@ SOURCES += \
     business.cpp \
     dbase.cpp \
     embeddableapp.cpp \
+    imageprocessor.cpp \
     lmshopapp.cpp \
     main.cpp \
     persistdata.cpp \
@@ -387,14 +388,23 @@ HEADERS += \
     config.h \
     dbase.h \
     embeddableapp.h \
+    imageprocessor.h \
     lmshopapp.h \
     persistdata.h \
     tools.h \
     wthelpers.h
 
+INCLUDEPATH += /usr/include/GraphicsMagick/
+
+# DEFINES += MAGICKCORE_HDRI_ENABLE=1
+# DEFINES += MAGICKCORE_QUANTUM_DEPTH=16
+# DEFINES += MAGICKCORE_CHANNEL_MASK_DEPTH=32
+
 QMAKE_CXXFLAGS += -Ofast
 QMAKE_CXXFLAGS += -march=native
 QMAKE_CXXFLAGS += -msse4.2
+
+# QMAKE_CXXFLAGS += -fopenmp
 
 unix:!macx: LIBS += -lpthread
 unix:!macx: LIBS += -lssl
@@ -408,3 +418,7 @@ unix:!macx: LIBS += -lwt
 unix:!macx: LIBS += -lwtdbo
 unix:!macx: LIBS += -lwtdbosqlite3
 unix:!macx: LIBS += -lwthttp
+
+unix:!macx: LIBS += -lGraphicsMagick++
+unix:!macx: LIBS += -lGraphicsMagick
+unix:!macx: LIBS += -lGraphicsMagickWand

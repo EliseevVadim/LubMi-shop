@@ -154,14 +154,14 @@ class Image: virtual public DbItem {
   public:
     bool primary;                                           // основное изображение?
     ImageFormat format;                                     // формат картинки
-    std::vector<unsigned char> data;                        // данные
+    std::vector<unsigned char> image;                       // данные
     std::optional<std::vector<unsigned char>> thumbnail;    // миниатюра
     dbo_ptr<Product> product;                               // товар
 
     template<class Action> void persist(Action &a) {
         dbo::field(a, primary, "primary");
         dbo::field(a, format, "format");
-        dbo::field(a, data, "data");
+        dbo::field(a, image, "image");
         dbo::field(a, thumbnail, "thumbnail");
         dbo::belongsTo(a, product, PRODUCT);
         DbItem::persist(a);

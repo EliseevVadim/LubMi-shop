@@ -1,3 +1,4 @@
+#pragma once
 #ifndef BUSINESS_H
 #define BUSINESS_H
 

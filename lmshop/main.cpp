@@ -5,11 +5,14 @@
 #include <memory>
 #include <Wt/WServer.h>
 #include <Wt/WResource.h>
+#include <Magick++.h>
 
 int main(int argc, char *argv[]) {
     using namespace std;
     using namespace Wt;
     using namespace string_literals;
+
+    Magick::InitializeMagick(nullptr);
 
     try {
         if (auto server = init_server<LmShopApp>(argc, argv); server->start()) {

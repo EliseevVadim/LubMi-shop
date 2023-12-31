@@ -1,3 +1,4 @@
+#pragma once
 #ifndef PERSISTDATA_H
 #define PERSISTDATA_H
 
@@ -17,6 +18,8 @@ class PersistData final {
     std::string street() const noexcept;
     std::string building() const noexcept;
     std::string apartment() const noexcept;
+    std::string phone() const noexcept;
+    std::string email() const noexcept;
     std::unordered_set<std::string> favorites() const noexcept;
 
     PersistData &update(const std::optional<std::string> &full_name,
@@ -24,6 +27,8 @@ class PersistData final {
                         const std::optional<std::string> &street = {},
                         const std::optional<std::string> &building = {},
                         const std::optional<std::string> &apartment = {},
+                        const std::optional<std::string> &phone = {},
+                        const std::optional<std::string> &email = {},
                         const std::optional<std::unordered_set<std::string>> &favorites = {});
     PersistData &updateFullName(const std::string &full_name) {
         return update(full_name);
@@ -40,8 +45,14 @@ class PersistData final {
     PersistData &updateApartment(const std::string &apartment) {
         return update({}, {}, {}, {}, apartment);
     }
+    PersistData &updatePhone(const std::string &phone) {
+        return update({}, {}, {}, {}, {}, phone);
+    }
+    PersistData &updateEmail(const std::string &email) {
+        return update({}, {}, {}, {}, {}, {}, email);
+    }
     PersistData &updateFavorites(const std::unordered_set<std::string> &favorites) {
-        return update({}, {}, {}, {}, {}, favorites);
+        return update({}, {}, {}, {}, {}, {}, {}, favorites);
     }
 
   private:

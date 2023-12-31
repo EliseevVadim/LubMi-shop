@@ -1,3 +1,4 @@
+#pragma once
 #ifndef LMSHOPAPP_H
 #define LMSHOPAPP_H
 

@@ -13,6 +13,8 @@
 #define STREET      "street"
 #define BUILDING    "building"
 #define APARTMENT   "apartment"
+#define PHONE       "phone"
+#define EMAIL       "email"
 #define FAVORITES   "favorites"
 #define PSDATANAME  "lmshop_persist_data"
 
@@ -48,7 +50,7 @@ PersistData::PersistData() {
             return;
         }
 
-        static const auto keys = {UUID, FULL_NAME, CITY, STREET, BUILDING, APARTMENT, FAVORITES};
+        static const auto keys = {UUID, FULL_NAME, CITY, STREET, BUILDING, APARTMENT, PHONE, EMAIL, FAVORITES};
 
         for (auto &key : keys) {
             if (!_json.contains(key)) {
@@ -93,6 +95,14 @@ std::string PersistData::apartment() const noexcept {
     return _json.get(APARTMENT);
 }
 
+std::string PersistData::phone() const noexcept {
+    return _json.get(PHONE);
+}
+
+std::string PersistData::email() const noexcept {
+    return _json.get(EMAIL);
+}
+
 std::unordered_set<std::string> PersistData::favorites() const noexcept {
     using namespace Wt;
     Json::Array array = _json.get(FAVORITES);
@@ -104,6 +114,8 @@ PersistData &PersistData::update(const std::optional<std::string> &full_name,
                                  const std::optional<std::string> &street,
                                  const std::optional<std::string> &building,
                                  const std::optional<std::string> &apartment,
+                                 const std::optional<std::string> &phone,
+                                 const std::optional<std::string> &email,
                                  const std::optional<std::unordered_set<std::string>> &favorites) {
     using namespace std;
     using namespace Wt;
@@ -132,6 +144,16 @@ PersistData &PersistData::update(const std::optional<std::string> &full_name,
 
     if (apartment) {
         _json[APARTMENT] = WString(*apartment);
+        need_save = true;
+    }
+
+    if (phone) {
+        _json[PHONE] = WString(*phone);
+        need_save = true;
+    }
+
+    if (email) {
+        _json[EMAIL] = WString(*email);
         need_save = true;
     }
 
@@ -164,6 +186,8 @@ void PersistData::createDefault(bool save) {
     _json[STREET] = WString{};
     _json[BUILDING] = WString{};
     _json[APARTMENT] = WString{};
+    _json[PHONE] = WString{};
+    _json[EMAIL] = WString{};
     _json[FAVORITES] = Json::Array{};
 
     if (save) {
