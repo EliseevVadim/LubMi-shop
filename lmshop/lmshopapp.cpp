@@ -22,9 +22,13 @@ void LmShopApp::populateInterior() {
 
     EmbeddableApp::populateInterior();
     auto cw = interior()->addWidget(make_unique<WContainerWidget>(), LayoutPosition::Center);
+
     auto button = cw->addNew<WPushButton>("Uuid");
     button->clicked().connect([this]() {
-        //
+        if (auto image = ImageProcessor::createProductImage("/home/cerberus/30916944.png"); image) {
+            auto i = std::move(*image);
+        }
+
         doJavaScript(format("alert('{}');", _persist_data.uuid()));
     });
 }

@@ -18,7 +18,7 @@
 #define FAVORITES   "favorites"
 #define PSDATANAME  "lmshop_persist_data"
 
-PersistData::PersistData() {
+PersistData::PersistData() { //TODO store encrypted on user-side
     using namespace std;
     using namespace Wt;
 

@@ -14,6 +14,7 @@ SOURCES += \
     tools.cpp
 
 DISTFILES += \
+    .clangd \
     CMakeLists.txt \
     Dockerfile \
     embed.html \

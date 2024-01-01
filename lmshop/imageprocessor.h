@@ -3,11 +3,13 @@
 #define IMAGEPROCESSOR_H
 
 #include "dbase.h"
-#include <memory.h>
+#include <memory>
+#include <expected>
 
 class ImageProcessor final {
   public:
-    static std::unique_ptr<Image> createProductImage(const std::string &file);
+    static std::expected<std::unique_ptr<Image>, std::string>
+    createProductImage(const std::string &file);
 };
 
 #endif // IMAGEPROCESSOR_H
