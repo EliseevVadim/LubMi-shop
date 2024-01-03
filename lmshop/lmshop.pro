@@ -404,6 +404,7 @@ INCLUDEPATH += /usr/include/GraphicsMagick/
 QMAKE_CXXFLAGS += -Ofast
 QMAKE_CXXFLAGS += -march=native
 QMAKE_CXXFLAGS += -msse4.2
+QMAKE_CXXFLAGS += -fopenmp
 
 # QMAKE_CXXFLAGS += -fopenmp
 

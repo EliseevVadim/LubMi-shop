@@ -169,13 +169,13 @@ PersistData &PersistData::update(const std::optional<std::string> &full_name,
     }
 
     if (need_save) {
-        save();
+        store();
     }
 
     return *this;
 }
 
-void PersistData::createDefault(bool save) {
+void PersistData::createDefault(bool store) {
     using namespace std;
     using namespace Wt;
 
@@ -190,12 +190,12 @@ void PersistData::createDefault(bool save) {
     _json[EMAIL] = WString{};
     _json[FAVORITES] = Json::Array{};
 
-    if (save) {
-        this->save();
+    if (store) {
+        this->store();
     }
 }
 
-void PersistData::save() {
+void PersistData::store() {
     using namespace std;
     using namespace Wt;
 

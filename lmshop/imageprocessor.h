@@ -8,8 +8,7 @@
 
 class ImageProcessor final {
   public:
-    static std::expected<std::unique_ptr<Image>, std::string>
-    createProductImage(const std::string &file);
+    static auto createProductImage(const std::string &file, bool primary) -> std::expected<std::unique_ptr<Image>, std::string>;
 };
 
 #endif // IMAGEPROCESSOR_H

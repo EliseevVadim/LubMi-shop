@@ -25,11 +25,18 @@ void LmShopApp::populateInterior() {
 
     auto button = cw->addNew<WPushButton>("Uuid");
     button->clicked().connect([this]() {
-        if (auto image = ImageProcessor::createProductImage("/home/cerberus/30916944.png"); image) {
+        doJavaScript(format("alert('{}');", _persist_data.uuid()));
+    });
+
+    button = cw->addNew<WPushButton>("Test image processor");
+    button->clicked().connect([this]() {
+        if (auto image = ImageProcessor::createProductImage("/home/cerberus/30916944.png", true); image) {
             auto i = std::move(*image);
+            doJavaScript("alert('Ok');");
+        } else {
+            doJavaScript(format("alert('{}');", image.error()));
         }
 
-        doJavaScript(format("alert('{}');", _persist_data.uuid()));
     });
 }
 

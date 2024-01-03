@@ -154,8 +154,8 @@ class Image: virtual public DbItem {
   public:
     bool primary;                                           // основное изображение?
     ImageFormat format;                                     // формат картинки
-    std::vector<unsigned char> image;                       // данные
-    std::optional<std::vector<unsigned char>> thumbnail;    // миниатюра
+    std::string image;                                      // данные, base64
+    std::optional<std::string> thumbnail;                   // миниатюра, base64
     dbo_ptr<Product> product;                               // товар
 
     template<class Action> void persist(Action &a) {

@@ -59,8 +59,8 @@ class PersistData final {
     Wt::Json::Object _json {};
     Wt::JSignal<std::string> _signal_data_exists {Wt::WApplication::instance(), "persist-data-exists"};
     Wt::JSignal<> _signal_data_missed {Wt::WApplication::instance(), "persist-data-missed"};
-    void createDefault(bool save = true);
-    void save();
+    void createDefault(bool store = true);
+    void store();
 };
 
 #endif // PERSISTDATA_H
