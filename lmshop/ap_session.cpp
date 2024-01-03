@@ -10,33 +10,6 @@
 #include <Wt/Auth/Dbo/AuthInfo.h>
 #include <Wt/Dbo/backend/Sqlite3.h>
 
-void ApSession::configureAuth() {
-    using namespace Wt;
-
-    auth_service_.setAuthTokensEnabled(true, "logincookie");
-    auth_service_.setEmailVerificationEnabled(false);
-    auth_service_.setEmailVerificationRequired(false);
-
-    auto verifier = std::make_unique<Auth::PasswordVerifier>();
-    verifier->addHashFunction(std::make_unique<Auth::BCryptHashFunction>(7));
-
-    password_service_.setVerifier(std::move(verifier));
-    password_service_.setAttemptThrottlingEnabled(true);
-    password_service_.setStrengthValidator(std::make_unique<Auth::PasswordStrengthValidator>());
-
-    if (Auth::GoogleService::configured()) {
-        oauth_services_.push_back(std::make_unique<Auth::GoogleService>(auth_service_));
-    }
-
-    if (Auth::FacebookService::configured()) {
-        oauth_services_.push_back(std::make_unique<Auth::FacebookService>(auth_service_));
-    }
-
-    for (const auto &oAuthService : oauth_services_) {
-        oAuthService->generateRedirectEndpoint();
-    }
-}
-
 ApSession::ApSession(const std::string &sqlite_db) {
     using namespace Wt;
 
@@ -102,6 +75,33 @@ std::vector<const Wt::Auth::OAuthService *> ApSession::oAuth() {
     }
 
     return result;
+}
+
+void ApSession::configureAuth() {
+    using namespace Wt;
+
+    auth_service_.setAuthTokensEnabled(true, "logincookie");
+    auth_service_.setEmailVerificationEnabled(false);
+    auth_service_.setEmailVerificationRequired(false);
+
+    auto verifier = std::make_unique<Auth::PasswordVerifier>();
+    verifier->addHashFunction(std::make_unique<Auth::BCryptHashFunction>(7));
+
+    password_service_.setVerifier(std::move(verifier));
+    password_service_.setAttemptThrottlingEnabled(true);
+    password_service_.setStrengthValidator(std::make_unique<Auth::PasswordStrengthValidator>());
+
+    if (Auth::GoogleService::configured()) {
+        oauth_services_.push_back(std::make_unique<Auth::GoogleService>(auth_service_));
+    }
+
+    if (Auth::FacebookService::configured()) {
+        oauth_services_.push_back(std::make_unique<Auth::FacebookService>(auth_service_));
+    }
+
+    for (const auto &oAuthService : oauth_services_) {
+        oAuthService->generateRedirectEndpoint();
+    }
 }
 
 Wt::Auth::AuthService ApSession::auth_service_;

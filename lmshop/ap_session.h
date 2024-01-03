@@ -15,7 +15,6 @@ using UserDatabase = Wt::Auth::Dbo::UserDatabase<AuthInfo>;
 class ApSession : public dbo::Session {
   public:
     explicit ApSession(const std::string &sqlite_db);
-    static void configureAuth();
     void createUser(const std::string &login, const std::string &password, const Role &role);
     std::expected<dbo_ptr<ApUser>, std::string> user() const;
     Wt::Auth::AbstractUserDatabase &users();
@@ -26,6 +25,7 @@ class ApSession : public dbo::Session {
     static const Wt::Auth::AuthService &auth();
     static const Wt::Auth::PasswordService &passwordAuth();
     static std::vector<const Wt::Auth::OAuthService *> oAuth();
+    static void configureAuth();
 
   private:
     std::unique_ptr<UserDatabase> users_;
