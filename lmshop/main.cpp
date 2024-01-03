@@ -1,3 +1,4 @@
+#include "ap_application.h"
 #include "lmshopapp.h"
 #include "wthelpers.h"
 
@@ -16,7 +17,7 @@ int main(int argc, char *argv[]) {
 
     try {
         if (auto server = init_server<LmShopApp>(argc, argv); server->start()) {
-            add_embeddables<LmShopApp>(server.get(), "/lmshop");
+            add_embeddables<LmShopApp, ApApplication>(server.get(), "/lmshop", "/apanel");
             auto signal = WServer::waitForShutdown();
             cerr << format("Shutdown (signal = {})\n", signal);
             server->stop();

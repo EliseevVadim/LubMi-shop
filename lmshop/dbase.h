@@ -2,18 +2,12 @@
 #ifndef DBASE_H
 #define DBASE_H
 
-#include <Wt/Dbo/Dbo.h>
+#include "dbodefs.h"
+#include "config.h"
 #include <string>
 #include <optional>
-#include <chrono>
 #include <vector>
 
-namespace dbo = Wt::Dbo;
-using timestamp = std::chrono::system_clock::time_point;
-template<class T> using dbo_ptr = dbo::ptr<T>;
-template<class T> using dbo_ptr_collection = dbo::collection<dbo::ptr<T>>;
-
-class DbItem;
 class Category;
 class Product;
 class AvailableSize;
@@ -21,7 +15,6 @@ class Attribute;
 class Image;
 class Order;
 
-#define SQLITE_DBASE "lmshop.db"
 #define CATEGORY "category"
 #define CATEGORIES_PRODUCTS "categories_products"
 #define PRODUCT "product"
@@ -34,18 +27,6 @@ enum class ImageFormat : int {
 
 enum class CategoryKind : int {
     ProductTaxonomy // классификация товаров в магазине
-};
-
-class DbItem {
-  public:
-    timestamp created_at {std::chrono::system_clock::now()};    // когда создан
-    std::optional<timestamp> updated_at;                        // когда изменен
-
-  protected:
-    template<class Action> void persist(Action &a) {
-        dbo::field(a, created_at, "created_at");
-        dbo::field(a, updated_at, "updated_at");
-    }
 };
 
 class Category: virtual public DbItem {
@@ -68,9 +49,7 @@ class Category: virtual public DbItem {
     }
 };
 
-namespace Wt {
-namespace Dbo {
-
+namespace Wt::Dbo {
 /*
  * Переопределяем параметры идентификатора для Product:
  * используем поле article как идентификатор
@@ -86,8 +65,6 @@ struct dbo_traits<Product>: public dbo_default_traits {
         return nullptr;
     }
 };
-
-}
 }
 
 class Product: virtual public DbItem {
@@ -98,8 +75,8 @@ class Product: virtual public DbItem {
     std::optional<std::string> color;                           // цвет
     int actual_price;                                           // цена в копейках
     std::optional<int> old_price;                               // старая цена в копейках
-    int sales_quantity = 0;                                         // количество продаж
-    std::optional<timestamp> published_at = created_at;         // время публикации (опубликован, если published_at > now())
+    int sales_quantity = 0;                                     // количество продаж
+    std::optional<dbo::timestamp> published_at = created_at;    // время публикации (опубликован, если published_at > now())
     dbo_ptr_collection<Category> categories;                    // категории
     dbo_ptr_collection<AvailableSize> sizes;                    // размеры в наличии
     dbo_ptr_collection<Image> images;                           // изображения
@@ -152,11 +129,11 @@ class Attribute: virtual public DbItem {
 
 class Image: virtual public DbItem {
   public:
-    bool primary;                                           // основное изображение?
-    ImageFormat format;                                     // формат картинки
-    std::string image;                                      // данные, base64
-    std::optional<std::string> thumbnail;                   // миниатюра, base64
-    dbo_ptr<Product> product;                               // товар
+    bool primary;                           // основное изображение?
+    ImageFormat format;                     // формат картинки
+    std::string image;                      // данные, base64
+    std::optional<std::string> thumbnail;   // миниатюра, base64
+    dbo_ptr<Product> product;               // товар
 
     template<class Action> void persist(Action &a) {
         dbo::field(a, primary, "primary");
@@ -188,7 +165,7 @@ class Order: virtual public DbItem {
 #undef CATEGORIES_PRODUCTS
 #undef PRODUCT
 
-class Db final {
+class Db final { //TODO: move to application
   public:
     static dbo::Session &session() {
         return _session;

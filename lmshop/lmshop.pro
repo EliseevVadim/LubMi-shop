@@ -4,6 +4,9 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+    ap_application.cpp \
+    ap_session.cpp \
+    ap_user.cpp \
     business.cpp \
     dbase.cpp \
     embeddableapp.cpp \
@@ -385,9 +388,13 @@ DISTFILES += \
     wt_config.xml
 
 HEADERS += \
+    ap_application.h \
+    ap_session.h \
+    ap_user.h \
     business.h \
     config.h \
     dbase.h \
+    dbodefs.h \
     embeddableapp.h \
     imageprocessor.h \
     lmshopapp.h \

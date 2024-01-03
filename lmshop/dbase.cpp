@@ -7,7 +7,7 @@
 dbo::Session Db::_session {};
 
 bool Db::_initiated = []()->bool{
-    Db::session().setConnection(std::make_unique<dbo::backend::Sqlite3>(SQLITE_DBASE));
+    Db::session().setConnection(std::make_unique<dbo::backend::Sqlite3>(LMSHOP_DBASE));
     Db::session().mapClass<Category>("tab_category");
     Db::session().mapClass<Product>("tab_product");
     Db::session().mapClass<AvailableSize>("tab_available_size");

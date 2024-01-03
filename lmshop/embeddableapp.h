@@ -4,8 +4,7 @@
 
 #include <Wt/WApplication.h>
 
-class EmbeddableApp:
-    public Wt::WApplication {
+class EmbeddableApp: public Wt::WApplication {
 
   public:
 
@@ -33,7 +32,7 @@ class EmbeddableApp:
         return animation_;
     }
 
-    auto embdedded() const {
+    auto embedded() const {
         return embedded_;
     }
 
