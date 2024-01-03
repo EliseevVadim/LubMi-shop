@@ -13,10 +13,10 @@ ApApplication::ApApplication(const Wt::WEnvironment &env, bool embedded)
     root()->addStyleClass("container");
     setTheme(std::make_shared<Wt::WBootstrap2Theme>());
     useStyleSheet("css/style.css");
-
-    auto authWidget = std::make_unique<Wt::Auth::AuthWidget>(Session::auth(), session_.users(), session_.login());
-    authWidget->model()->addPasswordAuth(&Session::passwordAuth());
-    authWidget->model()->addOAuth(Session::oAuth());
+    
+    auto authWidget = std::make_unique<Wt::Auth::AuthWidget>(ApSession::auth(), session_.users(), session_.login());
+    authWidget->model()->addPasswordAuth(&ApSession::passwordAuth());
+    authWidget->model()->addOAuth(ApSession::oAuth());
     authWidget->setRegistrationEnabled(true);
     authWidget->processEnvironment();
     root()->addWidget(std::move(authWidget));

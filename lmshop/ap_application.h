@@ -11,7 +11,7 @@ class ApApplication : public EmbeddableApp {
     void authEvent();
 
   private:
-    Session session_;
+    ApSession session_;
 
   protected:
     std::string title() const {

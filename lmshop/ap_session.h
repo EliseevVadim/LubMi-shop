@@ -11,9 +11,9 @@
 namespace dbo = Wt::Dbo;
 using UserDatabase = Wt::Auth::Dbo::UserDatabase<AuthInfo>;
 
-class Session : public dbo::Session {
+class ApSession : public dbo::Session {
   public:
-    explicit Session(const std::string &sqlite_db);
+    explicit ApSession(const std::string &sqlite_db);
     static void configureAuth();
     dbo::ptr<User> user() const;
     Wt::Auth::AbstractUserDatabase &users();
@@ -28,9 +28,9 @@ class Session : public dbo::Session {
   private:
     std::unique_ptr<UserDatabase> users_;
     Wt::Auth::Login login_;
-    static Wt::Auth::AuthService myAuthService;
-    static Wt::Auth::PasswordService myPasswordService;
-    static std::vector<std::unique_ptr<Wt::Auth::OAuthService>> myOAuthServices;
+    static Wt::Auth::AuthService auth_service_;
+    static Wt::Auth::PasswordService password_service_;
+    static std::vector<std::unique_ptr<Wt::Auth::OAuthService>> oauth_services_;
 };
 
 #endif // SESSION_H_

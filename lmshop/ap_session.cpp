@@ -9,34 +9,34 @@
 #include <Wt/Auth/Dbo/AuthInfo.h>
 #include <Wt/Dbo/backend/Sqlite3.h>
 
-void Session::configureAuth() {
+void ApSession::configureAuth() {
     using namespace Wt;
-
-    myAuthService.setAuthTokensEnabled(true, "logincookie");
-    myAuthService.setEmailVerificationEnabled(false);
-    myAuthService.setEmailVerificationRequired(false);
+    
+    auth_service_.setAuthTokensEnabled(true, "logincookie");
+    auth_service_.setEmailVerificationEnabled(false);
+    auth_service_.setEmailVerificationRequired(false);
 
     auto verifier = std::make_unique<Auth::PasswordVerifier>();
     verifier->addHashFunction(std::make_unique<Auth::BCryptHashFunction>(7));
-
-    myPasswordService.setVerifier(std::move(verifier));
-    myPasswordService.setAttemptThrottlingEnabled(true);
-    myPasswordService.setStrengthValidator(std::make_unique<Auth::PasswordStrengthValidator>());
+    
+    password_service_.setVerifier(std::move(verifier));
+    password_service_.setAttemptThrottlingEnabled(true);
+    password_service_.setStrengthValidator(std::make_unique<Auth::PasswordStrengthValidator>());
 
     if (Auth::GoogleService::configured()) {
-        myOAuthServices.push_back(std::make_unique<Auth::GoogleService>(myAuthService));
+        oauth_services_.push_back(std::make_unique<Auth::GoogleService>(auth_service_));
     }
 
     if (Auth::FacebookService::configured()) {
-        myOAuthServices.push_back(std::make_unique<Auth::FacebookService>(myAuthService));
+        oauth_services_.push_back(std::make_unique<Auth::FacebookService>(auth_service_));
     }
-
-    for (const auto &oAuthService : myOAuthServices) {
+    
+    for (const auto &oAuthService : oauth_services_) {
         oAuthService->generateRedirectEndpoint();
     }
 }
 
-Session::Session(const std::string &sqlite_db) {
+ApSession::ApSession(const std::string &sqlite_db) {
     using namespace Wt;
 
     auto connection = std::make_unique<Dbo::backend::Sqlite3>(sqlite_db);
@@ -58,11 +58,11 @@ Session::Session(const std::string &sqlite_db) {
     users_ = std::make_unique<UserDatabase>(*this);
 }
 
-Wt::Auth::AbstractUserDatabase &Session::users() {
+Wt::Auth::AbstractUserDatabase &ApSession::users() {
     return *users_;
 }
 
-dbo::ptr<User> Session::user() const {
+dbo::ptr<User> ApSession::user() const {
     if (login_.loggedIn()) {
         dbo::ptr<AuthInfo> authInfo = users_->find(login_.user());
         return authInfo->user();
@@ -71,27 +71,27 @@ dbo::ptr<User> Session::user() const {
     }
 }
 
-const Wt::Auth::AuthService &Session::auth() {
-    return myAuthService;
+const Wt::Auth::AuthService &ApSession::auth() {
+    return auth_service_;
 }
 
-const Wt::Auth::PasswordService &Session::passwordAuth() {
-    return myPasswordService;
+const Wt::Auth::PasswordService &ApSession::passwordAuth() {
+    return password_service_;
 }
 
-std::vector<const Wt::Auth::OAuthService *> Session::oAuth() {
+std::vector<const Wt::Auth::OAuthService *> ApSession::oAuth() {
     using namespace Wt;
 
     std::vector<const Auth::OAuthService *> result;
-    result.reserve(myOAuthServices.size());
-
-    for (const auto &auth : myOAuthServices) {
+    result.reserve(oauth_services_.size());
+    
+    for (const auto &auth : oauth_services_) {
         result.push_back(auth.get());
     }
 
     return result;
 }
 
-Wt::Auth::AuthService Session::myAuthService;
-Wt::Auth::PasswordService Session::myPasswordService(Session::myAuthService);
-std::vector<std::unique_ptr<Wt::Auth::OAuthService>> Session::myOAuthServices;
+Wt::Auth::AuthService ApSession::auth_service_;
+Wt::Auth::PasswordService ApSession::password_service_(ApSession::auth_service_);
+std::vector<std::unique_ptr<Wt::Auth::OAuthService>> ApSession::oauth_services_;
