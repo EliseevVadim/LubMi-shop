@@ -23,6 +23,8 @@
 #define THUMBNAIL_FILTER                LanczosFilter
 #define LMSHOP_DBASE                    "lmshop.db"
 #define APANEL_DBASE                    "apanel.db"
+#define ADMIN_LOGIN                     "admin"
+#define ADMIN_PASSW                     "admin"
 
 #define CLR_BKG_HDR                     "#046a02"
 #define CLR_HTEXT                       "#ffffff"

@@ -7,17 +7,22 @@
 #include <Wt/Dbo/Types.h>
 #include <Wt/WGlobal.h>
 
-class User;
-using AuthInfo = Wt::Auth::Dbo::AuthInfo<User>;
+class ApUser;
+using AuthInfo = Wt::Auth::Dbo::AuthInfo<ApUser>;
 
 using Role = std::bitset<8>;
 const Role manager      {0b00000001};
 const Role publisher    {0b00000010};
 const Role admin        {manager | publisher};
 
-class User: virtual public DbItem {
+class ApUser: virtual public DbItem {
   public:
     int role;
+
+    ApUser() = default;
+    ApUser(const Role &r) {
+        setRole(r);
+    }
 
     void setRole(const Role &r) {
         role = static_cast<decltype(role)>(r.to_ulong());
@@ -34,6 +39,6 @@ class User: virtual public DbItem {
     }
 };
 
-DBO_EXTERN_TEMPLATES(User)
+DBO_EXTERN_TEMPLATES(ApUser)
 
 #endif // USER_H_

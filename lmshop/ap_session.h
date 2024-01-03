@@ -3,6 +3,7 @@
 #define SESSION_H_
 
 #include "ap_user.h"
+#include <expected>
 #include <Wt/Auth/Login.h>
 #include <Wt/Auth/Dbo/UserDatabase.h>
 #include <Wt/Dbo/Session.h>
@@ -15,7 +16,8 @@ class ApSession : public dbo::Session {
   public:
     explicit ApSession(const std::string &sqlite_db);
     static void configureAuth();
-    dbo::ptr<User> user() const;
+    void createUser(const std::string &login, const std::string &password, const Role &role);
+    std::expected<dbo_ptr<ApUser>, std::string> user() const;
     Wt::Auth::AbstractUserDatabase &users();
     Wt::Auth::Login &login() {
         return login_;
