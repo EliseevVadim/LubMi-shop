@@ -47,6 +47,7 @@ ApSession::ApSession(const std::string &sqlite_db) {
     mapClass<AuthInfo>("auth_info");
     mapClass<AuthInfo::AuthIdentityType>("auth_identity");
     mapClass<AuthInfo::AuthTokenType>("auth_token");
+    users_ = std::make_unique<UserDatabase>(*this);
 
     try {
         createTables();
@@ -56,8 +57,6 @@ ApSession::ApSession(const std::string &sqlite_db) {
         std::cerr << e.what() << '\n';
         std::cerr << "Using existing database\n";
     }
-
-    users_ = std::make_unique<UserDatabase>(*this);
 }
 
 Wt::Auth::AbstractUserDatabase &ApSession::users() {
@@ -106,5 +105,5 @@ std::vector<const Wt::Auth::OAuthService *> ApSession::oAuth() {
 }
 
 Wt::Auth::AuthService ApSession::auth_service_;
-Wt::Auth::PasswordService ApSession::password_service_(ApSession::auth_service_);
+Wt::Auth::PasswordService ApSession::password_service_(auth_service_);
 std::vector<std::unique_ptr<Wt::Auth::OAuthService>> ApSession::oauth_services_;
