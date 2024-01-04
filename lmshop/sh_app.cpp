@@ -1,14 +1,14 @@
-#include "lmshopapp.h"
+#include "sh_app.h"
 #include "imageprocessor.h"
 #include <Wt/WContainerWidget.h>
 #include <Wt/WBorderLayout.h>
 #include <Wt/WPushButton.h>
 
-LmShopApp::LmShopApp(const Wt::WEnvironment &env, bool embedded):
+ShopApplication::ShopApplication(const Wt::WEnvironment &env, bool embedded):
     EmbeddableApp(env, embedded) {
 }
 
-LmShopApp::~LmShopApp() {
+ShopApplication::~ShopApplication() {
     for (auto &conn : connections_) {
         if (conn.isConnected()) {
             conn.disconnect();
@@ -16,7 +16,7 @@ LmShopApp::~LmShopApp() {
     }
 }
 
-void LmShopApp::populateInterior() {
+void ShopApplication::populateInterior() {
     using namespace Wt;
     using namespace std;
 
@@ -40,8 +40,8 @@ void LmShopApp::populateInterior() {
     });
 }
 
-std::string LmShopApp::title() const {
+std::string ShopApplication::title() const {
     return "LubMi Shop";
 }
 
-Wt::Signal<const LmShopApp *, const std::string &> LmShopApp::broadcast_message_;
+Wt::Signal<const ShopApplication *, const std::string &> ShopApplication::broadcast_message_;

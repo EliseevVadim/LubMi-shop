@@ -17,6 +17,9 @@ class ApApplication : public EmbeddableApp {
     std::string title() const {
         return "AdminPanel";
     }
+
+  public:
+    void populateInterior() override;
 };
 
 #endif // APAPPLICATION_H

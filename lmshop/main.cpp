@@ -1,5 +1,5 @@
 #include "ap_application.h"
-#include "lmshopapp.h"
+#include "sh_app.h"
 #include "wthelpers.h"
 
 #include <format>
@@ -16,8 +16,8 @@ int main(int argc, char *argv[]) {
     Magick::InitializeMagick(nullptr);
 
     try {
-        if (auto server = init_server<LmShopApp>(argc, argv); server->start()) {
-            add_embeddables<LmShopApp, ApApplication>(server.get(), "/lmshop", "/apanel");
+        if (auto server = init_server<ShopApplication>(argc, argv); server->start()) {
+            add_embeddables<ShopApplication, ApApplication>(server.get(), "/lmshop", "/apanel");
             ApSession::configureAuth();
             auto signal = WServer::waitForShutdown();
             cerr << format("Shutdown (signal = {})\n", signal);

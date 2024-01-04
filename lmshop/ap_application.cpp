@@ -3,6 +3,7 @@
 #include <Wt/Auth/AuthWidget.h>
 #include <Wt/WBootstrap2Theme.h>
 #include <Wt/WContainerWidget.h>
+#include <Wt/WBorderLayout.h>
 #include <Wt/Auth/PasswordService.h>
 
 ApApplication::ApApplication(const Wt::WEnvironment &env, bool embedded)
@@ -13,13 +14,7 @@ ApApplication::ApApplication(const Wt::WEnvironment &env, bool embedded)
     root()->addStyleClass("container");
     setTheme(std::make_shared<Wt::WBootstrap2Theme>());
     useStyleSheet("css/style.css");
-    
-    auto authWidget = std::make_unique<Wt::Auth::AuthWidget>(ApSession::auth(), session_.users(), session_.login());
-    authWidget->model()->addPasswordAuth(&ApSession::passwordAuth());
-    authWidget->model()->addOAuth(ApSession::oAuth());
-    authWidget->setRegistrationEnabled(true);
-    authWidget->processEnvironment();
-    root()->addWidget(std::move(authWidget));
+
 }
 
 void ApApplication::authEvent() {
@@ -32,4 +27,14 @@ void ApApplication::authEvent() {
     } else {
         log("notice") << "User logged out.";
     }
+}
+
+void ApApplication::populateInterior() {
+    EmbeddableApp::populateInterior();
+    auto authWidget = std::make_unique<Wt::Auth::AuthWidget>(ApSession::auth(), session_.users(), session_.login());
+    authWidget->model()->addPasswordAuth(&ApSession::passwordAuth());
+    authWidget->model()->addOAuth(ApSession::oAuth());
+    authWidget->setRegistrationEnabled(false);
+    authWidget->processEnvironment();
+    interior()->addWidget(std::move(authWidget), Wt::LayoutPosition::Center);
 }

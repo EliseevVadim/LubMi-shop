@@ -3,12 +3,12 @@
 #define LMSHOPAPP_H
 
 #include "embeddableapp.h"
-#include "persistdata.h"
+#include "sh_persistdata.h"
 
-class LmShopApp : public EmbeddableApp {
+class ShopApplication : public EmbeddableApp {
   public:
-    LmShopApp(const Wt::WEnvironment &env, bool embedded = false);
-    ~LmShopApp();
+    ShopApplication(const Wt::WEnvironment &env, bool embedded = false);
+      ~ShopApplication();
     void populateInterior() override;
 
   protected:
@@ -17,7 +17,7 @@ class LmShopApp : public EmbeddableApp {
   private:
 
     std::list<Wt::Signals::connection> connections_;
-    static Wt::Signal<const LmShopApp *, const std::string &> broadcast_message_; //TODO map of string -> signal
+      static Wt::Signal<const ShopApplication *, const std::string &> broadcast_message_; //TODO map of string -> signal
     PersistData _persist_data;
 };
 

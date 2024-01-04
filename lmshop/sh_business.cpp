@@ -1,4 +1,4 @@
-#include "business.h"
+#include "sh_business.h"
 #include <format>
 #include <Wt/WException.h>
 
@@ -17,7 +17,7 @@ inline auto create(std::unique_ptr<T> p) {
 template<typename T, typename K>
 inline auto find(const std::string &field, const K &key) {
     dbo::Transaction _(Db::session());
-    return Db::session().find<T>().where(format("{} = ?", field)).bind(key);
+    return Db::session().find<T>().where(std::format("{} = ?", field)).bind(key);
 }
 
 template<typename T>
