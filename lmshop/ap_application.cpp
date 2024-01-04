@@ -36,5 +36,5 @@ void ApApplication::populateInterior() {
     authWidget->model()->addOAuth(ApSession::oAuth());
     authWidget->setRegistrationEnabled(false);
     authWidget->processEnvironment();
-    interior()->addWidget(std::move(authWidget), Wt::LayoutPosition::Center);
+    top()->addWidget(std::move(authWidget));
 }

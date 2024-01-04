@@ -2,7 +2,6 @@
 #ifndef ENTRYPOINTMAP_H
 #define ENTRYPOINTMAP_H
 
-#include "config.h"
 #include <memory>
 #include <Wt/WResource.h>
 #include <Wt/WApplication.h>
@@ -56,12 +55,8 @@ template <WtEmbeddable ... WE>
 void add_embeddables(auto server, auto ... arg) {
     using namespace Wt;
     using namespace std::string_literals;
-    #if STANDALONE_EMBEDDABLES
     ((server->addEntryPoint(EntryPointType::Application, get_builder_for_embeddable<WE>(false), arg),
       server->addEntryPoint(EntryPointType::WidgetSet, get_builder_for_embeddable<WE>(true), arg + ".js"s)), ...);
-    #else
-    (server->addEntryPoint(EntryPointType::WidgetSet, get_builder_for_emb<WE>(true), arg + ".js"s), ...);
-    #endif
 }
 
 #endif // ENTRYPOINTMAP_H

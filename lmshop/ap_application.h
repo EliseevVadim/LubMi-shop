@@ -14,7 +14,7 @@ class ApApplication : public EmbeddableApp {
     ApSession session_;
 
   protected:
-    std::string title() const {
+    std::string title() const override {
         return "AdminPanel";
     }
 

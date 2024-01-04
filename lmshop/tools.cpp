@@ -127,7 +127,7 @@ std::function<std::string (const std::string &)> Tools::create_transcoder(const 
     return bind(transcoder, _1, codepages.at(code_page));
 }
 
-std::optional<std::string> Tools::get_string_option(const Wt::WEnvironment &env, const std::string &opt_name) {
+std::optional<std::string> Tools::getStringOption(const Wt::WEnvironment &env, const std::string &opt_name) {
     using namespace std;
     auto *value = env.getParameter(opt_name);
     return value ? optional{ *value } :
@@ -136,7 +136,7 @@ std::optional<std::string> Tools::get_string_option(const Wt::WEnvironment &env,
 
 std::optional<int> Tools::get_int_option(const Wt::WEnvironment &env, const std::string &opt_name) {
     using namespace std;
-    auto value = get_string_option(env, opt_name);
+    auto value = getStringOption(env, opt_name);
 
     if (value) try {
             return stoi(*value);

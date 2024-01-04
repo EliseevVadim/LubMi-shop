@@ -2,18 +2,6 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
-/**
- * maybe extern defines -- begin
- */
-
-#ifndef STANDALONE_EMBEDDABLES
-    #define STANDALONE_EMBEDDABLES          true
-#endif
-
-/**
- * maybe extern defines -- end
- */
-
 #define AVAIL_LANGS                     "ru"
 #define DEFAULT_LANG                    "en"
 #define ANIM_DUR                        350

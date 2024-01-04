@@ -8,16 +8,15 @@
 class ShopApplication : public EmbeddableApp {
   public:
     ShopApplication(const Wt::WEnvironment &env, bool embedded = false);
-      ~ShopApplication();
+    ~ShopApplication();
     void populateInterior() override;
 
   protected:
     std::string title() const override;
 
   private:
-
     std::list<Wt::Signals::connection> connections_;
-      static Wt::Signal<const ShopApplication *, const std::string &> broadcast_message_; //TODO map of string -> signal
+    static Wt::Signal<const ShopApplication *, const std::string &> broadcast_message_; //TODO map of string -> signal
     PersistData _persist_data;
 };
 

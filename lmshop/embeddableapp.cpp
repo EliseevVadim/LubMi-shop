@@ -19,7 +19,7 @@ EmbeddableApp::EmbeddableApp(const Wt::WEnvironment &env, bool embedded):
     using namespace std;
 
     static set<string> avail_langs { AVAIL_LANGS };
-    auto lang = Tools::get_string_option(env, "lang").value_or(DEFAULT_LANG);
+    auto lang = Tools::getStringOption(env, "lang").value_or(DEFAULT_LANG);
     messageResourceBundle().use(appRoot() + (avail_langs.contains(lang) ? format("strings-{}", lang) : "strings"s));
     setTheme(make_shared<WBootstrap5Theme>());
 
@@ -29,7 +29,7 @@ EmbeddableApp::EmbeddableApp(const Wt::WEnvironment &env, bool embedded):
         auto wcw = make_unique<WContainerWidget>();
         top_ = wcw.get();
 
-        if (auto div = Tools::get_string_option(env, "div"); div) {
+        if (auto div = Tools::getStringOption(env, "div"); div) {
             setJavaScriptClass(*div);
             bindWidget(std::move(wcw), *div);
             top_->decorationStyle().setBorder({BorderStyle::Solid, BorderWidth::Thin});
@@ -39,10 +39,10 @@ EmbeddableApp::EmbeddableApp(const Wt::WEnvironment &env, bool embedded):
         }
     }
 
-    auto fl = top_->setLayout(make_unique<WFitLayout>());
-    auto interior = make_unique<WBorderLayout>();
-    interior_ = interior.get();
-    fl->addItem(std::move(interior));
+    // auto fl = top_->setLayout(make_unique<WFitLayout>());
+    // auto interior = make_unique<WBorderLayout>();
+    // interior_ = interior.get();
+    // fl->addItem(std::move(interior));
     enableUpdates();
 }
 
@@ -50,22 +50,22 @@ void EmbeddableApp::populateInterior() {
     using namespace Wt;
     using namespace std;
 
-    if (!embedded_) {
+    if (!embedded()) {
         setTitle(title());
     }
 
-    interior_->setSpacing(4);
+    // interior()->setSpacing(4);
 
     // header
-    auto header = make_unique<WContainerWidget>();
-    auto hblyt = make_unique<WHBoxLayout>();
-    hblyt->setDirection(LayoutDirection::LeftToRight);
-    hblyt->addWidget(make_unique<WImage>(IMAGE_LINK_"logo.svg"), 0, AlignmentFlag::Left);
-    hblyt->addSpacing(10);
-    auto text = hblyt->addWidget(make_unique<WText>(format(R"(<h2>{}</h2>)", title())));
-    hblyt->addStretch(1);
-    text->decorationStyle().setForegroundColor({CLR_HTEXT});
-    header->decorationStyle().setBackgroundColor({CLR_BKG_HDR});
-    header->setLayout(std::move(hblyt));
-    interior_->addWidget(std::move(header), LayoutPosition::North);
+    // auto header = make_unique<WContainerWidget>();
+    // auto hblyt = make_unique<WHBoxLayout>();
+    // hblyt->setDirection(LayoutDirection::LeftToRight);
+    // hblyt->addWidget(make_unique<WImage>(IMAGE_LINK_"logo.svg"), 0, AlignmentFlag::Left);
+    // hblyt->addSpacing(10);
+    // auto text = hblyt->addWidget(make_unique<WText>(format(R"(<h2>{}</h2>)", title())));
+    // hblyt->addStretch(1);
+    // text->decorationStyle().setForegroundColor({CLR_HTEXT});
+    // header->decorationStyle().setBackgroundColor({CLR_BKG_HDR});
+    // header->setLayout(std::move(hblyt));
+    // interior()->addWidget(std::move(header), LayoutPosition::North);
 }

@@ -1,4 +1,4 @@
-#include "sh_app.h"
+#include "sh_application.h"
 #include "imageprocessor.h"
 #include <Wt/WContainerWidget.h>
 #include <Wt/WBorderLayout.h>
@@ -21,23 +21,15 @@ void ShopApplication::populateInterior() {
     using namespace std;
 
     EmbeddableApp::populateInterior();
-    auto cw = interior()->addWidget(make_unique<WContainerWidget>(), LayoutPosition::Center);
+    auto cw = top()->addWidget(make_unique<WContainerWidget>());
+    auto gl = cw->setLayout(make_unique<WGridLayout>());
 
-    auto button = cw->addNew<WPushButton>("Uuid");
-    button->clicked().connect([this]() {
-        doJavaScript(format("alert('{}');", _persist_data.uuid()));
-    });
-
-    button = cw->addNew<WPushButton>("Test image processor");
-    button->clicked().connect([this]() {
-        if (auto image = ImageProcessor::createProductImage("/home/cerberus/30916944.png", true); image) {
-            auto i = std::move(*image);
-            doJavaScript("alert('Ok');");
-        } else {
-            doJavaScript(format("alert('{}');", image.error()));
-        }
-
-    });
+    for (int c = 99; c >= 0; c--) {
+        auto button = gl->addWidget(make_unique<WPushButton>("Uuid"), c / 4, c % 4, AlignmentFlag::Center);
+        button->clicked().connect([this]() {
+            doJavaScript(format("alert('{}');", _persist_data.uuid()));
+        });
+    }
 }
 
 std::string ShopApplication::title() const {

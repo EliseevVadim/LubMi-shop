@@ -30,7 +30,7 @@ class Tools final {
     static std::string read_stream(std::istream &ifs);
     static std::string read_stream(const std::string &file);
     static std::function<std::string(const std::string &)> create_transcoder(const std::string &code_page);
-    static std::optional<std::string> get_string_option(const Wt::WEnvironment &env, const std::string &opt_name);
+    static std::optional<std::string> getStringOption(const Wt::WEnvironment &env, const std::string &opt_name);
     static std::optional<int> get_int_option(const Wt::WEnvironment &env, const std::string &opt_name);
     static int get_int_option(const Wt::WEnvironment &env, const std::string &opt_name, int defv, int minv, int maxv);
     static std::optional<std::string> get_config_string(const std::string &name, bool empty_string_allowed = false);

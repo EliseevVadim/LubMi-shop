@@ -11,7 +11,7 @@ SOURCES += \
     embeddableapp.cpp \
     imageprocessor.cpp \
     main.cpp \
-    sh_app.cpp \
+    sh_application.cpp \
     sh_business.cpp \
     sh_persistdata.cpp \
     tools.cpp
@@ -396,7 +396,7 @@ HEADERS += \
     dbodefs.h \
     embeddableapp.h \
     imageprocessor.h \
-    sh_app.h \
+    sh_application.h \
     sh_business.h \
     sh_persistdata.h \
     tools.h \

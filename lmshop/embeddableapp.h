@@ -14,7 +14,6 @@ class EmbeddableApp: public Wt::WApplication {
   private:
 
     Wt::WContainerWidget *top_ {nullptr};
-    Wt::WBorderLayout *interior_ {nullptr};
     const bool embedded_ {false};
     const Wt::WAnimation animation_;
 
@@ -22,10 +21,6 @@ class EmbeddableApp: public Wt::WApplication {
 
     auto top() {
         return top_;
-    }
-
-    auto interior() {
-        return interior_;
     }
 
     auto &animation() {
