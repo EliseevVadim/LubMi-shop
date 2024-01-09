@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from djmoney.models.fields import MoneyField
 
 
 class DbItem(models.Model):
@@ -29,15 +30,15 @@ class Category(DbItem):
 
 
 class Product(DbItem):
-    article = models.CharField(primary_key=True, max_length=250)                        # внутренний артикул, он же идентификатор
-    title = models.CharField(max_length=500)                                            # название
-    description = models.TextField(null=True, blank=True)                               # описание
-    color = models.CharField(max_length=250, null=True, blank=True)                     # цвет
-    actual_price = models.BigIntegerField()                                             # цена в копейках
-    old_price = models.BigIntegerField(null=True, blank=True)                           # старая цена (до акции) в копейках
-    sales_quantity = models.BigIntegerField(default=0)                                  # количество продаж
-    published_at = models.DateTimeField(null=True, blank=True, default=timezone.now)    # время публикации(опубликован, если published_at < now())
-    categories = models.ManyToManyField(Category, related_name="products")              # категории
+    article = models.CharField(primary_key=True, max_length=250)                                            # внутренний артикул, он же идентификатор
+    title = models.CharField(max_length=500)                                                                # название
+    description = models.TextField(null=True, blank=True)                                                   # описание
+    color = models.CharField(max_length=250, null=True, blank=True)                                         # цвет
+    actual_price = MoneyField(max_digits=14, decimal_places=2, default_currency='RUR')                      # цена
+    old_price = MoneyField(max_digits=14, decimal_places=2, default_currency='RUR', null=True, blank=True)  # старая цена (до акции), null -- нет акции
+    sales_quantity = models.BigIntegerField(default=0)                                                      # количество продаж
+    published_at = models.DateTimeField(null=True, blank=True, default=timezone.now)                        # время публикации(опубликован, если published_at < now())
+    categories = models.ManyToManyField(Category, related_name="products")                                  # категории
 
     class Meta:
         ordering = ["title"]
