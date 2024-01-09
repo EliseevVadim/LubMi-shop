@@ -15,10 +15,10 @@ class Category(DbItem):
     class Kind(models.TextChoices):
         product_taxonomy = "PT", "Таксономия продуктов"
 
-    kind = models.CharField(max_length=2, choices=Kind.choices, default=Kind.product_taxonomy)                  # тип категории
-    title = models.CharField(max_length=250)                                                                    # название категории
-    description = models.TextField(null=True)                                                                   # описание категории
-    category = models.ForeignKey('self', null=True, on_delete=models.CASCADE, related_name='subcategories')     # объемлющая категория
+    kind = models.CharField(max_length=2, choices=Kind.choices, default=Kind.product_taxonomy)                              # тип категории
+    title = models.CharField(max_length=250)                                                                                # название категории
+    description = models.TextField(null=True, blank=True)                                                                   # описание категории
+    category = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='subcategories')     # объемлющая категория
 
     class Meta:
         ordering = ["title"]
@@ -29,22 +29,22 @@ class Category(DbItem):
 
 
 class Product(DbItem):
-    article = models.CharField(primary_key=True, max_length=250)                    # внутренний артикул, он же идентификатор
-    title = models.CharField(max_length=500)                                        # название
-    description = models.TextField(null=True)                                       # описание
-    color = models.CharField(max_length=250, null=True)                             # цвет
-    actual_price = models.BigIntegerField()                                         # цена в копейках
-    old_price = models.BigIntegerField(null=True)                                   # старая цена (до акции) в копейках
-    sales_quantity = models.BigIntegerField(default=0)                              # количество продаж
-    published_at = models.DateTimeField(null=True, default=timezone.now)            # время публикации(опубликован, если published_at < now())
-    categories = models.ManyToManyField(Category, related_name="products")          # категории
+    article = models.CharField(primary_key=True, max_length=250)                        # внутренний артикул, он же идентификатор
+    title = models.CharField(max_length=500)                                            # название
+    description = models.TextField(null=True, blank=True)                               # описание
+    color = models.CharField(max_length=250, null=True, blank=True)                     # цвет
+    actual_price = models.BigIntegerField()                                             # цена в копейках
+    old_price = models.BigIntegerField(null=True, blank=True)                           # старая цена (до акции) в копейках
+    sales_quantity = models.BigIntegerField(default=0)                                  # количество продаж
+    published_at = models.DateTimeField(null=True, blank=True, default=timezone.now)    # время публикации(опубликован, если published_at < now())
+    categories = models.ManyToManyField(Category, related_name="products")              # категории
 
     class Meta:
         ordering = ["title"]
         indexes = [models.Index(fields=["title"])]
 
     def __str__(self):
-        return self.title
+        return f"{self.article}: {self.title}"
 
 
 class AvailableSize(DbItem):
@@ -74,7 +74,7 @@ class Image(DbItem):
     primary = models.BooleanField()                                                             # основное изображение?
     format = models.CharField(max_length=3, choices=Format.choices, default=Format.jpg)         # формат картинки
     image = models.TextField()                                                                  # данные, base64
-    thumbnail = models.TextField(null=True)                                                     # миниатюра, base64
+    thumbnail = models.TextField(null=True, blank=True)                                         # миниатюра, base64
     product = models.ForeignKey(Product, related_name="images", on_delete=models.CASCADE)       # товар
 
     def __str__(self):
@@ -89,5 +89,3 @@ class Order(DbItem):
 
     def __str__(self):
         return f'заказ на {self.product} из корзины {self.scart_id}'
-
-
