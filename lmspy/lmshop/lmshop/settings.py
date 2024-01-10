@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'lms.apps.LmsConfig',
     'scart.apps.ScartConfig',
+    'favorites.apps.FavoritesConfig',
     'djmoney',
 ]
 
@@ -128,3 +129,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # shopping cart session id
 
 SCART_SESSION_ID = 'shopping_cart'
+
+# favorites session id
+
+FAVORITES_SESSION_ID = 'favorites'
