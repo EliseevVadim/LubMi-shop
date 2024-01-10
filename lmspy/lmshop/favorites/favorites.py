@@ -32,5 +32,8 @@ class Favorites:
     def __len__(self):
         return len(self._favorites)
 
+    def __contains__(self, item: str):
+        return item in self._favorites
+
     def save(self):
         self.session.modified = True
