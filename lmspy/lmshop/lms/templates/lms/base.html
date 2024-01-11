@@ -1,0 +1,18 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% block title %}{% endblock %}</title>
+  <link href="{% static "css/lms.css" %}" rel="stylesheet">
+</head>
+<body>
+  <div id="content">
+    {% block content %}
+    {% endblock %}
+  </div>
+  <div id="sidebar">
+    {% block right_side_bar %}
+    {% endblock %}
+  </div>
+</body>
+</html>

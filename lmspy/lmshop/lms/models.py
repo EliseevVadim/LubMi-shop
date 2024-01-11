@@ -29,6 +29,11 @@ class Category(DbItem):
         return self.title
 
 
+class PublishedManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().exclude(published_at=None).filter(published_at__lte=timezone.now())
+
+
 class Product(DbItem):
     article = models.CharField(primary_key=True, max_length=250)                                            # внутренний артикул, он же идентификатор
     title = models.CharField(max_length=500)                                                                # название
@@ -39,6 +44,9 @@ class Product(DbItem):
     sales_quantity = models.BigIntegerField(default=0)                                                      # количество продаж
     published_at = models.DateTimeField(null=True, blank=True, default=timezone.now)                        # время публикации(опубликован, если published_at < now())
     categories = models.ManyToManyField(Category, related_name="products")                                  # категории
+
+    objects = models.Manager()
+    published = PublishedManager()
 
     class Meta:
         ordering = ["title"]
