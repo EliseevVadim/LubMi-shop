@@ -1,6 +1,7 @@
 {% extends "lms/base.html" %}
 {% block title %}Каталог{% endblock %}
 {% block content %}
+{% load thumbnail %}
   <h1>Каталог</h1>
   {% for product in products %}
     <h2>
@@ -8,6 +9,9 @@
         {{ product.title }}
       </a>
     </h2>
+    {% for img in product.images.all %}
+      <img src="{% thumbnail img.image 200x0 %}" class="image-detail">
+    {% endfor %}
     <p class="price">{{ product.actual_price.amount }} руб.</p>
     {% if product.color %}
     <p class="product_color">Цвет: {{ product.color }}</p>
