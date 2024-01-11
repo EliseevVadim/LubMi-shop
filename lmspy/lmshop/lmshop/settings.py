@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'scart.apps.ScartConfig',
     'favorites.apps.FavoritesConfig',
     'djmoney',
+    'easy_thumbnails',
 ]
 
 MIDDLEWARE = [
@@ -133,3 +134,7 @@ SCART_SESSION_ID = 'shopping_cart'
 # favorites session id
 
 FAVORITES_SESSION_ID = 'favorites'
+
+MEDIA_URL = 'media/'
+
+MEDIA_ROOT = BASE_DIR / 'media'

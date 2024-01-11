@@ -1,2 +1,4 @@
 Django~=4.2.7
 Django-Money~=3.0.0
+Pillow~=10.2.0
+Easy_Thumbnails~=2.8.5

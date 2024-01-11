@@ -36,10 +36,9 @@ class AttributeAdmin(admin.ModelAdmin):
 
 @admin.register(Image)
 class ImageAdmin(admin.ModelAdmin):
-    list_display = ['format', 'primary', 'product']
-    list_filter = ['format', 'primary']
-    search_fields = ['format', 'primary']
-    ordering = ['format', 'primary']
+    list_display = ['product', 'primary', 'image']
+    list_filter = ['primary', 'product']
+    ordering = ['product', 'primary']
 
 
 @admin.register(Order)

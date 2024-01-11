@@ -75,15 +75,8 @@ class Attribute(DbItem):
 
 
 class Image(DbItem):
-    class Format(models.TextChoices):
-        jpg = "JPG", "JPEG"
-        png = "PNG", "PNG"
-        gif = "GIF", "GIF"
-
     primary = models.BooleanField()                                                             # основное изображение?
-    format = models.CharField(max_length=3, choices=Format.choices, default=Format.jpg)         # формат картинки
-    image = models.TextField()                                                                  # данные, base64
-    thumbnail = models.TextField(null=True, blank=True)                                         # миниатюра, base64
+    image = models.ImageField(upload_to='products/%Y/%m/%d')                                    # картинка
     product = models.ForeignKey(Product, related_name="images", on_delete=models.CASCADE)       # товар
 
     def __str__(self):
