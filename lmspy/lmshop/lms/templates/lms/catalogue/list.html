@@ -10,7 +10,11 @@
       </a>
     </h2>
     {% for img in product.images.all %}
+    {% if img.primary %}
       <img src="{% thumbnail img.image 200x0 %}" class="image-detail">
+      <img src="{% thumbnail img.image 100x100 %}" class="image-detail">
+      <img src="{% thumbnail img.image 50x50 %}" class="image-detail">
+    {% endif %}
     {% endfor %}
     <p class="price">{{ product.actual_price.amount }} руб.</p>
     {% if product.color %}

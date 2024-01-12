@@ -74,10 +74,18 @@ class Attribute(DbItem):
         return self.name
 
 
+class PrimariesManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(primary=True)
+
+
 class Image(DbItem):
     primary = models.BooleanField()                                                             # основное изображение?
     image = models.ImageField(upload_to='products/%Y/%m/%d')                                    # картинка
     product = models.ForeignKey(Product, related_name="images", on_delete=models.CASCADE)       # товар
+
+    objects = models.Manager()
+    primaries = PrimariesManager()
 
     def __str__(self):
         return 'изображение'
