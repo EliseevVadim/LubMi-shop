@@ -1,10 +1,9 @@
-{% extends "lms/base.html" %}
+{% extends "lms/std_page.html" %}
 {% load static %}
+{% load thumbnail %}
 
-{% block title %}LubMi{% endblock %}
-
-{% block leading %}
-<p>Заголовок</p>
+{% block title %}
+LubMi - Главная
 {% endblock %}
 
 {% block page_header %}
@@ -12,7 +11,6 @@
 {% endblock %}
 
 {% block page_content %}
-{% load thumbnail %}
   <h1>Каталог</h1>
   {% for product in products %}
     <h2>
@@ -36,16 +34,3 @@
   {% include "pagination.html" with page=page_obj %}
 {% endblock %}
 
-{% block page_footer %}
-<p>Футер</p>
-{% endblock %}
-
-{% block left_side_bar %}
-  <h2>Левая Боковая панель</h2>
-  <p>Работа в процессе</p>
-{% endblock %}
-
-{% block right_side_bar %}
-  <h2>Правая Боковая панель</h2>
-  <p>Работа в процессе</p>
-{% endblock %}

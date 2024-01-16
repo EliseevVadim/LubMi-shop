@@ -1,0 +1,29 @@
+{% extends "lms/base.html" %}
+{% load static %}
+
+{% block leading %}
+<nav>
+  <a class="logo" href=""><img src="{% static 'svg/logo.svg' %}" /></a>
+  <a href="">Главная</a>
+  <a href="">Каталог</a>
+  <a href="">Парфюмерия</a>
+  <a href="">Доставка и оплата</a>
+  <a href="">Уход</a>
+  <a href="">Контакты</a>
+  <a href="">О компании</a>
+</nav>
+{% endblock %}
+
+{% block page_footer %}
+<p>Футер</p>
+{% endblock %}
+
+{% block left_side_bar %}
+  <h2>Левая Боковая панель</h2>
+  <p>Работа в процессе</p>
+{% endblock %}
+
+{% block right_side_bar %}
+  <h2>Правая Боковая панель</h2>
+  <p>Работа в процессе</p>
+{% endblock %}

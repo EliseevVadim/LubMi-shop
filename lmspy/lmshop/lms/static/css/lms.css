@@ -1,60 +1,86 @@
 :root {
     --LeadingHeight: 3rem;
     --FooterHeight: 3rem;
-    --DefPadding: 1rem;
-    --Fonts: helvetica, sans-serif
+    --DefPadding: 1em;
+    --Fonts: 'URW Gothic', helvetica, sans-serif;
+    --ZixContent: 10;
+    --ZixLeading: 20;
+    --ZixPanels: 30;
+    --ZixTop: 40;
 }
 
-body {
+body, aside, .content, .leading {
     margin: 0;
     padding: 0;
     font-family: var(--Fonts);
 }
 
 .content {
-    z-index: 10;
+    z-index: var(--ZixContent);
     position: static;
-    margin-top=100px;
-    width=100%;
+    left: 0;
+    right: 0;
     display: flex;
     flex-flow: column;
 }
 
-header.page {
-    padding: 0; /*var(--DefPadding);*/
-    margin: 0;
-    background: #cba;
-}
-
-main.page {
+header.leading {
+    z-index: var(--ZixLeading);
+    position: fixed;
+    height: var(--LeadingHeight);
+    top: 0;
+    left: 0;
+    right: 0;
     padding: var(--DefPadding);
-    background: #bca;
-}
-
-footer.page {
-    padding: var(--DefPadding);
-    background: #abc;
-    flex: 0 0 var(--FooterHeight);
+    background: white;
 }
 
 #leading-spacer {
     flex: 0 0 calc(var(--LeadingHeight) + var(--DefPadding) + 15px);
+    padding: 0;
+    margin: 0;
 }
 
-header.leading {
-    z-index: 20;
-    position: fixed;
+.leading > nav {
     width: 100%;
-    height: var(--LeadingHeight);
-    padding: var(--DefPadding);
-    top: 0;
-    background: #aef;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.leading > nav > a {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: black;
+}
+
+.leading > nav > a.logo {
+    margin-right: auto;
+}
+
+.leading > nav > a > img {
+    height: 3rem;
+}
+
+header.page {
+    background: #cba;
+}
+
+main.page {
+    background: #bca;
+}
+
+footer.page {
+    background: #abc;
+    flex: 0 0 var(--FooterHeight);
 }
 
 aside {
-    padding: var(--DefPadding);
+    z-index: var(--ZixPanels);
     position: fixed;
-    z-index: 30;
     top: 0;
     height: 100vh;
     flex: 0 0 10rem;
@@ -104,5 +130,5 @@ p.product_color {
 }
 
 img.bkg {
-    width: 100vw;
+    width: 100%;
 }

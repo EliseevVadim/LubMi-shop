@@ -1,6 +1,5 @@
-{% load static %}
-
 <!DOCTYPE html>
+{% load static %}
 <html>
 <head>
   <link href="{% static "css/lms.css" %}" rel="stylesheet">
@@ -8,6 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body>
+
+<!-- Leading, sidebars begin -->
   <header class="leading">
       {% block leading %}
       {% endblock %}
@@ -22,12 +23,14 @@
     {% block right_side_bar %}
     {% endblock %}
   </aside>
+<!-- Leading, sidebars end -->
 
+<!-- Content begin -->
   <div class="content">
     <div id="leading-spacer"></div>
     <header class="page">
-        {% block page_header %}
-        {% endblock %}
+      {% block page_header %}
+      {% endblock %}
     </header>
     <main class="page">
       {% block page_content %}
@@ -38,5 +41,6 @@
       {% endblock %}
     </footer>
   </div>
+<!-- Content end -->
 </body>
 </html>
