@@ -2,17 +2,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>{% block title %}{% endblock %}</title>
   <link href="{% static "css/lms.css" %}" rel="stylesheet">
+  <title>{% block title %}{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body>
-  <div id="content">
-    {% block content %}
+  <header class="leading">
+      {% block leading %}
+      {% endblock %}
+  </header>
+
+  <aside class="left">
+    {% block left_side_bar %}
     {% endblock %}
-  </div>
-  <div id="sidebar">
+  </aside>
+
+  <aside class="right">
     {% block right_side_bar %}
     {% endblock %}
+  </aside>
+
+  <div class="content">
+    <div id="leading-spacer"></div>
+    <header class="page">
+        {% block page_header %}
+        {% endblock %}
+    </header>
+    <main class="page">
+      {% block page_content %}
+      {% endblock %}
+    </main>
+    <footer class="page">
+      {% block page_footer %}
+      {% endblock %}
+    </footer>
   </div>
 </body>
 </html>

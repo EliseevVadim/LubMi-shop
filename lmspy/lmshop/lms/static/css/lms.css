@@ -1,15 +1,76 @@
-body { 
-    margin:0;
-    padding:0;
-    font-family:helvetica, sans-serif; 
+:root {
+    --LeadingHeight: 3rem;
+    --FooterHeight: 3rem;
+    --DefPadding: 1rem;
+    --Fonts: helvetica, sans-serif
 }
 
-a { 
-    color:#00abff;
-    text-decoration:none; 
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--Fonts);
 }
 
-h1 { 
+.content {
+    z-index: 10;
+    position: static;
+    margin-top=100px;
+    width=100%;
+    display: flex;
+    flex-flow: column;
+}
+
+header.page {
+    padding: var(--DefPadding);
+    background: #cba;
+}
+
+main.page {
+    padding: var(--DefPadding);
+    background: #bca;
+}
+
+footer.page {
+    padding: var(--DefPadding);
+    background: #abc;
+    flex: 0 0 var(--FooterHeight);
+}
+
+#leading-spacer {
+    flex: 0 0 calc(var(--LeadingHeight) + var(--DefPadding) + 15px);
+}
+
+header.leading {
+    z-index: 20;
+    position: fixed;
+    width: 100%;
+    height: var(--LeadingHeight);
+    padding: var(--DefPadding);
+    top: 0;
+    background: #aef;
+}
+
+aside {
+    padding: var(--DefPadding);
+    position: fixed;
+    z-index: 30;
+    top: 0;
+    height: 100vh;
+    flex: 0 0 10rem;
+    display: none;
+}
+
+aside.right {
+    right:0;
+    background:#0f0;
+}
+
+aside.left {
+    left:0;
+    background:#f00;
+}
+
+h1 {
     font-weight:normal;
     border-bottom:1px solid #bbb;
     padding:0 0 10px 0;
@@ -18,20 +79,6 @@ h1 {
 h2 {
     font-weight:normal;
     margin:30px 0 0;
-}
-
-#content { 
-    float:left;
-    width:60%;
-    padding:0 0 0 30px; 
-}
-
-#sidebar { 
-    float:right;
-    width:30%;
-    padding:10px;
-    background:#efefef; 
-    height:100%;
 }
 
 p.price {
@@ -55,42 +102,3 @@ p.product_color {
     font-style: italic;
 }
 
-/* pagination */
-.pagination { 
-    margin:40px 0; 
-    font-weight:bold;
-}
-
-/* forms */
-label { 
-    float:left;
-    clear:both;
-    color:#333;
-    margin-bottom:4px; 
-}
-
-input, textarea { 
-    clear:both;
-    float:left;
-    margin:0 0 10px;
-    background:#ededed;
-    border:0;
-    padding:6px 10px;
-    font-size:12px;
-}
-
-input[type=submit] {
-    font-weight:bold;
-    background:#00abff;
-    color:#fff;
-    padding:10px 20px;
-    font-size:14px;
-    text-transform:uppercase; 
-}
-
-.errorlist { 
-    color:#cc0033;
-    float:left;
-    clear:both;
-    padding-left:10px; 
-}
