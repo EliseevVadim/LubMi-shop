@@ -21,7 +21,8 @@ body {
 }
 
 header.page {
-    padding: var(--DefPadding);
+    padding: 0; /*var(--DefPadding);*/
+    margin: 0;
     background: #cba;
 }
 
@@ -102,3 +103,6 @@ p.product_color {
     font-style: italic;
 }
 
+img.bkg {
+    width: 100vw;
+}
