@@ -7,6 +7,7 @@
     --ZixLeading: 20;
     --ZixPanels: 30;
     --ZixTop: 40;
+    --CatItemWidth: 17rem;
 }
 
 body, aside, .content, .leading {
@@ -24,10 +25,14 @@ body, aside, .content, .leading {
     flex-flow: column;
 }
 
-header.leading {
+/* Лидинг -------------------------------------------------------------------------------------------------------------- */
+
+.leading {
     z-index: var(--ZixLeading);
     position: fixed;
     height: var(--LeadingHeight);
+    max-height: var(--LeadingHeight);
+    min-height: var(--LeadingHeight);
     top: 0;
     left: 0;
     right: 0;
@@ -61,22 +66,94 @@ header.leading {
     margin-right: auto;
 }
 
-.leading > nav > a > img {
-    height: 3rem;
+.leading > nav > a > img, a.logo > img {
+    height: calc(var(--LeadingHeight) * 0.95);
 }
 
+/* Контент ------------------------------------------------------------------------------------------------------------- */
+
 header.page {
-    background: #cba;
+   /* background: #cba;*/
 }
 
 main.page {
-    background: #bca;
+    /*background: #bca;*/
+    padding: var(--DefPadding)
 }
 
 footer.page {
-    background: #abc;
+    /*background: #abc;*/
+    border-top:1px solid black;
     flex: 0 0 var(--FooterHeight);
+    padding: var(--DefPadding)
 }
+
+.std-footer {
+    padding: var(--DefPadding);
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: auto 7rem 7rem 7rem 7rem;
+    grid-template-areas: "A B B C C" "D D D D D";
+}
+
+[class^='std-footer-item'] {
+    display: flex;
+    flex-flow: column;
+}
+
+[class^='std-footer-item'] > * {
+    text-decoration: none;
+    color: black;
+}
+
+.std-footer-item-1 {
+    grid-area: A;
+}
+
+.std-footer-item-2 {
+    grid-area: B;
+}
+
+.std-footer-item-3 {
+    grid-area: C;
+}
+
+.std-footer-item-4 {
+    grid-area: D;
+    flex-flow: row;
+    justify-content: space-between;
+    place-items: center;
+    margin-top: 1rem;
+}
+
+.std-footer-item-4 > * {
+    /*flex: 1;*/
+}
+
+/* Каталог ------------------------------------------------------------------------------------------------------------- */
+
+.catalogue {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(var(--CatItemWidth), 1fr));
+}
+
+.catalogue > * {
+   display: flex;
+   flex-flow: column;
+   place-items: center;
+}
+
+.catalogue > * > a {
+   display: flex;
+   flex-flow: column;
+   place-items: center;
+}
+
+.catalogue > * > * {
+   max-width: calc(var(--CatItemWidth) * 0.9);
+}
+
+/* Панели --------------------------------------------------------------------------------------------------------------*/
 
 aside {
     z-index: var(--ZixPanels);
@@ -97,9 +174,11 @@ aside.left {
     background:#f00;
 }
 
+/* Элементы оформления -------------------------------------------------------------------------------------------------*/
+
 h1 {
     font-weight:normal;
-    border-bottom:1px solid #bbb;
+    border-top:1px solid black;
     padding:0 0 10px 0;
 }
 
@@ -108,25 +187,20 @@ h2 {
     margin:30px 0 0;
 }
 
-p.price {
-    color:#c00;
-    font-family: georgia, serif;
-    font-size: 14px;
-    font-style: italic; 
+h5, h6, small {
+    opacity: 0.5;
+    margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
 }
 
-p.description {
-    color:#ccc;
-    font-family: georgia, serif;
-    font-size: 12px;
-    font-style: italic;
+h1, h2, h3, h4, h5, h6 {
+    text-transform: uppercase;
 }
 
-p.product_color {
-    color:#00c;
-    font-family: georgia, serif;
-    font-size: 12px;
-    font-style: italic;
+.old_price {
+    text-decoration: line-through red;
+    color: gray;
+    margin-right: 0.5rem;
 }
 
 img.bkg {

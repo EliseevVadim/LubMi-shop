@@ -1,6 +1,7 @@
 {% extends "lms/std_page.html" %}
 {% load static %}
 {% load thumbnail %}
+{% load custom_tags %}
 
 {% block title %}
 LubMi - Главная
@@ -12,25 +13,63 @@ LubMi - Главная
 
 {% block page_content %}
   <h1>Каталог</h1>
-  {% for product in products %}
-    <h2>
-      <a href="{{ product.get_absolute_url }}">
-        {{ product.title }}
-      </a>
-    </h2>
-    {% for img in product.images.all %}
-    {% if img.primary %}
-      <img src="{% thumbnail img.image 200x0 %}" class="image-detail">
-      <img src="{% thumbnail img.image 100x100 %}" class="image-detail">
-      <img src="{% thumbnail img.image 50x50 %}" class="image-detail">
-    {% endif %}
+  <div class="catalogue">
+    {% for product in products %}
+      <div>
+        <figure>
+          {% set ins_ = True %}
+          {% for img in product.images.all %}
+          {% if ins_ and img.primary %}
+            <a href="{{ product.get_absolute_url }}">
+            <img src="{% thumbnail img.image 220x0 %}">
+            </a>
+            {% set ins_ = False %}
+          {% endif %}
+          {% endfor %}
+          <figcaption>
+            {% if product.old_price %}
+            {{product.title}}<br/>
+            ({{product.color|default:"цвет не указан"}})<br/>
+            <span class="old_price">{{product.old_price.amount}} руб.</span>{{product.actual_price.amount}} руб.
+            {% else %}
+            {{product.title}}<br/>
+            ({{product.color|default:"цвет не указан"}})<br/>
+            {{product.actual_price.amount}} руб.
+            {% endif %}
+          </figcaption>
+        </figure>
+      </div>
     {% endfor %}
-    <p class="price">{{ product.actual_price.amount }} руб.</p>
-    {% if product.color %}
-    <p class="product_color">Цвет: {{ product.color }}</p>
-    {% endif %}
-    <p class="description">{{ product.description | truncatewords:30 | linebreaks }}</p>
-  {% endfor %}
-  {% include "pagination.html" with page=page_obj %}
+  </div>
+  <h1>Бестселлеры</h1>
+  <div class="catalogue">
+    {% for product in products %}
+      <div>
+        <figure>
+          {% set ins_ = True %}
+          {% for img in product.images.all %}
+          {% if ins_ and img.primary %}
+            <a href="{{ product.get_absolute_url }}">
+            <img src="{% thumbnail img.image 220x0 %}">
+            </a>
+            {% set ins_ = False %}
+          {% endif %}
+          {% endfor %}
+          <figcaption>
+            {% if product.old_price %}
+            {{product.title}}<br/>
+            ({{product.color|default:"цвет не указан"}})<br/>
+            <span class="old_price">{{product.old_price.amount}} руб.</span>{{product.actual_price.amount}} руб.
+            {% else %}
+            {{product.title}}<br/>
+            ({{product.color|default:"цвет не указан"}})<br/>
+            {{product.actual_price.amount}} руб.
+            {% endif %}
+          </figcaption>
+        </figure>
+      </div>
+    {% endfor %}
+  </div>
+  {#% include "pagination.html" with page=page_obj %#}
 {% endblock %}
 
