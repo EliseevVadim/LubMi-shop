@@ -8,7 +8,7 @@ LubMi - Главная
 {% endblock %}
 
 {% block page_header %}
-<img class="bkg" src="{% static 'img/bkg-001.png' %}"/>
+<img class="bkg" src="{% static 'img/bkg-001.jpg' %}"/>
 {% endblock %}
 
 {% block page_content %}
@@ -73,3 +73,6 @@ LubMi - Главная
   {#% include "pagination.html" with page=page_obj %#}
 {% endblock %}
 
+{% block footer_header %}
+  <img class="bkg" src="{% static 'img/bkg-002.jpg' %}"/>
+{% endblock %}
