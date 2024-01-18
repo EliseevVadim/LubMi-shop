@@ -29,11 +29,6 @@ class Category(DbItem):
         return self.title
 
 
-class PublishedManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().exclude(published_at=None).filter(published_at__lte=timezone.now())
-
-
 class Product(DbItem):
     article = models.CharField(primary_key=True, max_length=250)                                            # внутренний артикул, он же идентификатор
     title = models.CharField(max_length=500)                                                                # название
@@ -45,8 +40,17 @@ class Product(DbItem):
     published_at = models.DateTimeField(null=True, blank=True, default=timezone.now)                        # время публикации(опубликован, если published_at < now())
     categories = models.ManyToManyField(Category, related_name="products")                                  # категории
 
+    class PublishedManager(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset().exclude(published_at=None).filter(published_at__lte=timezone.now())
+
+    class BestsellersManager(PublishedManager):
+        def get_queryset(self):
+            return super().get_queryset()
+
     objects = models.Manager()
     published = PublishedManager()
+    bestsellers = BestsellersManager()
 
     images: QuerySet                        # -- Just for IDE syntax analyzer --
     sizes: QuerySet
@@ -104,15 +108,14 @@ class Attribute(DbItem):
         return self.name
 
 
-class PrimariesManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(primary=True)
-
-
 class Image(DbItem):
     primary = models.BooleanField()                                                             # основное изображение?
     image = models.ImageField(upload_to='products/%Y/%m/%d')                                    # картинка
     product = models.ForeignKey(Product, related_name="images", on_delete=models.CASCADE)       # товар
+
+    class PrimariesManager(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset().filter(primary=True)
 
     objects = models.Manager()
     primaries = PrimariesManager()
