@@ -55,6 +55,11 @@ class Product(DbItem):
     def __str__(self):
         return f"{self.article}: {self.title}"
 
+    @property
+    def primary_image(self):
+        query = self.images.filter(primary=True)
+        return query.first() if query.count() else None
+
 
 class AvailableSize(DbItem):
     size = models.CharField(max_length=30)                                                  # размер

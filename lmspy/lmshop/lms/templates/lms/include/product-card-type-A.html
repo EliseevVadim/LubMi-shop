@@ -1,0 +1,23 @@
+{% load thumbnail %}
+<figure>
+  {% with product.primary_image as img %}
+    {% if img %}
+      <a href="{{ product.get_absolute_url }}">
+        <img src="{% thumbnail img.image 220x0 %}">
+      </a>
+    {% else %}
+      <h3>Изображение отсутствует</h3>
+    {% endif %}
+  {% endwith %}
+  <figcaption>
+    {% if product.old_price %}
+    {{product.title}}<br/>
+    ({{product.color|default:"цвет не указан"}})<br/>
+    <span class="old_price">{{product.old_price.amount}} руб.</span>{{product.actual_price.amount}} руб.
+    {% else %}
+    {{product.title}}<br/>
+    ({{product.color|default:"цвет не указан"}})<br/>
+    {{product.actual_price.amount}} руб.
+    {% endif %}
+  </figcaption>
+</figure>
