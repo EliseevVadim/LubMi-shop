@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import QuerySet
 from django.utils import timezone
 from djmoney.models.fields import MoneyField
 
@@ -47,6 +48,11 @@ class Product(DbItem):
     objects = models.Manager()
     published = PublishedManager()
 
+    images: QuerySet                        # -- Just for IDE syntax analyzer --
+    sizes: QuerySet
+    attributes: QuerySet
+    orders: QuerySet
+
     class Meta:
         ordering = ["title"]
         indexes = [models.Index(fields=["title"])]
@@ -57,11 +63,27 @@ class Product(DbItem):
     @property
     def primary_image(self):
         query = self.images.filter(primary=True)
-        return query.first() if query.count() else None
+        return query.first() if query.exists() else None
 
     @property
     def absolute_url(self):
-        return ""   # TODO implement me
+        return ""                           # TODO -- implement me --
+
+    @property
+    def quantity(self):
+        return self.sizes.aggregate(models.Sum("quantity", default=0))["quantity__sum"]
+
+    @property
+    def in_stock(self):
+        return self.sizes.filter(quantity__gt=0).exists()
+
+    @property
+    def favorite(self):
+        return False                        # TODO -- implement me --
+
+    @property
+    def novelty(self):
+        return False                        # TODO -- implement me --
 
 
 class AvailableSize(DbItem):
