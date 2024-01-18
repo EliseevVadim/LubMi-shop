@@ -2,7 +2,7 @@
 <figure>
   {% with product.primary_image as img %}
     {% if img %}
-      <a href="{{ product.get_absolute_url }}">
+      <a href="{{product.absolute_url}}">
         <img src="{% thumbnail img.image 220x0 %}">
       </a>
     {% else %}

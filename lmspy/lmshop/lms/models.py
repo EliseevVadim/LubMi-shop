@@ -11,7 +11,6 @@ class DbItem(models.Model):
         abstract: bool = True
 
 
-# Create your models here.
 class Category(DbItem):
     class Kind(models.TextChoices):
         product_taxonomy = "PT", "Таксономия продуктов"
@@ -59,6 +58,10 @@ class Product(DbItem):
     def primary_image(self):
         query = self.images.filter(primary=True)
         return query.first() if query.count() else None
+
+    @property
+    def absolute_url(self):
+        return ""   # TODO implement me
 
 
 class AvailableSize(DbItem):

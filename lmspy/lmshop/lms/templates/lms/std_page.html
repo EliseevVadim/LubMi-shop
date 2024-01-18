@@ -3,38 +3,38 @@
 
 {% block leading %}
 <nav>
-  <a class="logo" href="/lms"><img src="{% static 'svg/logo.svg' %}"/></a>
-  <a href="/lms">Главная</a>
-  <a href="/lms/catalogue">Каталог</a>
-  <a href="/lms/perfumery">Парфюмерия</a>
-  <a href="/lms/delivery">Доставка и оплата</a>
-  <a href="/lms/care">Уход</a>
-  <a href="/lms/contacts">Контакты</a>
-  <a href="/lms/about">О компании</a>
+  <a class="logo" href='{% url "lms:index" %}'><img src="{% static 'svg/logo.svg' %}"/></a>
+  <a href='{% url "lms:index" %}'>Главная</a>
+  <a href='{% url "lms:catalogue" %}'>Каталог</a>
+  <a href='{% url "lms:perfumery" %}'>Парфюмерия</a>
+  <a href='{% url "lms:delivery" %}'>Доставка и оплата</a>
+  <a href='{% url "lms:care" %}'>Уход</a>
+  <a href='{% url "lms:contacts" %}'>Контакты</a>
+  <a href='{% url "lms:about" %}'>О компании</a>
 </nav>
 {% endblock %}
 
 {% block page_footer %}
 <div class="std-footer">
   <div class="std-footer-item-1">
-    <a class="logo" href=""><img src="{% static 'svg/logo.svg' %}"/></a>
-    <a href="">+1 891 989-11-91</a>
-    <a href="">hello@logoipsum.com</a>
+    <a class="logo" href='{% url "lms:index" %}'><img src="{% static 'svg/logo.svg' %}"/></a>
+    <a href='{% url "lms:index" %}'>+1 891 989-11-91</a>
+    <a href='{% url "lms:index" %}'>hello@logoipsum.com</a>
   </div>
   <div class="std-footer-item-2">
     <h6>Покупателям</h6>
-    <a href="">Доставка и оплата</a>
-    <a href="">Таблица размеров</a>
+    <a href='{% url "lms:delivery" %}'>Доставка и оплата</a>
+    <a href='{% url "lms:index" %}'>Таблица размеров</a>
   </div>
   <div class="std-footer-item-3">
     <h6>О компании</h6>
-    <a href="">О бренде</a>
+    <a href='{% url "lms:about" %}'>О бренде</a>
   </div>
   <div class="std-footer-item-4">
     <small>&#169; 2023 -- Copyright</small>
     <img style="height:1em" src="{% static 'svg/footer.svg' %}"/>
-    <a href=""><small>Политика конфиденциальности</small></a>
-    <a href=""><small>Публичная оферта</small></a>
+    <a href='{% url "lms:index" %}'><small>Политика конфиденциальности</small></a>
+    <a href='{% url "lms:index" %}'><small>Публичная оферта</small></a>
   </div>
 </div>
 {% endblock %}

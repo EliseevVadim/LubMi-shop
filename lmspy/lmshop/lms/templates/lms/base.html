@@ -46,5 +46,11 @@
     </footer>
   </div>
 <!-- Content end -->
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      {% block DOM_ready_script %}
+      {% endblock %}
+    })
+  </script>
 </body>
 </html>
