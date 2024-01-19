@@ -7,7 +7,7 @@ from .models import *
 
 
 class IndexView(View):
-    page_size = 5
+    page_size = 10
     default_order = 'published'
     ordering = {
         default_order: lambda q: q.order_by('published_at'),
