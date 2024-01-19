@@ -46,7 +46,7 @@ class Product(DbItem):
 
     class BestsellersManager(PublishedManager):
         def get_queryset(self):
-            return super().get_queryset()
+            return super().get_queryset().order_by('-sales_quantity')
 
     objects = models.Manager()
     published = PublishedManager()

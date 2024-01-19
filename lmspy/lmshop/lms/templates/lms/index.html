@@ -3,35 +3,20 @@
 {% load custom_tags %}
 
 {% block title %}
-LubMi - Главная
+{{page_title}}
 {% endblock %}
 
 {% block page_header %}
-<img class="bkg" src="{% static 'img/bkg-001.jpg' %}"/>
+  {% include "lms/include/ad-block.html" with static_image="img/bkg-001.jpg" %}
 {% endblock %}
 
 {% block page_content %}
-  <h1>Каталог</h1>
-  <div class="catalogue">
-    {% for product in products %}
-      <div>
-        {% include "lms/include/product-card-type-A.html" with product=product %}
-      </div>
-    {% endfor %}
-  </div>
-  <h1>Бестселлеры</h1>
-  <div class="catalogue">
-    {% for product in products %}
-      <div>
-        {% include "lms/include/product-card-type-A.html" with product=product %}
-      </div>
-    {% endfor %}
-  </div>
-  {#% include "pagination.html" with page=page_obj %#}
+  {% include "lms/include/catalogue-type-A.html" with products=products title="Каталог"%}
+  {% include "lms/include/catalogue-type-A.html" with products=bestsellers title="Бестселлеры"%}
 {% endblock %}
 
 {% block footer_header %}
-  <img class="bkg" src="{% static 'img/bkg-002.jpg' %}"/>
+  {% include "lms/include/ad-block.html" with static_image="img/bkg-002.jpg" %}
 {% endblock %}
 
 {% block DOM_ready_script %}

@@ -1,13 +1,57 @@
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView, DetailView
 from django.views import View
 from .models import *
 
 
-class IndexView(ListView):
-    queryset = Product.published.all()
-    context_object_name = 'products'
-    paginate_by = 100
-    template_name = 'lms/index.html'
+class IndexView(View):
+    page_size = 10
+    default_order = 'published'
+    ordering = {
+        default_order: lambda q: q.order_by('published_at'),
+        'title': lambda q: q.order_by('title'),
+        'price': lambda q: q.order_by('actual_price'),
+        'sales': lambda q: q.order_by('sales_quantity'),
+    }
+
+    @staticmethod
+    def get(request, *_, **__):
+        page = request.GET.get('page')
+        order = request.GET.get('order')
+        order = order if order in IndexView.ordering else IndexView.default_order
+        products = Product.published.all()
+        products = IndexView.ordering[order](products)
+        bestsellers = Product.bestsellers.all()
+        pd_pgn = Paginator(products, IndexView.page_size)
+        bs_pgn = Paginator(bestsellers, IndexView.page_size)
+
+        if not page:
+            return render(request, 'lms/index.html', {
+                'page_title': "LubMi - Главная",
+                'products': pd_pgn.page(1),
+                'bestsellers': bs_pgn.page(1),
+                'order': order,
+                'page': 1,
+            })
+
+        match request.GET.get('kind'):
+            case 'bs':
+                pgn = pd_pgn
+            case _:
+                pgn = bs_pgn
+
+        try:
+            return render(request, 'lms/plist.html', {
+                'products': pgn.page(page),
+            })
+        except PageNotAnInteger:
+            return HttpResponse('')
+        except EmptyPage:
+            return HttpResponse('')
+        except ValueError:
+            return HttpResponse('')
 
 
 class CatalogueView(ListView):
