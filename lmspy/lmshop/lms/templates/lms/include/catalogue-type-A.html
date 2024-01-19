@@ -1,4 +1,16 @@
+<script>
+    let {{kind}}_page = 2;
+    let {{kind}}_update = () => {
+        fetch("?order={{order}}&kind={{kind}}&page=" + {{kind}}_page).then(response => response.text()).then(text => {
+            document.getElementById("{{kind}}-list").insertAdjacentHTML('beforeEnd', text);
+            if(++{{kind}}_page > {{pages}} || text === '') {
+                document.getElementById("{{kind}}-upd-btn").style.visibility = 'hidden';
+            }
+        });
+    };
+</script>
 <h1>{{title}}</h1>
-<div class="catalogue">
-{% include "lms/include/product-list-type-A.html" with products=products %}
-</div>
+<div id="{{kind}}-list" class="catalogue">{% include "lms/include/product-list-type-A.html" with products=products %}</div>
+{% if pages > 1 %}
+<div class="toolbar"><button id="{{kind}}-upd-btn" class="medium" onclick="{{kind}}_update();">Загрузить ещё</button></div>
+{% endif %}

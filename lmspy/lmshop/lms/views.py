@@ -7,7 +7,7 @@ from .models import *
 
 
 class IndexView(View):
-    page_size = 10
+    page_size = 5
     default_order = 'published'
     ordering = {
         default_order: lambda q: q.order_by('published_at'),
@@ -32,8 +32,9 @@ class IndexView(View):
                 'page_title': "LubMi - Главная",
                 'products': pd_pgn.page(1),
                 'bestsellers': bs_pgn.page(1),
+                'product_pages': pd_pgn.num_pages,
+                'bestseller_pages': bs_pgn.num_pages,
                 'order': order,
-                'page': 1,
             })
 
         match request.GET.get('kind'):

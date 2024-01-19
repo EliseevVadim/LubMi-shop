@@ -208,3 +208,40 @@ h1, h2, h3, h4, h5, h6 {
 img.bkg {
     width: 100%;
 }
+
+.toolbar {
+    display: flex;
+    flex-flow: column;
+    place-items: center;
+    background: none;
+    padding: var(--DefPadding)
+}
+
+/* Кнопки --------------------------------------------------------------------------------------------------------------*/
+
+button {
+    border: solid black thin;
+    border-radius: 1px;
+    color: black;
+    background: none;
+    box-shadow: none;
+    padding: calc(0.75 * var(--DefPadding)) calc(2 * var(--DefPadding));
+}
+
+button.medium {
+    font-size: 1.25rem;
+}
+
+button.large {
+    font-size: 3rem;
+    border-width: thick;
+}
+
+button.inverted {
+    border-color: white;
+    color: white;
+}
+
+button:hover {
+    background: rgba(0, 0, 0, 0.15);
+}
