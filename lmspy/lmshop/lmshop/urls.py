@@ -6,6 +6,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('lms/', include('lms.urls', namespace='lms')),
+    path('api/', include('lms.api.urls', namespace='api')),
 ]
 
 if settings.DEBUG:
