@@ -17,7 +17,7 @@ class ProductDetailView(generics.RetrieveAPIView):
     serializer_class = ProductSerializer
 
 
-class ProductLike(APIView):
+class ProductLikeSetView(APIView):
     permission_classes = [AllowAny]
 
     @staticmethod
@@ -26,6 +26,20 @@ class ProductLike(APIView):
         like = bool(like)
         if product.favorite != like:
             pass  # TODO product.favorite = like
+        return Response({
+            'pk': pk,
+            'like': like
+        })
+
+
+class ProductLikeToggleView(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    def post(request, pk, _=None):
+        product = get_object_or_404(Product, pk=pk)
+        like = True  # TODO -- remove this line --
+        pass  # TODO -- product.favorite = (like := not product.favorite) --
         return Response({
             'pk': pk,
             'like': like
