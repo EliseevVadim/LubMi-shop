@@ -21,8 +21,7 @@ class IndexView(View):
         page = request.GET.get('page')
         order = request.GET.get('order')
         order = order if order in IndexView.ordering else IndexView.default_order
-        products = Product.published.all()
-        products = IndexView.ordering[order](products)
+        products = IndexView.ordering[order](Product.published.all())
         bestsellers = Product.bestsellers.all()
         pd_pgn = Paginator(products, IndexView.page_size)
         bs_pgn = Paginator(bestsellers, IndexView.page_size)
@@ -39,9 +38,9 @@ class IndexView(View):
 
         match request.GET.get('kind'):
             case 'bs':
-                pgn = pd_pgn
-            case _:
                 pgn = bs_pgn
+            case _:
+                pgn = pd_pgn
 
         try:
             return render(request, 'lms/plist.html', {

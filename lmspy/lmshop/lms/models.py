@@ -1,7 +1,8 @@
 from django.db import models
 from django.db.models import QuerySet
-from django.utils import timezone
+from django.utils import timezone, text
 from djmoney.models.fields import MoneyField
+from datetime import datetime
 
 
 class DbItem(models.Model):
@@ -38,7 +39,13 @@ class Product(DbItem):
     old_price = MoneyField(max_digits=14, decimal_places=2, default_currency='RUR', null=True, blank=True)  # старая цена (до акции), null -- нет акции
     sales_quantity = models.BigIntegerField(default=0)                                                      # количество продаж
     published_at = models.DateTimeField(null=True, blank=True, default=timezone.now)                        # время публикации(опубликован, если published_at < now())
+    slug = models.SlugField(unique=True, max_length=200)                                                    # слаг
     categories = models.ManyToManyField(Category, related_name="products")                                  # категории
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = text.slugify(self.article, self.title)
+        super().save(*args, **kwargs)
 
     class PublishedManager(models.Manager):
         def get_queryset(self):
@@ -58,7 +65,7 @@ class Product(DbItem):
     orders: QuerySet
 
     class Meta:
-        ordering = ["title"]
+        # ordering = ["published_at"]
         indexes = [models.Index(fields=["title"])]
 
     def __str__(self):

@@ -16,6 +16,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ['title', 'article', 'published_at']
     search_fields = ['title', 'article', 'published_at']
     ordering = ['title', 'article']
+    prepopulated_fields = {'slug': ('article', 'title')}
 
 
 @admin.register(AvailableSize)
