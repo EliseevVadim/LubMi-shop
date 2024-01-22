@@ -21,3 +21,13 @@
 
 {% block DOM_ready_script %}
 {% endblock %}
+
+{% block javascript %}
+heart_click = (input, url) => {
+  url = url.replace(/\/\d\/$/, `/${input.checked?1:0}/`);
+  alert(url);
+  fetch(url, {'method': 'POST'}).then(response => response.text()).then(text => {
+    alert(text);
+  });
+}
+{% endblock %}

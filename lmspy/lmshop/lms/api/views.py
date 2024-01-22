@@ -5,6 +5,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework import generics
 from lms.models import Product
 from lms.api.serializers import ProductSerializer
+from favorites.favorites import Favorites
 
 
 class ProductListView(generics.ListAPIView):
@@ -21,13 +22,11 @@ class ProductLikeSetView(APIView):
     permission_classes = [AllowAny]
 
     @staticmethod
-    def post(request, pk, like: int, _=None):
-        product = get_object_or_404(Product, pk=pk)
-        like = bool(like)
-        if product.favorite != like:
-            pass  # TODO product.favorite = like
+    def post(request, ppk, like: int, _=None):
+        favorites = Favorites(request)
+        (lambda: favorites.add_item(ppk) if like else lambda: favorites.remove_item(ppk))()
         return Response({
-            'pk': pk,
+            'ppk': ppk,
             'like': like
         })
 
