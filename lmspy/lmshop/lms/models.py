@@ -65,7 +65,7 @@ class Product(DbItem):
     orders: QuerySet
 
     class Meta:
-        # ordering = ["published_at"]
+        ordering = ["published_at"]
         indexes = [models.Index(fields=["title"])]
 
     def __str__(self):
@@ -89,16 +89,8 @@ class Product(DbItem):
         return self.sizes.filter(quantity__gt=0).exists()
 
     @property
-    def favorite(self):
-        return False                        # TODO -- implement me --
-
-    @property
-    def checked(self):
-        return "checked" if self.favorite else "unchecked"
-
-    @property
     def novelty(self):
-        return True                        # TODO -- implement me --
+        return (datetime.now().date() - self.published_at.date()).days < 30 if self.published_at else False;
 
 
 class AvailableSize(DbItem):

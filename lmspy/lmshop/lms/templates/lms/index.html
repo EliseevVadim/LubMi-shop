@@ -11,8 +11,8 @@
 {% endblock %}
 
 {% block page_content %}
-  {% include "lms/include/catalogue-type-A.html" with products=products title="Каталог" order=order pages=product_pages kind="pd" %}
-  {% include "lms/include/catalogue-type-A.html" with products=bestsellers title="Бестселлеры" order=order pages=bestseller_pages kind="bs" %}
+  {% include "lms/include/catalogue-type-A.html" with products=products title="Каталог" favorites=favorites order=order pages=product_pages kind="pd" %}
+  {% include "lms/include/catalogue-type-A.html" with products=bestsellers favorites=favorites title="Бестселлеры" order=order pages=bestseller_pages kind="bs" %}
 {% endblock %}
 
 {% block footer_header %}

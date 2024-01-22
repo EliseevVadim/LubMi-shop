@@ -6,7 +6,11 @@
     {% if product.novelty %}
     <label class="white">Новинка</label>
     {% endif %}
-    {% include "lms/include/heart.html" with checked=product.checked %}
+    {% if product.article in favorites %}
+    {% include "lms/include/heart.html" with product=product checked="checked" %}
+    {% else %}
+    {% include "lms/include/heart.html" with product=product checked="unchecked" %}
+    {% endif %}
   </div>
   {% else %}
   <div class="p-card-a">

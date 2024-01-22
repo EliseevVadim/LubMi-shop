@@ -4,6 +4,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView, DetailView
 from django.views import View
 from .models import *
+from favorites.favorites import Favorites
 
 
 class IndexView(View):
@@ -25,6 +26,7 @@ class IndexView(View):
         bestsellers = Product.bestsellers.all()
         pd_pgn = Paginator(products, IndexView.page_size)
         bs_pgn = Paginator(bestsellers, IndexView.page_size)
+        favorites = Favorites(request).favorites
 
         if not page:
             return render(request, 'lms/index.html', {
@@ -34,6 +36,7 @@ class IndexView(View):
                 'product_pages': pd_pgn.num_pages,
                 'bestseller_pages': bs_pgn.num_pages,
                 'order': order,
+                'favorites': favorites,
             })
 
         match request.GET.get('kind'):

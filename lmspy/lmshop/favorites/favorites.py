@@ -1,5 +1,4 @@
 from django.conf import settings
-from lms.models import Product
 
 
 class Favorites:
@@ -7,7 +6,7 @@ class Favorites:
         self.session = request.session
         favorites = self.session.get(settings.FAVORITES_SESSION_ID)
         if not favorites:
-            favorites = self.session[settings.FAVORITES_SESSION_ID] = set()
+            favorites = self.session[settings.FAVORITES_SESSION_ID] = list()
         self._favorites = favorites
 
     def clear(self):
@@ -16,18 +15,17 @@ class Favorites:
 
     def add_item(self, prod_id: str):
         if prod_id not in self._favorites:
-            self._favorites.add(prod_id)
-        self.save()
+            self._favorites.append(prod_id)
+            self.save()
 
     def remove_item(self, prod_id: str):
         if prod_id in self._favorites:
-            self._favorites.discard(prod_id)
+            self._favorites.remove(prod_id)
             self.save()
 
-    def __iter__(self):
-        products = Product.objects.filter(article__in=self._favorites)
-        for product in products:
-            yield product
+    @property
+    def favorites(self):
+        return list(self._favorites)
 
     def __len__(self):
         return len(self._favorites)

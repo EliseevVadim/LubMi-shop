@@ -10,7 +10,7 @@
     };
 </script>
 <h1>{{title}}</h1>
-<div id="{{kind}}-list" class="catalogue">{% include "lms/include/product-list-type-A.html" with products=products %}</div>
+<div id="{{kind}}-list" class="catalogue">{% include "lms/include/product-list-type-A.html" with products=products favorites=favorites %}</div>
 {% if pages > 1 %}
 <div class="toolbar"><button id="{{kind}}-upd-btn" class="medium" onclick="{{kind}}_update();">Загрузить ещё</button></div>
 {% endif %}
