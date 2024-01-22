@@ -30,7 +30,7 @@ class Category(DbItem):
 
 
 class Product(DbItem):
-    article = models.CharField(primary_key=True, max_length=250)                                            # внутренний артикул, он же идентификатор
+    article = models.CharField(primary_key=True, max_length=100)                                            # внутренний артикул
     title = models.CharField(max_length=500)                                                                # название
     description = models.TextField(null=True, blank=True)                                                   # описание
     color = models.CharField(max_length=250, null=True, blank=True)                                         # цвет
