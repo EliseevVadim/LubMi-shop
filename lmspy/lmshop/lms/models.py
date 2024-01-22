@@ -93,8 +93,12 @@ class Product(DbItem):
         return False                        # TODO -- implement me --
 
     @property
+    def checked(self):
+        return "checked" if self.favorite else "unchecked"
+
+    @property
     def novelty(self):
-        return False                        # TODO -- implement me --
+        return True                        # TODO -- implement me --
 
 
 class AvailableSize(DbItem):

@@ -128,15 +128,12 @@ footer.page {
     margin-top: 1rem;
 }
 
-.std-footer-item-4 > * {
-    /*flex: 1;*/
-}
-
 /* Каталог ------------------------------------------------------------------------------------------------------------- */
 
 .catalogue {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(var(--CatItemWidth), 1fr));
+    gap: var(--DefPadding);
 }
 
 .catalogue > * {
@@ -152,7 +149,41 @@ footer.page {
 }
 
 .catalogue > * > * {
-   max-width: calc(var(--CatItemWidth) * 0.9);
+   max-width: calc(var(--CatItemWidth));
+   min-width: calc(var(--CatItemWidth));
+}
+
+.p-card-a {
+    display: flex;
+    flex-flow: row;
+    background-size: cover;
+    background-repeat: no-repeat;
+    max-height: calc(var(--CatItemWidth) * 1.6);
+    min-height: calc(var(--CatItemWidth) * 1.6);
+    padding: var(--DefPadding)
+}
+
+.heart {
+    margin-left: auto;
+}
+
+input[type="checkbox"] {
+    visibility: hidden;
+}
+
+input[type="checkbox"] ~ svg {
+    min-height: 1.6rem;
+    min-width: 1.6rem;
+    stroke: white;
+    cursor: pointer;
+}
+
+input[type="checkbox"]:checked ~ svg { fill: white; }
+
+input[type="checkbox"]:not(:checked) ~ svg { fill: none; }
+
+figcaption {
+    margin-top: 10px;
 }
 
 /* Панели --------------------------------------------------------------------------------------------------------------*/
@@ -210,11 +241,15 @@ img.bkg {
 }
 
 .toolbar {
+    background: none;
     display: flex;
     flex-flow: column;
     place-items: center;
-    background: none;
     padding: var(--DefPadding)
+}
+
+.white {
+    color: white;
 }
 
 /* Кнопки --------------------------------------------------------------------------------------------------------------*/

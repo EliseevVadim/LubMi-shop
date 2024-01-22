@@ -1,13 +1,18 @@
 {% load thumbnail %}
 <figure>
   {% with product.primary_image as img %}
-    {% if img %}
-      <a href="{{product.absolute_url}}">
-        <img src="{% thumbnail img.image 220x0 %}">
-      </a>
-    {% else %}
-      <h3>Изображение отсутствует</h3>
+  {% if img %}
+  <div class="p-card-a" style="background-image: url('{% thumbnail img.image 220x0 %}');">
+    {% if product.novelty %}
+    <label class="white">Новинка</label>
     {% endif %}
+    {% include "lms/include/heart.html" with checked=product.checked %}
+  </div>
+  {% else %}
+  <div class="p-card-a">
+    <h3>Изображение отсутствует</h3>
+  </div>
+  {% endif %}
   {% endwith %}
   <figcaption>
     {% if product.old_price %}
