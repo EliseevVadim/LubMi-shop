@@ -48,6 +48,7 @@ class IndexView(View):
         try:
             return render(request, 'lms/plist.html', {
                 'products': pgn.page(page),
+                'favorites': favorites,
             })
         except PageNotAnInteger:
             return HttpResponse('')

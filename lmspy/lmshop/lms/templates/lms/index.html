@@ -25,9 +25,12 @@
 {% block javascript %}
 heart_click = (input, url) => {
   url = url.replace(/\/\d\/$/, `/${input.checked?1:0}/`);
-  alert(url);
-  fetch(url, {'method': 'POST'}).then(response => response.text()).then(text => {
-    alert(text);
+  fetch(url, {'method': 'POST', headers: {'X-CSRFToken': csrftoken}}).then(response => response.json()).then(answer => {
+    let selector = `input[type="checkbox"][data-ppk="${answer.ppk}"]`;
+    let inputs = document.querySelectorAll(selector);
+    inputs.forEach((a,b,c) => {
+      a.checked = answer.like;
+    });
   });
 }
 {% endblock %}

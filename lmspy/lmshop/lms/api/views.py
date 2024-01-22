@@ -24,7 +24,10 @@ class ProductLikeSetView(APIView):
     @staticmethod
     def post(request, ppk, like: int, _=None):
         favorites = Favorites(request)
-        (lambda: favorites.add_item(ppk) if like else lambda: favorites.remove_item(ppk))()
+        if like:
+            favorites.add_item(ppk)
+        else:
+            favorites.remove_item(ppk)
         return Response({
             'ppk': ppk,
             'like': like

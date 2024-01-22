@@ -5,17 +5,18 @@
   <link href="{% static "css/lms.css" %}" rel="stylesheet">
   <title>{% block title %}{% endblock %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="{% static "js/js.cookie.min.js" %}"></script>
   <script>
+    const csrftoken = Cookies.get('csrftoken');
     {% block javascript %}
     {% endblock %}
   </script>
 </head>
 <body>
-
 <!-- Leading, sidebars begin -->
   <header class="leading">
-      {% block leading %}
-      {% endblock %}
+    {% block leading %}
+    {% endblock %}
   </header>
 
   <aside class="left">
