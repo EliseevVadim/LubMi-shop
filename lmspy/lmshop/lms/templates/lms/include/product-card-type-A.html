@@ -4,7 +4,7 @@
   {% if img %}
   <div class="p-card-a" style="background-image: url('{% thumbnail img.image 220x0 %}');">
     {% if product.novelty %}
-    <label class="white">Новинка</label>
+    <label class="white">Новинка!</label>
     {% endif %}
     {% if product.article in favorites %}
     {% include "lms/include/heart.html" with product=product checked="checked" %}
@@ -19,14 +19,9 @@
   {% endif %}
   {% endwith %}
   <figcaption>
-    {% if product.old_price %}
     {{product.title}}<br/>
     ({{product.color|default:"цвет не указан"}})<br/>
-    <span class="old_price">{{product.old_price.amount}} руб.</span>{{product.actual_price.amount}} руб.
-    {% else %}
-    {{product.title}}<br/>
-    ({{product.color|default:"цвет не указан"}})<br/>
-    {{product.actual_price.amount}} руб.
-    {% endif %}
+    {% if product.old_price %}<span class="old_price">{{product.old_price.amount}} руб.</span>{% endif %}{{product.actual_price.amount}} руб.<br/>
+    {% if not product.in_stock %}<span class="red">Нет в наличии<br/></span><button class="w-100">Сообщить о поступлении</button>{% endif %}
   </figcaption>
 </figure>

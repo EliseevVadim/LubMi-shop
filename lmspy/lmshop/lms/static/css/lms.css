@@ -8,6 +8,7 @@
     --ZixPanels: 30;
     --ZixTop: 40;
     --CatItemWidth: 17rem;
+    --HeartSize: 1.6rem;
 }
 
 body, aside, .content, .leading {
@@ -165,6 +166,7 @@ footer.page {
 
 .heart {
     margin-left: auto;
+    max-height: calc(1.2 * var(--HeartSize));
 }
 
 input[type="checkbox"] {
@@ -172,8 +174,8 @@ input[type="checkbox"] {
 }
 
 input[type="checkbox"] ~ svg {
-    min-height: 1.6rem;
-    min-width: 1.6rem;
+    min-height: var(--HeartSize);
+    min-width: var(--HeartSize);
     stroke: white;
     cursor: pointer;
 }
@@ -252,6 +254,14 @@ img.bkg {
     color: white;
 }
 
+.red {
+    color: red;
+}
+
+.w-100 {
+    width: 100%;
+}
+
 /* Кнопки --------------------------------------------------------------------------------------------------------------*/
 
 button {
@@ -261,6 +271,7 @@ button {
     background: none;
     box-shadow: none;
     padding: calc(0.75 * var(--DefPadding)) calc(2 * var(--DefPadding));
+    cursor: pointer;
 }
 
 button.medium {
