@@ -25,9 +25,9 @@ class ProductLikeSetView(APIView):
     def post(request, ppk, like: int, _=None):
         favorites = CustomerInfo(request)
         if like:
-            favorites.add_item(ppk)
+            favorites.add_favorite(ppk)
         else:
-            favorites.remove_item(ppk)
+            favorites.remove_favorite(ppk)
         return Response({
             'ppk': ppk,
             'like': like

@@ -112,7 +112,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SCART_SESSION_ID = 'shopping_cart'
 
-CUSTOMER_INFO_SESSION_ID = 'customer-info-session-id'
+CUSTOMER_INFO_SESSION_ID = 'customer-info-session-id-1.0'
 
 MEDIA_URL = 'media/'
 
