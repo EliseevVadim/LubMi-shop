@@ -4,7 +4,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView, DetailView
 from django.views import View
 from .models import *
-from favorites.customerinfo import CustomerInfo
+from customerinfo.customerinfo import CustomerInfo
 
 
 class IndexView(View):

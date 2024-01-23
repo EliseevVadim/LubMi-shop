@@ -5,7 +5,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework import generics
 from lms.models import Product
 from lms.api.serializers import ProductSerializer
-from favorites.customerinfo import CustomerInfo
+from customerinfo.customerinfo import CustomerInfo
 
 
 class ProductListView(generics.ListAPIView):

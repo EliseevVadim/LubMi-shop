@@ -25,7 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'lms.apps.LmsConfig',
     'scart.apps.ScartConfig',
-    'favorites.apps.FavoritesConfig',
+    'customerinfo.apps.CustomerInfoConfig',
     'djmoney',
     'easy_thumbnails',
     'rest_framework',
@@ -110,13 +110,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# shopping cart session id
-
 SCART_SESSION_ID = 'shopping_cart'
 
-# favorites session id
-
-FAVORITES_SESSION_ID = 'favorites'
+CUSTOMER_INFO_SESSION_ID = 'customer-info-session-id'
 
 MEDIA_URL = 'media/'
 

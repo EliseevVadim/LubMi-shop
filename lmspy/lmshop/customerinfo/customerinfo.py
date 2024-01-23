@@ -4,13 +4,13 @@ from django.conf import settings
 class CustomerInfo:
     def __init__(self, request):
         self.session = request.session
-        favorites = self.session.get(settings.FAVORITES_SESSION_ID)
+        favorites = self.session.get(settings.CUSTOMER_INFO_SESSION_ID)
         if not favorites:
-            favorites = self.session[settings.FAVORITES_SESSION_ID] = list()
+            favorites = self.session[settings.CUSTOMER_INFO_SESSION_ID] = list()
         self._favorites = favorites
 
     def clear(self):
-        del self.session[settings.FAVORITES_SESSION_ID]
+        del self.session[settings.CUSTOMER_INFO_SESSION_ID]
         self.save()
 
     def add_item(self, prod_id: str):
