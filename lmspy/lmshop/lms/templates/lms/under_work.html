@@ -3,5 +3,10 @@
 {% block page_content %}
   <h1>Работа в процессе</h1>
   <p>Извините, работа над этой страницей продолжается</p>
+  <p class="text-center"><a href="#modal-one" class="open-modal">Открыть модальное окно</a></p>
+  <button onclick="document.getElementById('modal-one').showModal();">zzzzzzz</button>
   {% lorem 10 p %}
+{% endblock %}
+{% block modal_forms %}
+{% include "lms/include/modal-form.html" with modal_id="modal-one" %}
 {% endblock %}

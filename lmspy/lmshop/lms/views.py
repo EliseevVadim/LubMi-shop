@@ -3,8 +3,9 @@ from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView, DetailView
 from django.views import View
-from .models import *
 from customerinfo.customerinfo import CustomerInfo
+from .models import *
+from .forms import CustomerShortInfoForm
 
 
 class IndexView(View):
@@ -100,8 +101,10 @@ class ContactsView(ListView):
     template_name = 'lms/under_work.html'
 
 
-class AboutCompanyView(ListView):
-    queryset = Product.published.all()
-    context_object_name = 'products'
-    paginate_by = 3
-    template_name = 'lms/under_work.html'
+class AboutCompanyView(View):
+    @staticmethod
+    def get(request, *_, **__):
+        return render(request, 'lms/under_work.html', {
+            'page_title': "LubMi - Главная",
+            'form': CustomerShortInfoForm(),
+        })

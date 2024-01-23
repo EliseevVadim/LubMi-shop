@@ -272,6 +272,7 @@ button {
     box-shadow: none;
     padding: calc(0.75 * var(--DefPadding)) calc(2 * var(--DefPadding));
     cursor: pointer;
+    text-decoration: none;
 }
 
 button.medium {
@@ -290,4 +291,20 @@ button.inverted {
 
 button:hover {
     background: rgba(0, 0, 0, 0.15);
+}
+
+/* Диалоги и формы -----------------------------------------------------------------------------------------------------*/
+
+form {
+    display: flex;
+    flex-flow: column;
+}
+
+form div {
+    display: flex;
+    flex-flow: column;
+}
+
+form div label {
+
 }

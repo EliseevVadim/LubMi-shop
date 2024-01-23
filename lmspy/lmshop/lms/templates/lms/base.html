@@ -18,18 +18,15 @@
     {% block leading %}
     {% endblock %}
   </header>
-
   <aside class="left">
     {% block left_side_bar %}
     {% endblock %}
   </aside>
-
   <aside class="right">
     {% block right_side_bar %}
     {% endblock %}
   </aside>
 <!-- Leading, sidebars end -->
-
 <!-- Content begin -->
   <div class="content">
     <div id="leading-spacer"></div>
@@ -57,5 +54,7 @@
       {% endblock %}
     })
   </script>
+  {% block modal_forms %}
+  {% endblock %}
 </body>
 </html>

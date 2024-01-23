@@ -1,0 +1,14 @@
+{% if form %}
+<dialog id="{{modal_id}}">
+	<div class="dialog-header">
+		<h2>Заголовок формы</h2>
+	</div>
+	<div class="dialog-body">
+		<form action="" method="post">
+		{{form.as_div}}
+		{% csrf_token %}
+		<p><input type="submit" value="Ok"></p>
+		</form>
+	</div>
+</dialog>
+{% endif %}

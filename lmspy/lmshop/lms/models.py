@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import QuerySet
 from django.utils import timezone, text
 from djmoney.models.fields import MoneyField
+from django.core.validators import RegexValidator
 from datetime import datetime
 
 
@@ -135,3 +136,12 @@ class Order(DbItem):
 
     def __str__(self):
         return f'заказ на {self.product} из корзины {self.scart_id}'
+
+
+class CustomerShortInfo(DbItem):
+    class Meta:  # -- May be involved into database at future --
+        managed = False
+
+    name = models.CharField(null=False, max_length=150)
+    email = models.EmailField(null=False, max_length=250)
+    phone = models.CharField(null=False, max_length=50, validators=[RegexValidator()])  # TODO -- write regex --
