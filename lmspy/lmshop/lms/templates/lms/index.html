@@ -23,7 +23,7 @@
 {% endblock %}
 
 {% block javascript %}
-heart_click = (input, url) => {
+const pcard_like_click = (input, url) => {
   url = url.replace(/\/\d\/$/, `/${input.checked?1:0}/`);
   fetch(url, {'method': 'POST', headers: {'X-CSRFToken': csrftoken}}).then(response => response.json()).then(answer => {
     let selector = `input[type="checkbox"][data-ppk="${answer.ppk}"]`;
@@ -32,5 +32,8 @@ heart_click = (input, url) => {
       a.checked = answer.like;
     });
   });
+}
+const notify_delivery = ppk => {
+  alert(`TODO: Послать запрос на уведомление о поступлении товара ${ppk}`)
 }
 {% endblock %}

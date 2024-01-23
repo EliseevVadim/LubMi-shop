@@ -22,6 +22,6 @@
     {{product.title}}<br/>
     ({{product.color|default:"цвет не указан"}})<br/>
     {% if product.old_price %}<span class="old_price">{{product.old_price.amount}} руб.</span>{% endif %}{{product.actual_price.amount}} руб.<br/>
-    {% if not product.in_stock %}<span class="red">Нет в наличии<br/></span><button class="w-100">Сообщить о поступлении</button>{% endif %}
+    {% if not product.in_stock %}<span class="red">Нет в наличии<br/></span><button class="w-100" onclick="notify_delivery('{{product.article}}')">Сообщить о поступлении</button>{% endif %}
   </figcaption>
 </figure>
