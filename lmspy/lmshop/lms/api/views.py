@@ -5,7 +5,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework import generics
 from lms.models import Product
 from lms.api.serializers import ProductSerializer
-from favorites.favorites import Favorites
+from favorites.customerinfo import CustomerInfo
 
 
 class ProductListView(generics.ListAPIView):
@@ -23,7 +23,7 @@ class ProductLikeSetView(APIView):
 
     @staticmethod
     def post(request, ppk, like: int, _=None):
-        favorites = Favorites(request)
+        favorites = CustomerInfo(request)
         if like:
             favorites.add_item(ppk)
         else:

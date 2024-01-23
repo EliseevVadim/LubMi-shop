@@ -1,7 +1,7 @@
 from django.conf import settings
 
 
-class Favorites:
+class CustomerInfo:
     def __init__(self, request):
         self.session = request.session
         favorites = self.session.get(settings.FAVORITES_SESSION_ID)
