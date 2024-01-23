@@ -305,6 +305,6 @@ form div {
     flex-flow: column;
 }
 
-form div label {
-
+form div input {
+    margin-top: 1rem;
 }

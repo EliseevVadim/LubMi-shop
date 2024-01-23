@@ -1,13 +1,14 @@
 {% if form %}
 <dialog id="{{modal_id}}">
 	<div class="dialog-header">
-		<h2>Заголовок формы</h2>
+		<h2>{{form.title}}</h2>
+		<label>{{form.description}}</label>
 	</div>
 	<div class="dialog-body">
 		<form action="" method="post">
 		{{form.as_div}}
-		{% csrf_token %}
-		<p><input type="submit" value="Ok"></p>
+		{%csrf_token%}
+		<div><input type="submit" value="{{form.confirmation}}"/></div>
 		</form>
 	</div>
 </dialog>
