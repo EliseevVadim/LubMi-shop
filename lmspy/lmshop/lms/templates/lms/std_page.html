@@ -1,9 +1,12 @@
 {% extends "lms/base.html" %}
 {% load static %}
 
-{% block title %}LubMi - {{page_title}}{% endblock %}
+{% block title %}
+LubMi - {{page_title}}
+{% endblock %}
 
-{% block leading %}<nav>
+{% block leading %}
+<nav>
   <a class="logo" href='{% url "lms:index" %}'><img src="{% static 'svg/logo.svg' %}"/></a>
   <a href='{% url "lms:index" %}'>Главная</a>
   <a href='{% url "lms:catalogue" %}'>Каталог</a>
@@ -12,7 +15,8 @@
   <a href='{% url "lms:care" %}'>Уход</a>
   <a href='{% url "lms:contacts" %}'>Контакты</a>
   <a href='{% url "lms:about" %}'>О компании</a>
-</nav>{% endblock %}
+</nav>
+{% endblock %}
 
 {% block page_footer %}
 <div class="std-footer">
@@ -48,3 +52,24 @@
   <h2>Правая Боковая панель</h2>
   <p>Работа в процессе</p>
 {% endblock %}
+
+{% block modal_forms %}
+{% include "lms/include/popup.html" with popup_id="popup-message" %}
+{% endblock %}
+
+{% block javascript %}
+const show_popup = (text) => {
+  document.querySelector("#popup-message span").textContent = text;
+  document.getElementById('popup-message').style.visibility = "visible";
+};
+const hide_popup = () => {
+  document.getElementById('popup-message').style.visibility = "hidden";
+};
+{% endblock %}
+
+{% block DOM_ready_script %}
+  hide_popup();
+{% endblock %}
+
+
+

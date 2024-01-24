@@ -320,10 +320,38 @@ form div input {
     padding: 0.5rem;
 }
 
-dialog {
-    max-width:30rem;
-    padding: 3rem;
+dialog,
+.popup {
+    max-width: 30rem;
     border: solid black thin;
+    color: black;
+}
+
+dialog {
+    padding: 3rem;
+}
+
+.popup {
+    display: flex;
+    flex-flow: column;
+    padding: 1rem;
+    font-size: 1.25rem;
+    position: fixed;
+    right: 2rem;
+    top: calc(var(--LeadingHeight) + 3rem);
+    z-index: var(--ZixTop);
+    background: white;
+    visibility: hidden;
+}
+
+.popup label {
+    float: right;
+    margin-left: auto;
+    color: gray;
+}
+
+.popup label:hover {
+    color: black;
 }
 
 .dialog-header {
