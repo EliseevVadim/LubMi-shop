@@ -39,7 +39,7 @@ class CustomerInfo:
         return self._get_or_create_item("favorites", list)
 
     def _get_or_create_scart(self):
-        return self._get_or_create_item("scart", list)
+        return self._get_or_create_item("scart", dict)  # { ppk: order_info }
 
     def add_favorite(self, ppk):
         favorites = self._get_or_create_favorites()
@@ -56,6 +56,10 @@ class CustomerInfo:
     @property
     def favorites(self):
         return set(self._get_or_create_favorites())
+
+    @property
+    def scart(self):
+        return set(self._get_or_create_scart())
 
     @property
     def name(self):

@@ -5,7 +5,7 @@ from django.views.generic import ListView, DetailView
 from django.views import View
 from customerinfo.customerinfo import CustomerInfo
 from .models import *
-from .forms import CustomerShortInfoForm
+from .forms import ShortCustomerInfoForm
 
 
 class IndexView(View):
@@ -31,13 +31,14 @@ class IndexView(View):
 
         if not page:
             return render(request, 'lms/index.html', {
-                'page_title': "LubMi - Главная",
+                'page_title': "Главная",
                 'products': pd_pgn.page(1),
                 'bestsellers': bs_pgn.page(1),
                 'product_pages': pd_pgn.num_pages,
                 'bestseller_pages': bs_pgn.num_pages,
                 'order': order,
                 'favorites': favorites,
+                'form': ShortCustomerInfoForm(),
             })
 
         match request.GET.get('kind'):
@@ -105,6 +106,5 @@ class AboutCompanyView(View):
     @staticmethod
     def get(request, *_, **__):
         return render(request, 'lms/under_work.html', {
-            'page_title': "LubMi - Главная",
-            'form': CustomerShortInfoForm(),
+            'page_title': "Работа в процессе",
         })

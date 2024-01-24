@@ -138,7 +138,7 @@ class Order(DbItem):
         return f'заказ на {self.product} из корзины {self.scart_id}'
 
 
-class CustomerShortInfo(DbItem):
+class ShortCustomerInfo(DbItem):
     class Meta:  # -- May be involved into database at future --
         managed = False
 

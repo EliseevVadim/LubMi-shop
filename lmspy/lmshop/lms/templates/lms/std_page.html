@@ -1,8 +1,9 @@
 {% extends "lms/base.html" %}
 {% load static %}
 
-{% block leading %}
-<nav>
+{% block title %}LubMi - {{page_title}}{% endblock %}
+
+{% block leading %}<nav>
   <a class="logo" href='{% url "lms:index" %}'><img src="{% static 'svg/logo.svg' %}"/></a>
   <a href='{% url "lms:index" %}'>Главная</a>
   <a href='{% url "lms:catalogue" %}'>Каталог</a>
@@ -11,8 +12,7 @@
   <a href='{% url "lms:care" %}'>Уход</a>
   <a href='{% url "lms:contacts" %}'>Контакты</a>
   <a href='{% url "lms:about" %}'>О компании</a>
-</nav>
-{% endblock %}
+</nav>{% endblock %}
 
 {% block page_footer %}
 <div class="std-footer">

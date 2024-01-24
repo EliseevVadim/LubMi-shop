@@ -23,11 +23,11 @@ class ProductLikeSetView(APIView):
 
     @staticmethod
     def post(request, ppk, like: int, _=None):
-        favorites = CustomerInfo(request)
+        info = CustomerInfo(request)
         if like:
-            favorites.add_favorite(ppk)
+            info.add_favorite(ppk)
         else:
-            favorites.remove_favorite(ppk)
+            info.remove_favorite(ppk)
         return Response({
             'ppk': ppk,
             'like': like
@@ -38,11 +38,38 @@ class ProductLikeToggleView(APIView):
     permission_classes = [AllowAny]
 
     @staticmethod
-    def post(request, pk, _=None):
-        product = get_object_or_404(Product, pk=pk)
-        like = True  # TODO -- remove this line --
-        pass  # TODO -- product.favorite = (like := not product.favorite) --
-        return Response({
-            'pk': pk,
-            'like': like
-        })
+    def post(request, ppk, _=None):
+        info = CustomerInfo(request)
+        if ppk in info.favorites:
+            info.remove_favorite(ppk)
+            return Response({
+                'ppk': ppk,
+                'like': 0
+            })
+        else:
+            info.add_favorite(ppk)
+            return Response({
+                'ppk': ppk,
+                'like': 1
+            })
+
+
+class GetCustomerInfo(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    def post(request, flags, _=None):
+        info = CustomerInfo(request)
+        items = {
+            0b000000001: lambda: {"name": info.name},
+            0b000000010: lambda: {"phone": info.phone},
+            0b000000100: lambda: {"email": info.email},
+            0b000001000: lambda: {"address": info.address},
+            0b000010000: lambda: {"favorites": info.favorites},
+            0b000100000: lambda: {"scart": info.scart},
+        }
+        result = {}
+        for mask in items.keys():
+            if flags & mask:
+                result |= items[mask]()
+        return Response(result)

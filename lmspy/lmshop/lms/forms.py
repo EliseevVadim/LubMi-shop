@@ -1,15 +1,15 @@
 from django import forms
-from .models import CustomerShortInfo
+from .models import ShortCustomerInfo
 
 
-class CustomerShortInfoForm(forms.ModelForm):
+class ShortCustomerInfoForm(forms.ModelForm):
     title = 'Сообщить о поступлении товара'
     description = 'Выберите удобный способ для оповещения о повторном наличии данного товара'
     confirmation = "Получить уведомление"
     cancel = "🞨"
 
     class Meta:
-        model = CustomerShortInfo
+        model = ShortCustomerInfo
         fields = "__all__"
         labels = {
             "name": '',
