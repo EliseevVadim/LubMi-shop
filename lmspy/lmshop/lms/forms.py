@@ -17,7 +17,7 @@ class ShortCustomerInfoForm(forms.ModelForm):
             "email": '',
         }
         widgets = {
-            'name': forms.TextInput(attrs={'placeholder': 'Как к Вам обращаться'}),
-            'phone': forms.TextInput(attrs={'placeholder': 'Телефон'}),
-            'email': forms.EmailInput(attrs={'placeholder': 'Почта'}),
+            'name': forms.TextInput(attrs={'id': 'customer_name', 'placeholder': 'Как к Вам обращаться'}),
+            'phone': forms.TextInput(attrs={'id': 'customer_phone', 'placeholder': 'Телефон'}),
+            'email': forms.EmailInput(attrs={'id': 'customer_email', 'placeholder': 'Почта'}),
         }

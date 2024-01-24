@@ -28,7 +28,14 @@ const pcard_like_click = (input, url) => {
 }
 const notify_delivery = ppk => {
   fetch('{% url "api:get_customer_info" flags=7 %}', {'method': 'POST', headers: {'X-CSRFToken': csrftoken}}).then(response => response.json()).then(answer => {
-    document.getElementById('notify-delivery-form').showModal();
+    dialog = document.getElementById('notify-delivery-form');
+    cu_name = document.getElementById('customer_name');
+    cu_phone = document.getElementById('customer_phone');
+    cu_email = document.getElementById('customer_email');
+    cu_name.value = answer.name;
+    cu_phone.value = answer.phone;
+    cu_email.value = answer.email;
+    dialog.showModal();
   });
 }
 {% endblock %}
