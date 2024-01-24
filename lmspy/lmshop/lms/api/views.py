@@ -5,6 +5,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework import generics
 from lms.models import Product, NotificationRequest
 from lms.api.serializers import ProductSerializer
+from lms.utils import Telegram
 from customerinfo.customerinfo import CustomerInfo
 from json import JSONDecodeError
 import json
@@ -103,6 +104,8 @@ class NotifyMeForDelivery(APIView):
                 ppk=ppk
             )
             nrq.save()
+            tg = Telegram("6219840578:AAHtoo5hPUroTlT7pVAuae4OsmX2MrXgQoM", frozenset({1026778837}))
+            tg.send_message(str(nrq))
             return Response({'ok': True})
         except JSONDecodeError:
             return Response({'ok': False})
