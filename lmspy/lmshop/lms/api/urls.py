@@ -11,4 +11,5 @@ urlpatterns = [
     path('products/<ppk>/toggle-like/', views.ProductLikeToggleView.as_view(), name='toggle_product_like'),
     # -- customer API --
     path('customer/info/<int:flags>/', views.GetCustomerInfo.as_view(), name='get_customer_info'),
+    path('customer/notify-me-product-delivery/', views.NotifyMeForDelivery.as_view(), name='notify_me_for_delivery'),
 ]

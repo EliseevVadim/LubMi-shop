@@ -6,6 +6,8 @@ from rest_framework import generics
 from lms.models import Product
 from lms.api.serializers import ProductSerializer
 from customerinfo.customerinfo import CustomerInfo
+from json import JSONDecodeError
+import json
 
 
 class ProductListView(generics.ListAPIView):
@@ -73,3 +75,20 @@ class GetCustomerInfo(APIView):
             if flags & mask:
                 result |= items[mask]()
         return Response(result)
+
+
+class NotifyMeForDelivery(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    def post(request, _=None):
+        try:
+            cui = json.loads(request.body)
+            print(cui)
+            info = CustomerInfo(request)
+            return Response({'ok': True})
+        except JSONDecodeError:
+            return Response({'ok': False})
+        except KeyError:
+            return Response({'ok': False})
+

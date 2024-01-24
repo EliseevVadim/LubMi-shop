@@ -3,6 +3,7 @@ from .models import ShortCustomerInfo
 
 
 class ShortCustomerInfoForm(forms.ModelForm):
+    id = 'scui-form'
     title = 'Сообщить о поступлении товара'
     description = 'Выберите удобный способ для оповещения о повторном наличии данного товара'
     confirmation = "Получить уведомление"
@@ -17,7 +18,7 @@ class ShortCustomerInfoForm(forms.ModelForm):
             "email": '',
         }
         widgets = {
-            'name': forms.TextInput(attrs={'id': 'customer_name', 'placeholder': 'Как к Вам обращаться'}),
-            'phone': forms.TextInput(attrs={'id': 'customer_phone', 'placeholder': 'Телефон'}),
-            'email': forms.EmailInput(attrs={'id': 'customer_email', 'placeholder': 'Почта'}),
+            'name': forms.TextInput(attrs={'id': 'scui-name', 'placeholder': 'Как к Вам обращаться'}),
+            'phone': forms.TextInput(attrs={'id': 'scui-phone', 'placeholder': 'Телефон'}),
+            'email': forms.EmailInput(attrs={'id': 'scui-email', 'placeholder': 'Почта'}),
         }
