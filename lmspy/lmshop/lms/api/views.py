@@ -91,21 +91,15 @@ class NotifyMeForDelivery(APIView):
             email = escape(cui['email'])
             ppk = escape(cui['ppk'])
 
-            if not ppk or (not email and not phone):
+            if not name or not ppk or (not email and not phone):
                 return Response({'ok': False})
 
             info = CustomerInfo(request)
-            info.name = name or info.name
+            info.name = name
             info.phone = phone or info.phone
             info.email = email or info.email
-            nrq = NotificationRequest(
-                name=name or "Не указано",
-                phone=phone or "Не указан",
-                email=email or "Не указан",
-                ppk=ppk
-            )
+            nrq = NotificationRequest(name=name, phone=phone, email=email, ppk=ppk)
             nrq.save()
-
             tg = Telegram(settings.TELEGRAM_TOKEN, settings.TELEGRAM_CIDS)
             tg.send_message(str(nrq))
 
