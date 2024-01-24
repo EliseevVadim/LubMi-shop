@@ -11,7 +11,7 @@ class ShortCustomerInfoForm(forms.ModelForm):
 
     class Meta:
         model = ShortCustomerInfo
-        fields = "__all__"
+        fields = ['name', 'phone', 'email']
         labels = {
             "name": '',
             "phone": '',
