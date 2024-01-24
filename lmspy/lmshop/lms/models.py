@@ -145,4 +145,4 @@ class NotificationRequest(DbItem):
     ppk = models.EmailField(null=False, max_length=100)
 
     def __str__(self):
-        return f'уведомление о поступление {self.ppk}'
+        return f'уведомление о поступлении {self.ppk}'
