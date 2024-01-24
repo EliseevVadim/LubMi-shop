@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.utils.html import escape
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -104,8 +105,10 @@ class NotifyMeForDelivery(APIView):
                 ppk=ppk
             )
             nrq.save()
-            tg = Telegram("6219840578:AAHtoo5hPUroTlT7pVAuae4OsmX2MrXgQoM", frozenset({1026778837}))
+
+            tg = Telegram(settings.TELEGRAM_TOKEN, settings.TELEGRAM_CIDS)
             tg.send_message(str(nrq))
+
             return Response({'ok': True})
         except JSONDecodeError:
             return Response({'ok': False})
