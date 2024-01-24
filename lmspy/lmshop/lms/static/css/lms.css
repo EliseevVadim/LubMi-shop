@@ -308,3 +308,32 @@ form div {
 form div input {
     margin-top: 1rem;
 }
+
+dialog {
+    max-width:30rem;
+    padding: 3rem;
+    border: solid black thin;
+}
+
+.dialog-header {
+    display: flex;
+    flex-flow:column;
+    place-items:center;
+}
+
+.dialog-header label {
+    margin: 1rem;
+}
+
+.cancel-dialog {
+    font-size: 2rem;
+    color: gray;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    cursor: pointer;
+}
+
+.cancel-dialog:hover {
+    color: black;
+}

@@ -1,14 +1,15 @@
 {% if form %}
 <dialog id="{{modal_id}}">
+	<label class="cancel-dialog" onclick="document.getElementById('{{modal_id}}').close();">{{form.cancel|default:'Укажите отказ'}}</label>
 	<div class="dialog-header">
-		<h2>{{form.title}}</h2>
-		<label>{{form.description}}</label>
+		<h2>{{form.title|default:"Укажите заголовок"}}</h2>
+		<label>{{form.description|default:"Укажите описание"}}</label>
 	</div>
 	<div class="dialog-body">
 		<form action="" method="post">
 		{{form.as_div}}
 		{%csrf_token%}
-		<div><input type="submit" value="{{form.confirmation}}"/></div>
+		<div class="dialog-footer"><input type="submit" value="{{form.confirmation|default:'Укажите подтверждение'}}"/></div>
 		</form>
 	</div>
 </dialog>
