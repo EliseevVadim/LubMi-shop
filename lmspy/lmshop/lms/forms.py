@@ -18,7 +18,7 @@ class ShortCustomerInfoForm(forms.ModelForm):
             "email": '',
         }
         widgets = {
-            'name': forms.TextInput(attrs={'id': 'scui-name', 'placeholder': 'Как к Вам обращаться'}),
-            'phone': forms.TextInput(attrs={'id': 'scui-phone', 'placeholder': 'Телефон'}),
-            'email': forms.EmailInput(attrs={'id': 'scui-email', 'placeholder': 'Почта'}),
+            'name': forms.TextInput(attrs={'id': 'scui-name', 'placeholder': 'Укажите, как к Вам обращаться'}),
+            'phone': forms.TextInput(attrs={'id': 'scui-phone', 'placeholder': 'Введите Ваш номер телефона', 'pattern': """^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$"""}),
+            'email': forms.EmailInput(attrs={'id': 'scui-email', 'placeholder': 'Введите Ваш email'}),
         }
