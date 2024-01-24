@@ -141,8 +141,8 @@ class Order(DbItem):
 class NotificationRequest(DbItem):
     name = models.CharField(null=False, max_length=150)
     email = models.EmailField(null=False, max_length=250)
-    phone = models.CharField(null=False, max_length=50, validators=[RegexValidator('''''')])
+    phone = models.CharField(null=False, max_length=50)
     ppk = models.EmailField(null=False, max_length=100)
 
     def __str__(self):
-        return f'уведомление о поступлении {self.ppk}'
+        return f'Запрос #{self.id} на уведомление о поступлении товара артикул: {self.ppk}, от: {self.name}, телефон: {self.phone}, email: {self.email}'

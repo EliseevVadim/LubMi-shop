@@ -1,9 +1,9 @@
-from django.shortcuts import get_object_or_404
+from django.utils.html import escape
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework import generics
-from lms.models import Product
+from lms.models import Product, NotificationRequest
 from lms.api.serializers import ProductSerializer
 from customerinfo.customerinfo import CustomerInfo
 from json import JSONDecodeError
@@ -84,8 +84,25 @@ class NotifyMeForDelivery(APIView):
     def post(request, _=None):
         try:
             cui = json.loads(request.body)
-            print(cui)
+            name = escape(cui['name'])
+            phone = escape(cui['phone'])
+            email = escape(cui['email'])
+            ppk = escape(cui['ppk'])
+
+            if not ppk or (not email and not phone):
+                return Response({'ok': False})
+
             info = CustomerInfo(request)
+            info.name = name or info.name
+            info.phone = phone or info.phone
+            info.email = email or info.email
+            nrq = NotificationRequest(
+                name=name or "Не указано",
+                phone=phone or "Не указан",
+                email=email or "Не указан",
+                ppk=ppk
+            )
+            nrq.save()
             return Response({'ok': True})
         except JSONDecodeError:
             return Response({'ok': False})
