@@ -9,7 +9,7 @@
 		<form action="" method="post">
 		{{form.as_div}}
 		{%csrf_token%}
-		<div class="dialog-footer"><input type="submit" value="{{form.confirmation|default:'Укажите подтверждение'}}"/></div>
+		<div class="dialog-footer"><input class="medium inverted" type="submit" value="{{form.confirmation|default:'Укажите подтверждение'}}"/></div>
 		</form>
 	</div>
 </dialog>

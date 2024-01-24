@@ -264,7 +264,8 @@ img.bkg {
 
 /* Кнопки --------------------------------------------------------------------------------------------------------------*/
 
-button {
+button,
+input[type="submit"] {
     border: solid black thin;
     border-radius: 1px;
     color: black;
@@ -275,22 +276,31 @@ button {
     text-decoration: none;
 }
 
-button.medium {
+button.medium,
+input[type="submit"].medium {
     font-size: 1.25rem;
 }
 
-button.large {
+button.large,
+input[type="submit"].large {
     font-size: 3rem;
     border-width: thick;
 }
 
-button.inverted {
+button.inverted,
+input[type="submit"].inverted {
     border-color: white;
     color: white;
 }
 
-button:hover {
+input[type="submit"].inverted {
+    background: black;
+}
+
+button:hover,
+input[type="submit"]:hover {
     background: rgba(0, 0, 0, 0.15);
+    color: black;
 }
 
 /* Диалоги и формы -----------------------------------------------------------------------------------------------------*/
@@ -307,6 +317,7 @@ form div {
 
 form div input {
     margin-top: 1rem;
+    padding: 0.5rem;
 }
 
 dialog {
