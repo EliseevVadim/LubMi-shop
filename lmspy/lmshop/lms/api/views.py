@@ -8,8 +8,6 @@ from lms.models import Product, NotificationRequest
 from lms.api.serializers import ProductSerializer
 from lms.utils import Telegram
 from customerinfo.customerinfo import CustomerInfo
-from json import JSONDecodeError
-import json
 
 
 class ProductListView(generics.ListAPIView):
@@ -85,27 +83,22 @@ class NotifyMeForDelivery(APIView):
     @staticmethod
     def post(request, _=None):
         try:
-            cui = json.loads(request.body)
+            cui = request.data
             name = escape(cui['name'])
             phone = escape(cui['phone'])
             email = escape(cui['email'])
             ppk = escape(cui['ppk'])
-
-            if not name or not ppk or (not email and not phone):
-                return Response({'ok': False})
-
-            info = CustomerInfo(request)
-            info.name = name
-            info.phone = phone or info.phone
-            info.email = email or info.email
+        except KeyError:
+            return Response({'ok': False})
+        if name and ppk and (email or phone):
             nrq = NotificationRequest(name=name, phone=phone, email=email, ppk=ppk)
             nrq.save()
             tg = Telegram(settings.TELEGRAM_TOKEN, settings.TELEGRAM_CIDS)
             tg.send_message(str(nrq))
-
+            info = CustomerInfo(request)
+            info.name = name
+            info.phone = phone or info.phone
+            info.email = email or info.email
             return Response({'ok': True})
-        except JSONDecodeError:
-            return Response({'ok': False})
-        except KeyError:
-            return Response({'ok': False})
+        return Response({'ok': False})
 

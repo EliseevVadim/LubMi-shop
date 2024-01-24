@@ -42,7 +42,7 @@ const notify_delivery = ppk => {
     cu_form.onsubmit = e => {
       e.preventDefault();
       fetch('{% url "api:notify_me_for_delivery" %}',
-            { method: 'POST', headers: {'X-CSRFToken': csrftoken},
+            { method: 'POST', headers: {'Content-Type': 'application/json', 'X-CSRFToken': csrftoken},
               body: JSON.stringify({name: cu_name.value, phone: cu_phone.value, email: cu_email.value, ppk: ppk})
             }).then(response => response.json()).then(result => {
               if(result.ok) {
