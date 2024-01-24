@@ -138,10 +138,11 @@ class Order(DbItem):
         return f'заказ на {self.product} из корзины {self.scart_id}'
 
 
-class ShortCustomerInfo(DbItem):
-    class Meta:  # -- May be involved into database at future --
-        managed = False
-
+class NotificationRequest(DbItem):
     name = models.CharField(null=False, max_length=150)
     email = models.EmailField(null=False, max_length=250)
-    phone = models.CharField(null=False, max_length=50, validators=[RegexValidator()])  # TODO -- write regex --
+    phone = models.CharField(null=False, max_length=50, validators=[RegexValidator()])
+    ppk = models.EmailField(null=False, max_length=100)
+
+    def __str__(self):
+        return f'уведомление о поступление {self.ppk}'

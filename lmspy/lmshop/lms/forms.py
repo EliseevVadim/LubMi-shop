@@ -1,5 +1,5 @@
 from django import forms
-from .models import ShortCustomerInfo
+from .models import NotificationRequest
 
 
 class ShortCustomerInfoForm(forms.ModelForm):
@@ -10,7 +10,7 @@ class ShortCustomerInfoForm(forms.ModelForm):
     cancel = "🞨"
 
     class Meta:
-        model = ShortCustomerInfo
+        model = NotificationRequest
         fields = ['name', 'phone', 'email']
         labels = {
             "name": '',
