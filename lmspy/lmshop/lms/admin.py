@@ -38,7 +38,7 @@ class AttributeAdmin(admin.ModelAdmin):
 @admin.register(Image)
 class ImageAdmin(admin.ModelAdmin):
     list_display = ['product', 'primary', 'image']
-    list_filter = ['primary', 'product']
+    list_filter = ['product', 'primary']
     ordering = ['product', 'primary']
 
 
@@ -48,3 +48,19 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ['scart_id', 'size', 'quantity']
     search_fields = ['scart_id', 'size', 'quantity']
     ordering = ['scart_id', 'size', 'quantity']
+
+
+@admin.register(TelegramBot)
+class TelegramBotAdmin(admin.ModelAdmin):
+    list_display = ['title', 'token', 'description']
+    # list_filter = ['title', 'token']
+    search_fields = ['title', 'size', 'quantity']
+    ordering = ['title', 'token']
+
+
+@admin.register(Chat)
+class ChatAdmin(admin.ModelAdmin):
+    list_display = ['bot', 'title', 'cid', 'active']
+    list_filter = ['bot']
+    search_fields = ['title', 'cid', 'active']
+    ordering = ['active', 'title', 'cid']

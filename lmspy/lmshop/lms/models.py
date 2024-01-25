@@ -2,7 +2,6 @@ from django.db import models
 from django.db.models import QuerySet
 from django.utils import timezone, text
 from djmoney.models.fields import MoneyField
-from django.core.validators import RegexValidator
 from datetime import datetime
 
 
@@ -60,7 +59,7 @@ class Product(DbItem):
     published = PublishedManager()
     bestsellers = BestsellersManager()
 
-    images: QuerySet                        # -- Just for IDE syntax analyzer --
+    images: QuerySet                                                                            # -- Just for IDE syntax analyzer --
     sizes: QuerySet
     attributes: QuerySet
     orders: QuerySet
@@ -95,18 +94,18 @@ class Product(DbItem):
 
 
 class AvailableSize(DbItem):
-    size = models.CharField(max_length=30)                                                  # размер
-    quantity = models.BigIntegerField()                                                     # количество в наличии
-    product = models.ForeignKey(Product, related_name="sizes", on_delete=models.CASCADE)    # товар
+    size = models.CharField(max_length=30)                                                      # размер
+    quantity = models.BigIntegerField()                                                         # количество в наличии
+    product = models.ForeignKey(Product, related_name="sizes", on_delete=models.CASCADE)        # товар
 
     def __str__(self):
         return self.size
 
 
 class Attribute(DbItem):
-    name = models.CharField(max_length=50)                                                          # имя атрибута
-    value = models.CharField(max_length=250)                                                        # значение атрибута
-    product = models.ForeignKey(Product, related_name="attributes", on_delete=models.CASCADE)       # товар
+    name = models.CharField(max_length=50)                                                      # имя атрибута
+    value = models.CharField(max_length=250)                                                    # значение атрибута
+    product = models.ForeignKey(Product, related_name="attributes", on_delete=models.CASCADE)   # товар
 
     def __str__(self):
         return self.name
@@ -142,7 +141,27 @@ class NotificationRequest(DbItem):
     name = models.CharField(null=False, max_length=150)
     email = models.EmailField(null=True, max_length=250)
     phone = models.CharField(null=True, max_length=50)
-    ppk = models.EmailField(null=False, max_length=100)
+    ppk = models.CharField(null=False, max_length=100)
 
     def __str__(self):
         return f'Запрос #{self.id} на уведомление о поступлении товара артикул: {self.ppk}, от: {self.name}, телефон: {self.phone or "не указан"}, email: {self.email or "не указан"}'
+
+
+class TelegramBot(DbItem):
+    title = models.CharField(max_length=50)                                                     # -- название --
+    description = models.TextField(null=True, blank=True)                                       # -- описание --
+    token = models.CharField(max_length=150)                                                    # -- токен --
+    chats: QuerySet                                                                             # -- Just for IDE syntax analyzer --
+
+    def __str__(self):
+        return f'Телеграм-бот "{self.title}"'
+
+
+class Chat(DbItem):
+    title = models.CharField(max_length=50)                                                     # -- название --
+    cid = models.IntegerField(blank=False)                                                      # -- идентификатор чата --
+    active = models.BooleanField(default=True)                                                  # -- активен? --
+    bot = models.ForeignKey(TelegramBot, related_name="chats", on_delete=models.CASCADE)        # -- бот --
+
+    def __str__(self):
+        return f'Телеграм-чат "{self.title}"'

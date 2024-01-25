@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.utils.html import escape
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -6,7 +5,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework import generics
 from lms.models import Product, NotificationRequest
 from lms.api.serializers import ProductSerializer
-from lms.utils import Telegram
+from lms.utils import send_message_via_telegram
 from customerinfo.customerinfo import CustomerInfo
 
 
@@ -93,8 +92,7 @@ class NotifyMeForDelivery(APIView):
         if name and ppk and (email or phone):
             nrq = NotificationRequest(name=name, phone=phone, email=email, ppk=ppk)
             nrq.save()
-            tg = Telegram(settings.TELEGRAM_TOKEN, settings.TELEGRAM_CIDS)
-            tg.send_message(str(nrq))
+            send_message_via_telegram(str(nrq))
             info = CustomerInfo(request)
             info.name = name
             info.phone = phone or info.phone

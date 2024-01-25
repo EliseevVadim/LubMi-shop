@@ -1,14 +1,15 @@
 import json
 import httpx
 from threading import Thread
+from .models import TelegramBot
 
 
-class Telegram:
+class TelegramSender:
     def __init__(self, token: str, cids: frozenset[int]):
         self._token = token
         self._cids = cids
 
-    def send_message(self, message: str):
+    def send(self, message: str):
         def send_msg(token, cid, text):
             with httpx.Client() as client:
                 try:
@@ -25,3 +26,9 @@ class Telegram:
         for _cid in self._cids:
             th = Thread(target=send_msg, args=(self._token, _cid, message), daemon=True)
             th.start()
+
+
+def send_message_via_telegram(message: str):
+    for bot in TelegramBot.objects.all():
+        tm = TelegramSender(bot.token, frozenset(chat.cid for chat in bot.chats.all() if chat.active))
+        tm.send(message)
