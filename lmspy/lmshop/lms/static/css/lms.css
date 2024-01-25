@@ -136,7 +136,7 @@ footer.page {
 
 .selector-container {
     margin-left :auto;
-    margin-right: 1rem;
+    margin-right: 2rem;
 }
 
 select, select:focus {
@@ -145,6 +145,7 @@ select, select:focus {
     padding: 1rem;
     outline: 0;
     font-size: 1.25rem;
+    font-family: var(--Fonts);
 }
 
 /* Каталог ------------------------------------------------------------------------------------------------------------- */
@@ -360,6 +361,7 @@ dialog {
     z-index: var(--ZixTop);
     background: white;
     visibility: hidden;
+    cursor: pointer;
 }
 
 .popup label {

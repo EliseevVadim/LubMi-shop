@@ -38,7 +38,7 @@ class IndexView(View):
                 'product_pages': pd_pgn.num_pages,
                 'bestseller_pages': bs_pgn.num_pages,
                 'order': order,
-                'order_variants_': {order_value: order_item[0] for order_value, order_item in IndexView.ordering.items()},
+                'order_variants': {order_value: order_item[0] for order_value, order_item in IndexView.ordering.items()},
                 'favorites': favorites,
                 'form': ShortCustomerInfoForm(),
             })
