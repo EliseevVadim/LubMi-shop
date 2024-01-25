@@ -13,10 +13,10 @@ class IndexView(View):
     default_order = 'novelties-first'
     ordering = {
         default_order: ("Порядок: по умолчанию", lambda q: q.order_by('-published_at')),
-        'costly-last': ("Цена: по возрастанию", lambda q: q.order_by('actual_price')),
-        'costly-first': ("Цена: по убыванию", lambda q: q.order_by('-actual_price')),
-        'title-alphabet': ("Название: А-Я", lambda q: q.order_by('title')),
-        'title-reverse-alphabet': ("Название: Я-А", lambda q: q.order_by('title')),
+        'price-asc': ("Цена: по возрастанию", lambda q: q.order_by('actual_price')),
+        'price-dsc': ("Цена: по убыванию", lambda q: q.order_by('-actual_price')),
+        'title-asc': ("Название: А-Я", lambda q: q.order_by('title')),
+        'title-dsc': ("Название: Я-А", lambda q: q.order_by('-title')),
     }
 
     @staticmethod

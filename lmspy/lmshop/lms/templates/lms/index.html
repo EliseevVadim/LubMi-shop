@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block page_content %}
-  {% include "lms/include/catalogue-type-A.html" with title="Каталог" pages=product_pages kind="pd" variants=order_variants_ %}
+  {% include "lms/include/catalogue-type-A.html" with title="Каталог" pages=product_pages kind="pd" variants=order_variants_ selector_id="order-selector" %}
   {% include "lms/include/catalogue-type-A.html" with products=bestsellers title="Бестселлеры" pages=bestseller_pages kind="bs" %}
 {% endblock %}
 
@@ -67,4 +67,5 @@ const notify_delivery = ppk => {
 
 {% block DOM_ready_script %}
 {{block.super}}
+document.getElementById("order-selector").addEventListener("change", pd_reorder);
 {% endblock %}

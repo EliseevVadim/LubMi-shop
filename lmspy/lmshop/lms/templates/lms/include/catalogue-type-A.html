@@ -3,11 +3,7 @@
 <h1 class="with-selector">
     <span>{{title}}</span>
     <div class="selector-container">
-        <select id="ordering">
-            {% for value,title in variants.items %}
-            <option value="{{value}}">{{title}}</option>
-            {% endfor %}
-        </select>
+        {% include "lms/include/selector.html" %}
     </div>
 </h1>
 {% else %}
