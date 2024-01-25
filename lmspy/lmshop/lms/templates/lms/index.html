@@ -21,6 +21,8 @@
 
 {% block modal_forms %} {{block.super}}
 {% include "lms/include/modal-form.html" with modal_id="notify-delivery-dialog" %}
+{% include "lms/include/modal-form.html" with modal_id="product-dialog" form=None title="Продукт" %}
+<button onclick="document.getElementById('product-dialog').showModal();">Test</button>
 {% endblock %}
 
 {% block DOM_ready_script %} {{block.super}}
