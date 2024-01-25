@@ -7,9 +7,9 @@
     <label class="white">Новинка!</label>
     {% endif %}
     {% if product.article in favorites %}
-    {% include "lms/include/heart.html" with product=product checked="checked" %}
+    {% include "lms/include/heart.html" with checked="checked" %}
     {% else %}
-    {% include "lms/include/heart.html" with product=product checked="unchecked" %}
+    {% include "lms/include/heart.html" with checked="unchecked" %}
     {% endif %}
   </div>
   {% else %}
