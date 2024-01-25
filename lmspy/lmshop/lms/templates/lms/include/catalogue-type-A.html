@@ -1,5 +1,18 @@
 {% include "lms/include/catalogue-type-A.js" %}
+{% if variants %}
+<h1 class="with-selector">
+    <span>{{title}}</span>
+    <div class="selector-container">
+        <select id="ordering">
+            {% for value,title in variants.items %}
+            <option value="{{value}}">{{title}}</option>
+            {% endfor %}
+        </select>
+    </div>
+</h1>
+{% else %}
 <h1>{{title}}</h1>
+{% endif %}
 <div id="{{kind}}-list" class="catalogue">{% include "lms/include/product-list-type-A.html" %}</div>
 {% if pages > 1 %}
 <div class="toolbar"><button id="{{kind}}-upd-btn" class="medium" onclick="{{kind}}_update();">Загрузить ещё</button></div>

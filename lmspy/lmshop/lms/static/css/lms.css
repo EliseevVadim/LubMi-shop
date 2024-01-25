@@ -129,6 +129,24 @@ footer.page {
     margin-top: 1rem;
 }
 
+.with-selector {
+    display :flex;
+    flex-flow :row;
+}
+
+.selector-container {
+    margin-left :auto;
+    margin-right: 1rem;
+}
+
+select, select:focus {
+    border: none;
+    background :white;
+    padding: 1rem;
+    outline: 0;
+    font-size: 1.25rem;
+}
+
 /* Каталог ------------------------------------------------------------------------------------------------------------- */
 
 .catalogue {
@@ -347,6 +365,7 @@ dialog {
 .popup label {
     margin-left: 1rem;
     color: gray;
+    cursor: pointer;
 }
 
 .popup label:hover {

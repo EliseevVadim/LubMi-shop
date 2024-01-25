@@ -10,12 +10,13 @@ from .forms import ShortCustomerInfoForm
 
 class IndexView(View):
     page_size = 10
-    default_order = 'published'
+    default_order = 'novelties-first'
     ordering = {
-        default_order: lambda q: q.order_by('published_at'),
-        'title': lambda q: q.order_by('title'),
-        'price': lambda q: q.order_by('actual_price'),
-        'sales': lambda q: q.order_by('sales_quantity'),
+        default_order: ("Порядок: по умолчанию", lambda q: q.order_by('-published_at')),
+        'costly-last': ("Цена: по возрастанию", lambda q: q.order_by('actual_price')),
+        'costly-first': ("Цена: по убыванию", lambda q: q.order_by('-actual_price')),
+        'title-alphabet': ("Название: А-Я", lambda q: q.order_by('title')),
+        'title-reverse-alphabet': ("Название: Я-А", lambda q: q.order_by('title')),
     }
 
     @staticmethod
@@ -23,7 +24,7 @@ class IndexView(View):
         page = request.GET.get('page')
         order = request.GET.get('order')
         order = order if order in IndexView.ordering else IndexView.default_order
-        products = IndexView.ordering[order](Product.published.all())
+        products = IndexView.ordering[order][1](Product.published.all())
         bestsellers = Product.bestsellers.all()
         pd_pgn = Paginator(products, IndexView.page_size)
         bs_pgn = Paginator(bestsellers, IndexView.page_size)
@@ -37,6 +38,7 @@ class IndexView(View):
                 'product_pages': pd_pgn.num_pages,
                 'bestseller_pages': bs_pgn.num_pages,
                 'order': order,
+                'order_variants_': {order_value: order_item[0] for order_value, order_item in IndexView.ordering.items()},
                 'favorites': favorites,
                 'form': ShortCustomerInfoForm(),
             })
