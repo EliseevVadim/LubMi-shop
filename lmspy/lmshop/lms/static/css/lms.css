@@ -333,7 +333,7 @@ dialog {
 
 .popup {
     display: flex;
-    flex-flow: column;
+    flex-flow: row;
     padding: 1rem;
     font-size: 1.25rem;
     position: fixed;
@@ -345,8 +345,7 @@ dialog {
 }
 
 .popup label {
-    float: right;
-    margin-left: auto;
+    margin-left: 1rem;
     color: gray;
 }
 

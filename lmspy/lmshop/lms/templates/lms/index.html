@@ -47,7 +47,7 @@ const notify_delivery = ppk => {
             }).then(response => response.json()).then(result => {
               if(result.ok) {
                 dialog.close();
-                show_popup("Запрос на уведомление о доставке товара успешно отправлен");
+                show_popup("Ваш запрос на уведомление о доставке товара успешно отправлен");
               } else {
                 show_popup("При отправке запроса возникли проблемы, попробуйте повторить отправку позже");
               }
