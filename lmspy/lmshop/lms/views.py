@@ -69,11 +69,9 @@ class CatalogueView(ListView):
     template_name = 'lms/under_work.html'
 
 
-class ProductView(ListView):
-    queryset = Product.published.all()
-    context_object_name = 'products'
-    paginate_by = 3
-    template_name = 'lms/under_work.html'
+class ProductView(DetailView):
+    model = Product
+    template_name = 'lms/pcard.html'
 
 
 class PerfumeryView(ListView):

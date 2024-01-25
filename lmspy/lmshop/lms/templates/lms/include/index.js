@@ -7,7 +7,7 @@ const pcard_like_click = (input, url) => {
       input.checked = answer.like;
     });
   });
-}
+};
 const notify_delivery = ppk => {
   fetch('{% url "api:get_customer_info" flags=7 %}', {method: 'POST', headers: {'X-CSRFToken': csrftoken}}).then(response => response.json()).then(answer => {
     dialog = document.getElementById('notify-delivery-dialog');
@@ -39,3 +39,9 @@ const notify_delivery = ppk => {
     dialog.showModal();
   });
 }
+const show_product_details = url => {
+    fetch(url).then(response => response.text()).then(html => {
+        document.querySelector("#{{product_details_id}} .dialog-body").innerHTML = html;
+        document.querySelector("#{{product_details_id}}").showModal();
+    });
+};
