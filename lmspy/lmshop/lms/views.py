@@ -112,7 +112,9 @@ class ProductView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         favorites = CustomerInfo(self.request).favorites
+        print(context)
         return context | {
             'favorites': favorites,
+            'sizes': {size.id: size.size for size in context['object'].sizes.all() if size.quantity > 0},
         }
 

@@ -134,6 +134,8 @@ footer.page {
     margin-top: 1rem;
 }
 
+/* Selector ------------------------------------------------------------------------------------------------------------*/
+
 .with-selector {
     display :flex;
     flex-flow :row;
@@ -192,6 +194,12 @@ select, select:focus {
     min-height: calc(var(--CatItemWidth) * 1.6);
     max-width: var(--CatItemWidth);
     min-width: var(--CatItemWidth);
+}
+
+.p-card-b {
+    display: grid;
+    gap: var(--Gap);
+    grid-template-columns: auto auto auto;
 }
 
 .heart {
@@ -266,6 +274,7 @@ h1, h2, h3, h4, h5, h6 {
     text-decoration: line-through red;
     color: gray;
     margin-right: 0.5rem;
+    margin-left: 0.5rem;
 }
 
 img.bkg {
@@ -280,12 +289,32 @@ img.bkg {
     padding: var(--DefPadding)
 }
 
+.like-title {
+    font-size: 1.25rem;
+}
+
+.like-note {
+    font-size: 0.75rem;
+}
+
+.not-wide {
+    max-width: 25rem;
+}
+
 .white {
     color: white;
 }
 
+.black {
+    color: black;
+}
+
 .red {
     color: red;
+}
+
+.gray {
+    color: gray;
 }
 
 .w-100 {
@@ -323,6 +352,7 @@ input[type="submit"].inverted {
     color: white;
 }
 
+button.inverted,
 input[type="submit"].inverted {
     background: black;
 }
@@ -352,13 +382,18 @@ form div input {
 
 dialog,
 .popup {
-    max-width: 30rem;
+    max-width: 35rem;
     border: solid black thin;
     color: black;
 }
 
 dialog {
     padding: 3rem;
+}
+
+#gp-dialog {
+    max-width: 100vw;
+    max-height: 100vw;
 }
 
 .popup {

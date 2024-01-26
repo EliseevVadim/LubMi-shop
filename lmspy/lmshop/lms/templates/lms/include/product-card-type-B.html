@@ -1,5 +1,12 @@
+{% load thumbnail %}
 <div class="p-card-b">
-    <h2>{{product.title}}</h2>
-    {% include "lms/include/product-card-type-A.html" %}
-    {% include "lms/include/product-description.html" %}
+    <div class="icon-list">
+        <p>КАРТИНКИ</p>
+    </div>
+    <div class="product-card">
+        {% include "lms/include/product-card-type-A.html" %}
+    </div>
+    <div class="product-description">
+        {% include "lms/include/product-description.html" %}
+    </div>
 </div>
