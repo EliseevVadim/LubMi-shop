@@ -69,7 +69,7 @@ class Product(DbItem):
         indexes = [models.Index(fields=["title"])]
 
     def __str__(self):
-        return f"{self.article}: {self.title}"
+        return f"{self.article}:{self.title}"
 
     @property
     def primary_image(self):

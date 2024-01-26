@@ -1,9 +1,10 @@
 from django.utils.html import escape
+from django.shortcuts import get_object_or_404, Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework import generics
-from lms.models import Product, NotificationRequest
+from lms.models import Product, NotificationRequest, AvailableSize
 from lms.api.serializers import ProductSerializer
 from lms.utils import send_message_via_telegram
 from customerinfo.customerinfo import CustomerInfo
@@ -81,12 +82,9 @@ class NotifyMeForDelivery(APIView):
 
     @staticmethod
     def post(request, _=None):
+        cui = request.data
         try:
-            cui = request.data
-            name = escape(cui['name'])
-            phone = escape(cui['phone'])
-            email = escape(cui['email'])
-            ppk = escape(cui['ppk'])
+            name, phone, email, ppk = escape(cui['name']), escape(cui['phone']), escape(cui['email']), escape(cui['ppk'])
         except KeyError:
             return Response({'ok': False})
         if name and ppk and (email or phone):
@@ -100,3 +98,30 @@ class NotifyMeForDelivery(APIView):
             return Response({'ok': True})
         return Response({'ok': False})
 
+
+class ProductToSCart(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    def post(request, _=None):
+        rec = request.data
+        try:
+            ppk, size_id, quantity = rec['ppk'], int(rec['size_id']), int(rec['quantity'])
+        except KeyError:
+            return Response({'ok': False, 'why': 'Произошла ошибка при передаче данных, мы работаем над этим...'})
+        try:
+            product = get_object_or_404(Product, article=ppk)
+        except Http404:
+            return Response({'ok': False, 'why': f'Не удалось найти товар с артикулом {ppk}'})
+        try:
+            size = get_object_or_404(AvailableSize, id=size_id)
+        except Http404:
+            return Response({'ok': False, 'why': f'Не удалось найти нужный размер'})
+        if not product.sizes.filter(id=size_id).exists():
+            return Response({'ok': False, 'why': f'Для товара {product} недоступен размер {size}'})
+        info = CustomerInfo(request)
+        new_quantity = info.add_to_scart(ppk, size.size, quantity, True)
+        if new_quantity > size.quantity:
+            return Response({'ok': False, 'why': f'В наличии недостаточно единиц товара {product} с размером {size}'})
+        new_quantity = info.add_to_scart(ppk, size.size, quantity)
+        return Response({'ok': True, 'quantity': new_quantity})

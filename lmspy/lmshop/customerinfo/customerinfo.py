@@ -53,6 +53,30 @@ class CustomerInfo:
             favorites.remove(ppk)
             self.save()
 
+    def add_to_scart(self, ppk, size, quantity, dry_run=False):    # -- accumulative operation, negative quantity decreases total quantity in SCart --
+        sct = self._get_or_create_scart()
+        h1 = hash(ppk)
+        h2 = hash(size)
+        key = h1 ^ h2 if h1 != h2 else h2
+        rec = sct.setdefault(key, {'ppk': ppk, 'size': size, 'quantity': 0})
+        if dry_run:
+            rec = rec.copy()
+        try:
+            rec['quantity'] = (new_quantity := max(rec['quantity'] + quantity, 0))
+            if new_quantity == 0 and not dry_run:
+                del sct[key]
+            return new_quantity
+        finally:
+            if not dry_run:
+                self.save()
+
+    def get_scart(self):
+        sct = self._get_or_create_scart()
+        result = dict()
+        for rec in sct:
+            result.setdefault(rec['ppk'], dict())[rec['size']] = rec['quantity']
+        return result
+
     @property
     def favorites(self):
         return set(self._get_or_create_favorites())
