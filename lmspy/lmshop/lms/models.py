@@ -90,7 +90,11 @@ class Product(DbItem):
 
     @property
     def novelty(self):
-        return (datetime.now().date() - self.published_at.date()).days < 30 if self.published_at else False;
+        return (datetime.now().date() - self.published_at.date()).days < 30 if self.published_at else False
+
+    @property
+    def variants(self):
+        return {size.id: size.size for size in self.sizes.filter(quantity__gt=0).all()}
 
 
 class AvailableSize(DbItem):

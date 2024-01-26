@@ -1,7 +1,9 @@
 {% load thumbnail %}
 <div class="p-card-b">
     <div class="icon-list">
-        <p>КАРТИНКИ</p>
+        {% for img in product.images.all %}
+        <img src="{% thumbnail img.image 50x0 %}"/>
+        {% endfor %}
     </div>
     <div class="product-card">
         {% include "lms/include/product-card-type-A.html" %}

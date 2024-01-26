@@ -179,6 +179,14 @@ select, select:focus {
    min-width: calc(var(--CatItemWidth));
 }
 
+figure {
+    margin: 0;
+}
+
+figcaption {
+    margin-top: 10px;
+}
+
 .p-card-a {
     display: flex;
     flex-flow: row;
@@ -221,10 +229,6 @@ input[type="checkbox"] ~ svg {
 input[type="checkbox"]:checked ~ svg { fill: white; }
 
 input[type="checkbox"]:not(:checked) ~ svg { fill: none; }
-
-figcaption {
-    margin-top: 10px;
-}
 
 /* Панели --------------------------------------------------------------------------------------------------------------*/
 

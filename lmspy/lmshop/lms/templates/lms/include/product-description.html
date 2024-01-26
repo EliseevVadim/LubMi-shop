@@ -9,7 +9,7 @@
 <p><span class="like-title"><strong>{{product.actual_price.amount}} руб.</strong></span>{% if product.old_price %}<span class="old_price">{{product.old_price.amount}} руб.</span>{% endif %}</p>
 {% if product.in_stock %}
 <label class="like-title" for="size-selector">Размер:</label>
-{% include "lms/include/selector.html" with variants=sizes selector_id="size-selector" %}
+{% include "lms/include/selector.html" with variants=product.variants selector_id="size-selector" %}
 <button class="w-100 inverted" onclick="notify_delivery('{{product.article}}')">Добавить в корзину</button>
 {% else %}
 <p><span class="red">Нет в наличии<br/></span><button class="w-100 inverted" onclick="notify_delivery('{{product.article}}')">Сообщить о поступлении</button></p>
