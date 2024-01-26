@@ -9,7 +9,7 @@
 {% else %}
 <h1>{{title}}</h1>
 {% endif %}
-<div id="{{kind}}-list" class="catalogue">{% include "lms/include/product-list-type-A.html" %}</div>
+<div id="{{kind}}-list" class="catalogue">{% include "lms/include/product-list-type-A.html" with standalone=True %}</div>
 {% if pages > 1 %}
 <div class="toolbar"><button id="{{kind}}-upd-btn" class="medium" onclick="{{kind}}_update();">Загрузить ещё</button></div>
 {% endif %}

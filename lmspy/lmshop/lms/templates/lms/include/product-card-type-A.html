@@ -2,9 +2,14 @@
 <figure>
   {% with product.primary_image as img %}
   {% if img %}
+  {% if standalone %}
   <div class="p-card-a"
        style="background-image: url('{% thumbnail img.image 220x0 %}');"
        onclick="if(event.eventPhase==event.AT_TARGET) show_product_details('{% url 'lms:product_details' slug=product.slug %}');">
+  {% else %}
+  <div class="p-card-a not-standalone"
+       style="background-image: url('{% thumbnail img.image 220x0 %}');">
+  {% endif%}
     {% if product.novelty %}
     <label class="white">Новинка!</label>
     {% endif %}
@@ -20,10 +25,9 @@
   </div>
   {% endif %}
   {% endwith %}
+  {% if standalone %}
   <figcaption>
-    {{product.title}}<br/>
-    ({{product.color|default:"цвет не указан"}})<br/>
-    {% if product.old_price %}<span class="old_price">{{product.old_price.amount}} руб.</span>{% endif %}{{product.actual_price.amount}} руб.<br/>
-    {% if not product.in_stock %}<span class="red">Нет в наличии<br/></span><button class="w-100" onclick="notify_delivery('{{product.article}}')">Сообщить о поступлении</button>{% endif %}
+  {% include "lms/include/product-description.html" %}
   </figcaption>
+  {% endif %}
 </figure>

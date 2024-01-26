@@ -9,6 +9,11 @@
     --ZixTop: 40;
     --CatItemWidth: 17rem;
     --HeartSize: 1.6rem;
+    --Gap: var(--DefPadding);
+}
+
+* {
+    outline: 0;
 }
 
 body, aside, .content, .leading {
@@ -143,7 +148,6 @@ select, select:focus {
     border: none;
     background :white;
     padding: 1rem;
-    outline: 0;
     font-size: 1.25rem;
     font-family: var(--Fonts);
 }
@@ -153,7 +157,7 @@ select, select:focus {
 .catalogue {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(var(--CatItemWidth), 1fr));
-    gap: var(--DefPadding);
+    gap: var(--Gap);
 }
 
 .catalogue > * {
@@ -178,9 +182,16 @@ select, select:focus {
     flex-flow: row;
     background-size: cover;
     background-repeat: no-repeat;
+    max-height: calc(var(--CatItemWidth) * 1.5);
+    min-height: calc(var(--CatItemWidth) * 1.5);
+    padding: var(--DefPadding)
+}
+
+.p-card-a.not-standalone {
     max-height: calc(var(--CatItemWidth) * 1.6);
     min-height: calc(var(--CatItemWidth) * 1.6);
-    padding: var(--DefPadding)
+    max-width: var(--CatItemWidth);
+    min-width: var(--CatItemWidth);
 }
 
 .heart {
@@ -344,7 +355,6 @@ dialog,
     max-width: 30rem;
     border: solid black thin;
     color: black;
-    outline: 0;
 }
 
 dialog {

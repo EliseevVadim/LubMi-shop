@@ -69,11 +69,6 @@ class CatalogueView(ListView):
     template_name = 'lms/under_work.html'
 
 
-class ProductView(DetailView):
-    model = Product
-    template_name = 'lms/pcard.html'
-
-
 class PerfumeryView(ListView):
     queryset = Product.published.all()
     context_object_name = 'products'
@@ -108,3 +103,16 @@ class AboutCompanyView(View):
         return render(request, 'lms/under_work.html', {
             'page_title': "Работа в процессе",
         })
+
+
+class ProductView(DetailView):
+    model = Product
+    template_name = 'lms/pcard.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        favorites = CustomerInfo(self.request).favorites
+        return context | {
+            'favorites': favorites,
+        }
+
