@@ -210,6 +210,11 @@ figcaption {
     grid-template-columns: auto auto auto;
 }
 
+.icon {
+    cursor: pointer;
+    margin-bottom: 1rem;
+}
+
 .heart {
     margin-left: auto;
     max-height: calc(1.2 * var(--HeartSize));
@@ -272,6 +277,16 @@ h5, h6, small {
 
 h1, h2, h3, h4, h5, h6 {
     text-transform: uppercase;
+}
+
+.items-top-down {
+    display: flex;
+    flex-flow: column;
+}
+
+.items-left-right {
+    display: flex;
+    flex-flow: column;
 }
 
 .old_price {
