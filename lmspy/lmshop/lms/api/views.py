@@ -104,6 +104,7 @@ class ProductToSCart(APIView):
 
     @staticmethod
     def post(request, _=None):
+        info = CustomerInfo(request)
         rec = request.data
         try:
             ppk, size_id, quantity = rec['ppk'], int(rec['size_id']), int(rec['quantity'])
@@ -119,9 +120,6 @@ class ProductToSCart(APIView):
             return Response({'ok': False, 'why': f'Не удалось найти нужный размер'})
         if not product.sizes.filter(id=size_id).exists():
             return Response({'ok': False, 'why': f'Для товара {product} недоступен размер {size}'})
-        info = CustomerInfo(request)
-        new_quantity = info.add_to_scart(ppk, size.size, quantity, True)
-        if new_quantity > size.quantity:
-            return Response({'ok': False, 'why': f'В наличии недостаточно единиц товара {product} с размером {size}'})
-        new_quantity = info.add_to_scart(ppk, size.size, quantity)
-        return Response({'ok': True, 'quantity': new_quantity})
+        return Response({'ok': True, 'quantity': info.add_to_scart(ppk, size.size, quantity)})\
+            if info.add_to_scart(ppk, size.size, quantity, True) <= size.quantity\
+            else Response({'ok': False, 'why': f'В наличии недостаточно единиц товара {product} с размером {size}'})
