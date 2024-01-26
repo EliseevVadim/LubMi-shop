@@ -40,8 +40,5 @@ const notify_delivery = ppk => {
   });
 }
 const show_product_details = url => {
-    fetch(url).then(response => response.text()).then(html => {
-        document.querySelector("#{{product_details_id}} .dialog-body").innerHTML = html;
-        document.querySelector("#{{product_details_id}}").showModal();
-    });
+    show_gp_modal_dialog(url);
 };

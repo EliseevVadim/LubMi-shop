@@ -1,0 +1,36 @@
+<dialog id="{{dialog_id}}">
+	{% if form %}
+	<label class="cancel-dialog" onclick="document.getElementById('{{dialog_id}}').close();">{{form.cancel|default:'&times;'}}</label>
+	{% else %}
+	<label class="cancel-dialog" onclick="document.getElementById('{{dialog_id}}').close();">&times;</label>
+	{% endif %}
+	<div class="dialog-header">
+		{% if form %}
+			<h2>{{form.title|default:"Укажите заголовок формы"}}</h2>
+			<label>{{form.description|default:"Укажите описание формы"}}</label>
+		{% else %}
+			{% if title %}
+			<h2>{{title}}</h2>
+			{% endif %}
+			{% if description %}
+			<label>{{description}}</label>
+			{% endif %}
+		{% endif %}
+	</div>
+	<div class="dialog-body">
+		{% if form %}
+			<form id="{{form.id}}" action="" method="post">
+			{{form.as_div}}
+			{%csrf_token%}
+			<div class="dialog-footer"><input class="medium inverted" type="submit" value="{{form.confirmation|default:'Укажите подтверждение'}}"/></div>
+			</form>
+		{% else %}
+			{% lorem %}
+		{% endif %}
+	</div>
+	{% if not form %}
+	<div class="dialog-footer">
+		<p>Проверка</p>
+	</div>
+	{% endif %}
+</dialog>
