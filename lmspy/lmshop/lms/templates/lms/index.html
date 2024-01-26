@@ -20,8 +20,8 @@
 {% endblock %}
 
 {% block modal_forms %} {{block.super}}
-{% include "lms/include/modal-form.html" with modal_id="notify-delivery-dialog" %}
-{% include "lms/include/modal-form.html" with modal_id="product-dialog" form=None title="Продукт" %}
+{% include "lms/include/modal-form.html" with modal_id="notify-delivery-dialog" form=scui_form %}
+{% include "lms/include/modal-form.html" with modal_id="product-dialog" form=None %}
 {% endblock %}
 
 {% block DOM_ready_script %} {{block.super}}

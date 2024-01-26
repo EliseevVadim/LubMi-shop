@@ -344,6 +344,7 @@ dialog,
     max-width: 30rem;
     border: solid black thin;
     color: black;
+    outline: 0;
 }
 
 dialog {
@@ -358,10 +359,10 @@ dialog {
     position: fixed;
     right: 2rem;
     top: calc(var(--LeadingHeight) + 3rem);
-    z-index: var(--ZixTop);
     background: white;
     visibility: hidden;
     cursor: pointer;
+    z-index: var(--ZixTop);
 }
 
 .popup label {

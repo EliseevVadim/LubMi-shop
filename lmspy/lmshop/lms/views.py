@@ -40,7 +40,7 @@ class IndexView(View):
                 'order': order,
                 'order_variants': {order_value: order_item[0] for order_value, order_item in IndexView.ordering.items()},
                 'favorites': favorites,
-                'form': ShortCustomerInfoForm(),
+                'scui_form': ShortCustomerInfoForm(),
             })
 
         match request.GET.get('kind'):
