@@ -12,6 +12,7 @@ urlpatterns = [
     path('care/', CareView.as_view(), name='care'),
     path('contacts/', ContactsView.as_view(), name='contacts'),
     path('about/', AboutCompanyView.as_view(), name='about'),
-    # -- helpers --
+    # -- backstage --
     path('product/<slug:slug>/', ProductView.as_view(), name='product_details'),
+    path('shopping-cart/', ProductView.as_view(), name='scart'),
 ]

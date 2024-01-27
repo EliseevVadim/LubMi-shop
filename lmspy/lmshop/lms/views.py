@@ -8,6 +8,9 @@ from .models import *
 from .forms import ShortCustomerInfoForm
 
 
+# -------------------------------------------------------------------------
+# -- Main views --
+
 class IndexView(View):
     page_size = 10
     default_order = 'novelties-first'
@@ -105,6 +108,9 @@ class AboutCompanyView(View):
         })
 
 
+# -------------------------------------------------------------------------
+# -- Backstage views --
+
 class ProductView(DetailView):
     model = Product
     template_name = 'lms/pcard.html'
@@ -116,3 +122,9 @@ class ProductView(DetailView):
             'favorites': favorites,
         }
 
+
+class SCartView(View):
+    @staticmethod
+    def get(request, *_, **__):
+        return render(request, 'lms/scart.html', {
+        })

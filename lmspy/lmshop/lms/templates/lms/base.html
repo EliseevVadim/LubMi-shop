@@ -8,6 +8,10 @@
   <script src="{% static "js/js.cookie.min.js" %}"></script>
   <script>
     {% include "lms/include/base.js" with token="__csrf_token__" %}
+    document.addEventListener('DOMContentLoaded', (event) => {
+    {% block DOM_ready_script %}
+    {% endblock %}
+    });
     {% block javascript %}
     {% endblock %}
   </script>

@@ -44,13 +44,11 @@ LubMi - {{page_title}}
 {% endblock %}
 
 {% block left_side_bar %}
-  <h2>Левая Боковая панель</h2>
-  <p>Работа в процессе</p>
+{% include "lms/include/sidebar.html" with cid="left-sidebar-content" classes="items-top-down" %}
 {% endblock %}
 
 {% block right_side_bar %}
-  <h2>Правая Боковая панель</h2>
-  <p>Работа в процессе</p>
+{% include "lms/include/sidebar.html" with cid="right-sidebar-content" classes="items-top-down" %}
 {% endblock %}
 
 {% block modal_forms %}
@@ -64,7 +62,7 @@ LubMi - {{page_title}}
 {% endblock %}
 
 {% block DOM_ready_script %}
-  hide_popup();
+hide_popup();
 {% endblock %}
 
 

@@ -12,7 +12,4 @@ const __api_call__ = (url, obj, functor, method='POST', content_type='applicatio
         .then(response => response.json())
         .then(functor);
 };
-document.addEventListener('DOMContentLoaded', (event) => {
-    {% block DOM_ready_script %}
-    {% endblock %}
-})
+
