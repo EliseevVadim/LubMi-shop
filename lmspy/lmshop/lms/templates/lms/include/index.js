@@ -1,17 +1,3 @@
-const __api_call__ = (url, obj, functor, method='POST', content_type='application/json') => {
-    options = {
-        method: method,
-        headers: {
-            'Content-Type': content_type,
-            'X-CSRFToken': csrftoken
-        },
-        body: obj?JSON.stringify(obj):''
-    }
-    fetch(url, options)
-        .then(response => response.json())
-        .then(functor);
-};
-
 const pcard_like_click = (input, url) => {
     url = url.replace(/\/\d\/$/, `/${input.checked?1:0}/`);
     __api_call__(url, null, answer => {

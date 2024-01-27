@@ -2,12 +2,12 @@
 {% load static %}
 <html>
 <head>
-  <link href="{% static "css/lms.css" %}" rel="stylesheet">
   <title>{% block title %}{% endblock %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="{% static "css/lms.css" %}" rel="stylesheet">
   <script src="{% static "js/js.cookie.min.js" %}"></script>
   <script>
-    const csrftoken = Cookies.get('csrftoken');
+    {% include "lms/include/base.js" with token="__csrf_token__" %}
     {% block javascript %}
     {% endblock %}
   </script>
@@ -48,12 +48,6 @@
     </footer>
   </div>
 <!-- Content end -->
-  <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-      {% block DOM_ready_script %}
-      {% endblock %}
-    })
-  </script>
   {% block modal_forms %}
   {% endblock %}
 </body>
