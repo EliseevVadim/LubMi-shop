@@ -10,7 +10,7 @@
 {% if product.in_stock %}
 <label class="like-title" for="size-selector">Размер:</label>
 {% include "lms/include/selector.html" with variants=product.variants selector_id="size-selector" %}
-<button class="w-100 inverted" onclick="notify_delivery('{{product.article}}')">Добавить в корзину</button>
+<button class="w-100 inverted" onclick="product_to_scart('{{product.article}}', document.getElementById('size-selector').value, 1);">Добавить в корзину</button>
 {% else %}
 <p><span class="red">Нет в наличии<br/></span><button class="w-100 inverted" onclick="notify_delivery('{{product.article}}')">Сообщить о поступлении</button></p>
 {% endif %}

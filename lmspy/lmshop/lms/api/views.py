@@ -143,6 +143,8 @@ class ProductToSCartView(APIView):
             })
         return Response({
             'success': True,
+            'product': str(product),
+            'size': str(size),
             'quantity': info.add_to_scart(ppk, size.size, quantity)
         }) if info.add_to_scart(ppk, size.size, quantity, True) <= size.quantity else Response({
             'success': False,
