@@ -9,9 +9,15 @@ class CustomerInfo:
             info = self.session[settings.CUSTOMER_INFO_SESSION_ID] = dict()
         self._info = info
 
+    def save(self):
+        self.session.modified = True
+
     def clear(self):
         del self.session[settings.CUSTOMER_INFO_SESSION_ID]
         self.save()
+
+    # -------------------------------------------------------------------------
+    # -- Privates --
 
     def _get_or_create_item(self, key, builder, save=False):
         try:
@@ -47,6 +53,9 @@ class CustomerInfo:
         h2 = int(sha256(s2.encode()).hexdigest(), 16)
         return hex(h1 ^ h2 if h1 != h2 else h2)
 
+    # -------------------------------------------------------------------------
+    # -- Favorites --
+
     def add_favorite(self, ppk):
         favorites = self._get_or_create_favorites()
         if ppk not in favorites:
@@ -59,9 +68,15 @@ class CustomerInfo:
             favorites.remove(ppk)
             self.save()
 
+    @property
+    def favorites(self):
+        return set(self._get_or_create_favorites())
+
+    # -------------------------------------------------------------------------
+    # -- Shopping cart --
+
     def add_to_scart(self, ppk, size, quantity, dry_run=False):    # -- accumulative operation, negative quantity decreases total quantity in SCart --
         sct = self._get_or_create_scart()
-        print(sct)
         key = CustomerInfo._hash(ppk, size)
         rec = sct.setdefault(key, {'ppk': ppk, 'size': size, 'quantity': 0})
         if dry_run:
@@ -73,6 +88,20 @@ class CustomerInfo:
             return new_quantity
         finally:
             if not dry_run:
+                self.save()
+
+    def remove_from_scart(self, ppk, size, dry_run=False):    # -- accumulative operation, negative quantity decreases total quantity in SCart --
+        sct = self._get_or_create_scart()
+        key = CustomerInfo._hash(ppk, size)
+        if dry_run:
+            try:
+                return sct[key].copy()
+            except KeyError:
+                return None
+        else:
+            try:
+                return sct.pop(key, None)
+            finally:
                 self.save()
 
     def clear_scart(self):
@@ -88,9 +117,8 @@ class CustomerInfo:
             result.setdefault(rec['ppk'], dict())[rec['size']] = rec['quantity']
         return result
 
-    @property
-    def favorites(self):
-        return set(self._get_or_create_favorites())
+    # -------------------------------------------------------------------------
+    # -- Name --
 
     @property
     def name(self):
@@ -104,6 +132,9 @@ class CustomerInfo:
     def name(self):
         self._delete_item("name")
 
+    # -------------------------------------------------------------------------
+    # -- Phone --
+
     @property
     def phone(self):
         return self._get_or_create_item("phone", str)
@@ -116,6 +147,9 @@ class CustomerInfo:
     def phone(self):
         self._delete_item("phone")
 
+    # -------------------------------------------------------------------------
+    # -- Email --
+
     @property
     def email(self):
         return self._get_or_create_item("email", str)
@@ -127,6 +161,9 @@ class CustomerInfo:
     @email.deleter
     def email(self):
         self._delete_item("email")
+
+    # -------------------------------------------------------------------------
+    # -- Address --
 
     @property
     def address(self):
@@ -144,5 +181,3 @@ class CustomerInfo:
     def address(self):
         self._delete_item("address")
 
-    def save(self):
-        self.session.modified = True
