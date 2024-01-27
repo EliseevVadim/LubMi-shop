@@ -130,12 +130,11 @@ class CustomerInfo:
 
     @property
     def address(self):
-        return self._get_or_create_item("address",
-                                        lambda: {
-                                            "Страна": "",
-                                            "Город": "",
-                                            "Адрес": ""
-                                        })
+        return self._get_or_create_item("address", lambda: {
+            "country": "",
+            "city": "",
+            "address": ""
+        })
 
     @address.setter
     def address(self, value):
