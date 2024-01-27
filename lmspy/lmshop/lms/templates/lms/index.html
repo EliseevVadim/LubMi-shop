@@ -16,6 +16,7 @@
 {% endblock %}
 
 {% block javascript %} {{block.super}}
+{% include "lms/include/dialog.js" with dialog_id="notify-delivery-dialog" unique="ndd" custom_load=True %}
 {% include "lms/include/index.js" %}
 {% endblock %}
 

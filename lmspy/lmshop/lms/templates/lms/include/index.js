@@ -11,7 +11,7 @@ const pcard_like_click = (input, url) => {
 
 const notify_delivery = ppk => {
     __api_call__('{% url "api:get_customer_info" flags=7 %}', null, answer => {
-        dialog = document.getElementById('notify-delivery-dialog');
+        dialog = ndd_modal_dialog();
         cu_form = document.getElementById('scui-form');
         cu_name = document.getElementById('scui-name');
         cu_phone = document.getElementById('scui-phone');
