@@ -56,7 +56,7 @@ class ProductLikeToggleView(APIView):
             })
 
 
-class GetCustomerInfo(APIView):
+class GetCustomerInfoView(APIView):
     permission_classes = [AllowAny]
 
     @staticmethod
@@ -77,7 +77,7 @@ class GetCustomerInfo(APIView):
         return Response(result)
 
 
-class NotifyMeForDelivery(APIView):
+class NotifyMeForDeliveryView(APIView):
     permission_classes = [AllowAny]
 
     @staticmethod
@@ -103,7 +103,7 @@ class NotifyMeForDelivery(APIView):
         })
 
 
-class ProductToSCart(APIView):
+class ProductToSCartView(APIView):
     permission_classes = [AllowAny]
 
     @staticmethod

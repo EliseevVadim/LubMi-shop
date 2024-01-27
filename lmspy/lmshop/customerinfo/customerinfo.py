@@ -1,6 +1,7 @@
 from django.conf import settings
 from hashlib import sha256
 
+
 class CustomerInfo:
     def __init__(self, request):
         self.session = request.session
@@ -78,11 +79,11 @@ class CustomerInfo:
     def add_to_scart(self, ppk, size, quantity, dry_run=False):    # -- accumulative operation, negative quantity decreases total quantity in SCart --
         sct = self._get_or_create_scart()
         key = CustomerInfo._hash(ppk, size)
-        rec = sct.setdefault(key, {'ppk': ppk, 'size': size, 'quantity': 0})
+        sc_rec = sct.setdefault(key, {'ppk': ppk, 'size': size, 'quantity': 0})
         if dry_run:
-            rec = rec.copy()
+            sc_rec = sc_rec.copy()
         try:
-            new_quantity = rec['quantity'] = max(rec['quantity'] + quantity, 0)
+            new_quantity = sc_rec['quantity'] = max(sc_rec['quantity'] + quantity, 0)
             if new_quantity == 0 and not dry_run:
                 del sct[key]
             return new_quantity
@@ -113,8 +114,8 @@ class CustomerInfo:
     def scart(self):
         sct = self._get_or_create_scart()
         result = dict()
-        for rec in sct.values():
-            result.setdefault(rec['ppk'], dict())[rec['size']] = rec['quantity']
+        for sc_rec in sct.values():
+            result.setdefault(sc_rec['ppk'], dict())[sc_rec['size']] = sc_rec['quantity']
         return result
 
     # -------------------------------------------------------------------------
