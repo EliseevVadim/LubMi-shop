@@ -41,7 +41,8 @@ const notify_delivery = ppk => {
 const product_to_scart = (ppk, size_id, quantity) => {
     __api_call__('{% url "api:product_to_scart" %}', { ppk: String(ppk), size_id: Number(size_id), quantity: String(quantity) }, result => {
         if(result.success) {
-            alert(`${result.product} ${result.size} ${result.quantity}`);
+            close_gp_modal_dialog();
+            show_right_sidebar('{% url "lms:scart" %}');
         } else {
             alert(result.why);
         }

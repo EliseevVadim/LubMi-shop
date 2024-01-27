@@ -242,8 +242,9 @@ aside {
     position: fixed;
     top: 0;
     height: 100vh;
-    flex: 0 0 10rem;
-    display: none;
+    width: min(30rem, 40%);
+    visibility: hidden;
+    padding: var(--DefPadding);
 }
 
 aside.right {

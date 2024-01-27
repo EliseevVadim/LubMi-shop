@@ -14,5 +14,5 @@ urlpatterns = [
     path('about/', AboutCompanyView.as_view(), name='about'),
     # -- backstage --
     path('product/<slug:slug>/', ProductView.as_view(), name='product_details'),
-    path('shopping-cart/', ProductView.as_view(), name='scart'),
+    path('shopping-cart/', SCartView.as_view(), name='scart'),
 ]

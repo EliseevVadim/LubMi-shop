@@ -44,11 +44,11 @@ LubMi - {{page_title}}
 {% endblock %}
 
 {% block left_side_bar %}
-{% include "lms/include/sidebar.html" with cid="left-sidebar-content" classes="items-top-down" %}
+{% include "lms/include/sidebar.html" with side="left" classes="items-top-down" %}
 {% endblock %}
 
 {% block right_side_bar %}
-{% include "lms/include/sidebar.html" with cid="right-sidebar-content" classes="items-top-down" %}
+{% include "lms/include/sidebar.html" with side="right" classes="items-top-down" %}
 {% endblock %}
 
 {% block modal_forms %}
@@ -59,6 +59,8 @@ LubMi - {{page_title}}
 {% block javascript %}
 {% include "lms/include/popup.js" with popup_id="popup-message" %}
 {% include "lms/include/dialog.js" with dialog_id="gp-dialog" unique="gp" %}
+{% include "lms/include/sidebar.js" with side="left" %}
+{% include "lms/include/sidebar.js" with side="right" %}
 {% endblock %}
 
 {% block DOM_ready_script %}

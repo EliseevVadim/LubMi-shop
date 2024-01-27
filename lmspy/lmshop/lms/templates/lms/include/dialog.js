@@ -4,3 +4,7 @@ const show_{{unique}}_modal_dialog = url => {
         document.querySelector("#{{dialog_id}}").showModal();
     });
 };
+
+const close_{{unique}}_modal_dialog = () => {
+    document.querySelector("#{{dialog_id}}").close();
+};
