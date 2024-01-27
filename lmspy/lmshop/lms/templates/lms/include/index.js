@@ -8,7 +8,6 @@ const pcard_like_click = (input, url) => {
         });
     });
 };
-
 const notify_delivery = ppk => {
     __api_call__('{% url "api:get_customer_info" flags=7 %}', null, answer => {
         dialog = ndd_modal_dialog();
@@ -37,7 +36,6 @@ const notify_delivery = ppk => {
         dialog.showModal();
     });
 }
-
 const product_to_scart = (ppk, size_id, quantity) => {
     __api_call__('{% url "api:product_to_scart" %}', { ppk: String(ppk), size_id: Number(size_id), quantity: String(quantity) }, result => {
         if(result.success) {
@@ -48,7 +46,6 @@ const product_to_scart = (ppk, size_id, quantity) => {
         }
     });
 }
-
 const show_product_details = url => {
     show_gp_modal_dialog(url);
 };

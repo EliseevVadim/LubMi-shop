@@ -4,7 +4,6 @@ const show_{{side}}_sidebar = url => {
         document.getElementById('_{{side}}_sidebar').style.visibility = 'visible';
     });
 };
-
 const hide_{{side}}_sidebar = () => {
     document.getElementById('_{{side}}_sidebar').style.visibility = "hidden";
 };
