@@ -1,5 +1,5 @@
 from django.conf import settings
-
+from hashlib import sha256
 
 class CustomerInfo:
     def __init__(self, request):
@@ -41,6 +41,12 @@ class CustomerInfo:
     def _get_or_create_scart(self):
         return self._get_or_create_item("scart", dict)  # { ppk: order_info }
 
+    @staticmethod
+    def _hash(s1, s2):
+        h1 = int(sha256(s1.encode()).hexdigest(), 16)
+        h2 = int(sha256(s2.encode()).hexdigest(), 16)
+        return hex(h1 ^ h2 if h1 != h2 else h2)
+
     def add_favorite(self, ppk):
         favorites = self._get_or_create_favorites()
         if ppk not in favorites:
@@ -55,14 +61,13 @@ class CustomerInfo:
 
     def add_to_scart(self, ppk, size, quantity, dry_run=False):    # -- accumulative operation, negative quantity decreases total quantity in SCart --
         sct = self._get_or_create_scart()
-        h1 = hash(ppk)
-        h2 = hash(size)
-        key = h1 ^ h2 if h1 != h2 else h2
+        print(sct)
+        key = CustomerInfo._hash(ppk, size)
         rec = sct.setdefault(key, {'ppk': ppk, 'size': size, 'quantity': 0})
         if dry_run:
             rec = rec.copy()
         try:
-            rec['quantity'] = (new_quantity := max(rec['quantity'] + quantity, 0))
+            new_quantity = rec['quantity'] = max(rec['quantity'] + quantity, 0)
             if new_quantity == 0 and not dry_run:
                 del sct[key]
             return new_quantity
@@ -70,20 +75,22 @@ class CustomerInfo:
             if not dry_run:
                 self.save()
 
-    def get_scart(self):
+    def clear_scart(self):
+        sct = self._get_or_create_scart()
+        sct.clear()
+        self.save()
+
+    @property
+    def scart(self):
         sct = self._get_or_create_scart()
         result = dict()
-        for rec in sct:
+        for rec in sct.values():
             result.setdefault(rec['ppk'], dict())[rec['size']] = rec['quantity']
         return result
 
     @property
     def favorites(self):
         return set(self._get_or_create_favorites())
-
-    @property
-    def scart(self):
-        return set(self._get_or_create_scart())
 
     @property
     def name(self):

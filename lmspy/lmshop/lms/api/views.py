@@ -86,7 +86,7 @@ class NotifyMeForDelivery(APIView):
         try:
             name, phone, email, ppk = escape(cui['name']), escape(cui['phone']), escape(cui['email']), escape(cui['ppk'])
         except KeyError:
-            return Response({'ok': False})
+            return Response({'ok': False})  # TODO -- rename 'ok' to 'success' --
         if name and ppk and (email or phone):
             nrq = NotificationRequest(name=name, phone=phone, email=email, ppk=ppk)
             nrq.save()
@@ -95,8 +95,12 @@ class NotifyMeForDelivery(APIView):
             info.name = name
             info.phone = phone or info.phone
             info.email = email or info.email
-            return Response({'ok': True})
-        return Response({'ok': False})
+            return Response({
+                'ok': True
+            })
+        return Response({
+            'ok': False
+        })
 
 
 class ProductToSCart(APIView):
@@ -109,17 +113,39 @@ class ProductToSCart(APIView):
         try:
             ppk, size_id, quantity = rec['ppk'], int(rec['size_id']), int(rec['quantity'])
         except KeyError:
-            return Response({'ok': False, 'why': 'Произошла ошибка при передаче данных, мы работаем над этим...'})
+            return Response({
+                'success': False,
+                'why': 'Произошла ошибка при отправке данных, мы работаем над этим...'
+            })
+        except ValueError:
+            return Response({
+                'success': False,
+                'why': 'Произошла ошибка при извлечении данных, мы работаем над этим...'
+            })
         try:
             product = get_object_or_404(Product, article=ppk)
         except Http404:
-            return Response({'ok': False, 'why': f'Не удалось найти товар с артикулом {ppk}'})
+            return Response({
+                'success': False,
+                'why': f'Не удалось найти товар с артикулом {ppk}'
+            })
         try:
             size = get_object_or_404(AvailableSize, id=size_id)
         except Http404:
-            return Response({'ok': False, 'why': f'Не удалось найти нужный размер'})
+            return Response({
+                'success': False,
+                'why': f'Не удалось найти нужный размер'
+            })
         if not product.sizes.filter(id=size_id).exists():
-            return Response({'ok': False, 'why': f'Для товара {product} недоступен размер {size}'})
-        return Response({'ok': True, 'quantity': info.add_to_scart(ppk, size.size, quantity)})\
-            if info.add_to_scart(ppk, size.size, quantity, True) <= size.quantity\
-            else Response({'ok': False, 'why': f'В наличии недостаточно единиц товара {product} с размером {size}'})
+            return Response({
+                'success': False,
+                'why': f'Для товара {product} недоступен размер {size}'
+            })
+        return Response({
+            'success': True,
+            'quantity': info.add_to_scart(ppk, size.size, quantity)
+        }) if info.add_to_scart(ppk, size.size, quantity, True) <= size.quantity else Response({
+            'success': False,
+            'why': f'В наличии недостаточно единиц товара {product} с размером {size}',
+            'available_quantity': size.quantity
+        })
