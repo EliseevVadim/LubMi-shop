@@ -26,13 +26,25 @@ class Parameter(DbItem):
     @staticmethod
     def value_of(key, default=""):
         try:
-            return Parameter.objects.get(pk=key)
+            return Parameter.objects.get(pk=key).value
         except Parameter.DoesNotExist:
             return default
 
+
+class Tunable:
     @staticmethod
-    def rgx_validate_with(rgx_key, msg_key, default_regexp, default_message):
-        return RegexValidator(regex=Parameter.value_of(rgx_key, default_regexp), message=Parameter.value_of(msg_key, default_message))
+    def regex_validator(rgx_key, msg_key, default_regexp, default_message):
+        return RegexValidator(
+            regex=Parameter.value_of(rgx_key, default_regexp),
+            message=Parameter.value_of(msg_key, default_message)
+        )
+
+    @staticmethod
+    def validate_size(value):
+        Tunable.regex_validator(
+            "regex_cloth_size", "message_invalid_cloth_size",
+            """^(\d*(?:M|X{0,2}[SL]))(?:$|\s+.*$)""", "Размер не соответствует образцу"
+        )(value)
 
 
 class Category(DbItem):
@@ -122,10 +134,7 @@ class Product(DbItem):
 class AvailableSize(DbItem):
     size = models.CharField(                                                                    # размер
         max_length=30,
-        validators=[RegexValidator(
-            regex=settings.CLOTH_SIZE_REGEX,  # TODO -- validate with cloth_size_regex parameter --
-            message="Размер не соответствует шаблону"
-        )]
+        validators=[Tunable.validate_size]
     )
     quantity = models.BigIntegerField()                                                         # количество в наличии
     product = models.ForeignKey(Product, related_name="sizes", on_delete=models.CASCADE)        # товар
