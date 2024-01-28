@@ -102,6 +102,10 @@ class AvailableSize(DbItem):  # TODO -- RegEx and unique for Product --
     quantity = models.BigIntegerField()                                                         # количество в наличии
     product = models.ForeignKey(Product, related_name="sizes", on_delete=models.CASCADE)        # товар
 
+    class Meta:
+        ordering = ["size"]
+        constraints = [models.UniqueConstraint(fields=["size", "product_id"], name="unique_size_per_product")]
+
     def __str__(self):
         return self.size
 
