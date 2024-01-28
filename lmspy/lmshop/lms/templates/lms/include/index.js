@@ -10,7 +10,6 @@ const pcard_like_click = (input, url) => {
 };
 const notify_delivery = ppk => {
     __api_call__('{% url "api:get_customer_info" flags=7 %}', null, answer => {
-        dialog = ndd_modal_dialog();
         cu_form = document.getElementById('scui-form');
         cu_name = document.getElementById('scui-name');
         cu_phone = document.getElementById('scui-phone');
@@ -24,7 +23,7 @@ const notify_delivery = ppk => {
             e.preventDefault();
             __api_call__('{% url "api:notify_me_for_delivery" %}', { name: cu_name.value, phone: cu_phone.value, email: cu_email.value, ppk: ppk }, result => {
                 if(result.ok) {
-                    dialog.close();
+                    ndd_dialog.close();
                     show_popup("Ваш запрос на уведомление о доставке товара успешно отправлен");
                 } else {
                     show_popup("При отправке запроса возникли проблемы, попробуйте повторить отправку позже");
@@ -33,19 +32,21 @@ const notify_delivery = ppk => {
         }
         cu_email.oninput(null);
         cu_phone.oninput(null);
-        dialog.showModal();
+        ndd_dialog.self().showModal();
     });
 }
 const product_to_scart = (ppk, size_id, quantity) => {
     __api_call__('{% url "api:product_to_scart" %}', { ppk: String(ppk), size_id: Number(size_id), quantity: String(quantity) }, result => {
         if(result.success) {
-            close_gp_modal_dialog();
-            show_right_sidebar('{% url "lms:scart" %}');
+            gp_dialog.close();
+            right_sidebar.show('{% url "lms:scart" %}');
         } else {
             alert(result.why);
         }
     });
 }
 const show_product_details = url => {
-    show_gp_modal_dialog(url);
+    left_sidebar.hide();
+    right_sidebar.hide();
+    gp_dialog.show(url);
 };
