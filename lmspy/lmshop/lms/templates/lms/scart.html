@@ -1,2 +1,21 @@
+{% load thumbnail %}
 <h1>Ваш заказ</h1>
+{% for sr in scart %}
+<label onclick="{{side}}_sidebar.hide();">&times;</label>
+<div class="scart-item grid-c2">
+    {% with sr.product.primary_image as img %}
+    {% if img %}
+    <div>
+        <img class="icon" src="{% thumbnail img.image 70x0 %}" />
+    </div>
+    {% endif %}
+    {% endwith %}
+    <div class="product-description">
+    {% include "lms/include/product-description.html" with product=sr.product size=sr.size quantity=sr.quantity %}
+    </div>
+</div>
+{% endfor %}
+<div>
+    <p class="total-price like-title">Сумма к оплате: {{price}} руб.</p>
+</div>
 <button class="w-100 inverted" onclick="">Оформить заказ</button>

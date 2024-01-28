@@ -309,6 +309,18 @@ h1, h2, h3, h4, h5, h6 {
     flex-flow: column;
 }
 
+.grid-c2 {
+    display: grid;
+    gap: var(--Gap);
+    grid-template-columns: auto auto;
+}
+
+.grid-c3 {
+    display: grid;
+    gap: var(--Gap);
+    grid-template-columns: auto auto auto;
+}
+
 .old_price {
     text-decoration: line-through red;
     color: gray;

@@ -6,6 +6,7 @@ from django.views import View
 from customerinfo.customerinfo import CustomerInfo
 from .models import *
 from .forms import ShortCustomerInfoForm
+from decimal import Decimal
 
 
 # -------------------------------------------------------------------------
@@ -126,6 +127,21 @@ class ProductView(DetailView):
 class SCartView(View):
     @staticmethod
     def get(request, *_, **__):
+        info = CustomerInfo(request)
+        sct = info.scart
+        records = []
+        price = Decimal(0)
+        for ppk, sizes in sct.items():
+            product = Product.objects.get(pk=ppk)
+            for sz, quantity in sizes.items():
+                size = product.sizes.get(size=sz)
+                records += [{
+                    'product': product,
+                    'size': size,
+                    'quantity': quantity
+                }]
+                price += quantity * product.actual_price.amount
         return render(request, 'lms/scart.html', {
-            "xx": Parameter.value_of("123")
+            'scart': records,
+            'price': price
         })

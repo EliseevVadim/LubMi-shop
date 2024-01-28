@@ -1,9 +1,19 @@
 {% if standalone %}
+
 {{product.title}}<br/>
 ({{product.color|default:"цвет не указан"}})<br/>
 {% if product.old_price %}<span class="old_price">{{product.old_price.amount}} руб.</span>{% endif %}{{product.actual_price.amount}} руб.<br/>
 {% if not product.in_stock %}<span class="red">Нет в наличии<br/></span><button class="w-100" onclick="notify_delivery('{{product.article}}')">Сообщить о поступлении</button>{% endif %}
+
+{% elif size or quantity %}
+
+<span class="like-title">{{product.title}}&nbsp;({{product.color|default:"цвет не указан"}})</span><br/>
+<span class="gray like-note">Артикул: {{product.article}}<br/>Размер: {{size.size}}</span><br/>
+{{product.actual_price.amount}} руб.<br/>
+{{quantity}} шт<br/>
+
 {% else %}
+
 <p class="like-title"><strong>{{product.title}} ({{product.color}})</strong></p>
 <p class="gray like-note">Артикул: {{product.article}}</p>
 <p><span class="like-title"><strong>{{product.actual_price.amount}} руб.</strong></span>{% if product.old_price %}<span class="old_price">{{product.old_price.amount}} руб.</span>{% endif %}</p>
