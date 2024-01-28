@@ -97,7 +97,7 @@ class Product(DbItem):
         return {size.id: size.size for size in self.sizes.filter(quantity__gt=0).all()}
 
 
-class AvailableSize(DbItem):
+class AvailableSize(DbItem):  # TODO -- RegEx and unique for Product --
     size = models.CharField(max_length=30)                                                      # размер
     quantity = models.BigIntegerField()                                                         # количество в наличии
     product = models.ForeignKey(Product, related_name="sizes", on_delete=models.CASCADE)        # товар

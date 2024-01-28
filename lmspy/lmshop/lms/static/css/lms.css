@@ -245,16 +245,35 @@ aside {
     width: min(30rem, 40%);
     visibility: hidden;
     padding: var(--DefPadding);
+    box-shadow: 0 0 0 100vw #7777;
 }
 
 aside.right {
     right:0;
-    background:#0f0;
+    background: white;
 }
 
 aside.left {
     left:0;
     background:#f00;
+}
+
+.cancel-sidebar {
+    font-size: 2rem;
+    color: gray;
+    position: absolute;
+    top: 1.9rem;
+    right: 1rem;
+    cursor: pointer;
+}
+
+.cancel-sidebar:hover {
+    color: black;
+}
+
+aside h1 {
+    border-bottom: thin solid black;
+    border-top: none;
 }
 
 /* Элементы оформления -------------------------------------------------------------------------------------------------*/
