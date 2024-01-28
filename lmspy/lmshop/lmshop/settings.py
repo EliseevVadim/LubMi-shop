@@ -122,5 +122,3 @@ REST_FRAMEWORK = {
 }
 
 CUSTOMER_INFO_SESSION_ID = 'customer-info-session-id-1.0'
-
-CLOTH_SIZE_REGEX = """^(\d*(?:M|X{0,2}[SL]))(?:$|\s+.*$)"""

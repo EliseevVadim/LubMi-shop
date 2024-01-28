@@ -3,7 +3,6 @@ from django.db.models import QuerySet
 from django.utils import timezone, text
 from django.core.validators import RegexValidator
 from djmoney.models.fields import MoneyField
-from django.conf import settings
 from datetime import datetime
 
 
@@ -42,8 +41,10 @@ class Tunable:
     @staticmethod
     def validate_size(value):
         Tunable.regex_validator(
-            "regex_cloth_size", "message_invalid_cloth_size",
-            """^(\d*(?:M|X{0,2}[SL]))(?:$|\s+.*$)""", "Размер не соответствует образцу"
+            "regex_cloth_size",
+            "message_invalid_cloth_size",
+            """^(\d*(?:M|X{0,2}[SL]))(?:$|\s+.*$)""",
+            "Размер не соответствует образцу"
         )(value)
 
 
