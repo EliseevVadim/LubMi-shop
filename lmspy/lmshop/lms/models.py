@@ -103,7 +103,7 @@ class AvailableSize(DbItem):
     size = models.CharField(                                                                    # размер
         max_length=30,
         validators=[RegexValidator(
-            regex=settings.CLOTH_SIZE_REGEX,
+            regex=settings.CLOTH_SIZE_REGEX,  # TODO -- validate with cloth_size_regex parameter --
             message="Размер не соответствует шаблону"
         )]
     )
@@ -184,3 +184,20 @@ class Chat(DbItem):
 
     def __str__(self):
         return f'Телеграм-чат "{self.title}"'
+
+
+class Parameter(DbItem):
+    key = models.CharField(primary_key=True, max_length=50)                                     # -- ключ --
+    value = models.CharField(max_length=250)                                                    # -- значение --
+    description = models.TextField(null=True, blank=True)                                       # -- описание --
+
+    def __str__(self):
+        return f'Параметр "{self.key}"'
+
+    @staticmethod
+    def value_of(key, default=""):
+        try:
+            return Parameter.objects.get(pk=key)
+        except Parameter.DoesNotExist:
+            return default
+

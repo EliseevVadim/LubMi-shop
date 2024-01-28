@@ -127,4 +127,5 @@ class SCartView(View):
     @staticmethod
     def get(request, *_, **__):
         return render(request, 'lms/scart.html', {
+            "xx": Parameter.value_of("123")
         })

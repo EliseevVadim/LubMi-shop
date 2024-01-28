@@ -53,7 +53,6 @@ class OrderAdmin(admin.ModelAdmin):
 @admin.register(TelegramBot)
 class TelegramBotAdmin(admin.ModelAdmin):
     list_display = ['title', 'token', 'description']
-    # list_filter = ['title', 'token']
     search_fields = ['title', 'size', 'quantity']
     ordering = ['title', 'token']
 
@@ -64,3 +63,9 @@ class ChatAdmin(admin.ModelAdmin):
     list_filter = ['bot']
     search_fields = ['title', 'cid', 'active']
     ordering = ['active', 'title', 'cid']
+
+
+@admin.register(Parameter)
+class ParamAdmin(admin.ModelAdmin):
+    list_display = ['key', 'value', 'description']
+    search_fields = ['key', 'value']
