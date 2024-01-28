@@ -15,6 +15,26 @@ class DbItem(models.Model):
         abstract: bool = True
 
 
+class Parameter(DbItem):
+    key = models.CharField(primary_key=True, max_length=50)                                     # -- ключ --
+    value = models.CharField(max_length=250)                                                    # -- значение --
+    description = models.TextField(null=True, blank=True)                                       # -- описание --
+
+    def __str__(self):
+        return f'Параметр "{self.key}"'
+
+    @staticmethod
+    def value_of(key, default=""):
+        try:
+            return Parameter.objects.get(pk=key)
+        except Parameter.DoesNotExist:
+            return default
+
+    @staticmethod
+    def rgx_validate_with(rgx_key, msg_key, default_regexp, default_message):
+        return RegexValidator(regex=Parameter.value_of(rgx_key, default_regexp), message=Parameter.value_of(msg_key, default_message))
+
+
 class Category(DbItem):
     class Kind(models.TextChoices):
         product_taxonomy = "PT", "Таксономия продуктов"
@@ -186,18 +206,4 @@ class Chat(DbItem):
         return f'Телеграм-чат "{self.title}"'
 
 
-class Parameter(DbItem):
-    key = models.CharField(primary_key=True, max_length=50)                                     # -- ключ --
-    value = models.CharField(max_length=250)                                                    # -- значение --
-    description = models.TextField(null=True, blank=True)                                       # -- описание --
-
-    def __str__(self):
-        return f'Параметр "{self.key}"'
-
-    @staticmethod
-    def value_of(key, default=""):
-        try:
-            return Parameter.objects.get(pk=key)
-        except Parameter.DoesNotExist:
-            return default
 
