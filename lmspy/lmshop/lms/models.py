@@ -1,7 +1,9 @@
 from django.db import models
 from django.db.models import QuerySet
 from django.utils import timezone, text
+from django.core.validators import RegexValidator
 from djmoney.models.fields import MoneyField
+from django.conf import settings
 from datetime import datetime
 
 
@@ -97,14 +99,23 @@ class Product(DbItem):
         return {size.id: size.size for size in self.sizes.filter(quantity__gt=0).all()}
 
 
-class AvailableSize(DbItem):  # TODO -- RegEx and unique for Product --
-    size = models.CharField(max_length=30)                                                      # размер
+class AvailableSize(DbItem):
+    size = models.CharField(                                                                    # размер
+        max_length=30,
+        validators=[RegexValidator(
+            regex=settings.CLOTH_SIZE_REGEX,
+            message="Размер не соответствует шаблону"
+        )]
+    )
     quantity = models.BigIntegerField()                                                         # количество в наличии
     product = models.ForeignKey(Product, related_name="sizes", on_delete=models.CASCADE)        # товар
 
     class Meta:
         ordering = ["size"]
-        constraints = [models.UniqueConstraint(fields=["size", "product_id"], name="unique_size_per_product")]
+        constraints = [models.UniqueConstraint(
+            fields=["size", "product_id"],
+            name="unique_size_per_product"
+        )]
 
     def __str__(self):
         return self.size

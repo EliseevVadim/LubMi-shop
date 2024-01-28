@@ -110,10 +110,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SCART_SESSION_ID = 'shopping_cart'
-
-CUSTOMER_INFO_SESSION_ID = 'customer-info-session-id-1.0'
-
 MEDIA_URL = 'media/'
 
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -124,3 +120,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'],
     'DEFAULT_RENDERER_CLASSES': ['rest_framework.renderers.JSONRenderer', 'rest_framework.renderers.BrowsableAPIRenderer'],
 }
+
+CUSTOMER_INFO_SESSION_ID = 'customer-info-session-id-1.0'
+
+CLOTH_SIZE_REGEX = """^(\d*(?:M|X{0,2}[SL]))(?:$|\s+.*$)"""

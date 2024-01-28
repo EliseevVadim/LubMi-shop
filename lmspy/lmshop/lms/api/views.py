@@ -148,6 +148,6 @@ class ProductToSCartView(APIView):
             'quantity': info.add_to_scart(ppk, size.size, quantity)
         }) if info.add_to_scart(ppk, size.size, quantity, True) <= size.quantity else Response({
             'success': False,
-            'why': f'В наличии недостаточно единиц товара {product} с размером {size}',
+            'why': 'Извините, достигнут лимит. Это максимально возможное количество товаров в наличии.',
             'available_quantity': size.quantity
         })
