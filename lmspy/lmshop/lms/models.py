@@ -33,7 +33,7 @@ class Parameter(DbItem):
 
 class Tunable:
     @staticmethod
-    def regex_validator(rgx_key, msg_key, default_regexp, default_message):
+    def _regex_validator(rgx_key, msg_key, default_regexp, default_message):
         return RegexValidator(
             regex=Parameter.value_of(rgx_key, default_regexp),
             message=Parameter.value_of(msg_key, default_message)
@@ -41,11 +41,20 @@ class Tunable:
 
     @staticmethod
     def validate_size(value):
-        Tunable.regex_validator(
+        Tunable._regex_validator(
             "regex_cloth_size",
             "message_invalid_cloth_size",
             """^(\d*(?:M|X{0,2}[SL]))(?:$|\s+.*$)""",
             "Размер не соответствует образцу"
+        )(value)
+
+    @staticmethod
+    def validate_article(value):
+        Tunable._regex_validator(
+            "regex_article",
+            "message_invalid_article",
+            """[А-Яа-яЁё\w\d\-]+""",
+            "Артикул не соответствует образцу"
         )(value)
 
 
@@ -67,7 +76,7 @@ class Category(DbItem):
 
 
 class Product(DbItem):
-    article = models.CharField(primary_key=True, max_length=100)                                            # внутренний артикул
+    article = models.CharField(primary_key=True, max_length=100, validators=[Tunable.validate_article])     # внутренний артикул
     title = models.CharField(max_length=500)                                                                # название
     description = models.TextField(null=True, blank=True)                                                   # описание
     color = models.CharField(max_length=250, null=True, blank=True)                                         # цвет
