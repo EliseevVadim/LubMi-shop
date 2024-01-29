@@ -24,7 +24,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'lms.apps.LmsConfig',
-    'scart.apps.ScartConfig',
     'customerinfo.apps.CustomerInfoConfig',
     'djmoney',
     'easy_thumbnails',
