@@ -1,6 +1,10 @@
 {% load thumbnail %}
 <div class="items-right-left">
-    <label class="hand gray like-title" style="margin-bottom: -1rem;" onclick="{{side}}_sidebar.hide();">&#11198;</label>
+    {% if card_type == "shopping-cart" %}
+    <label class="hand gray like-title" style="margin-bottom: -1rem;" onclick="">&#11198;</label>
+    {% elif card_type == "favorites" %}
+    <label class="hand gray like-title" style="margin-bottom: -1rem;" onclick="pcard_like_click({checked: false}, '{% url 'api:set_product_like' ppk=product.article like=0 %}');">&#11198;</label>
+    {% endif %}
 </div>
 <div class="items-left-right">
     {% with product.primary_image as img %}
