@@ -3,8 +3,8 @@ const {{unique}}_dialog = {
     {% if not custom_load %}show: url  => {
         fetch(url).then(response => response.text()).then(html => {
             document.querySelector("#{{dialog_id}} .dialog-body").innerHTML = html;
-            document.querySelector("#{{dialog_id}}").showModal();
+            {{unique}}_dialog.self().showModal();
         });
     },{% endif %}
-    close: () => { document.querySelector("#{{dialog_id}}").close(); },
+    close: () => { {{unique}}_dialog.self().close(); },
 };
