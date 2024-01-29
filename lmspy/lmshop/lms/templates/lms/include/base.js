@@ -12,3 +12,9 @@ const __api_call__ = (url, obj, functor, method='POST', content_type='applicatio
         .then(response => response.json())
         .then(functor);
 };
+
+const SbarContentType = {
+    NTHNG: 0,
+    SCART: 1,
+    FVRTS: 2,
+};

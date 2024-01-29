@@ -8,6 +8,6 @@
   <a href='{% url "lms:care" %}'>{{param_title_care}}</a>
   <a href='{% url "lms:contacts" %}'>{{param_title_contacts}}</a>
   <a href='{% url "lms:about" %}'>{{param_title_about_company}}</a>
-  <button onclick="right_sidebar.show('{% url 'lms:favorites' %}');">{{param_title_favorites}}</button>
-  <button onclick="right_sidebar.show('{% url 'lms:scart' %}');">{{param_title_shopping_cart}}</button>
+  <button onclick="right_sidebar.show_favorites();">{{param_title_favorites}}</button>
+  <button onclick="right_sidebar.show_scart();">{{param_title_shopping_cart}}</button>
 </nav>
