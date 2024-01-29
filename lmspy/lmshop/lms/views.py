@@ -142,6 +142,6 @@ class SCartView(View):
                 }]
                 price += quantity * product.actual_price.amount
         return render(request, 'lms/scart.html', {
-            'scart': records,
+            'records': records,
             'price': price
         })

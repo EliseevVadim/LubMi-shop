@@ -1,11 +1,11 @@
 {% load thumbnail %}
 <h1>{{param_title_shopping_cart}}</h1>
-{% for sr in scart %}
+{% for rec in records %}
 <div class="items-right-left">
     <label class="hand gray like-title" style="margin-bottom: -1rem;" onclick="{{side}}_sidebar.hide();">&#11198;</label>
 </div>
 <div class="items-left-right">
-    {% with sr.product.primary_image as img %}
+    {% with rec.product.primary_image as img %}
     {% if img %}
     <figure class="scart-fig">
         <div class="scart-img" style="background-image: url('{% thumbnail img.image 100x0 %}');">
@@ -14,7 +14,7 @@
     {% endif %}
     {% endwith %}
     <div class="pl1">
-    {% include "lms/include/product-description.html" with product=sr.product size=sr.size quantity=sr.quantity %}
+    {% include "lms/include/product-description.html" with product=rec.product size=rec.size quantity=rec.quantity %}
     </div>
 </div>
 {% endfor %}
