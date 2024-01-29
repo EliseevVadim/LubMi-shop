@@ -1,0 +1,17 @@
+{% load thumbnail %}
+<div class="items-right-left">
+    <label class="hand gray like-title" style="margin-bottom: -1rem;" onclick="{{side}}_sidebar.hide();">&#11198;</label>
+</div>
+<div class="items-left-right">
+    {% with product.primary_image as img %}
+    {% if img %}
+    <figure class="sidebar-fig">
+        <div class="sidebar-img" style="background-image: url('{% thumbnail img.image 100x0 %}');">
+        </div>
+    </figure>
+    {% endif %}
+    {% endwith %}
+    <div class="pl1">
+    {% include "lms/include/product-description.html" %}
+    </div>
+</div>

@@ -199,7 +199,7 @@ figcaption {
     padding: var(--DefPadding)
 }
 
-.p-card-a.not-standalone {
+.p-card-a.details {
     max-height: calc(var(--CatItemWidth) * 1.6);
     min-height: calc(var(--CatItemWidth) * 1.6);
     max-width: var(--CatItemWidth);
@@ -280,7 +280,7 @@ aside h1 {
 
 /* Корзина ------------------------------------------------------------------------------------------------------------- */
 
-.scart-fig {
+.sidebar-fig {
     max-width: var(--ScartFigWidth);
     min-width: var(--ScartFigWidth);
     max-height: var(--ScartFigWidth);
@@ -288,7 +288,7 @@ aside h1 {
     padding: 0.3rem;
 }
 
-.scart-fig > .scart-img {
+.sidebar-fig > .sidebar-img {
     height: 100%;
     background-size: cover;
     background-position: center center;

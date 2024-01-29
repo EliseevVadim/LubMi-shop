@@ -2,14 +2,12 @@
 {% if variants %}
 <h1 class="with-selector">
     <span>{{title}}</span>
-    <div class="selector-container">
-        {% include "lms/include/selector.html" %}
-    </div>
+    <div class="selector-container">{% include "lms/include/selector.html" %}</div>
 </h1>
 {% else %}
 <h1>{{title}}</h1>
 {% endif %}
-<div id="{{kind}}-list" class="catalogue">{% include "lms/include/product-list-type-A.html" with standalone=True %}</div>
+<div id="{{kind}}-list" class="catalogue">{% include "lms/include/product-list-type-A.html" with card_type="catalogue" %}</div>
 {% if pages > 1 %}
 <div class="toolbar"><button id="{{kind}}-upd-btn" class="medium" onclick="{{kind}}_update();">{{param_label_load_more}}</button></div>
 {% endif %}

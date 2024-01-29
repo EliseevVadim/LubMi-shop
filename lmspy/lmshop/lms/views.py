@@ -145,3 +145,11 @@ class SCartView(View):
             'records': records,
             'price': price
         })
+
+
+class FavoritesView(View):
+    @staticmethod
+    def get(request, *_, **__):
+        return render(request, 'lms/favorites.html', {
+            'products': Product.objects.filter(pk__in=CustomerInfo(request).favorites),
+        })
