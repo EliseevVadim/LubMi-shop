@@ -1,6 +1,6 @@
 {% if standalone %}
 
-{{product.title}}<br/>
+<span class="like-title">{{product.title}}</span><br/>
 ({{product.color|default:"цвет не указан"}})<br/>
 {% if product.old_price %}<span class="old_price">{{product.old_price.amount}} руб.</span>{% endif %}{{product.actual_price.amount}} руб.<br/>
 {% if not product.in_stock %}<span class="red">Нет в наличии<br/></span><button class="w-100" onclick="notify_delivery('{{product.article}}')">Сообщить о поступлении</button>{% endif %}
@@ -8,14 +8,20 @@
 {% elif size or quantity %}
 
 <span class="like-title">{{product.title}}&nbsp;({{product.color|default:"цвет не указан"}})</span><br/>
-<span class="gray like-note">Артикул: {{product.article}}<br/>Размер: {{size.size}}</span><br/>
-{{product.actual_price.amount}} руб.<br/>
-{{quantity}} шт<br/>
+<span class="gray like-note">Артикул: {{product.article}}<br/>Размер: {{size.size}}</span><br/><br/>
+<span class="items-left-right">
+    <span>{{product.actual_price.amount}} руб.</span>
+    <span class="inline-items-right-left mla">{% if quantity < size.quantity %}
+        <span class="hand gray">&nbsp;&#8853;</span>{% endif %}
+        <span>{{quantity}}</span>{% if quantity > 1 %}
+        <span class="hand gray">&#8854;&nbsp;</span>{% endif %}
+    </span>
+</span>
 
 {% else %}
 
-<p class="like-title"><strong>{{product.title}} ({{product.color}})</strong></p>
-<p class="gray like-note">Артикул: {{product.article}}</p>
+<p class="like-title"><strong>{{product.title}} ({{product.color}})</strong><br/>
+<span class="gray like-note">Артикул: {{product.article}}</span></p>
 <p><span class="like-title"><strong>{{product.actual_price.amount}} руб.</strong></span>{% if product.old_price %}<span class="old_price">{{product.old_price.amount}} руб.</span>{% endif %}</p>
 {% if product.in_stock %}
 <label class="like-title" for="size-selector">Размер:</label>
@@ -24,5 +30,5 @@
 {% else %}
 <p><span class="red">Нет в наличии<br/></span><button class="w-100 inverted" onclick="notify_delivery('{{product.article}}')">Сообщить о поступлении</button></p>
 {% endif %}
-<p class="not-wide">{{product.description|default:"Детальное товара описание отсутствует"}}</p>
+<blockquote class="not-wide"><br/>{{product.description|default:"Детальное товара описание отсутствует"}}</blockquote>
 {% endif %}

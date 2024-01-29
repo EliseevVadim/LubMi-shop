@@ -8,6 +8,7 @@
     --ZixPanels: 30;
     --ZixTop: 40;
     --CatItemWidth: 17rem;
+    --ScartFigWidth: 7rem;
     --HeartSize: 1.6rem;
     --Gap: var(--DefPadding);
 }
@@ -191,6 +192,7 @@ figcaption {
     display: flex;
     flex-flow: row;
     background-size: cover;
+    background-position: center center;
     background-repeat: no-repeat;
     max-height: calc(var(--CatItemWidth) * 1.5);
     min-height: calc(var(--CatItemWidth) * 1.5);
@@ -276,7 +278,24 @@ aside h1 {
     border-top: none;
 }
 
-/* Элементы оформления -------------------------------------------------------------------------------------------------*/
+/* Корзина ------------------------------------------------------------------------------------------------------------- */
+
+.scart-fig {
+    max-width: var(--ScartFigWidth);
+    min-width: var(--ScartFigWidth);
+    max-height: var(--ScartFigWidth);
+    min-height: var(--ScartFigWidth);
+    padding: 0.3rem;
+}
+
+.scart-fig > .scart-img {
+    height: 100%;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+/* Элементы оформления ------------------------------------------------------------------------------------------------- */
 
 h1 {
     font-weight:normal;
@@ -304,9 +323,29 @@ h1, h2, h3, h4, h5, h6 {
     flex-flow: column;
 }
 
+.items-down-top {
+    display: flex;
+    flex-flow: column-reverse;
+}
+
 .items-left-right {
     display: flex;
-    flex-flow: column;
+    flex-flow: row;
+}
+
+.items-right-left {
+    display: flex;
+    flex-flow: row-reverse;
+}
+
+.inline-items-left-right {
+    display: inline-flex;
+    flex-flow: row;
+}
+
+.inline-items-right-left {
+    display: inline-flex;
+    flex-flow: row-reverse;
 }
 
 .grid-c2 {
@@ -350,6 +389,66 @@ img.bkg {
 
 .not-wide {
     max-width: 25rem;
+}
+
+.pl1 {
+    padding-left: var(--DefPadding);
+}
+
+.pr1 {
+    padding-right: var(--DefPadding);
+}
+
+.pt1 {
+    padding-top: var(--DefPadding);
+}
+
+.pb1 {
+    padding-bottom: var(--DefPadding);
+}
+
+.ml1 {
+    margin-left: var(--DefPadding);
+}
+
+.mr1 {
+    margin-right: var(--DefPadding);
+}
+
+.mt1 {
+    margin-top: var(--DefPadding);
+}
+
+.mb1 {
+    margin-bottom: var(--DefPadding);
+}
+
+.mla {
+    margin-left: auto;
+}
+
+.mra {
+    margin-right: auto;
+}
+
+.mta {
+    margin-top: auto;
+}
+
+.mba {
+    margin-bottom: auto;
+}
+
+.hand {
+    cursor: pointer;
+}
+
+.hand:hover {
+    color: black;
+}
+
+.overlined {
+    border-top: 1px solid black;
 }
 
 .white {
