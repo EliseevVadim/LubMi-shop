@@ -11,5 +11,5 @@
 {% endif %}
 <div id="{{kind}}-list" class="catalogue">{% include "lms/include/product-list-type-A.html" with standalone=True %}</div>
 {% if pages > 1 %}
-<div class="toolbar"><button id="{{kind}}-upd-btn" class="medium" onclick="{{kind}}_update();">Загрузить ещё</button></div>
+<div class="toolbar"><button id="{{kind}}-upd-btn" class="medium" onclick="{{kind}}_update();">{{param_label_load_more}}</button></div>
 {% endif %}

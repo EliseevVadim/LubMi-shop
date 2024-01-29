@@ -36,7 +36,7 @@ class IndexView(View):
 
         if not page:
             return render(request, 'lms/index.html', {
-                'page_title': "Главная",
+                'page_title': Parameter.value_of("title_main_page", "Главная"),
                 'products': pd_pgn.page(1),
                 'bestsellers': bs_pgn.page(1),
                 'product_pages': pd_pgn.num_pages,

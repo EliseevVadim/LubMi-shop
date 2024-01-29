@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block page_content %}
-{% include "lms/include/catalogue-type-A.html" with title="Каталог" pages=product_pages kind="pd" variants=order_variants selector_id="order-selector" %}
+{% include "lms/include/catalogue-type-A.html" with title=param_title_catalogue pages=product_pages kind="pd" variants=order_variants selector_id="order-selector" %}
 {% include "lms/include/catalogue-type-A.html" with products=bestsellers title="Бестселлеры" pages=bestseller_pages kind="bs" %}
 {% endblock %}
 

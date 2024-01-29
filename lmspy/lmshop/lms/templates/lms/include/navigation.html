@@ -1,0 +1,11 @@
+{% load static %}
+<nav>
+  <a class="logo" href='{% url "lms:index" %}'><img src="{% static 'svg/logo.svg' %}"/></a>
+  <a href='{% url "lms:index" %}'>{{param_title_main_page}}</a>
+  <a href='{% url "lms:catalogue" %}'>{{param_title_catalogue}}</a>
+  <a href='{% url "lms:perfumery" %}'>{{param_title_perfumery}}</a>
+  <a href='{% url "lms:delivery" %}'>{{param_title_shipping_and_payment}}</a>
+  <a href='{% url "lms:care" %}'>{{param_title_care}}</a>
+  <a href='{% url "lms:contacts" %}'>{{param_title_contacts}}</a>
+  <a href='{% url "lms:about" %}'>{{param_title_about_company}}</a>
+</nav>

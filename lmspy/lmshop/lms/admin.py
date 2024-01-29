@@ -67,5 +67,5 @@ class ChatAdmin(admin.ModelAdmin):
 
 @admin.register(Parameter)
 class ParamAdmin(admin.ModelAdmin):
-    list_display = ['key', 'value', 'description']
+    list_display = ['key', 'value', 'in_context', 'description']
     search_fields = ['key', 'value']

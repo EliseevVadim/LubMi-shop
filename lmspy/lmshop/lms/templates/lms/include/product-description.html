@@ -1,34 +1,29 @@
 {% if standalone %}
-
 <span class="like-title">{{product.title}}</span><br/>
-({{product.color|default:"цвет не указан"}})<br/>
-{% if product.old_price %}<span class="old_price">{{product.old_price.amount}} руб.</span>{% endif %}{{product.actual_price.amount}} руб.<br/>
-{% if not product.in_stock %}<span class="red">Нет в наличии<br/></span><button class="w-100" onclick="notify_delivery('{{product.article}}')">Сообщить о поступлении</button>{% endif %}
-
+({{product.color|default:param_message_color_missed}})<br/>
+{% if product.old_price %}<span class="old_price">{{product.old_price.amount}} {{param_label_currency}}</span>{% endif %}{{product.actual_price.amount}} {{param_label_currency}}<br/>
+{% if not product.in_stock %}<span class="red">{{param_label_not_available}}<br/></span><button class="w-100" onclick="notify_delivery('{{product.article}}')">{{param_label_notify_delivery}}</button>{% endif %}
 {% elif size or quantity %}
-
-<span class="like-title">{{product.title}}&nbsp;({{product.color|default:"цвет не указан"}})</span><br/>
-<span class="gray like-note">Артикул: {{product.article}}<br/>Размер: {{size.size}}</span><br/><br/>
+<span class="like-title">{{product.title}}&nbsp;({{product.color|default:param_message_color_missed}})</span><br/>
+<span class="gray like-note">{{param_label_article}}: {{product.article}}<br/>{{param_label_size}}: {{size.size}}</span><br/><br/>
 <span class="items-left-right">
-    <span>{{product.actual_price.amount}} руб.</span>
+    <span>{{product.actual_price.amount}} {{param_label_currency}}</span>
     <span class="inline-items-right-left mla">{% if quantity < size.quantity %}
         <span class="hand gray">&nbsp;&#8853;</span>{% endif %}
         <span>{{quantity}}</span>{% if quantity > 1 %}
         <span class="hand gray">&#8854;&nbsp;</span>{% endif %}
     </span>
 </span>
-
 {% else %}
-
 <p class="like-title"><strong>{{product.title}} ({{product.color}})</strong><br/>
-<span class="gray like-note">Артикул: {{product.article}}</span></p>
-<p><span class="like-title"><strong>{{product.actual_price.amount}} руб.</strong></span>{% if product.old_price %}<span class="old_price">{{product.old_price.amount}} руб.</span>{% endif %}</p>
+<span class="gray like-note">{{param_label_article}}: {{product.article}}</span></p>
+<p><span class="like-title"><strong>{{product.actual_price.amount}} {{param_label_currency}}</strong></span>{% if product.old_price %}<span class="old_price">{{product.old_price.amount}} {{param_label_currency}}</span>{% endif %}</p>
 {% if product.in_stock %}
-<label class="like-title" for="size-selector">Размер:</label>
+<label class="like-title" for="size-selector">{{param_label_size}}:</label>
 {% include "lms/include/selector.html" with variants=product.variants selector_id="size-selector" %}
-<button class="w-100 inverted" onclick="product_to_scart('{{product.article}}', document.getElementById('size-selector').value, 1);">Добавить в корзину</button>
+<button class="w-100 inverted" onclick="product_to_scart('{{product.article}}', document.getElementById('size-selector').value, 1);">{{param_label_add_to_shopping_cart}}</button>
 {% else %}
-<p><span class="red">Нет в наличии<br/></span><button class="w-100 inverted" onclick="notify_delivery('{{product.article}}')">Сообщить о поступлении</button></p>
+<p><span class="red">{{param_label_not_available}}<br/></span><button class="w-100 inverted" onclick="notify_delivery('{{product.article}}')">{{param_label_notify_delivery}}</button></p>
 {% endif %}
-<blockquote class="not-wide"><br/>{{product.description|default:"Детальное товара описание отсутствует"}}</blockquote>
+<blockquote class="not-wide"><br/>{{product.description|default:param_message_details_missed}}</blockquote>
 {% endif %}

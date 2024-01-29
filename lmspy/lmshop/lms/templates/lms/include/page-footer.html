@@ -1,0 +1,23 @@
+{% load static %}
+<div class="std-footer">
+  <div class="std-footer-item-1">
+    <a class="logo" href='{% url "lms:index" %}'><img src="{% static 'svg/logo.svg' %}"/></a>
+    <a href='{% url "lms:index" %}'>{{param_label_phone}}</a>
+    <a href='{% url "lms:index" %}'>{{param_label_email}}</a>
+  </div>
+  <div class="std-footer-item-2">
+    <h6>{{param_title_for_buyers}}</h6>
+    <a href='{% url "lms:delivery" %}'>{{param_title_shipping_and_payment}}</a>
+    <a href='{% url "lms:index" %}'>{{param_title_size_table}}</a>
+  </div>
+  <div class="std-footer-item-3">
+    <h6>{{param_title_about_company}}</h6>
+    <a href='{% url "lms:about" %}'>{{param_title_about_the_brand}}</a>
+  </div>
+  <div class="std-footer-item-4">
+    <small>{{param_label_copyright}}</small>
+    <img style="height:1em" src="{% static 'svg/footer.svg' %}"/>
+    <a href='{% url "lms:index" %}'><small>{{param_title_privacy_policy}}</small></a>
+    <a href='{% url "lms:index" %}'><small>{{param_title_public_offer}}</small></a>
+  </div>
+</div>

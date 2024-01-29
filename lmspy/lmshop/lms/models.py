@@ -17,6 +17,7 @@ class DbItem(models.Model):
 class Parameter(DbItem):
     key = models.CharField(primary_key=True, max_length=50)                                     # -- ключ --
     value = models.CharField(max_length=250)                                                    # -- значение --
+    in_context = models.BooleanField(default=True)                                              # -- используется в контексте --
     description = models.TextField(null=True, blank=True)                                       # -- описание --
 
     def __str__(self):
