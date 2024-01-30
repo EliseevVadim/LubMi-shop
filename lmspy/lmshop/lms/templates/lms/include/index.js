@@ -43,7 +43,18 @@ const product_to_scart = (ppk, size_id, quantity) => {
             gp_dialog.close();
             right_sidebar.show_scart();
         } else {
-            alert(result.why);
+            popup.show(result.why);
+        }
+    });
+}
+const kill_product_in_scart = (ppk, size) => {
+    __api_call__('{% url "api:kill_product_in_scart" %}', { ppk: String(ppk), size: String(size) }, result => {
+        if(result.success) {
+            if(right_sidebar.visible() && right_sidebar.ctype == SbarContentType.SCART) {
+                right_sidebar.show_scart();
+            }
+        } else {
+            popup.show(result.why);
         }
     });
 }

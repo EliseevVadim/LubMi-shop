@@ -1,4 +1,5 @@
 <h1>{{param_title_shopping_cart}}</h1>
+{% if records %}
 {% for rec in records %}
 {% include "lms/include/sidebar-item.html" with card_type="shopping-cart" product=rec.product size=rec.size quantity=rec.quantity %}
 {% endfor %}
@@ -6,3 +7,6 @@
     <p class="total-price like-title">{{param_label_amount_to_be_paid}}: {{price}} {{param_label_currency}}</p>
 </div>
 <button class="w-100 inverted" onclick="">{{param_label_checkout}}</button>
+{% else %}
+<h4>{{param_message_shopping_cart_empty}}</h4>
+{% endif %}

@@ -164,7 +164,7 @@ class KillProductInSCartView(APIView):
     def post(request, _=None):
         rec = request.data
         try:
-            ppk, size = rec['ppk'], int(rec['size'])
+            ppk, size = rec['ppk'], rec['size']
         except KeyError:
             return Response({
                 'success': False,
