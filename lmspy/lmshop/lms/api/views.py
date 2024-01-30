@@ -123,7 +123,7 @@ class ProductToSCartView(APIView):
                 'why': Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
             })
         try:
-            product = get_object_or_404(Product, article=ppk)
+            product = get_object_or_404(Product.published, pk=ppk)
         except Http404:
             return Response({
                 'success': False,
