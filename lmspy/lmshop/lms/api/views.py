@@ -86,7 +86,7 @@ class NotifyMeForDeliveryView(APIView):
         try:
             name, phone, email, ppk = escape(cui['name']), escape(cui['phone']), escape(cui['email']), escape(cui['ppk'])
         except KeyError:
-            return Response({'ok': False})  # TODO -- rename 'ok' to 'success' --
+            return Response({'success': False})
         if name and ppk and (email or phone):
             nrq = NotificationRequest(name=name, phone=phone, email=email, ppk=ppk)
             nrq.save()
@@ -96,10 +96,10 @@ class NotifyMeForDeliveryView(APIView):
             info.phone = phone or info.phone
             info.email = email or info.email
             return Response({
-                'ok': True
+                'success': True
             })
         return Response({
-            'ok': False
+            'success': False
         })
 
 

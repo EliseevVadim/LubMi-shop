@@ -24,11 +24,11 @@ const notify_delivery = ppk => {
         cu_form.onsubmit = e => {
             e.preventDefault();
             __api_call__('{% url "api:notify_me_for_delivery" %}', { name: cu_name.value, phone: cu_phone.value, email: cu_email.value, ppk: ppk }, result => {
-                if(result.ok) {
+                if(result.success) {
                     ndd_dialog.close();
-                    show_popup("Ваш запрос на уведомление о доставке товара успешно отправлен");
+                    popup.show("Ваш запрос на уведомление о доставке товара успешно отправлен");
                 } else {
-                    show_popup("При отправке запроса возникли проблемы, попробуйте повторить отправку позже");
+                    popup.show("При отправке запроса возникли проблемы, попробуйте повторить отправку позже");
                 }
             });
         }
