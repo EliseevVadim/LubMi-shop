@@ -114,6 +114,7 @@ class AboutCompanyView(View):
 
 class ProductView(DetailView):
     model = Product
+    queryset = Product.published.all()
     template_name = 'lms/pcard.html'
 
     def get_context_data(self, **kwargs):
@@ -132,15 +133,22 @@ class SCartView(View):
         records = []
         price = Decimal(0)
         for ppk, sizes in sct.items():
-            product = Product.objects.get(pk=ppk)
+            try:
+                product = Product.objects.get(pk=ppk)
+            except Product.DoesNotExist:
+                continue
             for sz, quantity in sizes.items():
-                size = product.sizes.get(size=sz)
-                records += [{
-                    'product': product,
-                    'size': size,
-                    'quantity': quantity
-                }]
-                price += quantity * product.actual_price.amount
+                try:
+                    size = product.sizes.get(size=sz)
+                except AvailableSize.DoesNotExist:
+                    pass
+                else:
+                    records += [{
+                        'product': product,
+                        'size': size,
+                        'quantity': quantity
+                    }]
+                    price += quantity * product.actual_price.amount
         return render(request, 'lms/scart.html', {
             'records': records,
             'price': price
@@ -151,5 +159,5 @@ class FavoritesView(View):
     @staticmethod
     def get(request, *_, **__):
         return render(request, 'lms/favorites.html', {
-            'products': Product.objects.filter(pk__in=CustomerInfo(request).favorites),
+            'products': Product.published.filter(pk__in=CustomerInfo(request).favorites),
         })

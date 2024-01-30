@@ -11,12 +11,12 @@ from customerinfo.customerinfo import CustomerInfo
 
 
 class ProductListView(generics.ListAPIView):
-    queryset = Product.objects.all()
+    queryset = Product.published.all()
     serializer_class = ProductSerializer
 
 
 class ProductDetailView(generics.RetrieveAPIView):
-    queryset = Product.objects.all()
+    queryset = Product.published.all()
     serializer_class = ProductSerializer
 
 
@@ -150,7 +150,7 @@ class ProductToSCartView(APIView):
             'product': str(product),
             'size': str(size),
             'quantity': info.add_to_scart(ppk, size.size, quantity)
-        }) if info.add_to_scart(ppk, size.size, quantity, True) <= size.quantity else Response({
+        }) if info.add_to_scart(ppk, size.size, quantity, True) <= size.quantity or quantity < 0 else Response({
             'success': False,
             'why': Parameter.value_of('message_overkill', 'Извините, достигнут лимит. Это максимально возможное количество товаров в наличии.'),
             'available_quantity': size.quantity
