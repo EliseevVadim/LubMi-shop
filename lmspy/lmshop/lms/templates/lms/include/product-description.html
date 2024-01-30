@@ -4,8 +4,7 @@
 {% if product.old_price %}<span class="old_price">{{product.old_price.amount}} {{param_label_currency}}</span>{% endif %}{{product.actual_price.amount}} {{param_label_currency}}<br/>
 {% if not product.in_stock %}<span class="red">{{param_label_not_available}}<br/></span><button class="w-100" onclick="notify_delivery('{{product.article}}')">{{param_label_notify_delivery}}</button>{% endif %}
 {% elif card_type == "details" %}
-<p class="like-title"><strong>{{product.title}} ({{product.color}})</strong><br/>
-<span class="gray like-note">{{param_label_article}}: {{product.article}}</span></p>
+<p class="like-title"><strong>{{product.title}} ({{product.color}})</strong><br/><span class="gray like-note">{{param_label_article}}: {{product.article}}</span></p>
 <p><span class="like-title"><strong>{{product.actual_price.amount}} {{param_label_currency}}</strong></span>{% if product.old_price %}<span class="old_price">{{product.old_price.amount}} {{param_label_currency}}</span>{% endif %}</p>
 {% if product.in_stock %}
 <label class="like-title" for="size-selector">{{param_label_size}}:</label>
