@@ -86,7 +86,10 @@ class NotifyMeForDeliveryView(APIView):
         try:
             name, phone, email, ppk = escape(cui['name']), escape(cui['phone']), escape(cui['email']), escape(cui['ppk'])
         except KeyError:
-            return Response({'success': False})
+            return Response({
+                'success': False,
+                'why': Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
+            })
         if name and ppk and (email or phone):
             nrq = NotificationRequest(name=name, phone=phone, email=email, ppk=ppk)
             nrq.save()
@@ -99,7 +102,8 @@ class NotifyMeForDeliveryView(APIView):
                 'success': True
             })
         return Response({
-            'success': False
+            'success': False,
+            'why': Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
         })
 
 
@@ -108,7 +112,6 @@ class ProductToSCartView(APIView):
 
     @staticmethod
     def post(request, _=None):
-        info = CustomerInfo(request)
         rec = request.data
         try:
             ppk, size_id, quantity = rec['ppk'], int(rec['size_id']), int(rec['quantity'])
@@ -141,6 +144,7 @@ class ProductToSCartView(APIView):
                 'success': False,
                 'why': Parameter.value_of('message_product_has_no_size', 'Для товара %s недоступен размер %s') % (product, size)
             })
+        info = CustomerInfo(request)
         return Response({
             'success': True,
             'product': str(product),
@@ -150,4 +154,34 @@ class ProductToSCartView(APIView):
             'success': False,
             'why': Parameter.value_of('message_overkill', 'Извините, достигнут лимит. Это максимально возможное количество товаров в наличии.'),
             'available_quantity': size.quantity
+        })
+
+
+class KillProductInSCartView(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    def post(request, _=None):
+        rec = request.data
+        try:
+            ppk, size = rec['ppk'], int(rec['size'])
+        except KeyError:
+            return Response({
+                'success': False,
+                'why': Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
+            })
+        except ValueError:
+            return Response({
+                'success': False,
+                'why': Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
+            })
+        rec = CustomerInfo(request).remove_from_scart(ppk, size)
+        return Response({
+            'success': True,
+            'ppk': rec['ppk'],
+            'size': rec['size'],
+            'quantity': rec['quantity']
+        }) if rec else Response({
+            'success': False,
+            'why': Parameter.value_of('message_product_not_found_in_shopping_cart', 'Товар с артикулом %s и размером %s не найден в корзине') % (ppk, size)
         })

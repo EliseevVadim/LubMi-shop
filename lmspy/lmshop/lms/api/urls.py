@@ -12,5 +12,6 @@ urlpatterns = [
     # -- customer API --
     path('customer/info/<int:flags>/', views.GetCustomerInfoView.as_view(), name='get_customer_info'),
     path('customer/notify-me-product-delivery/', views.NotifyMeForDeliveryView.as_view(), name='notify_me_for_delivery'),
-    path('customer/product-to-scart/', views.ProductToSCartView.as_view(), name='product_to_scart'),
+    path('customer/add-product-to-scart/', views.ProductToSCartView.as_view(), name='product_to_scart'),
+    path('customer/remove-product-from-scart/', views.KillProductInSCartView.as_view(), name='kill_product_in_scart'),
 ]

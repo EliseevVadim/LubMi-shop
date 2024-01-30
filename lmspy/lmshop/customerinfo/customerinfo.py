@@ -91,7 +91,7 @@ class CustomerInfo:
             if not dry_run:
                 self.save()
 
-    def remove_from_scart(self, ppk, size, dry_run=False):    # -- accumulative operation, negative quantity decreases total quantity in SCart --
+    def remove_from_scart(self, ppk, size, dry_run=False):
         sct = self._get_or_create_scart()
         key = CustomerInfo._hash(ppk, size)
         if dry_run:
