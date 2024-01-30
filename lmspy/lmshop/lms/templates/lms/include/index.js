@@ -53,7 +53,7 @@ const kill_product_in_scart = (ppk, product_title, size_id, size) => {
         if(result.success) {
             if(right_sidebar.visible() && right_sidebar.ctype == SbarContentType.SCART) {
                 right_sidebar.show_scart();
-                undo.start(59,
+                undo.start({{param_value_undo_period}} * 1000 / undo.period(),
                     u => {
                         if(u.alive()) {
                             let cd = u.countdown();

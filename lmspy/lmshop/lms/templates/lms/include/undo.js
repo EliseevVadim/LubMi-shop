@@ -6,6 +6,7 @@ const undo = {
     undo_action: null,
 
     alive: () => !!undo.timer_id,
+    period: () => 100,
     start: (count, time_action, final_action, undo_action) => {
         undo.stop();
         undo.count = Number(count);
@@ -19,7 +20,7 @@ const undo = {
             } else {
                 undo.stop();
             }
-        }, 100);
+        }, undo.period());
     },
     stop: () => {
         if(undo.alive()) {
