@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework import generics
-from lms.models import Product, NotificationRequest, AvailableSize
+from lms.models import Product, NotificationRequest, AvailableSize, Parameter
 from lms.api.serializers import ProductSerializer
 from lms.utils import send_message_via_telegram
 from customerinfo.customerinfo import CustomerInfo
@@ -115,31 +115,31 @@ class ProductToSCartView(APIView):
         except KeyError:
             return Response({
                 'success': False,
-                'why': 'Произошла ошибка при отправке данных, мы работаем над этим...'
+                'why': Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
             })
         except ValueError:
             return Response({
                 'success': False,
-                'why': 'Произошла ошибка при извлечении данных, мы работаем над этим...'
+                'why': Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
             })
         try:
             product = get_object_or_404(Product, article=ppk)
         except Http404:
             return Response({
                 'success': False,
-                'why': f'Не удалось найти товар с артикулом {ppk}'
+                'why': Parameter.value_of('message_product_not_found_by_article', 'Не удалось найти товар с артикулом %s') % (ppk,)
             })
         try:
             size = get_object_or_404(AvailableSize, id=size_id)
         except Http404:
             return Response({
                 'success': False,
-                'why': f'Не удалось найти нужный размер'
+                'why': Parameter.value_of('message_size_not_found_by_id', 'Не удалось найти нужный размер')
             })
         if not product.sizes.filter(id=size_id).exists():
             return Response({
                 'success': False,
-                'why': f'Для товара {product} недоступен размер {size}'
+                'why': Parameter.value_of('message_product_has_no_size', 'Для товара %s недоступен размер %s') % (product, size)
             })
         return Response({
             'success': True,
@@ -148,6 +148,6 @@ class ProductToSCartView(APIView):
             'quantity': info.add_to_scart(ppk, size.size, quantity)
         }) if info.add_to_scart(ppk, size.size, quantity, True) <= size.quantity else Response({
             'success': False,
-            'why': 'Извините, достигнут лимит. Это максимально возможное количество товаров в наличии.',
+            'why': Parameter.value_of('message_overkill', 'Извините, достигнут лимит. Это максимально возможное количество товаров в наличии.'),
             'available_quantity': size.quantity
         })
