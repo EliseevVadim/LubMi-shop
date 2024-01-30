@@ -1,3 +1,4 @@
+{% include "lms/include/undo.js" %}
 const pcard_like_click = (input, url) => {
     url = url.replace(/\/\d\/$/, `/${input.checked?1:0}/`);
     __api_call__(url, null, answer => {
@@ -47,11 +48,27 @@ const product_to_scart = (ppk, size_id, quantity) => {
         }
     });
 }
-const kill_product_in_scart = (ppk, size) => {
+const kill_product_in_scart = (ppk, size, size_id, message) => {
     __api_call__('{% url "api:kill_product_in_scart" %}', { ppk: String(ppk), size: String(size) }, result => {
         if(result.success) {
             if(right_sidebar.visible() && right_sidebar.ctype == SbarContentType.SCART) {
                 right_sidebar.show_scart();
+                undo.start(59,
+                    u => {
+                        if(u.alive()) {
+                            let cd = u.countdown();
+                            let ms = u.message();
+                            let wg = u.widget();
+                            if(wg && ms && cd) { ms.innerHTML = message; cd.innerHTML = String(Math.floor(u.count/10)); wg.style.display = "block"; }
+                        }
+                    },
+                    u => {
+                        let wg = u.widget();
+                        if(wg) { wg.style.display = "none"; }
+                        right_sidebar.show_scart();
+                    },
+                    u => { product_to_scart(ppk, size_id, result.quantity); }
+                );
             }
         } else {
             popup.show(result.why);

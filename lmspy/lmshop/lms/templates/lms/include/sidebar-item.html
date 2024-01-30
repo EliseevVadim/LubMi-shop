@@ -1,7 +1,9 @@
 {% load thumbnail %}
 <div class="items-right-left">
     {% if card_type == "shopping-cart" %}
-    <label class="hand gray like-title" style="margin-bottom: -1rem;" onclick="kill_product_in_scart('{{product.article}}', '{{size.size}}');">&#11198;</label>
+    <label class="hand gray like-title"
+           style="margin-bottom: -1rem;"
+           onclick="kill_product_in_scart('{{product.article}}', '{{size.size}}', {{size.id}}, `{{param_label_you_removed}} &laquo;${ '{{product.title}}' }&raquo;`);">&#11198;</label>
     {% elif card_type == "favorites" %}
     <label class="hand gray like-title" style="margin-bottom: -1rem;" onclick="pcard_like_click({checked: false}, '{% url 'api:set_product_like' ppk=product.article like=0 %}');">&#11198;</label>
     {% endif %}
