@@ -1,4 +1,8 @@
 <h1>{{param_title_favorites}}</h1>
+{% if products %}
 {% for product in products %}
 {% include "lms/include/sidebar-item.html" with card_type="favorites" %}
 {% endfor %}
+{% else %}
+<h4>{{param_message_no_favorites}}</h4>
+{% endif %}
