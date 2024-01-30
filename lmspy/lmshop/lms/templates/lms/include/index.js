@@ -48,7 +48,7 @@ const product_to_scart = (ppk, size_id, quantity) => {
         }
     });
 }
-const kill_product_in_scart = (ppk, size, size_id, message) => {
+const kill_product_in_scart = (ppk, product_title, size_id, size) => {
     __api_call__('{% url "api:kill_product_in_scart" %}', { ppk: String(ppk), size: String(size) }, result => {
         if(result.success) {
             if(right_sidebar.visible() && right_sidebar.ctype == SbarContentType.SCART) {
@@ -59,7 +59,11 @@ const kill_product_in_scart = (ppk, size, size_id, message) => {
                             let cd = u.countdown();
                             let ms = u.message();
                             let wg = u.widget();
-                            if(wg && ms && cd) { ms.innerHTML = message; cd.innerHTML = String(Math.floor(u.count/10)); wg.style.display = "block"; }
+                            if(wg && ms && cd) {
+                                ms.innerHTML = `{{param_label_you_removed}} &laquo;${product_title}&raquo;`;
+                                cd.innerHTML = String(Math.floor(u.count/10));
+                                wg.style.display = "block";
+                            }
                         }
                     },
                     u => {
