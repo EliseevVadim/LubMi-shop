@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import QuerySet
 from django.utils import timezone, text
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, MinValueValidator
 from djmoney.models.fields import MoneyField
 from datetime import datetime
 
@@ -77,14 +77,14 @@ class Category(DbItem):
 
 class Product(DbItem):
     article = models.CharField(primary_key=True, max_length=100, validators=[Tunable.validate_article])     # внутренний артикул
-    title = models.CharField(max_length=500)                                                                # название
+    title = models.CharField(max_length=100)                                                                # название
+    slug = models.SlugField(unique=True, max_length=200)                                                    # слаг
     description = models.TextField(null=True, blank=True)                                                   # описание
-    color = models.CharField(max_length=250, null=True, blank=True)                                         # цвет
+    color = models.CharField(max_length=50, null=True, blank=True)                                          # цвет
     actual_price = MoneyField(max_digits=14, decimal_places=2, default_currency='RUR')                      # цена
     old_price = MoneyField(max_digits=14, decimal_places=2, default_currency='RUR', null=True, blank=True)  # старая цена (до акции), null -- нет акции
     sales_quantity = models.BigIntegerField(default=0)                                                      # количество продаж
     published_at = models.DateTimeField(null=True, blank=True, default=timezone.now)                        # время публикации(опубликован, если published_at < now())
-    slug = models.SlugField(unique=True, max_length=200)                                                    # слаг
     categories = models.ManyToManyField(Category, related_name="products")                                  # категории
 
     def save(self, *args, **kwargs):
@@ -187,13 +187,53 @@ class Image(DbItem):
 
 
 class Order(DbItem):
-    scart_id = models.CharField(max_length=100)                                                 # ид.корзины
-    size = models.CharField(max_length=30)                                                      # размер
-    quantity = models.BigIntegerField()                                                         # количество
-    product = models.ForeignKey(Product, related_name="orders", on_delete=models.CASCADE)       # товар
+    class Delivery(models.TextChoices):
+        sd = "sd", "СДЭК"
+        pr = "pr", "Почта России"
+
+    slug = models.SlugField(unique=True, max_length=200)                                        # -- слаг --
+    closed_at = models.DateTimeField(null=True, blank=True, default=None)                       # -- время и флаг выполнения --
+    delivery = models.CharField(                                                                # -- тип доставки --
+        max_length=2,
+        choices=Delivery.choices,
+        default=Delivery.sd)
+    delivery_cost = MoneyField(                                                                 # -- стоимость доставки --
+        max_digits=14,
+        decimal_places=2,
+        default_currency='RUR')
+    cu_name = models.CharField(max_length=250)                                                  # -- как обращаться --
+    cu_phone = models.CharField(null=True, max_length=50)                                       # -- телефон --
+    cu_email = models.CharField(null=True, max_length=250)                                      # -- email --
+    cu_country = models.CharField(max_length=100, default="Россия")                             # -- страна --
+    cu_city = models.CharField(max_length=100)                                                  # -- город --
+    cu_street = models.CharField(max_length=200)                                                # -- улица --
+    cu_building = models.CharField(max_length=50)                                               # -- здание --
+    cu_floor = models.CharField(max_length=50)                                                  # -- этаж --
+    cu_apartment = models.CharField(max_length=50)                                              # -- квартира/офис --
+    cu_fullname = models.CharField(max_length=250)                                              # -- полное имя заказчика --
+    cu_confirm = models.BooleanField(default=False)                                             # -- поставил галочку про конфиденциальность? --
+    items: QuerySet                                                                             # -- компоненты, Just for IDE syntax analyzer --
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = text.slugify(self.created_at, self.id)
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'заказ на {self.product} из корзины {self.scart_id}'
+        return f'заказ #{self.slug} от {self.cu_name}'
+
+
+class OrderItem(DbItem):
+    order = models.ForeignKey(Order, related_name="items", on_delete=models.CASCADE)                        # -- заказ --
+    ppk = models.CharField(max_length=100, validators=[Tunable.validate_article])                           # -- внутренний артикул --
+    title = models.CharField(max_length=150)                                                                # -- название --
+    size = models.CharField(max_length=30, validators=[Tunable.validate_size])                              # -- размер --
+    quantity = models.BigIntegerField(validators=[MinValueValidator(1)])                                    # -- количество --
+    price = MoneyField(max_digits=14, decimal_places=2, default_currency='RUR')                             # -- цена на момент заказа --
+
+    def __str__(self):
+        return f'{self.title} ({self.quantity})'
+
 
 
 class NotificationRequest(DbItem):

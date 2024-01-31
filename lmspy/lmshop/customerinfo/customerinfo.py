@@ -171,7 +171,11 @@ class CustomerInfo:
         return self._get_or_create_item("address", lambda: {
             "country": "",
             "city": "",
-            "address": ""
+            "street": "",
+            "building": "",
+            "floor": "",
+            "apartment": "",
+            "fullname": "",
         })
 
     @address.setter

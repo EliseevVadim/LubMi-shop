@@ -44,10 +44,10 @@ class ImageAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['scart_id', 'size', 'quantity', 'product']
-    list_filter = ['scart_id', 'size', 'quantity']
-    search_fields = ['scart_id', 'size', 'quantity']
-    ordering = ['scart_id', 'size', 'quantity']
+    list_display = ['slug', 'cu_fullname', 'closed_at']
+    list_filter = ['cu_fullname']
+    search_fields = ['cu_fullname']
+    prepopulated_fields = {'slug': ('created_at', 'id')}
 
 
 @admin.register(TelegramBot)
