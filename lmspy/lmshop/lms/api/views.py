@@ -1,12 +1,14 @@
 from django.utils.html import escape
 from django.shortcuts import get_object_or_404, Http404
+from django.db import transaction, IntegrityError
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework import generics
-from lms.models import Product, NotificationRequest, AvailableSize, Parameter
+from lms.models import Product, NotificationRequest, AvailableSize, Parameter, Order, OrderItem
 from lms.api.serializers import ProductSerializer
-from lms.utils import send_message_via_telegram
+from lms.utils import send_message_via_telegram, ask_bank_for_payment_statement, ask_delivery_service_for_cost
+from lms.views import SCartView
 from customerinfo.customerinfo import CustomerInfo
 
 
@@ -82,9 +84,9 @@ class NotifyMeForDeliveryView(APIView):
 
     @staticmethod
     def post(request, _=None):
-        cui = request.data
+        cu_data = request.data
         try:
-            name, phone, email, ppk = escape(cui['name']), escape(cui['phone']), escape(cui['email']), escape(cui['ppk'])
+            name, phone, email, ppk = escape(cu_data['name']), escape(cu_data['phone']), escape(cu_data['email']), escape(cu_data['ppk'])
         except KeyError:
             return Response({
                 'success': False,
@@ -103,7 +105,7 @@ class NotifyMeForDeliveryView(APIView):
             })
         return Response({
             'success': False,
-            'why': Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
+            'why': Parameter.value_of('message_unable_notify', 'Ваше имя, а также почта или телефон должны быть указаны')
         })
 
 
@@ -112,9 +114,9 @@ class ProductToSCartView(APIView):
 
     @staticmethod
     def post(request, _=None):
-        rec = request.data
+        data = request.data
         try:
-            ppk, size_id, quantity = rec['ppk'], int(rec['size_id']), int(rec['quantity'])
+            ppk, size_id, quantity = data['ppk'], int(data['size_id']), int(data['quantity'])
         except KeyError:
             return Response({
                 'success': False,
@@ -162,9 +164,9 @@ class KillProductInSCartView(APIView):
 
     @staticmethod
     def post(request, _=None):
-        rec = request.data
+        data = request.data
         try:
-            ppk, size = rec['ppk'], rec['size']
+            ppk, size = data['ppk'], data['size']
         except KeyError:
             return Response({
                 'success': False,
@@ -175,13 +177,137 @@ class KillProductInSCartView(APIView):
                 'success': False,
                 'why': Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
             })
-        rec = CustomerInfo(request).remove_from_scart(ppk, size)
+        data = CustomerInfo(request).remove_from_scart(ppk, size)
         return Response({
             'success': True,
-            'ppk': rec['ppk'],
-            'size': rec['size'],
-            'quantity': rec['quantity']
-        }) if rec else Response({
+            'ppk': data['ppk'],
+            'size': data['size'],
+            'quantity': data['quantity']
+        }) if data else Response({
             'success': False,
             'why': Parameter.value_of('message_product_not_found_in_shopping_cart', 'Товар с артикулом %s и размером %s не найден в корзине') % (ppk, size)
+        })
+
+
+class CheckoutSCartView(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    def post(request, _=None):
+        data = {k: escape(v) for k, v in request.data.items()}
+        try:
+            delivery_service, \
+                cu_name, \
+                cu_phone, \
+                cu_email, \
+                cu_country, \
+                cu_city, \
+                cu_street, \
+                cu_building, \
+                cu_floor, \
+                cu_apartment, \
+                cu_fullname, \
+                cu_confirm = data["delivery"], \
+                data["cu_name"], \
+                data["cu_phone"], \
+                data["cu_email"], \
+                data["cu_country"], \
+                data["cu_city"], \
+                data["cu_street"], \
+                data["cu_building"], \
+                data["cu_floor"], \
+                data["cu_apartment"], \
+                data["cu_fullname"], \
+                data["cu_confirm"]
+        except KeyError:
+            return Response({
+                'success': False,
+                'why': Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
+            })
+        except ValueError:
+            return Response({
+                'success': False,
+                'why': Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
+            })
+        if delivery_service and \
+                cu_name and \
+                (cu_phone or cu_email) and \
+                cu_country and \
+                cu_city and \
+                cu_street and \
+                cu_building and \
+                cu_floor and \
+                cu_apartment and \
+                cu_fullname and \
+                cu_confirm:
+            if cu_confirm != "true":
+                return Response({
+                    'success': False,
+                    'why': Parameter.value_of('message_you_must_agree_pp', 'Необходимо согласиться с политикой конфиденциальности')
+                })
+            # TODO validate all data we can validate here
+            try:  # -- save order --
+                with transaction.atomic():
+                    scart = SCartView.actual_scart(request)["records"]
+                    records, price = scart["records"], scart["price"]
+                    if not records:
+                        return Response({
+                            'success': False,
+                            'why': Parameter.value_of('message_shopping_cart_empty', 'Корзина пуста. Добавьте в корзину хотя бы один товар!')
+                        })
+                    delivery_cost = ask_delivery_service_for_cost(delivery_service)
+                    bps_id, bps_redirect = ask_bank_for_payment_statement(price + delivery_cost)
+                    order = Order(delivery_service=delivery_service,
+                                  delivery_cost=delivery_cost,
+                                  bank_payment_id=bps_id,
+                                  cu_name=cu_name,
+                                  cu_phone=cu_phone,
+                                  cu_email=cu_email,
+                                  cu_country=cu_country,
+                                  cu_city=cu_city,
+                                  cu_street=cu_street,
+                                  cu_building=cu_building,
+                                  cu_floor=cu_floor,
+                                  cu_apartment=cu_apartment,
+                                  cu_fullname=cu_fullname,
+                                  cu_confirm=True)
+                    order.save()
+                    for rec in records:
+                        item = OrderItem(order=order,
+                                         ppk=rec.product.article,
+                                         title=str(rec.product),
+                                         size=rec.size.size,
+                                         quantity=rec.quantity,
+                                         price=rec.product.actual_price)
+                        item.save()
+                        rec.product.sales_quantity += rec.quantity
+                        rec.product.save()
+                        rec.size.quantity -= rec.quantity  # TODO ensure validation works !!!
+                        rec.size.save()
+                    info = CustomerInfo(request)    # -- update session info --
+                    info.last_bps_id = bps_id
+                    info.name = cu_name
+                    info.phone = cu_phone or info.phone
+                    info.email = cu_email or info.email
+                    info.address = {
+                        "country": cu_country,
+                        "city": cu_city,
+                        "street": cu_street,
+                        "building": cu_building,
+                        "floor": cu_floor,
+                        "apartment": cu_apartment,
+                        "fullname": cu_fullname,
+                    }
+            except IntegrityError as error:
+                return Response({
+                    'success': False,
+                    'why': 'IntegrityError'  # TODO test this!
+                })
+            return Response({
+                'success': True,
+                'bank': bps_redirect
+            })
+        return Response({  # TODO write decorator to convert (bool, string) to appropriate Response
+            'success': False,
+            'why': Parameter.value_of('message_wrong_input', 'Пожалуйста, правильно введите данные')
         })

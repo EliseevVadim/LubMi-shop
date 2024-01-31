@@ -57,10 +57,12 @@ class Tunable:
             "Артикул не соответствует образцу"
         )(value)
 
+    # TODO validate phones
+
 
 class Category(DbItem):
     class Kind(models.TextChoices):
-        product_taxonomy = "PT", "Таксономия продуктов"
+        product_taxonomy = "pt", "Таксономия продуктов"
 
     kind = models.CharField(max_length=2, choices=Kind.choices, default=Kind.product_taxonomy)                              # тип категории
     title = models.CharField(max_length=250)                                                                                # название категории
@@ -81,9 +83,19 @@ class Product(DbItem):
     slug = models.SlugField(unique=True, max_length=200)                                                    # слаг
     description = models.TextField(null=True, blank=True)                                                   # описание
     color = models.CharField(max_length=50, null=True, blank=True)                                          # цвет
-    actual_price = MoneyField(max_digits=14, decimal_places=2, default_currency='RUR')                      # цена
-    old_price = MoneyField(max_digits=14, decimal_places=2, default_currency='RUR', null=True, blank=True)  # старая цена (до акции), null -- нет акции
-    sales_quantity = models.BigIntegerField(default=0)                                                      # количество продаж
+    actual_price = MoneyField(
+        max_digits=14,
+        decimal_places=2,
+        default_currency='RUR',
+        validators=[MinValueValidator(0.01)])                                                               # цена
+    old_price = MoneyField(
+        max_digits=14,
+        decimal_places=2,
+        default_currency='RUR',
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(0.01)])                                                               # старая цена (до акции), null -- нет акции
+    sales_quantity = models.BigIntegerField(default=0, validators=[MinValueValidator(0)])                   # количество продаж
     published_at = models.DateTimeField(null=True, blank=True, default=timezone.now)                        # время публикации(опубликован, если published_at < now())
     categories = models.ManyToManyField(Category, related_name="products")                                  # категории
 
@@ -143,11 +155,8 @@ class Product(DbItem):
 
 
 class AvailableSize(DbItem):
-    size = models.CharField(                                                                    # размер
-        max_length=30,
-        validators=[Tunable.validate_size]
-    )
-    quantity = models.BigIntegerField()                                                         # количество в наличии
+    size = models.CharField(max_length=30, validators=[Tunable.validate_size])                  # размер
+    quantity = models.BigIntegerField(validators=[MinValueValidator(0)])                        # количество в наличии
     product = models.ForeignKey(Product, related_name="sizes", on_delete=models.CASCADE)        # товар
 
     class Meta:
@@ -187,16 +196,17 @@ class Image(DbItem):
 
 
 class Order(DbItem):
-    class Delivery(models.TextChoices):
+    class DeliveryService(models.TextChoices):
         sd = "sd", "СДЭК"
         pr = "pr", "Почта России"
 
     slug = models.SlugField(unique=True, max_length=200)                                        # -- слаг --
+    bank_payment_id = models.CharField(max_length=250)                                          # -- Id банковской платежки --
     closed_at = models.DateTimeField(null=True, blank=True, default=None)                       # -- время и флаг выполнения --
-    delivery = models.CharField(                                                                # -- тип доставки --
+    delivery_service = models.CharField(                                                        # -- тип доставки --
         max_length=2,
-        choices=Delivery.choices,
-        default=Delivery.sd)
+        choices=DeliveryService.choices,
+        default=DeliveryService.sd)
     delivery_cost = MoneyField(                                                                 # -- стоимость доставки --
         max_digits=14,
         decimal_places=2,
@@ -233,7 +243,6 @@ class OrderItem(DbItem):
 
     def __str__(self):
         return f'{self.title} ({self.quantity})'
-
 
 
 class NotificationRequest(DbItem):

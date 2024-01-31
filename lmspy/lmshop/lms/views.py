@@ -16,7 +16,7 @@ class IndexView(View):
     page_size = 10
     default_order = 'novelties-first'
     ordering = {
-        default_order: ("Порядок: по умолчанию", lambda q: q.order_by('-published_at')),
+        default_order: ("Порядок: по умолчанию", lambda q: q.order_by('-published_at')),  # TODO -- move labels to parameters! --
         'price-asc': ("Цена: по возрастанию", lambda q: q.order_by('actual_price')),
         'price-dsc': ("Цена: по убыванию", lambda q: q.order_by('-actual_price')),
         'title-asc': ("Название: А-Я", lambda q: q.order_by('title')),
@@ -127,11 +127,7 @@ class ProductView(DetailView):
 
 class SCartView(View):
     @staticmethod
-    def enumerate_scart():
-        pass
-
-    @staticmethod
-    def get(request, *_, **__):
+    def actual_scart(request):  # TODO -- move to context processor for certain views --
         info = CustomerInfo(request)
         sct = info.scart
         records = []
@@ -141,9 +137,9 @@ class SCartView(View):
                 product = Product.published.get(pk=ppk)
             except Product.DoesNotExist:
                 continue
-            for sz, quantity in sizes.items():
+            for size_str, quantity in sizes.items():
                 try:
-                    size = product.sizes.get(size=sz)
+                    size = product.sizes.get(size=size_str)
                 except AvailableSize.DoesNotExist:
                     pass
                 else:
@@ -153,10 +149,14 @@ class SCartView(View):
                         'quantity': quantity
                     }]
                     price += quantity * product.actual_price.amount
-        return render(request, 'lms/scart.html', {
+        return {
             'records': records,
             'price': price
-        })
+        }
+
+    @staticmethod
+    def get(request, *_, **__):
+        return render(request, 'lms/scart.html', SCartView.actual_scart(request))
 
 
 class FavoritesView(View):
