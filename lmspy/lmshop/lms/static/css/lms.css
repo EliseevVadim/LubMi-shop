@@ -24,18 +24,17 @@ body, aside, .content, .leading {
 }
 
 .content {
-    z-index: var(--ZixContent);
     position: static;
     left: 0;
     right: 0;
     display: flex;
     flex-flow: column;
+    z-index: var(--ZixContent);
 }
 
 /* Лидинг -------------------------------------------------------------------------------------------------------------- */
 
 .leading {
-    z-index: var(--ZixLeading);
     position: fixed;
     height: var(--LeadingHeight);
     max-height: var(--LeadingHeight);
@@ -45,6 +44,7 @@ body, aside, .content, .leading {
     right: 0;
     padding: var(--DefPadding);
     background: white;
+    z-index: var(--ZixLeading);
 }
 
 #leading-spacer {
@@ -153,6 +153,9 @@ select, select:focus {
     padding: 1rem;
     font-size: 1.25rem;
     font-family: var(--Fonts);
+    /*-moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;*/
 }
 
 /* Каталог ------------------------------------------------------------------------------------------------------------- */
@@ -240,7 +243,6 @@ input[type="checkbox"]:not(:checked) ~ svg { fill: none; }
 /* Панели --------------------------------------------------------------------------------------------------------------*/
 
 aside {
-    z-index: var(--ZixPanels);
     position: fixed;
     top: 0;
     height: 100vh;
@@ -248,6 +250,7 @@ aside {
     visibility: hidden;
     padding: var(--DefPadding);
     box-shadow: 0 0 0 100vw #7777;
+    z-index: var(--ZixPanels);
 }
 
 aside.right {
