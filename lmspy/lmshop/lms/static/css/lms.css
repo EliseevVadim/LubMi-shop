@@ -298,9 +298,10 @@ aside h1 {
     background-repeat: no-repeat;
 }
 
-#undo-section {
+*[id $= "-undo-section"] {
     display: none;
 }
+
 /* Элементы оформления ------------------------------------------------------------------------------------------------- */
 
 h1 {
@@ -413,6 +414,10 @@ img.bkg {
     padding-bottom: var(--DefPadding);
 }
 
+.p0 {
+    padding: 0;
+}
+
 .ml1 {
     margin-left: var(--DefPadding);
 }
@@ -443,6 +448,10 @@ img.bkg {
 
 .mba {
     margin-bottom: auto;
+}
+
+.m0 {
+    margin: 0;
 }
 
 .hand {

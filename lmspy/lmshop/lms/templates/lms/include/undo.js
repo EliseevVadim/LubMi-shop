@@ -1,47 +1,47 @@
-const undo = {
+const {{unique}}_undo = {
     timer_id: null,
     count: null,
     time_action: null,
     final_action: null,
     undo_action: null,
 
-    alive: () => !!undo.timer_id,
+    alive: () => !!{{unique}}_undo.timer_id,
     period: () => 100,
     start: (count, time_action, final_action, undo_action) => {
-        undo.stop();
-        undo.count = Number(count);
-        undo.time_action = time_action;
-        undo.final_action = final_action;
-        undo.undo_action = undo_action;
-        undo.timer_id = setInterval(() => {
-            if(undo.count) {
-                undo.do_time();
-                --undo.count;
+        {{unique}}_undo.stop();
+        {{unique}}_undo.count = Number(count);
+        {{unique}}_undo.time_action = time_action;
+        {{unique}}_undo.final_action = final_action;
+        {{unique}}_undo.undo_action = undo_action;
+        {{unique}}_undo.timer_id = setInterval(() => {
+            if({{unique}}_undo.count) {
+                {{unique}}_undo.do_time();
+                --{{unique}}_undo.count;
             } else {
-                undo.stop();
+                {{unique}}_undo.stop();
             }
-        }, undo.period());
+        }, {{unique}}_undo.period());
     },
     stop: () => {
-        if(undo.alive()) {
-            clearInterval(undo.timer_id);
+        if({{unique}}_undo.alive()) {
+            clearInterval({{unique}}_undo.timer_id);
         }
-        undo.do_final();
-        undo.timer_id = null;
-        undo.count = null;
-        undo.time_action = null;
-        undo.final_action = null;
-        undo.undo_action = null;
+        {{unique}}_undo.do_final();
+        {{unique}}_undo.timer_id = null;
+        {{unique}}_undo.count = null;
+        {{unique}}_undo.time_action = null;
+        {{unique}}_undo.final_action = null;
+        {{unique}}_undo.undo_action = null;
     },
     do_action: action => {
         if(action) {
-            action(undo);
+            action({{unique}}_undo);
         }
     },
-    do_time: () => undo.do_action(undo.time_action),
-    do_final: () => undo.do_action(undo.final_action),
-    do_undo: () => { undo.do_action(undo.undo_action); undo.stop(); },
-    widget: () => document.querySelector('#undo-section'),
-    message: () => document.querySelector('#undo-message'),
-    countdown: () => document.querySelector('#undo-countdown'),
+    do_time: () => {{unique}}_undo.do_action({{unique}}_undo.time_action),
+    do_final: () => {{unique}}_undo.do_action({{unique}}_undo.final_action),
+    do_undo: () => { {{unique}}_undo.do_action({{unique}}_undo.undo_action); {{unique}}_undo.stop(); },
+    widget: () => document.querySelector('#{{unique}}-undo-section'),
+    message: () => document.querySelector('#{{unique}}-undo-message'),
+    countdown: () => document.querySelector('#{{unique}}-undo-countdown'),
 };

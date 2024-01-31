@@ -1,4 +1,4 @@
-{% include "lms/include/undo.js" %}
+{% include "lms/include/undo.js" with unique="scart" %}
 const pcard_like_click = (input, url) => {
     url = url.replace(/\/\d\/$/, `/${input.checked?1:0}/`);
     __api_call__(url, null, answer => {
@@ -53,7 +53,7 @@ const kill_product_in_scart = (ppk, product_title, size_id, size) => {
         if(result.success) {
             if(right_sidebar.visible() && right_sidebar.ctype == SbarContentType.SCART) {
                 right_sidebar.show_scart();
-                undo.start({{param_value_undo_period}} * 1000 / undo.period(),
+                scart_undo.start({{param_value_undo_period}} * 1000 / scart_undo.period(),
                     u => {
                         if(u.alive()) {
                             let cd = u.countdown();
