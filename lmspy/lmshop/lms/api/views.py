@@ -2,9 +2,9 @@ from django.utils.html import escape
 from django.shortcuts import get_object_or_404, Http404
 from django.db import transaction, IntegrityError
 from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework import generics
+from lms.api.decorators import api_response
 from lms.models import Product, NotificationRequest, AvailableSize, Parameter, Order, OrderItem
 from lms.api.serializers import ProductSerializer
 from lms.utils import send_message_via_telegram, ask_bank_for_payment_statement, ask_delivery_service_for_cost
@@ -26,42 +26,36 @@ class ProductLikeSetView(APIView):
     permission_classes = [AllowAny]
 
     @staticmethod
+    @api_response
     def post(request, ppk, like: int, _=None):
         info = CustomerInfo(request)
         if like:
             info.add_favorite(ppk)
         else:
             info.remove_favorite(ppk)
-        return Response({
-            'ppk': ppk,
-            'like': like
-        })
+        return {'ppk': ppk, 'like': like}
 
 
 class ProductLikeToggleView(APIView):
     permission_classes = [AllowAny]
 
     @staticmethod
+    @api_response
     def post(request, ppk, _=None):
         info = CustomerInfo(request)
         if ppk in info.favorites:
             info.remove_favorite(ppk)
-            return Response({
-                'ppk': ppk,
-                'like': 0
-            })
+            return {'ppk': ppk, 'like': 0}
         else:
             info.add_favorite(ppk)
-            return Response({
-                'ppk': ppk,
-                'like': 1
-            })
+            return {'ppk': ppk, 'like': 1}
 
 
 class GetCustomerInfoView(APIView):
     permission_classes = [AllowAny]
 
     @staticmethod
+    @api_response
     def post(request, flags, _=None):
         info = CustomerInfo(request)
         items = {
@@ -76,22 +70,20 @@ class GetCustomerInfoView(APIView):
         for mask in items.keys():
             if flags & mask:
                 result |= items[mask]()
-        return Response(result)
+        return result
 
 
 class NotifyMeForDeliveryView(APIView):
     permission_classes = [AllowAny]
 
     @staticmethod
+    @api_response
     def post(request, _=None):
         cu_data = request.data
         try:
             name, phone, email, ppk = escape(cu_data['name']), escape(cu_data['phone']), escape(cu_data['email']), escape(cu_data['ppk'])
         except KeyError:
-            return Response({
-                'success': False,
-                'why': Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
-            })
+            return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
         if name and ppk and (email or phone):
             nrq = NotificationRequest(name=name, phone=phone, email=email, ppk=ppk)
             nrq.save()
@@ -100,99 +92,68 @@ class NotifyMeForDeliveryView(APIView):
             info.name = name
             info.phone = phone or info.phone
             info.email = email or info.email
-            return Response({
-                'success': True
-            })
-        return Response({
-            'success': False,
-            'why': Parameter.value_of('message_unable_notify', 'Ваше имя, а также почта или телефон должны быть указаны')
-        })
+            return {'success': True}
+        return Parameter.value_of('message_unable_notify', 'Имя, а также почта или телефон должны быть указаны')
 
 
 class ProductToSCartView(APIView):
     permission_classes = [AllowAny]
 
     @staticmethod
+    @api_response
     def post(request, _=None):
         data = request.data
         try:
             ppk, size_id, quantity = data['ppk'], int(data['size_id']), int(data['quantity'])
         except KeyError:
-            return Response({
-                'success': False,
-                'why': Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
-            })
+            return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
         except ValueError:
-            return Response({
-                'success': False,
-                'why': Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
-            })
+            return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
         try:
             product = get_object_or_404(Product.published, pk=ppk)
         except Http404:
-            return Response({
-                'success': False,
-                'why': Parameter.value_of('message_product_not_found_by_article', 'Не удалось найти товар с артикулом %s') % (ppk,)
-            })
+            return Parameter.value_of('message_product_not_found_by_article', 'Не удалось найти товар с артикулом %s') % (ppk,)
         try:
             size = get_object_or_404(AvailableSize, id=size_id)
         except Http404:
-            return Response({
-                'success': False,
-                'why': Parameter.value_of('message_size_not_found_by_id', 'Не удалось найти нужный размер')
-            })
+            return Parameter.value_of('message_size_not_found_by_id', 'Не удалось найти нужный размер')
         if not product.sizes.filter(id=size_id).exists():
-            return Response({
-                'success': False,
-                'why': Parameter.value_of('message_product_has_no_size', 'Для товара %s недоступен размер %s') % (product, size)
-            })
+            return Parameter.value_of('message_product_has_no_size', 'Для товара %s недоступен размер %s') % (product, size)
         info = CustomerInfo(request)
-        return Response({
-            'success': True,
+        return {
             'product': str(product),
             'size': str(size),
             'quantity': info.add_to_scart(ppk, size.size, quantity)
-        }) if info.add_to_scart(ppk, size.size, quantity, True) <= size.quantity or quantity < 0 else Response({
-            'success': False,
-            'why': Parameter.value_of('message_overkill', 'Извините, достигнут лимит. Это максимально возможное количество товаров в наличии.'),
-            'available_quantity': size.quantity
-        })
+        } if info.add_to_scart(ppk, size.size, quantity, True) <= size.quantity or quantity < 0 \
+            else Parameter.value_of('message_overkill', 'Извините, достигнут лимит. Это максимально возможное количество товаров в наличии.')
 
 
 class KillProductInSCartView(APIView):
     permission_classes = [AllowAny]
 
     @staticmethod
+    @api_response
     def post(request, _=None):
         data = request.data
         try:
             ppk, size = data['ppk'], data['size']
         except KeyError:
-            return Response({
-                'success': False,
-                'why': Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
-            })
+            return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
         except ValueError:
-            return Response({
-                'success': False,
-                'why': Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
-            })
+            return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
         data = CustomerInfo(request).remove_from_scart(ppk, size)
-        return Response({
-            'success': True,
+        return {
             'ppk': data['ppk'],
             'size': data['size'],
             'quantity': data['quantity']
-        }) if data else Response({
-            'success': False,
-            'why': Parameter.value_of('message_product_not_found_in_shopping_cart', 'Товар с артикулом %s и размером %s не найден в корзине') % (ppk, size)
-        })
+        } if data else Parameter.value_of('message_product_not_found_in_shopping_cart', 'Товар с артикулом %s и размером %s не найден в корзине') % (ppk, size)
 
 
 class CheckoutSCartView(APIView):
     permission_classes = [AllowAny]
 
     @staticmethod
+    @api_response
     def post(request, _=None):
         data = {k: escape(v) for k, v in request.data.items()}
         try:
@@ -220,15 +181,9 @@ class CheckoutSCartView(APIView):
                 data["cu_fullname"], \
                 data["cu_confirm"]
         except KeyError:
-            return Response({
-                'success': False,
-                'why': Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
-            })
+            return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
         except ValueError:
-            return Response({
-                'success': False,
-                'why': Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
-            })
+            return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
         if delivery_service and \
                 cu_name and \
                 (cu_phone or cu_email) and \
@@ -241,20 +196,14 @@ class CheckoutSCartView(APIView):
                 cu_fullname and \
                 cu_confirm:
             if cu_confirm != "true":
-                return Response({
-                    'success': False,
-                    'why': Parameter.value_of('message_you_must_agree_pp', 'Необходимо согласиться с политикой конфиденциальности')
-                })
+                return Parameter.value_of('message_you_must_agree_pp', 'Необходимо согласиться с политикой конфиденциальности')
             # TODO validate all data we can validate here
             try:  # -- save order --
                 with transaction.atomic():
                     scart = SCartView.actual_scart(request)["records"]
                     records, price = scart["records"], scart["price"]
                     if not records:
-                        return Response({
-                            'success': False,
-                            'why': Parameter.value_of('message_shopping_cart_empty', 'Корзина пуста. Добавьте в корзину хотя бы один товар!')
-                        })
+                        return Parameter.value_of('message_shopping_cart_empty', 'Корзина пуста. Добавьте в корзину хотя бы один товар!')
                     delivery_cost = ask_delivery_service_for_cost(delivery_service)
                     bps_id, bps_redirect = ask_bank_for_payment_statement(price + delivery_cost)
                     order = Order(delivery_service=delivery_service,
@@ -299,15 +248,8 @@ class CheckoutSCartView(APIView):
                         "fullname": cu_fullname,
                     }
             except IntegrityError as error:
-                return Response({
-                    'success': False,
-                    'why': 'IntegrityError'  # TODO test this!
-                })
-            return Response({
-                'success': True,
-                'bank': bps_redirect
-            })
-        return Response({  # TODO write decorator to convert (bool, string) to appropriate Response
-            'success': False,
-            'why': Parameter.value_of('message_wrong_input', 'Пожалуйста, правильно введите данные')
-        })
+                return 'IntegrityError'  # TODO test this!
+            return {
+                'bps_redirect': bps_redirect
+            }
+        return Parameter.value_of('message_wrong_input', 'Пожалуйста, правильно введите данные')
