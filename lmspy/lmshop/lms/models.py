@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import QuerySet
 from django.utils import timezone, text
-from django.core.validators import RegexValidator, MinValueValidator
+from django.core.validators import MinValueValidator, RegexValidator
 from djmoney.models.fields import MoneyField
 from datetime import datetime
 
@@ -57,7 +57,14 @@ class Tunable:
             "Артикул не соответствует образцу"
         )(value)
 
-    # TODO validate phones
+    @staticmethod
+    def validate_phone(value):
+        Tunable._regex_validator(
+            "regex_phone_number",
+            "message_invalid_phone_number",
+            """^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$""",
+            "Номер телефона не соответствует образцу"
+        )(value)
 
 
 class Category(DbItem):
@@ -212,7 +219,7 @@ class Order(DbItem):
         decimal_places=2,
         default_currency='RUR')
     cu_name = models.CharField(max_length=250)                                                  # -- как обращаться --
-    cu_phone = models.CharField(null=True, max_length=50)                                       # -- телефон --
+    cu_phone = models.CharField(null=True, max_length=50, validators=[Tunable.validate_phone])  # -- телефон --
     cu_email = models.CharField(null=True, max_length=250)                                      # -- email --
     cu_country = models.CharField(max_length=100, default="Россия")                             # -- страна --
     cu_city = models.CharField(max_length=100)                                                  # -- город --
@@ -248,7 +255,7 @@ class OrderItem(DbItem):
 class NotificationRequest(DbItem):
     name = models.CharField(null=False, max_length=150)
     email = models.EmailField(null=True, max_length=250)
-    phone = models.CharField(null=True, max_length=50)
+    phone = models.CharField(null=True, max_length=50, validators=[Tunable.validate_phone])
     ppk = models.CharField(null=False, max_length=100)
 
     def __str__(self):
@@ -273,6 +280,3 @@ class Chat(DbItem):
 
     def __str__(self):
         return f'Телеграм-чат "{self.title}"'
-
-
-
