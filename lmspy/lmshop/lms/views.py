@@ -127,6 +127,10 @@ class ProductView(DetailView):
 
 class SCartView(View):
     @staticmethod
+    def enumerate_scart():
+        pass
+
+    @staticmethod
     def get(request, *_, **__):
         info = CustomerInfo(request)
         sct = info.scart
@@ -134,7 +138,7 @@ class SCartView(View):
         price = Decimal(0)
         for ppk, sizes in sct.items():
             try:
-                product = Product.objects.get(pk=ppk)
+                product = Product.published.get(pk=ppk)
             except Product.DoesNotExist:
                 continue
             for sz, quantity in sizes.items():
