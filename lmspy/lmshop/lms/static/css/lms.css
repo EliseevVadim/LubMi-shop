@@ -246,7 +246,7 @@ aside {
     position: fixed;
     top: 0;
     height: 100vh;
-    width: min(30rem, 40%);
+    width: min(30rem, 40vw);
     visibility: hidden;
     padding: var(--DefPadding);
     box-shadow: 0 0 0 100vw #7777;
@@ -535,14 +535,21 @@ form {
     flex-flow: column;
 }
 
-form div {
+form > div {
     display: flex;
     flex-flow: column;
+    margin-bottom: 1rem;
 }
 
-form div input {
-    margin-top: 1rem;
-    padding: 0.5rem;
+form > div input {
+    border: none;
+    border-bottom: solid thin black;
+}
+
+form fieldset {
+    margin: 0;
+    padding: 0;
+    border: none;
 }
 
 dialog,
@@ -560,6 +567,15 @@ dialog {
 #c6t-dialog {
     max-width: 100vw;
     max-height: 100vw;
+}
+
+#c6t-dialog .grid-c2 {
+    gap: 4rem;
+}
+
+.c6t-sidebar,
+#c6t-form {
+    min-width: min(30rem, 40vw);
 }
 
 .popup {
@@ -607,4 +623,8 @@ dialog {
 
 .cancel-dialog:hover {
     color: black;
+}
+
+.dialog-footer {
+    margin-top: 1rem;
 }
