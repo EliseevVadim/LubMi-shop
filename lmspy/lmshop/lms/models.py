@@ -225,6 +225,7 @@ class Order(DbItem):
     cu_city = models.CharField(max_length=100)                                                  # -- город --
     cu_street = models.CharField(max_length=200)                                                # -- улица --
     cu_building = models.CharField(max_length=50)                                               # -- здание --
+    cu_entrance = models.CharField(max_length=50)                                               # -- подъезд --
     cu_floor = models.CharField(max_length=50)                                                  # -- этаж --
     cu_apartment = models.CharField(max_length=50)                                              # -- квартира/офис --
     cu_fullname = models.CharField(max_length=250)                                              # -- полное имя заказчика --

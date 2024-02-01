@@ -1,0 +1,14 @@
+{% include "lms/include/undo.html" with unique="scart" %}
+{% if records %}
+{% for rec in records %}
+{% include "lms/include/sidebar-item.html" with card_type="shopping-cart" product=rec.product size=rec.size quantity=rec.quantity %}
+{% endfor %}
+<div class="items-right-left overlined mt1">
+    <p class="total-price like-title">{{param_label_amount_to_be_paid}}: {{price}} {{param_label_currency}}</p>
+</div>
+{% if button %}
+<button class="w-100 inverted" onclick="do_checkout();">{{param_label_checkout}}</button>
+{% endif %}
+{% else %}
+<h4>{{param_message_shopping_cart_empty}}</h4>
+{% endif %}

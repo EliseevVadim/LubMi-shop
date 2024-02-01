@@ -1,6 +1,5 @@
 <label class="heart">
   <input  data-ppk="{{product.article}}"
-          style="visibility: hidden;"
           type="checkbox"
           {{checked}}
           onchange="pcard_like_click(this, '{% url 'api:set_product_like' ppk=product.article like=0 %}');">

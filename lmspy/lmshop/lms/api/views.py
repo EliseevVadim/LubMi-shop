@@ -165,6 +165,7 @@ class CheckoutSCartView(APIView):
                 cu_city, \
                 cu_street, \
                 cu_building, \
+                cu_entrance, \
                 cu_floor, \
                 cu_apartment, \
                 cu_fullname, \
@@ -176,6 +177,7 @@ class CheckoutSCartView(APIView):
                 data["cu_city"], \
                 data["cu_street"], \
                 data["cu_building"], \
+                data["cu_entrance"], \
                 data["cu_floor"], \
                 data["cu_apartment"], \
                 data["cu_fullname"], \
@@ -191,6 +193,7 @@ class CheckoutSCartView(APIView):
                 cu_city and \
                 cu_street and \
                 cu_building and \
+                cu_entrance and \
                 cu_floor and \
                 cu_apartment and \
                 cu_fullname and \
@@ -215,6 +218,7 @@ class CheckoutSCartView(APIView):
                                   cu_city=cu_city,
                                   cu_street=cu_street,
                                   cu_building=cu_building,
+                                  cu_entrance=cu_entrance,
                                   cu_floor=cu_floor,
                                   cu_apartment=cu_apartment,
                                   cu_fullname=cu_fullname,
@@ -245,6 +249,7 @@ class CheckoutSCartView(APIView):
                     "city": cu_city,
                     "street": cu_street,
                     "building": cu_building,
+                    "entrance": cu_entrance,
                     "floor": cu_floor,
                     "apartment": cu_apartment,
                     "fullname": cu_fullname,

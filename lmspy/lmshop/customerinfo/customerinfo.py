@@ -177,6 +177,7 @@ class CustomerInfo:
             "city": "",
             "street": "",
             "building": "",
+            "entrance": "",
             "floor": "",
             "apartment": "",
             "fullname": "",

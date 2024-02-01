@@ -225,7 +225,7 @@ figcaption {
     max-height: calc(1.2 * var(--HeartSize));
 }
 
-input[type="checkbox"] {
+.heart > input[type="checkbox"] {
     visibility: hidden;
 }
 
@@ -556,7 +556,8 @@ dialog {
     padding: 3rem;
 }
 
-#gp-dialog {
+#gp-dialog,
+#c6t-dialog {
     max-width: 100vw;
     max-height: 100vw;
 }
