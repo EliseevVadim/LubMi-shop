@@ -7,7 +7,7 @@ const pcard_like_click = (input, url) => {
         inputs.forEach((input, arg1, arg2) => {
             input.checked = answer.like;
         });
-        if(right_sidebar.visible() && right_sidebar.ctype == SbarContentType.FVRTS)
+        if(right_sidebar.visible() && right_sidebar.ctype == ContentType.FAVORITES)
             right_sidebar.show_favorites();
     });
 };
@@ -51,7 +51,7 @@ const product_to_scart = (ppk, size_id, quantity) => {
 const kill_product_in_scart = (ppk, product_title, size_id, size) => {
     __api_call__('{% url "api:kill_product_in_scart" %}', { ppk: String(ppk), size: String(size) }, result => {
         if(result.success) {
-            if(right_sidebar.visible() && right_sidebar.ctype == SbarContentType.SCART) {
+            if(right_sidebar.visible() && right_sidebar.ctype == ContentType.SCART) {
                 right_sidebar.show_scart();
                 scart_undo.start({{param_value_undo_period}} * 1000 / scart_undo.period(),
                     u => {

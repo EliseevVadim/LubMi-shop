@@ -13,8 +13,8 @@ const __api_call__ = (url, obj, functor, method='POST', content_type='applicatio
         .then(functor);
 };
 
-const SbarContentType = {
-    NTHNG: 0,
+const ContentType = {
+    NONE: 0,
     SCART: 1,
-    FVRTS: 2,
+    FAVORITES: 2,
 };
