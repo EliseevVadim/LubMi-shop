@@ -42,10 +42,11 @@ const scart_changed = () => {
     let e = new CustomEvent(EventType.SCART_CHANGED);
     window.dispatchEvent(e);
 };
-const product_to_scart = (ppk, size_id, quantity) => {
+const product_to_scart = (ppk, size_id, quantity, on_success=null) => {
     __api_call__('{% url "api:product_to_scart" %}', { ppk: String(ppk), size_id: Number(size_id), quantity: String(quantity) }, result => {
         if(result.success) {
             scart_changed();
+            if(on_success) on_success();
         } else {
             popup.show(result.why);
         }

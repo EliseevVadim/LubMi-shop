@@ -4,6 +4,7 @@ const {{side}}_sidebar = {
     content: () => document.getElementById('{{side}}_sidebar_content'),
     visible: () => {{side}}_sidebar.self().style.visibility == "visible",
     show: (url, ctype) => { fetch(url).then(response => response.text()).then(html => {
+        {{side}}_sidebar.hide();
         {{side}}_sidebar.content().innerHTML = html;
         {{side}}_sidebar.self().style.visibility = 'visible';
         {{side}}_sidebar.ctype = ctype;

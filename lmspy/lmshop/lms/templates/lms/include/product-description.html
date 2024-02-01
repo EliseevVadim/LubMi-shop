@@ -9,7 +9,7 @@
 {% if product.in_stock %}
 <label class="like-title" for="size-selector">{{param_label_size}}:</label>
 {% include "lms/include/selector.html" with variants=product.variants selector_id="size-selector" %}
-<button class="w-100 inverted" onclick="product_to_scart('{{product.article}}',document.getElementById('size-selector').value,1);gp_dialog.close();right_sidebar.show_scart();">{{param_label_add_to_shopping_cart}}</button>
+<button class="w-100 inverted" onclick="product_to_scart('{{product.article}}',document.getElementById('size-selector').value,1,right_sidebar.show_scart);gp_dialog.close();">{{param_label_add_to_shopping_cart}}</button>
 {% else %}
 <p><span class="red">{{param_label_not_available}}<br/></span><button class="w-100 inverted" onclick="notify_delivery('{{product.article}}')">{{param_label_notify_delivery}}</button></p>
 {% endif %}
