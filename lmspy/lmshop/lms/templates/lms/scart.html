@@ -7,7 +7,7 @@
 <div class="items-right-left overlined mt1">
     <p class="total-price like-title">{{param_label_amount_to_be_paid}}: {{price}} {{param_label_currency}}</p>
 </div>
-<button class="w-100 inverted" onclick="">{{param_label_checkout}}</button>
+<button class="w-100 inverted" onclick="do_checkout();">{{param_label_checkout}}</button>
 {% else %}
 <h4>{{param_message_shopping_cart_empty}}</h4>
 {% endif %}

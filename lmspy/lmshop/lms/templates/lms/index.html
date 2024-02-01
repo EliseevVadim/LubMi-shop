@@ -17,11 +17,13 @@
 
 {% block javascript %} {{block.super}}
 {% include "lms/include/dialog.js" with dialog_id="notify-delivery-dialog" unique="ndd" custom_load=True %}
+{% include "lms/include/dialog.js" with dialog_id="c6t-dialog" unique="c6t" custom_load=False %}
 {% include "lms/include/index.js" %}
 {% endblock %}
 
 {% block modal_forms %} {{block.super}}
 {% include "lms/include/dialog.html" with dialog_id="notify-delivery-dialog" form=scui_form %}
+{% include "lms/include/dialog.html" with dialog_id="c6t-dialog" form=c6t_form %}
 {% endblock %}
 
 {% block DOM_ready_script %} {{block.super}}

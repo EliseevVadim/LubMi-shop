@@ -5,7 +5,7 @@ from django.views.generic import ListView, DetailView
 from django.views import View
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
 from .models import *
-from .forms import ShortCustomerInfoForm
+from .forms import ShortCustomerInfoForm, CheckoutForm
 
 
 # -------------------------------------------------------------------------
@@ -44,6 +44,7 @@ class IndexView(View):
                 'order_variants': {order_value: order_item[0] for order_value, order_item in IndexView.ordering.items()},
                 'favorites': favorites,
                 'scui_form': ShortCustomerInfoForm(),
+                'c6t_form': CheckoutForm(),
             })
 
         match request.GET.get('kind'):

@@ -38,6 +38,33 @@ const notify_delivery = ppk => {
         ndd_dialog.self().showModal();
     });
 }
+const do_checkout = () => {
+    __api_call__('{% url "api:get_customer_info" flags=15 %}', null, answer => {
+        cu_form = document.getElementById('c6t-form');
+        cu_name = document.getElementById('c6t-cu_name');
+        cu_phone = document.getElementById('c6t-cu_phone');
+        cu_email = document.getElementById('c6t-cu_email');
+        cu_name.value = answer.name;
+        cu_phone.value = answer.phone;
+        cu_email.value = answer.email;
+        cu_email.oninput = _ => { if(cu_email.value) cu_phone.removeAttribute('required'); else cu_phone.setAttribute('required',''); }
+        cu_phone.oninput = _ => { if(cu_phone.value) cu_email.removeAttribute('required'); else cu_email.setAttribute('required',''); }
+        cu_form.onsubmit = e => {
+            e.preventDefault();
+            __api_call__('{% url "api:notify_me_for_delivery" %}', { name: cu_name.value, phone: cu_phone.value, email: cu_email.value, ppk: ppk }, result => {
+                if(result.success) {
+                    ndd_dialog.close();
+                    popup.show("Ваш запрос на уведомление о доставке товара успешно отправлен");
+                } else {
+                    popup.show("При отправке запроса возникли проблемы, попробуйте повторить отправку позже");
+                }
+            });
+        }
+        cu_email.oninput(null);
+        cu_phone.oninput(null);
+        c6t_dialog.self().showModal();
+    });
+}
 const scart_changed = () => {
     let e = new CustomEvent(EventType.SCART_CHANGED);
     window.dispatchEvent(e);
