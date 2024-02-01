@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView, DetailView
 from django.views import View
-from customerinfo.customerinfo import CustomerInfo, with_actual_scart_data
+from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
 from .models import *
 from .forms import ShortCustomerInfoForm
 
@@ -126,7 +126,7 @@ class ProductView(DetailView):
 
 class SCartView(View):
     @staticmethod
-    @with_actual_scart_data
+    @with_actual_scart_records_and_price
     def get(request, scart, *_, **__):
         return render(request, 'lms/scart.html', scart)
 

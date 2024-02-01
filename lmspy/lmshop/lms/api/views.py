@@ -8,8 +8,7 @@ from lms.api.decorators import api_response
 from lms.models import Product, NotificationRequest, AvailableSize, Parameter, Order, OrderItem
 from lms.api.serializers import ProductSerializer
 from lms.utils import send_message_via_telegram, ask_bank_for_payment_statement, ask_delivery_service_for_cost
-from lms.views import SCartView
-from customerinfo.customerinfo import CustomerInfo
+from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
 
 
 class ProductListView(generics.ListAPIView):
@@ -154,7 +153,8 @@ class CheckoutSCartView(APIView):
 
     @staticmethod
     @api_response
-    def post(request, _=None):
+    @with_actual_scart_records_and_price
+    def post(request, scart, _=None):
         data = {k: escape(v) for k, v in request.data.items()}
         try:
             delivery_service, \
@@ -200,7 +200,6 @@ class CheckoutSCartView(APIView):
             # TODO validate all data we can validate here
             try:  # -- save order --
                 with transaction.atomic():
-                    scart = SCartView.actual_scart(request)
                     records, price = scart["records"], scart["price"]
                     if not records:
                         return Parameter.value_of('message_shopping_cart_empty', 'Корзина пуста. Добавьте в корзину хотя бы один товар!')
@@ -233,23 +232,22 @@ class CheckoutSCartView(APIView):
                         rec.product.save()
                         rec.size.quantity -= rec.quantity  # TODO ensure validation works !!!
                         rec.size.save()
-                    info = CustomerInfo(request)    # -- update session info --
-                    info.last_bps_id = bps_id
-                    info.name = cu_name
-                    info.phone = cu_phone or info.phone
-                    info.email = cu_email or info.email
-                    info.address = {
-                        "country": cu_country,
-                        "city": cu_city,
-                        "street": cu_street,
-                        "building": cu_building,
-                        "floor": cu_floor,
-                        "apartment": cu_apartment,
-                        "fullname": cu_fullname,
-                    }
             except IntegrityError as error:
                 return 'IntegrityError'  # TODO test this!
-            return {
-                'bps_redirect': bps_redirect
-            }
+            else:
+                info = CustomerInfo(request)  # -- update session info --
+                info.last_bps_id = bps_id
+                info.name = cu_name
+                info.phone = cu_phone or info.phone
+                info.email = cu_email or info.email
+                info.address = {
+                    "country": cu_country,
+                    "city": cu_city,
+                    "street": cu_street,
+                    "building": cu_building,
+                    "floor": cu_floor,
+                    "apartment": cu_apartment,
+                    "fullname": cu_fullname,
+                }
+                return {'bps_redirect': bps_redirect}
         return Parameter.value_of('message_wrong_input', 'Пожалуйста, правильно введите данные')

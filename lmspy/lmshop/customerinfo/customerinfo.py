@@ -206,7 +206,7 @@ class CustomerInfo:
         self._delete_item("last_bps_id")
 
 
-def with_actual_scart_data(func):
+def with_actual_scart_records_and_price(func):
     def deco(request, *args, **kwargs):
         records = []
         price = Decimal(0)
