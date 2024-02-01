@@ -24,7 +24,7 @@
 
 {% block modal_forms %} {{block.super}}
 {% include "lms/include/dialog.html" with unique="ndd" dialog_id="notify-delivery-dialog" form=scui_form %}
-{% include "lms/include/dialog.html" with unique="c6t" dialog_id="c6t-dialog" title=param_title_checkout %}
+{% include "lms/include/dialog.html" with unique="c6t" dialog_id="c6t-dialog" title=param_title_checkout description=" " %}
 {% endblock %}
 
 {% block DOM_ready_script %} {{block.super}}
