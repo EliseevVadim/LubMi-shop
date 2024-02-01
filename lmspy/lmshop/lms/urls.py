@@ -16,5 +16,6 @@ urlpatterns = [
     path('product/<slug:slug>/', ProductView.as_view(), name='product_details'),
     path('shopping-cart/', SCartView.as_view(), name='scart'),
     path('favorite-list/', FavoritesView.as_view(), name='favorites'),
-    path('do-order/', C6tView.as_view(), name='c6t'),
+    path('c6t-scart/', C6tScartView.as_view(), name='c6t_scart'),
+    path('c6t-form/', C6tFormView.as_view(), name='c6t_form'),
 ]

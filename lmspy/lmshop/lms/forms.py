@@ -36,7 +36,7 @@ class ShortCustomerInfoForm(forms.ModelForm):
 
 class CheckoutForm(forms.ModelForm):
     id = 'c6t-form'
-    title = Parameter.value_of('title_TODO', 'Оформление заказа')
+    title = Parameter.value_of('title_checkout', 'Оформление заказа')
     description = Parameter.value_of('label_TODO', 'Введите данные, необходимые для оформления заказа')
     confirmation = Parameter.value_of('label_checkout', 'Оформить заказ')
 

@@ -1,6 +1,8 @@
 const {{unique}}_dialog = {
     self: () => document.querySelector("#{{dialog_id}}"),
-    body: () => document.querySelector("#{{dialog_id}} .dialog-body"),{% if not custom_load %}
+    visible: () => {{unique}}_dialog.self().style.visibility == "visible",
+    body: () => document.querySelector("#{{dialog_id}} .dialog-body"),
+    {% if dynamic %}
     show: url  => {
         fetch(url).then(response => response.text()).then(html => {
             {{unique}}_dialog.close();
@@ -8,8 +10,12 @@ const {{unique}}_dialog = {
             {{unique}}_dialog.self().showModal();
         });
     },
-    {% endif %}close: () => {
+    {% endif %}
+    close: () => {
+        {% if dynamic %}
         {{unique}}_dialog.body().innerHTML = '';
+        {% endif %}
         {{unique}}_dialog.self().close();
     }
+
 };

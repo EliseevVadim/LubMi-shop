@@ -16,14 +16,15 @@
 {% endblock %}
 
 {% block javascript %} {{block.super}}
-{% include "lms/include/dialog.js" with dialog_id="notify-delivery-dialog" unique="ndd" custom_load=True %}
-{% include "lms/include/dialog.js" with dialog_id="c6t-dialog" unique="c6t" custom_load=False %}
+{% include "lms/include/dialog.js" with dialog_id="notify-delivery-dialog" unique="ndd" dynamic=False %}
+{% include "lms/include/dialog.js" with dialog_id="c6t-dialog" unique="c6t" dynamic=True %}
+{% include "lms/include/c6t-dialog-ext.js" %}
 {% include "lms/include/index.js" %}
 {% endblock %}
 
 {% block modal_forms %} {{block.super}}
-{% include "lms/include/dialog.html" with dialog_id="notify-delivery-dialog" form=scui_form %}
-{% include "lms/include/dialog.html" with dialog_id="c6t-dialog" form=c6t_form %}
+{% include "lms/include/dialog.html" with unique="ndd" dialog_id="notify-delivery-dialog" form=scui_form %}
+{% include "lms/include/dialog.html" with unique="c6t" dialog_id="c6t-dialog" title=param_title_checkout %}
 {% endblock %}
 
 {% block DOM_ready_script %} {{block.super}}

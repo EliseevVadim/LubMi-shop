@@ -44,7 +44,6 @@ class IndexView(View):
                 'order_variants': {order_value: order_item[0] for order_value, order_item in IndexView.ordering.items()},
                 'favorites': favorites,
                 'scui_form': ShortCustomerInfoForm(),
-                'c6t_form': CheckoutForm(),  # TODO kill
             })
 
         match request.GET.get('kind'):
@@ -140,10 +139,16 @@ class FavoritesView(View):
         })
 
 
-class C6tView(View):
+class C6tFormView(View):
+    @staticmethod
+    def get(request, *_, **__):
+        return render(request, 'lms/c6t-form.html', {
+            'c6t_form': CheckoutForm(),
+        })
+
+
+class C6tScartView(View):
     @staticmethod
     @with_actual_scart_records_and_price
     def get(request, scart, *_, **__):
-        return render(request, 'lms/c6t.html', scart | {
-            'c6t_form': CheckoutForm(),
-        })
+        return render(request, 'lms/c6t-scart.html', scart)

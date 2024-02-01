@@ -22,12 +22,12 @@ LubMi - {{page_title}}
 
 {% block modal_forms %}
 {% include "lms/include/popup.html" with popup_id="popup-message" %}
-{% include "lms/include/dialog.html" with dialog_id="gp-dialog" form=None %}
+{% include "lms/include/dialog.html" with unique="gp" dialog_id="gp-dialog" form=None %}
 {% endblock %}
 
 {% block javascript %}
 {% include "lms/include/popup.js" with popup_id="popup-message" %}
-{% include "lms/include/dialog.js" with dialog_id="gp-dialog" unique="gp" %}
+{% include "lms/include/dialog.js" with dialog_id="gp-dialog" unique="gp" dynamic=True %}
 {% include "lms/include/sidebar.js" with side="left" %}
 {% include "lms/include/sidebar.js" with side="right" %}
 {% endblock %}

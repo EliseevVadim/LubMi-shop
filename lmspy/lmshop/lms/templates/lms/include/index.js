@@ -66,7 +66,9 @@ const notify_delivery = ppk => {
 //    });
 //}
 const do_checkout = () => {
-    c6t_dialog.show('{% url "lms:c6t" %}');
+    left_sidebar.hide();
+    right_sidebar.hide();
+    c6t_dialog.show();
 }
 const scart_changed = () => {
     let e = new CustomEvent(EventType.SCART_CHANGED);
