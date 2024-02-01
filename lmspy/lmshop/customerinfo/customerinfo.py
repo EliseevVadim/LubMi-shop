@@ -1,5 +1,9 @@
+from _decimal import Decimal
+
 from django.conf import settings
 from hashlib import sha256
+
+from lms.models import Product, AvailableSize
 
 
 class CustomerInfo:
@@ -200,3 +204,28 @@ class CustomerInfo:
     @last_bps_id.deleter
     def last_bps_id(self):
         self._delete_item("last_bps_id")
+
+
+def with_actual_scart_data(func):
+    def deco(request, *args, **kwargs):
+        records = []
+        price = Decimal(0)
+        for ppk, sizes in CustomerInfo(request).scart.items():
+            try:
+                product = Product.published.get(pk=ppk)
+            except Product.DoesNotExist:
+                continue
+            for size_str, quantity in sizes.items():
+                try:
+                    size = product.sizes.get(size=size_str)
+                except AvailableSize.DoesNotExist:
+                    pass
+                else:
+                    records += [{
+                        'product': product,
+                        'size': size,
+                        'quantity': quantity
+                    }]
+                    price += quantity * product.actual_price.amount
+        return func(request, {'records': records, 'price': price}, *args, **kwargs)
+    return deco

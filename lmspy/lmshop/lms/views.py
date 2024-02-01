@@ -3,10 +3,9 @@ from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView, DetailView
 from django.views import View
-from customerinfo.customerinfo import CustomerInfo
+from customerinfo.customerinfo import CustomerInfo, with_actual_scart_data
 from .models import *
 from .forms import ShortCustomerInfoForm
-from decimal import Decimal
 
 
 # -------------------------------------------------------------------------
@@ -127,36 +126,9 @@ class ProductView(DetailView):
 
 class SCartView(View):
     @staticmethod
-    def actual_scart(request):  # TODO -- move to context processor for certain views --
-        info = CustomerInfo(request)
-        sct = info.scart
-        records = []
-        price = Decimal(0)
-        for ppk, sizes in sct.items():
-            try:
-                product = Product.published.get(pk=ppk)
-            except Product.DoesNotExist:
-                continue
-            for size_str, quantity in sizes.items():
-                try:
-                    size = product.sizes.get(size=size_str)
-                except AvailableSize.DoesNotExist:
-                    pass
-                else:
-                    records += [{
-                        'product': product,
-                        'size': size,
-                        'quantity': quantity
-                    }]
-                    price += quantity * product.actual_price.amount
-        return {
-            'records': records,
-            'price': price
-        }
-
-    @staticmethod
-    def get(request, *_, **__):
-        return render(request, 'lms/scart.html', SCartView.actual_scart(request))
+    @with_actual_scart_data
+    def get(request, scart, *_, **__):
+        return render(request, 'lms/scart.html', scart)
 
 
 class FavoritesView(View):

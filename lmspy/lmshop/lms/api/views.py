@@ -200,7 +200,7 @@ class CheckoutSCartView(APIView):
             # TODO validate all data we can validate here
             try:  # -- save order --
                 with transaction.atomic():
-                    scart = SCartView.actual_scart(request)["records"]
+                    scart = SCartView.actual_scart(request)
                     records, price = scart["records"], scart["price"]
                     if not records:
                         return Parameter.value_of('message_shopping_cart_empty', 'Корзина пуста. Добавьте в корзину хотя бы один товар!')
