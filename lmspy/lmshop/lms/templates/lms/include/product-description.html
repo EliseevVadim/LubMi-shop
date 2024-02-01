@@ -9,7 +9,7 @@
 {% if product.in_stock %}
 <label class="like-title" for="size-selector">{{param_label_size}}:</label>
 {% include "lms/include/selector.html" with variants=product.variants selector_id="size-selector" %}
-<button class="w-100 inverted" onclick="product_to_scart('{{product.article}}', document.getElementById('size-selector').value, 1);">{{param_label_add_to_shopping_cart}}</button>
+<button class="w-100 inverted" onclick="product_to_scart('{{product.article}}',document.getElementById('size-selector').value,1);gp_dialog.close();right_sidebar.show_scart();">{{param_label_add_to_shopping_cart}}</button>
 {% else %}
 <p><span class="red">{{param_label_not_available}}<br/></span><button class="w-100 inverted" onclick="notify_delivery('{{product.article}}')">{{param_label_notify_delivery}}</button></p>
 {% endif %}
@@ -18,12 +18,12 @@
 <span class="like-title">{{product.title}}&nbsp;({{product.color|default:param_message_color_missed}})</span><br/>
 <span class="gray like-note">{{param_label_article}}: {{product.article}}<br/>{{param_label_size}}: {{size.size}}</span><br/><br/>
 <span class="items-left-right">
-    <span>{{product.actual_price.amount}} {{param_label_currency}}</span>
-    <span class="inline-items-right-left mla like-title">{% if quantity < size.quantity %}
-    <span class="hand gray" onclick="product_to_scart('{{product.article}}', {{size.id}}, 1);">&nbsp;&#8853;</span>{% endif %}
-    <span>{{quantity}}</span>{% if quantity > 1 %}
-    <span class="hand gray" onclick="product_to_scart('{{product.article}}', {{size.id}}, -1);">&#8854;&nbsp;</span>{% endif %}
-    </span>
+<span>{{product.actual_price.amount}} {{param_label_currency}}</span>
+<span class="inline-items-right-left mla like-title">{% if quantity < size.quantity %}
+<span class="hand gray" onclick="product_to_scart('{{product.article}}', {{size.id}}, 1);">&nbsp;&#8853;</span>{% endif %}
+<span>{{quantity}}</span>{% if quantity > 1 %}
+<span class="hand gray" onclick="product_to_scart('{{product.article}}', {{size.id}}, -1);">&#8854;&nbsp;</span>{% endif %}
+</span>
 </span>
 {% elif card_type == "favorites" %}
 <span class="like-title">{{product.title}}&nbsp;({{product.color|default:param_message_color_missed}})</span><br/>

@@ -38,47 +38,51 @@ const notify_delivery = ppk => {
         ndd_dialog.self().showModal();
     });
 }
+const scart_changed = () => {
+    let e = new CustomEvent(EventType.SCART_CHANGED);
+    window.dispatchEvent(e);
+};
 const product_to_scart = (ppk, size_id, quantity) => {
     __api_call__('{% url "api:product_to_scart" %}', { ppk: String(ppk), size_id: Number(size_id), quantity: String(quantity) }, result => {
         if(result.success) {
-            gp_dialog.close();
-            right_sidebar.show_scart();
+            scart_changed();
         } else {
             popup.show(result.why);
         }
     });
-}
+};
 const kill_product_in_scart = (ppk, product_title, size_id, size) => {
     __api_call__('{% url "api:kill_product_in_scart" %}', { ppk: String(ppk), size: String(size) }, result => {
         if(result.success) {
-            if(right_sidebar.visible() && right_sidebar.ctype == ContentType.SCART) {
-                right_sidebar.show_scart();
-                scart_undo.start({{param_value_undo_period}} * 1000 / scart_undo.period(),
-                    u => {
-                        if(u.alive()) {
-                            let cd = u.countdown();
-                            let ms = u.message();
-                            let wg = u.widget();
-                            if(wg && ms && cd) {
-                                ms.innerHTML = `{{param_label_you_removed}} &laquo;${product_title}&raquo;`;
-                                cd.innerHTML = String(Math.floor(u.count/10));
-                                wg.style.display = "block";
-                            }
+            scart_changed();
+            scart_undo.start({{param_value_undo_period}} * 1000 / scart_undo.period(),
+                u => {
+                    if(u.alive()) {
+                        let cds = u.countdowns();
+                        let mss = u.messages();
+                        let wgs = u.widgets();
+                        if(wgs && mss && cds) {
+                            let text = `{{param_label_you_removed}} &laquo;${product_title}&raquo;`;
+                            let count = String(Math.floor(u.count/10));
+                            for(let ms of mss) ms.innerHTML = text;
+                            for(let cd of cds) cd.innerHTML = count;
+                            for(let wg of wgs) wg.style.display = "block";
                         }
-                    },
-                    u => {
-                        let wg = u.widget();
-                        if(wg) { wg.style.display = "none"; }
-                        right_sidebar.show_scart();
-                    },
-                    u => { product_to_scart(ppk, size_id, result.quantity); }
-                );
-            }
+                    }
+                },
+                u => {
+                    let wgs = u.widgets();
+                    if(wgs) for(let wg of wgs) { wg.style.display = "none"; }
+                    let e = new CustomEvent(EventType.SCART_CHANGED);
+                    window.dispatchEvent(e);
+                },
+                u => { product_to_scart(ppk, size_id, result.quantity); }
+            );
         } else {
             popup.show(result.why);
         }
     });
-}
+};
 const show_product_details = url => {
     left_sidebar.hide();
     right_sidebar.hide();

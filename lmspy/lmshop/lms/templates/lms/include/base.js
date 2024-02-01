@@ -18,3 +18,7 @@ const ContentType = {
     SCART: 1,
     FAVORITES: 2,
 };
+
+const EventType = {
+    SCART_CHANGED: "ev_scart_changed",
+};

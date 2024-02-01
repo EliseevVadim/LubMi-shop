@@ -249,5 +249,6 @@ class CheckoutSCartView(APIView):
                     "apartment": cu_apartment,
                     "fullname": cu_fullname,
                 }
+                info.clear_scart()
                 return {'bps_redirect': bps_redirect}
         return Parameter.value_of('message_wrong_input', 'Пожалуйста, правильно введите данные')

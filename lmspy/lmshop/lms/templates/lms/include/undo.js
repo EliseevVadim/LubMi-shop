@@ -41,7 +41,7 @@ const {{unique}}_undo = {
     do_time: () => {{unique}}_undo.do_action({{unique}}_undo.time_action),
     do_final: () => {{unique}}_undo.do_action({{unique}}_undo.final_action),
     do_undo: () => { {{unique}}_undo.do_action({{unique}}_undo.undo_action); {{unique}}_undo.stop(); },
-    widget: () => document.querySelector('#{{unique}}-undo-section'),
-    message: () => document.querySelector('#{{unique}}-undo-message'),
-    countdown: () => document.querySelector('#{{unique}}-undo-countdown'),
+    widgets: () => document.querySelectorAll('*[id$="-undo-section"]'),
+    messages: () => document.querySelectorAll('*[id$="-undo-message"]'),
+    countdowns: () => document.querySelectorAll('*[id$="-undo-countdown"]'),
 };
