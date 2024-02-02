@@ -73,6 +73,7 @@ c6t_dialog.show = () => {
                     c6t_status.innerHTML = html;
                 });
             };
+
             const d6y_changed = e => {
                 let url = '{% url "lms:c6t_info" kind="cities" data="dvservice" %}'.replace(/\/dvservice\/$/, `/${e.currentTarget.value}/`);
                 fetch(url).then(response => response.text()).then(html => {
@@ -112,9 +113,12 @@ c6t_dialog.show = () => {
             fetch('{% url "lms:c6t_info" kind="delivery" data="pr" %}').then(response => response.text()).then(html => {
                 _d6y_service_1.parentElement.insertAdjacentHTML('beforeEnd', html);
             });
-            d6y_changed();
+
+            scart_changed();
+            d6y_changed({currentTarget: by_selector('input[id^="c6t-d6y_service_"]:checked')});
             _email.oninput(null);
             _phone.oninput(null);
+
             c6t_dialog.self().showModal();
         });
     });
