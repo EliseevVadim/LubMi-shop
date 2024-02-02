@@ -1,12 +1,24 @@
 {% extends "lms/std_page.html" %}
 {% load custom_tags %}
-
+{% block page_header %}
+{% include "lms/include/ad-block.html" with static_image="img/bkg-002.jpg" %}
+{% endblock %}
 {% block page_content %}
 {{ "#Парфюмерия"|markdown }}
+{{ text_01 | markdown }}
+{{ text_02 | markdown }}
+{{ text_03 | markdown }}
+{{ text_04 | markdown }}
+{{ text_05 | markdown }}
+{{ text_06 | markdown }}
+{{ text_07 | markdown }}
+{{ text_08 | markdown }}
+{% for title,topic in topics.items %}
+{{title|markdown}}<br/>{{topic|markdown}}
+{% endfor %}
+{% include "lms/include/ad-block.html" with static_image="img/bkg-003.jpg" %}
 {% endblock %}
-
 {% block modal_forms %}{{block.super}} {# TODO kill? #}
 {% endblock %}
-
 {% block javascript %}{{block.super}} {# TODO kill? #}
 {% endblock %}
