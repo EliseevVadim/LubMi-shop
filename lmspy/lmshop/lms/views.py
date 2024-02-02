@@ -25,8 +25,11 @@ class IndexView(View):
         'title-dsc': ("Название: Я-А", lambda q: q.order_by('-title')),
     }
 
-    @staticmethod
-    def get(request, *_, **__):
+    @property
+    def template_name(self):
+        return 'lms/index.html'
+
+    def get(self, request, *_, **__):
         page = request.GET.get('page')
         order = request.GET.get('order')
         order = order if order in IndexView.ordering else IndexView.default_order
@@ -37,7 +40,7 @@ class IndexView(View):
         favorites = CustomerInfo(request).favorites
 
         if not page:
-            return render(request, 'lms/index.html', {
+            return render(request, self.template_name, {
                 'page_title': Parameter.value_of("title_main_page", "Главная"),
                 'products': pd_pgn.page(1),
                 'bestsellers': bs_pgn.page(1),
@@ -68,11 +71,10 @@ class IndexView(View):
             return HttpResponse('')
 
 
-class CatalogueView(ListView):
-    queryset = Product.published.all()
-    context_object_name = 'products'
-    paginate_by = 3
-    template_name = 'lms/under_work.html'
+class CatalogueView(IndexView):
+    @property
+    def template_name(self):
+        return 'lms/catalogue.html'
 
 
 class PerfumeryView(ListView):
