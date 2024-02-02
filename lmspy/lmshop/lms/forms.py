@@ -89,7 +89,7 @@ class CheckoutForm(forms.ModelForm):
                 'placeholder': Parameter.value_of('pholder_TODO', 'Город')
             }),
             'delivery_service':  forms.RadioSelect(attrs={
-                'id': 'c6t-d7y_service',
+                'id': 'c6t-d6y_service',
                 'placeholder': Parameter.value_of('pholder_TODO', 'Вариант доставки')
             }),
             'cu_fullname':  forms.TextInput(attrs={

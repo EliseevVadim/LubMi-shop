@@ -10,27 +10,39 @@ c6t_dialog.close = () => {
     c6t_dialog.__close();
 };
 c6t_dialog.show = () => {
-    const find = id => document.getElementById(id);
+    const by_id = id => document.getElementById(id);
+    const by_selector = sel => document.querySelector(sel);
     fetch('{% url "lms:c6t_form" %}').then(response => response.text()).then(html => {
         c6t_dialog.close();
-        c6t_dialog.body().innerHTML = '<div class="grid-c2"><div class="c6t-form-container"></div><div class="items-top-down"><div class="c6t-sidebar"></div><section id="c6t-status">Проверка</section></div></div>';
+        c6t_dialog.body().innerHTML = `<div class="grid-c2">
+    <section class="c6t-form-container">
+    </section>
+    <div class="items-top-down">
+        <section class="c6t-sidebar">
+        </section>
+        <section id="c6t-status">
+        </section>
+    </div>
+</div>
+<section style="display:none" id="c6t-cl-holder">
+</section>`;
         c6t_dialog.form_container().innerHTML = html;
 
         __api_call__('{% url "api:get_customer_info" flags=15 %}', null, answer => {
-            _form = find('c6t-form');
-            _name = find('c6t-cu_name');
-            _phone = find('c6t-cu_phone');
-            _email = find('c6t-cu_email');
-            _city = find('c6t-cu_city');
-            _street = find('c6t-cu_street');
-            _building = find('c6t-cu_building');
-            _entrance = find('c6t-cu_entrance');
-            _floor = find('c6t-cu_floor');
-            _apartment = find('c6t-cu_apartment');
-            _fullname = find('c6t-cu_fullname');
-            _confirm = find('c6t-cu_confirm');
-            _d7y_service_0 = find('c6t-d7y_service_0');
-            _d7y_service_1 = find('c6t-d7y_service_1');
+            _form = by_id('c6t-form');
+            _name = by_id('c6t-cu_name');
+            _phone = by_id('c6t-cu_phone');
+            _email = by_id('c6t-cu_email');
+            _city = by_id('c6t-cu_city');
+            _street = by_id('c6t-cu_street');
+            _building = by_id('c6t-cu_building');
+            _entrance = by_id('c6t-cu_entrance');
+            _floor = by_id('c6t-cu_floor');
+            _apartment = by_id('c6t-cu_apartment');
+            _fullname = by_id('c6t-cu_fullname');
+            _confirm = by_id('c6t-cu_confirm');
+            _d6y_service_0 = by_id('c6t-d6y_service_0');
+            _d6y_service_1 = by_id('c6t-d6y_service_1');
 
             _name.value = answer.name;
             _phone.value = answer.phone;
@@ -41,23 +53,39 @@ c6t_dialog.show = () => {
             _entrance.value = answer.address.entrance;
             _floor.value = answer.address.floor;
             _apartment.value = answer.address.apartment;
-            _fullname.value = answer.address.fullname; // TODO -- ask services for data!! --
-            _d7y_service_0.parentElement.insertAdjacentHTML('beforeEnd', "<span class='gray'> от 3 дней, от 459 руб.</span>"); // TODO -- 1
-            _d7y_service_1.parentElement.insertAdjacentHTML('beforeEnd', "<span class='gray'> от 3 дней, от 459 руб.</span>");
+            _fullname.value = answer.address.fullname;
 
-            _email.oninput = _ => { if(_email.value) _phone.removeAttribute('required'); else _phone.setAttribute('required',''); }
-            _phone.oninput = _ => { if(_phone.value) _email.removeAttribute('required'); else _email.setAttribute('required',''); }
+            _email.oninput = _ => { 
+                if(_email.value) _phone.removeAttribute('required'); 
+                else _phone.setAttribute('required',''); 
+            }
+            
+            _phone.oninput = _ => { 
+                if(_phone.value) _email.removeAttribute('required'); 
+                else _email.setAttribute('required',''); 
+            }
 
-            let calculate_summary = () => __api_call__('{% url "api:scart_state" %}', null, answer => {
-                let c6t_status = find("c6t-status");
-                if(answer.success) { // TODO -- 2
-                    stat_str = answer.record_count > 0 ? "Сумма: " + answer.price + "руб.<br/>Доставка: 719 руб.<br/>Россия, г.Москва<br/>Итоговая сумма: " + (answer.price + 719) + "руб." : "Нет товаров в заказе";
-                    c6t_status.innerHTML = stat_str;
-                } else {
-                    alert("Ошибка сервера. Оформление заказа будет прервано!");
-                    c6t_dialog.close();
-                }
-            });
+            const update_summary = () => {
+                let ds = by_selector('input[id^="c6t-d6y_service_"]:checked').value;
+                let url = '{% url "lms:c6t_info" kind="summary" data="dvservice" %}'.replace(/\/dvservice\/$/, `/${ds}/?city=${_city.value}`);
+                fetch(url).then(response => response.text()).then(html => {
+                    let c6t_status = by_id("c6t-status");
+                    c6t_status.innerHTML = html;
+                });
+            };
+            const d6y_changed = e => {
+                let url = '{% url "lms:c6t_info" kind="cities" data="dvservice" %}'.replace(/\/dvservice\/$/, `/${e.currentTarget.value}/`);
+                fetch(url).then(response => response.text()).then(html => {
+                    dl_holder = by_id('c6t-cl-holder');
+                    dl_holder.innerHTML = html;
+                    _city.setAttribute('list', 'c6t-city-list');
+                });
+                update_summary();
+            };
+
+            _d6y_service_0.onchange = d6y_changed;
+            _d6y_service_1.onchange = d6y_changed;
+            _city.onchange = update_summary;
 
             _form.onsubmit = e => {
                 e.preventDefault();
@@ -73,14 +101,21 @@ c6t_dialog.show = () => {
                     }
                 });
             }
+            
             _email.oninput(null);
             _phone.oninput(null);
 
             c6t_dialog.__on_scart_changed = e => fetch('{% url "lms:c6t_scart" %}').then(response => response.text()).then(html => {
                 c6t_dialog.sidebar().innerHTML = html;
-                calculate_summary();
+                update_summary();
             });
             window.addEventListener(EventType.SCART_CHANGED, c6t_dialog.__on_scart_changed);
+            fetch('{% url "lms:c6t_info" kind="delivery" data="sd" %}').then(response => response.text()).then(html => {
+                _d6y_service_0.parentElement.insertAdjacentHTML('beforeEnd', html);
+            });
+            fetch('{% url "lms:c6t_info" kind="delivery" data="pr" %}').then(response => response.text()).then(html => {
+                _d6y_service_1.parentElement.insertAdjacentHTML('beforeEnd', html);
+            });
             c6t_dialog.self().showModal();
             scart_changed();
         });

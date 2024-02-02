@@ -148,19 +148,6 @@ class KillProductInSCartView(APIView):
         } if data else Parameter.value_of('message_product_not_found_in_shopping_cart', 'Товар с артикулом %s и размером %s не найден в корзине') % (ppk, size)
 
 
-class SCartStateView(APIView):
-    permission_classes = [AllowAny]
-
-    @staticmethod
-    @api_response
-    @with_actual_scart_records_and_price
-    def post(request, scart, _=None):
-        return {
-            'record_count': len(scart['records']),
-            'price': scart['price']
-        }
-
-
 class CheckoutSCartView(APIView):
     permission_classes = [AllowAny]
 

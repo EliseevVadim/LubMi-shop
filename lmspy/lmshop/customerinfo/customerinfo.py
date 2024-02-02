@@ -1,9 +1,8 @@
 from _decimal import Decimal
-
 from django.conf import settings
 from hashlib import sha256
-
 from lms.models import Product, AvailableSize
+from functools import lru_cache
 
 
 class CustomerInfo:
@@ -53,6 +52,7 @@ class CustomerInfo:
         return self._get_or_create_item("scart", dict)  # { ppk: order_info }
 
     @staticmethod
+    @lru_cache
     def _hash(s1, s2):
         h1 = int(sha256(s1.encode()).hexdigest(), 16)
         h2 = int(sha256(s2.encode()).hexdigest(), 16)

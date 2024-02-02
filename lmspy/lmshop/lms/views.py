@@ -1,8 +1,11 @@
+import decimal
+
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView, DetailView
 from django.views import View
+from django.template.defaultfilters import floatformat
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
 from .models import *
 from .forms import ShortCustomerInfoForm, CheckoutForm
@@ -152,3 +155,37 @@ class C6tScartView(View):
     @with_actual_scart_records_and_price
     def get(request, scart, *_, **__):
         return render(request, 'lms/c6t-scart.html', scart)
+
+
+class C6tInfoView(View):
+    @staticmethod
+    @with_actual_scart_records_and_price
+    def get(request, kind, data, scart, *_, **__):
+        match kind:
+            case 'delivery':
+                dv_cost = decimal.Decimal(459.70 if data == "sd" else 512.00)  # TODO !!!
+                dv_days = decimal.Decimal(3 if data == "sd" else 5)  # TODO !!!
+                return render(request, 'lms/c6t-d6y.html', {
+                    "cost":  floatformat(dv_cost, 2),
+                    "days": floatformat(dv_days),
+                })
+            case 'cities':
+                return render(request, 'lms/c6t-city-list.html', {
+                    "cities": ["СДЭК-Москва", "СДЭК-Донецк", "СДЭК-Луганск"] if data == 'sd' else ["ПР-Москва", "ПР-Донецк", "ПР-Луганск"],
+                })
+            case 'summary':
+                dv_cost = decimal.Decimal(719.50 if data == 'sd' else 820.10)  # TODO !!!
+                city = request.GET.get('city')
+                return render(request, 'lms/c6t-summary.html', {
+                    "items": {
+                        "Сумма": f'{floatformat(scart["price"], 2)} {Parameter.value_of("label_currency")}',
+                        "Доставка": f'{"СДЭК" if data == "sd" else "Почта России"}, {floatformat(dv_cost, 2)} {Parameter.value_of("label_currency")}',
+                        "Назначение": f'{city if city else "г. Москва, Россия"}',
+                        "Итоговая сумма": f'{floatformat(scart["price"] + dv_cost, 2)} {Parameter.value_of("label_currency")}',
+                    }
+                })
+            case _: return render(request, 'lms/c6t-summary.html', {
+                "items": {
+                    "Ошибка": "Запрошен неизвестный тип данных"
+                }
+            })
