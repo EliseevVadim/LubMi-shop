@@ -13,3 +13,4 @@ sqlparse~=0.4.4
 redis~=5.0.1
 requests~=2.31.0
 httpx~=0.26.0
+markdown~=3.5.2
