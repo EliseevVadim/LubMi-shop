@@ -101,10 +101,6 @@ c6t_dialog.show = () => {
                     }
                 });
             }
-            
-            _email.oninput(null);
-            _phone.oninput(null);
-
             c6t_dialog.__on_scart_changed = e => fetch('{% url "lms:c6t_scart" %}').then(response => response.text()).then(html => {
                 c6t_dialog.sidebar().innerHTML = html;
                 update_summary();
@@ -116,8 +112,10 @@ c6t_dialog.show = () => {
             fetch('{% url "lms:c6t_info" kind="delivery" data="pr" %}').then(response => response.text()).then(html => {
                 _d6y_service_1.parentElement.insertAdjacentHTML('beforeEnd', html);
             });
+            d6y_changed();
+            _email.oninput(null);
+            _phone.oninput(null);
             c6t_dialog.self().showModal();
-            scart_changed();
         });
     });
 };
