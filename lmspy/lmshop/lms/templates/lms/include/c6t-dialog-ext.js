@@ -13,7 +13,7 @@ c6t_dialog.show = () => {
     const find = id => document.getElementById(id);
     fetch('{% url "lms:c6t_form" %}').then(response => response.text()).then(html => {
         c6t_dialog.close();
-        c6t_dialog.body().innerHTML = '<div class="grid-c2"><div class="c6t-form-container"></div><div class="items-top-down"><div class="c6t-sidebar"></div><h5 id="c6t-status">Проверка</h5></div></div>';
+        c6t_dialog.body().innerHTML = '<div class="grid-c2"><div class="c6t-form-container"></div><div class="items-top-down"><div class="c6t-sidebar"></div><section id="c6t-status">Проверка</section></div></div>';
         c6t_dialog.form_container().innerHTML = html;
 
         __api_call__('{% url "api:get_customer_info" flags=15 %}', null, answer => {
@@ -42,7 +42,7 @@ c6t_dialog.show = () => {
             _floor.value = answer.address.floor;
             _apartment.value = answer.address.apartment;
             _fullname.value = answer.address.fullname; // TODO -- ask services for data!! --
-            _d7y_service_0.parentElement.insertAdjacentHTML('beforeEnd', "<span class='gray'> от 3 дней, от 459 руб.</span>");
+            _d7y_service_0.parentElement.insertAdjacentHTML('beforeEnd', "<span class='gray'> от 3 дней, от 459 руб.</span>"); // TODO -- 1
             _d7y_service_1.parentElement.insertAdjacentHTML('beforeEnd', "<span class='gray'> от 3 дней, от 459 руб.</span>");
 
             _email.oninput = _ => { if(_email.value) _phone.removeAttribute('required'); else _phone.setAttribute('required',''); }
@@ -50,7 +50,7 @@ c6t_dialog.show = () => {
 
             let calculate_summary = () => __api_call__('{% url "api:scart_state" %}', null, answer => {
                 let c6t_status = find("c6t-status");
-                if(answer.success) {
+                if(answer.success) { // TODO -- 2
                     stat_str = answer.record_count > 0 ? "Сумма: " + answer.price + "руб.<br/>Доставка: 719 руб.<br/>Россия, г.Москва<br/>Итоговая сумма: " + (answer.price + 719) + "руб." : "Нет товаров в заказе";
                     c6t_status.innerHTML = stat_str;
                 } else {
