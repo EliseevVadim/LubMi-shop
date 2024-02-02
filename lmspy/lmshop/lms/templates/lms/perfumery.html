@@ -1,9 +1,12 @@
 {% extends "lms/std_page.html" %}
+{% load custom_tags %}
+
 {% block page_content %}
+{{ "#Парфюмерия"|markdown }}
 {% endblock %}
 
-{% block modal_forms %}{{block.super}}
+{% block modal_forms %}{{block.super}} {# TODO kill? #}
 {% endblock %}
 
-{% block javascript %}{{block.super}}
+{% block javascript %}{{block.super}} {# TODO kill? #}
 {% endblock %}

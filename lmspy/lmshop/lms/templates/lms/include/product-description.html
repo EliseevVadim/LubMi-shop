@@ -1,3 +1,4 @@
+{% load custom_tags %}
 {% if card_type == "catalogue" %}
 <span class="like-title">{{product.title}}</span><br/>
 ({{product.color|default:param_message_color_missed}})<br/>
@@ -13,7 +14,7 @@
 {% else %}
 <p><span class="red">{{param_label_not_available}}<br/></span><button class="w-100 inverted" onclick="notify_delivery('{{product.article}}')">{{param_label_notify_delivery}}</button></p>
 {% endif %}
-<blockquote class="not-wide"><br/>{{product.description|default:param_message_details_missed}}</blockquote>
+<blockquote class="not-wide"><br/>{{product.description|default:param_message_details_missed|markdown}}</blockquote>
 {% elif card_type == "shopping-cart" %}
 <span class="like-title">{{product.title}}&nbsp;({{product.color|default:param_message_color_missed}})</span><br/>
 <span class="gray like-note">{{param_label_article}}: {{product.article}}<br/>{{param_label_size}}: {{size.size}}</span><br/><br/>
