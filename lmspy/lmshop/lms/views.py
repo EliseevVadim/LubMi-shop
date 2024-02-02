@@ -77,11 +77,12 @@ class CatalogueView(IndexView):
         return 'lms/catalogue.html'
 
 
-class PerfumeryView(ListView):
-    queryset = Product.published.all()
-    context_object_name = 'products'
-    paginate_by = 3
-    template_name = 'lms/under_work.html'
+class PerfumeryView(View):
+    @staticmethod
+    def get(request, *_, **__):
+        return render(request, 'lms/perfumery.html', {
+            'page_title': Parameter.value_of("title_perfumery", "Парфюмерия"),
+        })
 
 
 class DeliveryView(ListView):
