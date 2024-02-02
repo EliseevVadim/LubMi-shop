@@ -228,5 +228,5 @@ def with_actual_scart_records_and_price(func):
                         'quantity': quantity
                     }]
                     price += quantity * product.actual_price.amount
-        return func(request, {'records': records, 'price': price}, *args, **kwargs)
+        return func(request, *args, **kwargs, scart={'records': records, 'price': price})
     return deco
