@@ -4,21 +4,46 @@
 {% include "lms/include/ad-block.html" with static_image="img/bkg-002.jpg" %}
 {% endblock %}
 {% block page_content %}
-{{ "#Парфюмерия"|markdown }}
-{{ text_01 | markdown }}
-{{ text_02 | markdown }}
-{{ text_03 | markdown }}
-{{ text_04 | markdown }}
-{{ text_05 | markdown }}
-{{ text_06 | markdown }}
-{{ text_07 | markdown }}
-{{ text_08 | markdown }}
+{{ text_00 | markdown }}
+<div class="grid12 grid12-abcd"> {# ----------------------------------------------------------------------------------  #}
+    <div class="g12-abcd-a">{{ text_01 | markdown }}</div>
+    {% include "lms/include/picture.html" with classes="g12-abcd-b" pic_file="img/pic-03.jpg" %}
+    {% include "lms/include/picture.html" with classes="g12-abcd-c" pic_file="img/pic-04.jpg" %}
+    {% include "lms/include/picture.html" with classes="g12-abcd-d" pic_file="img/pic-05.jpg" %}
+</div>
+<h1></h1> {# ---------------------------------------------------------------------------------------------------------  #}
+{{text_02 | markdown}}
+<div class="grid12 grid12-ab">
+    {% include "lms/include/picture.html" with classes="g12-ab-a" pic_file="img/pic-06.jpg" %}
+    <div class="g12-ab-b">{{ text_03 | markdown }}</div>
+</div>
+<h1></h1> {# ---------------------------------------------------------------------------------------------------------  #}
+<div class="grid12 grid12-abcde">
+    <div class="g12-abcde-a">{{ text_04 | markdown }}</div>
+    <div class="g12-abcde-b bt1 bb1 bl1 br1 pl1 pr1">{{ text_06 | markdown }}</div>
+    <div class="g12-abcde-c bt1 bb1 bl1 br1 pl1 pr1 inverted">{{ text_07 | markdown }}</div>
+    <div class="g12-abcde-d bt1 bb1 bl1 br1 pl1 pr1">{{ text_08 | markdown }}</div>
+    {% include "lms/include/picture.html" with classes="g12-abcde-e" pic_file="img/pic-07.jpg" %}
+</div>
+<h1></h1> {# ---------------------------------------------------------------------------------------------------------  #}
+<section>
+    {% include "lms/include/ad-block.html" with static_image="img/bkg-003.jpg" %}
+</section>
+{{text_05 | markdown}} {# --------------------------------------------------------------------------------------------  #}
+<article class="bb1">
 {% for title,topic in topics.items %}
-{{title|markdown}}<br/>{{topic|markdown}}
+    <details>
+        <summary class="bt1 pt1 pb1 hand">
+            {{title}}
+        </summary>
+        {{topic|markdown}}
+    </details>
 {% endfor %}
-{% include "lms/include/ad-block.html" with static_image="img/bkg-003.jpg" %}
+</article>
 {% endblock %}
+
 {% block modal_forms %}{{block.super}} {# TODO kill? #}
 {% endblock %}
+
 {% block javascript %}{{block.super}} {# TODO kill? #}
 {% endblock %}

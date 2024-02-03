@@ -311,8 +311,8 @@ aside h1 {
 
 h1 {
     font-weight:normal;
-    border-top:1px solid black;
-    padding:0 0 10px 0;
+    border-top: 1px solid black;
+    padding: 0.5rem 0 0 0;
 }
 
 h2 {
@@ -372,6 +372,82 @@ h1, h2, h3, h4, h5, h6 {
     grid-template-columns: auto auto auto;
 }
 
+.grid12 {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(12, auto);
+    grid-template-rows: repeat(12, auto);
+    justify-items: stretch;
+}
+
+.grid12-abcde {
+    grid-template-areas:
+        "A A A A A A E E E E E E"
+        "A A A A A A E E E E E E"
+        "A A A A A A E E E E E E"
+        "B B B B B B E E E E E E"
+        "B B B B B B E E E E E E"
+        "B B B B B B E E E E E E"
+        "C C C C C C E E E E E E"
+        "C C C C C C E E E E E E"
+        "C C C C C C E E E E E E"
+        "D D D D D D E E E E E E"
+        "D D D D D D E E E E E E"
+        "D D D D D D E E E E E E";
+}
+
+.grid12-abcd {
+    grid-template-areas:
+        "A A A A A A B B B B B B"
+        "A A A A A A B B B B B B"
+        "A A A A A A B B B B B B"
+        "C C C C C C B B B B B B"
+        "C C C C C C B B B B B B"
+        "C C C C C C B B B B B B"
+        "C C C C C C B B B B B B"
+        "C C C C C C B B B B B B"
+        "C C C C C C B B B B B B"
+        "C C C C C C D D D D D D"
+        "C C C C C C D D D D D D"
+        "C C C C C C D D D D D D";
+}
+
+.grid12-ab {
+    grid-template-areas:
+        "A A A A A A B B B B B B"
+        "A A A A A A B B B B B B"
+        "A A A A A A B B B B B B"
+        "A A A A A A B B B B B B"
+        "A A A A A A B B B B B B"
+        "A A A A A A B B B B B B"
+        "A A A A A A B B B B B B"
+        "A A A A A A B B B B B B"
+        "A A A A A A B B B B B B"
+        "A A A A A A B B B B B B"
+        "A A A A A A B B B B B B"
+        "A A A A A A B B B B B B";
+}
+
+.g12-abcde-a, .g12-abcd-a, .g12-ab-a {
+    grid-area: A;
+}
+
+.g12-abcde-b, .g12-abcd-b, .g12-ab-b {
+    grid-area: B;
+}
+
+.g12-abcde-c, .g12-abcd-c {
+    grid-area: C;
+}
+
+.g12-abcde-d, .g12-abcd-d {
+    grid-area: D;
+}
+
+.g12-abcde-e {
+    grid-area: E;
+}
+
 .old_price {
     text-decoration: line-through red;
     color: gray;
@@ -401,6 +477,22 @@ img.bkg {
 
 .not-wide {
     max-width: 25rem;
+}
+
+.bt1 {
+    border-top: solid thin black;
+}
+
+.bb1 {
+    border-bottom: solid thin black;
+}
+
+.bl1 {
+    border-left: solid thin black;
+}
+
+.br1 {
+    border-right: solid thin black;
 }
 
 .pl1 {
@@ -518,19 +610,60 @@ input[type="submit"].large {
 
 button.inverted,
 input[type="submit"].inverted {
-    border-color: white;
     color: white;
-}
-
-button.inverted,
-input[type="submit"].inverted {
     background: black;
+    border-color: white;
 }
 
 button:hover,
 input[type="submit"]:hover {
     background: rgba(0, 0, 0, 0.15);
     color: black;
+    border-color: black;
+}
+
+/* Perfumery -----------------------------------------------------------------------------------------------------------*/
+
+.picture-content {
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    min-height: 10rem;
+    height: 100%;
+    width: 100%;
+}
+
+#perfumery h1 {
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    font-size: 4rem;
+    font-weight: bolder;
+}
+
+#perfumery h2 {
+    font-size: 2rem;
+    font-weight: bolder;
+}
+
+#perfumery summary {
+    font-size: 1.25rem;
+    font-weight: bolder;
+}
+
+#perfumery section,
+#perfumery .grid12,
+#perfumery article,
+#perfumery h1,
+#perfumery h2 {
+    max-width: 60rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#perfumery .inverted {
+    color: white;
+    background: black;
+    border-color: white;
 }
 
 /* Диалоги и формы -----------------------------------------------------------------------------------------------------*/
