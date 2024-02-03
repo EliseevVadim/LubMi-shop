@@ -460,6 +460,15 @@ img.bkg {
     width: 100%;
 }
 
+.picture-content {
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    min-height: 10rem;
+    height: 100%;
+    width: 100%;
+}
+
 .toolbar {
     background: none;
     display: flex;
@@ -625,15 +634,6 @@ input[type="submit"]:hover {
 
 /* Perfumery -----------------------------------------------------------------------------------------------------------*/
 
-.picture-content {
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    min-height: 10rem;
-    height: 100%;
-    width: 100%;
-}
-
 .perfumery > h1 {
     margin-top: 3rem;
     margin-bottom: 1rem;
@@ -661,6 +661,14 @@ input[type="submit"]:hover {
     color: white;
     background: black;
     border-color: white;
+}
+
+/* Delivery -----------------------------------------------------------------------------------------------------------*/
+
+.delivery > * {
+    max-width: var(--NarrowPageWidth);
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* Диалоги и формы -----------------------------------------------------------------------------------------------------*/

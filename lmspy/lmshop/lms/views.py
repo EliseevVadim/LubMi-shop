@@ -77,13 +77,6 @@ class CatalogueView(IndexView):
         return 'lms/catalogue.html'
 
 
-class DeliveryView(ListView):
-    queryset = Product.published.all()
-    context_object_name = 'products'
-    paginate_by = 3
-    template_name = 'lms/under_work.html'
-
-
 class CareView(ListView):
     queryset = Product.published.all()
     context_object_name = 'products'

@@ -1,0 +1,5 @@
+{% extends "lms/std_page.html" %}
+{% load custom_tags %}
+{% block page_content %}
+{{text | markdown}}
+{% endblock %}
