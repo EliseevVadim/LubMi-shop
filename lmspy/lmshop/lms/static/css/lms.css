@@ -633,34 +633,30 @@ input[type="submit"]:hover {
     width: 100%;
 }
 
-#perfumery h1 {
+.perfumery > h1 {
     margin-top: 3rem;
     margin-bottom: 1rem;
     font-size: 4rem;
     font-weight: bolder;
 }
 
-#perfumery h2 {
+.perfumery h2 {
     font-size: 2rem;
     font-weight: bolder;
 }
 
-#perfumery summary {
+.perfumery summary {
     font-size: 1.25rem;
     font-weight: bolder;
 }
 
-#perfumery section,
-#perfumery .grid12,
-#perfumery article,
-#perfumery h1,
-#perfumery h2 {
+.perfumery > * {
     max-width: 60rem;
     margin-left: auto;
     margin-right: auto;
 }
 
-#perfumery .inverted {
+.perfumery .inverted {
     color: white;
     background: black;
     border-color: white;
