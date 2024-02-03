@@ -30,15 +30,7 @@
     {% include "lms/include/ad-block.html" with static_image="img/bkg-003.jpg" %}
 </section>
 {{text_05 | markdown}} {# --------------------------------------------------------------------------------------------  #}
-<article class="bb1">
-{% for title,topic in topics.items %}
-    <details>
-        <summary class="bt1 pt1 pb1 hand">
-            {{title}}
-        </summary>
-        {{topic|markdown}}
-    </details>
-{% endfor %}
+{% include "lms/include/accordion.html" with article_classes="bb1" summary_classes="bt1 pt1 pb1 hand" md=True %}
 </article>
 {% endblock %}
 

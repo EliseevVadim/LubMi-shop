@@ -1,0 +1,17 @@
+{% load custom_tags %}
+<article class="accordion-article {{article_classes}}">
+{% for title,topic in topics.items %}
+{% if title and topic %}
+<details>
+<summary class="accordion-summary {{summary_classes}}">
+{{title}}
+</summary>
+{% if md %}
+{{topic|markdown}}
+{% else %}
+{{topic}}
+{% endif %}
+</details>
+{% endif %}
+{% endfor %}
+</article>
