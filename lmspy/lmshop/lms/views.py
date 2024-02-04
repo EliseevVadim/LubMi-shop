@@ -115,6 +115,16 @@ class ProductView(DetailView):
         }
 
 
+class SzChartView(View):
+    @staticmethod
+    def get(request, *_, **__):
+        return render(request, 'lms/sz-chart.html', {
+            'text': """aa | bb | cc
+                       -- | -- | --
+                       aa | bb | cc""",
+        })
+
+
 class SCartView(View):
     @staticmethod
     @with_actual_scart_records_and_price

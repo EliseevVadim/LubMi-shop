@@ -6,4 +6,4 @@ register = template.Library()
 
 @register.filter(name='markdown')
 def markdown_format(text):
-    return mark_safe(markdown.markdown(text))
+    return mark_safe(markdown.markdown(text, extensions=['tables', 'def_list']))
