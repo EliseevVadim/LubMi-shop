@@ -1,0 +1,11 @@
+{% extends "lms/std_page.html" %}
+{% load custom_tags %}
+{% load thumbnail %}
+{% load static %}
+{% block page_content %}
+{{ text_00 | markdown }}
+<div class="grid12 grid12-aab">
+<div class="g12-ia">{{ text_01 | markdown }}</div>
+{% include "lms/include/picture.html" with classes="g12-ib" pic_file='img/pic-08.jpg' %}
+</div>
+{% endblock %}

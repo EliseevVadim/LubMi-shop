@@ -2,6 +2,7 @@
     --LeadingHeight: 3rem;
     --FooterHeight: 3rem;
     --DefPadding: 1em;
+    --DefBottomPadding: 3rem;
     --Fonts: 'URW Gothic', helvetica, sans-serif;
     --ZixContent: 10;
     --ZixLeading: 20;
@@ -397,6 +398,22 @@ h1, h2, h3, h4, h5, h6 {
         "D D D D D D E E E E E E";
 }
 
+.grid12-aab {
+    grid-template-areas:
+        "A A A A A A A A B B B B"
+        "A A A A A A A A B B B B"
+        "A A A A A A A A B B B B"
+        "A A A A A A A A B B B B"
+        "A A A A A A A A B B B B"
+        "A A A A A A A A B B B B"
+        "A A A A A A A A B B B B"
+        "A A A A A A A A B B B B"
+        "A A A A A A A A B B B B"
+        "A A A A A A A A B B B B"
+        "A A A A A A A A B B B B"
+        "A A A A A A A A B B B B";
+}
+
 .grid12-abcd {
     grid-template-areas:
         "A A A A A A B B B B B B"
@@ -429,23 +446,23 @@ h1, h2, h3, h4, h5, h6 {
         "A A A A A A B B B B B B";
 }
 
-.g12-abcde-a, .g12-abcd-a, .g12-ab-a {
+.g12-ia {
     grid-area: A;
 }
 
-.g12-abcde-b, .g12-abcd-b, .g12-ab-b {
+.g12-ib {
     grid-area: B;
 }
 
-.g12-abcde-c, .g12-abcd-c {
+.g12-ic {
     grid-area: C;
 }
 
-.g12-abcde-d, .g12-abcd-d {
+.g12-id {
     grid-area: D;
 }
 
-.g12-abcde-e {
+.g12-ie {
     grid-area: E;
 }
 
@@ -672,10 +689,27 @@ input[type="submit"]:hover {
     margin-right: auto;
 }
 
+/* Care -----------------------------------------------------------------------------------------------------------*/
+
+.care-page > * {
+    max-width: var(--NarrowPageWidth);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.care-page > *:last-child {
+    margin-bottom: var(--DefBottomPadding);
+}
+
+.care-page p {
+    margin-top: 0.25rem;
+    margin-bottom: 0;
+}
+
 /* Size chart -----------------------------------------------------------------------------------------------------------*/
 
 .size-chart-container {
-    height: 60vh;
+    margin-bottom: var(--DefBottomPadding);
     display: flex;
     flex-flow: column;
     place-items: center;

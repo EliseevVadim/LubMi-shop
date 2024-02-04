@@ -77,11 +77,24 @@ class CatalogueView(IndexView):
         return 'lms/catalogue.html'
 
 
-class CareView(ListView):
-    queryset = Product.published.all()
-    context_object_name = 'products'
-    paginate_by = 3
-    template_name = 'lms/under_work.html'
+class CareView(View):
+    @staticmethod
+    def get(request, *_, **__):
+        title = Parameter.value_of('title_care', 'Уход')
+        return render(request, 'lms/care.html', {
+            'page_title': title,
+            'page_content': 'care-page',
+            'text_00': """#Уход за изделиями""",
+            'text_01': f"""##Стирка:\n\n- Только в деликатном режиме, температура нагретой воды не должна превышать 30°
+            \n\n- Не забудьте добавить кондиционер, благодаря ему ткань будет сохранять свою мягкость и упругость, а также шелк 
+            не потеряет свой цвет или принт. Плюсом кондиционера станет и снижение уровня накопления электрического заряда ткани.
+            \n\n- Не используйте агрессивные моющие средства. Изучите составы, чтобы в них не было отбеливателя.\n\n- Исключите отжим, 
+            для удаления влаги из ткани\n\n    - Остатки влаги можно убрать махровым полотенцем.\n\n    - Можете повесить ткань на сушилку 
+            и просто дать испариться воде.\n\n- Прополощите ткань в холодной воде.\n\n- Ни в коем случае не трите пятна порожком или 
+            пятновыводителем.\n\n##Глажка:\n\n- Настройте температуру утюга не выше 150С;\n\n- Начните глажку с небольшого и незаметного 
+            элемента вашей вещи, чтоб проверить реакции;\n\n- Лучше приступать к глажке, когда изделие не полностью высохло, и гладить через 
+            другую, более плотную ткань;\n\n- Гладьте только изнаночную сторону, можете гладить на лицевой только некоторые элементы и 
+            через плотную ткань; \n\n- Работайте руками быстро, не задерживайтесь с утюгом на месте;\n\n- Не используйте парогенератор."""})
 
 
 class ContactsView(ListView):
@@ -120,7 +133,9 @@ class SzChartView(View):
     def get(request, *_, **__):
         title = Parameter.value_of('title_size_chart', 'Таблица размеров')
         modal = Parameter.value_of('value_size_chart_modal', 'yes').lower().strip() == 'yes'
-        return render(request, 'lms/sz-chart-bs.html' if modal else 'lms/sz-chart-fp.html', {
+        return render(request, 'lms/sz-chart-modal.html' if modal else 'lms/sz-chart-page.html', {
+            'page_title': title,
+            'page_content': 'size-chart-page',
             'text': f"""#{title}\n\n#####Как выбрать одежду своего размера\n
 Европейский<br/>размер | Российский<br/>размер | Рост | Обхват груди | Обхват талии | Обхват бедер
 ---------------------- | ----------------- | ---- | ------------ | ------------ | ------------
