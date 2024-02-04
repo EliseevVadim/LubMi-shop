@@ -119,9 +119,27 @@ class SzChartView(View):
     @staticmethod
     def get(request, *_, **__):
         return render(request, 'lms/sz-chart.html', {
-            'text': """aa | bb | cc
-                       -- | -- | --
-                       aa | bb | cc""",
+            'text': """Надпись|Значение
+                    -|-
+                    (M) man (men), pour homme | Аромат для мужчин
+                    (W) woman (women), pour femme | Аромат для женщин
+                    \*\*\* | Аромат перевыпущенный по лицензии
+                    AF/SH (after shave) | Средство после бритья
+                    AS/L (after shave lotion) | Лосьон после бритья
+                    B/L (body lotion)|Лосьон для тела
+                    B/spray|Спрей для тела
+                    Bath Foam|Пена для ванны
+                    Bath oil|Масло для ванны и тела
+                    Beard oil | Масло для бороды
+                    Body Mist | Дымка для тела
+                    Candle | Свеча
+                    DEO | Дезодорант
+                    Diffusor | Аромат для дома
+                    EDC (Eau De Cologne) | Одеколон
+                    EDP | Парфюмированная вода
+                    EDT (Eau De Toilette) | Туалетная вода
+                    LIMITED ED. | Лимитированный выпуск
+                    MINI | Миниатюра, уменьшенная версия парфюма""",
         })
 
 

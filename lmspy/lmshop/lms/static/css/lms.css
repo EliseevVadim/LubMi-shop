@@ -465,6 +465,7 @@ img.bkg {
     background-position: center center;
     background-repeat: no-repeat;
     min-height: 10rem;
+    min-width: 10rem;
     height: 100%;
     width: 100%;
 }
