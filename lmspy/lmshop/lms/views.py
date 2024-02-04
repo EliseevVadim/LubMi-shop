@@ -118,29 +118,17 @@ class ProductView(DetailView):
 class SzChartView(View):
     @staticmethod
     def get(request, *_, **__):
-        return render(request, 'lms/sz-chart.html', {
-            'text': """Надпись|Значение
-                    -|-
-                    (M) man (men), pour homme | Аромат для мужчин
-                    (W) woman (women), pour femme | Аромат для женщин
-                    \*\*\* | Аромат перевыпущенный по лицензии
-                    AF/SH (after shave) | Средство после бритья
-                    AS/L (after shave lotion) | Лосьон после бритья
-                    B/L (body lotion)|Лосьон для тела
-                    B/spray|Спрей для тела
-                    Bath Foam|Пена для ванны
-                    Bath oil|Масло для ванны и тела
-                    Beard oil | Масло для бороды
-                    Body Mist | Дымка для тела
-                    Candle | Свеча
-                    DEO | Дезодорант
-                    Diffusor | Аромат для дома
-                    EDC (Eau De Cologne) | Одеколон
-                    EDP | Парфюмированная вода
-                    EDT (Eau De Toilette) | Туалетная вода
-                    LIMITED ED. | Лимитированный выпуск
-                    MINI | Миниатюра, уменьшенная версия парфюма""",
-        })
+        title = Parameter.value_of('title_size_chart', 'Таблица размеров')
+        modal = Parameter.value_of('value_size_chart_modal', 'yes').lower().strip() == 'yes'
+        return render(request, 'lms/sz-chart-bs.html' if modal else 'lms/sz-chart-fp.html', {
+            'text': f"""#{title}\n\n#####Как выбрать одежду своего размера\n
+Европейский<br/>размер | Российский<br/>размер | Рост | Обхват груди | Обхват талии | Обхват бедер
+---------------------- | ----------------- | ---- | ------------ | ------------ | ------------
+ХS                     | 42                | 170  | 82-85        | 60-63        | 90-93
+S                      | 44                | 170  | 86-89        | 64-67        | 94-97
+М                      | 46                | 170  | 90-93        | 68-71        | 98-101
+L                      | 48                | 170  | 94-97        | 72-75        | 102-105
+XL                     | 50                | 170  | 98-101       | 76-80        | 106-109"""})
 
 
 class SCartView(View):

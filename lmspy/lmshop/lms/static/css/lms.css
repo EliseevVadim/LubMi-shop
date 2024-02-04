@@ -672,6 +672,47 @@ input[type="submit"]:hover {
     margin-right: auto;
 }
 
+/* Size chart -----------------------------------------------------------------------------------------------------------*/
+
+.size-chart-container {
+    height: 60vh;
+    display: flex;
+    flex-flow: column;
+    place-items: center;
+}
+
+.size-chart {
+    display: flex;
+    flex-flow: column;
+}
+
+.size-chart * {
+    font-weight: normal;
+}
+
+.size-chart h1 {
+    margin-bottom: 0.25rem;
+    text-align: center;
+}
+
+.size-chart h5 {
+    text-align: center;
+}
+
+.size-chart table {
+    table-layout: fixed;
+    border-collapse:collapse;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.size-chart th,
+.size-chart td {
+    padding: 1rem;
+    text-align: center;
+    border-bottom: solid thin black;
+}
+
 /* Диалоги и формы -----------------------------------------------------------------------------------------------------*/
 
 form {
