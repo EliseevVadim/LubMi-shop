@@ -13,6 +13,7 @@
     --HeartSize: 1.6rem;
     --Gap: var(--DefPadding);
     --NarrowPageWidth: 60rem;
+    --HoFSize: 9rem;
 }
 
 * {
@@ -878,12 +879,14 @@ dialog {
     margin-top: 1rem;
 }
 
+/* HoF            -----------------------------------------------------------------------------------------------------*/
+
 .hall-of-fame {
     display: grid;
     justify-items: center;
     align-items: begin;
     gap: 0.1rem;
-    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(var(--HoFSize), 1fr));
     margin-top: 2rem;
 }
 
@@ -895,11 +898,11 @@ dialog {
 .hall-of-fame > figure {
     display: flex;
     flex-flow: column;
-    max-width: 9rem;
+    max-width: var(--HoFSize);
 }
 
 .hall-of-fame > figure > img {
-    flex: 0 0 9rem;
+    flex: 0 0 var(--HoFSize);
     overflow: hidden;
     object-fit: cover;
 }
