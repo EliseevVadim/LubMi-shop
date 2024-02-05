@@ -485,6 +485,7 @@ img.bkg {
     min-width: 10rem;
     height: 100%;
     width: 100%;
+    overflow: hidden;
 }
 
 .toolbar {
@@ -681,6 +682,10 @@ input[type="submit"]:hover {
     border-color: white;
 }
 
+.perfumery > *:last-child {
+    margin-bottom: var(--DefBottomPadding);
+}
+
 /* Delivery -----------------------------------------------------------------------------------------------------------*/
 
 .delivery > * {
@@ -689,7 +694,7 @@ input[type="submit"]:hover {
     margin-right: auto;
 }
 
-/* Care -----------------------------------------------------------------------------------------------------------*/
+/* Care ---------------------------------------------------------------------------------------------------------------*/
 
 .care-page > * {
     max-width: var(--NarrowPageWidth);
@@ -704,6 +709,29 @@ input[type="submit"]:hover {
 .care-page p {
     margin-top: 0.25rem;
     margin-bottom: 0;
+}
+
+/* About --------------------------------------------------------------------------------------------------------------*/
+
+.about-page > * {
+    max-width: var(--NarrowPageWidth);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.about-page > h1 {
+    text-align: center;
+}
+
+.about-page > h2 {
+    text-align: left;
+    border-top: 1px solid black;
+    padding: 0.5rem 0 0 0;
+    margin: 2.5rem auto 0 auto;
+}
+
+.about-page > *:last-child {
+    margin-bottom: var(--DefBottomPadding);
 }
 
 /* Size chart -----------------------------------------------------------------------------------------------------------*/
@@ -848,4 +876,35 @@ dialog {
 
 .dialog-footer {
     margin-top: 1rem;
+}
+
+.hall-of-fame {
+    display: grid;
+    justify-items: center;
+    align-items: begin;
+    gap: 0.1rem;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    margin-top: 2rem;
+}
+
+.hall-of-fame * {
+    margin: 0;
+    padding: 0;
+}
+
+.hall-of-fame > figure {
+    display: flex;
+    flex-flow: column;
+    max-width: 9rem;
+}
+
+.hall-of-fame > figure > img {
+    flex: 0 0 9rem;
+    overflow: hidden;
+    object-fit: cover;
+}
+
+.hall-of-fame > figure > figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
 }

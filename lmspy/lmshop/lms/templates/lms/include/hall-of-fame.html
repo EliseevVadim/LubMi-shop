@@ -1,0 +1,17 @@
+{% load custom_tags %}
+{% load static %}
+<section class="hall-of-fame">
+{% for item in items %}
+    {% with prefix|default:'img/'|add:item.img as img %}
+    <figure>
+        <img src="{% static img %}"/>
+        {% if item.label or item.descr %}
+        <figcaption>
+            {{item.label|markdown}}
+            {{item.descr|markdown}}
+        </figcaption>
+        {% endif %}
+    </figure>
+    {% endwith %}
+{% endfor %}
+</section>
