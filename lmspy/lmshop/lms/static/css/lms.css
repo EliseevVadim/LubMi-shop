@@ -931,6 +931,7 @@ dialog {
 .banner {
     display: grid;
     grid-template: repeat(12, 3rem) / repeat(12, minmax(2rem, 1fr));
+    background-color: white;
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;

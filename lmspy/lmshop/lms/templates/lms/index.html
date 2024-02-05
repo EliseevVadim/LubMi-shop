@@ -15,7 +15,8 @@
 
 {% block footer_header %}
 {% static "img/bkg-004.jpg" as img %}
-{% include "lms/include/banner.html" with type="B" slogan=param_title_perfumery s_cls="banner-end" button="Ознакомиться" b_cls="medium" ref=param_value_link_perfumery %}
+{% url "lms:perfumery" as ref %}
+{% include "lms/include/banner.html" with type="B" slogan=param_title_perfumery s_cls="banner-end" button="Ознакомиться" b_cls="medium" %}
 {% endblock %}
 
 {% block javascript %} {{block.super}}
