@@ -123,32 +123,32 @@ class AboutCompanyView(View):
                 {
                     'img': 'pic-08.jpg',
                     'label': '**Анна Иванова**',
-                    'descr': 'стилист, блогер',
+                    'description': 'стилист, блогер',
                 },
                 {
                     'img': 'pic-08.jpg',
                     'label': '**Анна Иванова**',
-                    'descr': 'стилист, блогер',
+                    'description': 'стилист, блогер',
                 },
                 {
                     'img': 'pic-08.jpg',
                     'label': '**Анна Иванова**',
-                    'descr': 'стилист, блогер',
+                    'description': 'стилист, блогер',
                 },
                 {
                     'img': 'pic-08.jpg',
                     'label': '**Анна Иванова**',
-                    'descr': 'стилист, блогер',
+                    'description': 'стилист, блогер',
                 },
                 {
                     'img': 'pic-08.jpg',
                     'label': '**Анна Иванова**',
-                    'descr': 'стилист, блогер',
+                    'description': 'стилист, блогер',
                 },
                 {
                     'img': 'pic-08.jpg',
                     'label': '**Анна Иванова**',
-                    'descr': 'стилист, блогер',
+                    'description': 'стилист, блогер',
                 },
             ],
             'partners': [

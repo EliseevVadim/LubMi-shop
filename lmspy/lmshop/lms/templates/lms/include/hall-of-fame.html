@@ -7,8 +7,8 @@
         <img src="{% static img %}"/>
         {% if item.label or item.descr %}
         <figcaption>
-            {{item.label|markdown}}
-            {{item.descr|markdown}}
+            {{item.label | markdown}}
+            {{item.description | markdown}}
         </figcaption>
         {% endif %}
     </figure>
