@@ -7,6 +7,11 @@ const pcard_like_click = (input, url) => {
         inputs.forEach((input, arg1, arg2) => {
             input.checked = answer.like;
         });
+        {% if param_value_show_popup_on_favorite.lower.strip == "yes" %}
+        if(input.checked) {
+            popup.show('{{param_message_product_is_favorite}}');
+        }
+        {% endif %}
         if(right_sidebar.visible() && right_sidebar.ctype == ContentType.FAVORITES)
             right_sidebar.show_favorites();
     });

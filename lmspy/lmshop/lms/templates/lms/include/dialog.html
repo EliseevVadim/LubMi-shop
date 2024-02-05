@@ -1,9 +1,12 @@
 <dialog id="{{dialog_id}}">
-	{% if form %}
-	<label class="cancel-dialog" onclick="{{unique}}_dialog.close();">{{form.cancel|default:'&times;'}}</label>
-	{% else %}
-	<label class="cancel-dialog" onclick="{{unique}}_dialog.close();">&times;</label>
-	{% endif %}
+	<div>
+		<label class="cancel-dialog arrow-left" onclick="{{unique}}_dialog.close();">{{param_label_back}}</label>
+		{% if form %}
+		<label class="cancel-dialog" onclick="{{unique}}_dialog.close();">{{form.cancel|default:'&times;'}}</label>
+		{% else %}
+		<label class="cancel-dialog" onclick="{{unique}}_dialog.close();">&times;</label>
+		{% endif %}
+	</div>
 	<div class="dialog-header">
 		{% if form %}
 			<h2>{{form.title|default:"Укажите заголовок формы"}}</h2>

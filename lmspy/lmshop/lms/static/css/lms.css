@@ -320,7 +320,7 @@ h1 {
 
 h2 {
     font-weight:normal;
-    margin:30px 0 0;
+    margin: 30px 0 0;
 }
 
 h5, h6, small {
@@ -856,6 +856,7 @@ dialog {
     display: flex;
     flex-flow:column;
     place-items:center;
+    margin: 2rem 0 0 0;
 }
 
 .dialog-header label {
@@ -869,10 +870,23 @@ dialog {
     top: 1rem;
     right: 1rem;
     cursor: pointer;
+    display: inline-flex;
+    flex-flow: row;
 }
 
 .cancel-dialog:hover {
     color: black;
+}
+
+.cancel-dialog.arrow-left {
+    left: 1rem;
+    right: auto;
+}
+
+.cancel-dialog.arrow-left span {
+    display: inline-flex;
+    align-items: center;
+    font-size: 1.25rem;
 }
 
 .dialog-footer {
