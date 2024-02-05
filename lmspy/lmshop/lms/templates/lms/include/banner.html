@@ -1,0 +1,12 @@
+<section class="banner banner-{{type}}" style="background-image: url('{{img}}')">
+
+    {% if slogan %}
+    <div class="banner-slogan {{s_cls}}">{{slogan}}</div>
+    {% endif %}
+    {% if button %}
+    <button class="banner-button {{b_cls}}" onclick="window.location.href='{{ref}}';">{{button}}</button>
+    {% endif %}
+    {% if text %}
+    <div class="banner-text {{t_cls}}">{{text}}</div>
+    {% endif %}
+</section>

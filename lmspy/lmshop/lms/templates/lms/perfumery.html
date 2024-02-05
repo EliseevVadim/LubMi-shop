@@ -1,7 +1,9 @@
 {% extends "lms/std_page.html" %}
+{% load static %}
 {% load custom_tags %}
 {% block page_header %}
-{% include "lms/include/ad-block.html" with static_image="img/bkg-002.jpg" %}
+{% static "img/bkg-002.jpg" as img %}
+{% include "lms/include/banner.html" with type="A" slogan="КАК ЗАКАЗАТЬ ПАРФЮМ" s_cls="banner-end white" button="Заказать аромат" b_cls="banner-button-plain" text=text_09|markdown t_cls="banner-end white" ref=param_value_link_perfumery %}
 {% endblock %}
 {% block page_content %}
 {{ text_00 | markdown }}
@@ -26,9 +28,8 @@
 {% include "lms/include/picture.html" with classes="g12-ie" pic_file="img/pic-07.jpg" %}
 </div>
 <h1></h1> {# ---------------------------------------------------------------------------------------------------------  #}
-<section>
-{% include "lms/include/ad-block.html" with static_image="img/bkg-003.jpg" %}
-</section>
+{% static "img/bkg-003.jpg" as img %}
+{% include "lms/include/banner.html" with type="A" slogan="КАК<br/>ЗАКАЗАТЬ<br/>ПАРФЮМ" s_cls="banner-end white" button="Заказать аромат" b_cls="banner-button-plain" text=text_09|markdown t_cls="banner-end white" ref=param_value_link_perfumery %}
 {{text_05 | markdown}} {# --------------------------------------------------------------------------------------------  #}
 {% include "lms/include/accordion.html" with article_classes="bb1" summary_classes="bt1 pt1 pb1 hand" md=True %}
 {% endblock %}

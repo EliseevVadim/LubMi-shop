@@ -925,3 +925,84 @@ dialog {
     margin-top: 0.5rem;
     font-size: 0.75rem;
 }
+
+/* Banner         -----------------------------------------------------------------------------------------------------*/
+
+.banner {
+    display: grid;
+    grid-template: repeat(12, 3rem) / repeat(12, minmax(2rem, 1fr));
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+.banner-A {
+
+        grid-template-areas:
+        "S S S S S . T T T T T T"
+        "S S S S S . T T T T T T"
+        "S S S S S . T T T T T T"
+        "S S S S S . T T T T T T"
+        "S S S S S . T T T T T T"
+        "S S S S S . T T T T T T"
+        "S S S S S . T T T T T T"
+        "S S S S S . T T T T T T"
+        "S S S S S . T T T T T T"
+        "S S S S S . T T T T T T"
+        "S S S S S . T T T T T T"
+        "S S S S S . B B B B B B";
+}
+
+.banner-slogan {
+    grid-area: S;
+    font-size: 4rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.banner-button {
+    grid-area: B;
+    font-family: var(--Fonts);
+    font-weight: lighter;
+}
+
+.banner-text {
+    grid-area: T;
+    font-size: 1.25rem;
+}
+
+.banner-begin {
+    align-self: end;
+    justify-self: stretch;
+}
+
+.banner-end {
+    align-self: end;
+    justify-self: stretch;
+}
+
+.banner-button-white {
+    color: white;
+    background: transparent;
+    border: solid thin white;
+}
+
+.banner-button-white:hover {
+    color: white;
+    background: #0007;
+    border: solid thin white;
+}
+
+.banner-button-plain {
+    color: #444;
+    background: white;
+    border: solid thin white;
+}
+
+.banner-button-plain:hover {
+    color: white;
+    background: #0007;
+    border: solid thin white;
+}
