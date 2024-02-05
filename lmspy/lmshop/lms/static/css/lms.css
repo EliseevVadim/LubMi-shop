@@ -88,7 +88,7 @@ body, aside, .content, .leading {
 /* Контент ------------------------------------------------------------------------------------------------------------- */
 
 header.page {
-   /* background: #cba;*/
+    background: #cba;
 }
 
 main.page {
@@ -939,7 +939,6 @@ dialog {
 }
 
 .banner-A {
-
         grid-template-areas:
         "S S S S S . T T T T T T"
         "S S S S S . T T T T T T"
@@ -955,9 +954,43 @@ dialog {
         "S S S S S . B B B B B B";
 }
 
+.banner-B {
+        grid-template-areas:
+        "S S S S S S S S S S S S"
+        "S S S S S S S S S S S S"
+        "S S S S S S S S S S S S"
+        "S S S S S S S S S S S S"
+        "S S S S S S S S S S S S"
+        "S S S S S S S S S S S S"
+        "S S S S S S S S S S S S"
+        "S S S S S S S S S S S S"
+        "S S S S S S S S S S S S"
+        "S S S S S S S S S S S S"
+        "B B B B . . . . . . . ."
+        "B B B B . . . . . . . .";
+}
+
+.banner-C {
+        justify-items: center;
+        text-align: center;
+        grid-template-areas:
+        "S S S S S S S S S S S S"
+        "S S S S S S S S S S S S"
+        "S S S S S S S S S S S S"
+        "S S S S S S S S S S S S"
+        "S S S S S S S S S S S S"
+        "S S S S S S S S S S S S"
+        "S S S S S S S S S S S S"
+        "S S S S S S S S S S S S"
+        ". . . . . . . . . . . ."
+        "B B B B B B B B B B B B"
+        "B B B B B B B B B B B B"
+        ". . . . . . . . . . . .";
+}
+
 .banner-slogan {
     grid-area: S;
-    font-size: 4rem;
+    font-size: 4.5rem;
     font-weight: bold;
     text-transform: uppercase;
 }
@@ -966,6 +999,12 @@ dialog {
     grid-area: B;
     font-family: var(--Fonts);
     font-weight: lighter;
+}
+
+.banner-button.medium {
+    max-width: 20rem;
+    min-width: 12rem;
+    margin: 0.85rem;
 }
 
 .banner-text {

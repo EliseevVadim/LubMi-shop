@@ -3,7 +3,9 @@
 {% load custom_tags %}
 
 {% block page_header %}
-{% include "lms/include/ad-block.html" with static_image="img/bkg-001.jpg" %}
+{% static "img/bkg-001.jpg" as img %}
+{% url "lms:catalogue" as ref %}
+{% include "lms/include/banner.html" with type="C" slogan='Новая коллекция' s_cls="banner-end white" button="Перейти в каталог" b_cls="banner-button-white medium" %}
 {% endblock %}
 
 {% block page_content %}
@@ -12,7 +14,8 @@
 {% endblock %}
 
 {% block footer_header %}
-{% include "lms/include/ad-block.html" with static_image="img/bkg-002.jpg" %}
+{% static "img/bkg-004.jpg" as img %}
+{% include "lms/include/banner.html" with type="B" slogan=param_title_perfumery s_cls="banner-end" button="Ознакомиться" b_cls="medium" ref=param_value_link_perfumery %}
 {% endblock %}
 
 {% block javascript %} {{block.super}}
