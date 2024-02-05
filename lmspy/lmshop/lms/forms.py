@@ -68,7 +68,7 @@ class CheckoutForm(forms.ModelForm):
             'cu_apartment': '',
             'cu_entrance': '',
             'cu_floor': '',
-            'cu_confirm': Parameter.value_of('pholder_TODO', 'Я согласен/на с политикой конфиденциальности)'),
+            'cu_confirm': Parameter.value_of('pholder_TODO', 'Я согласен/на с политикой конфиденциальности'),
         }
         widgets = {
             'cu_name': forms.TextInput(attrs={
