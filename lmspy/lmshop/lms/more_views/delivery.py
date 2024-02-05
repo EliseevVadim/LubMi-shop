@@ -9,7 +9,7 @@ class DeliveryView(View):
         dl_link = Parameter.value_of("value_link_application_form")
         ra_sdek = Parameter.value_of("value_return_address_sdek")
         ra_prus = Parameter.value_of("value_return_address_pr")
-        re_phne = Parameter.value_of("value_return_phone")
+        re_phne = Parameter.value_of("value_contact_phone")
         return render(request, 'lms/delivery.html', {
             'page_title': Parameter.value_of("title_delivery", "Доставка и оплата"),
             'page_content': 'delivery',
