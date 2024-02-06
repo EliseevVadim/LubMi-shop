@@ -7,8 +7,24 @@ from django.views.generic import ListView, DetailView
 from django.views import View
 from django.template.defaultfilters import floatformat
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
+from .collaborants.cdek import CDEK
 from .forms import ShortCustomerInfoForm, CheckoutForm
 from .models import Parameter, Product
+
+
+class ContactsView(ListView):
+    queryset = Product.published.all()
+    context_object_name = 'products'
+    paginate_by = 3
+    template_name = 'lms/under_work.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        favorites = CustomerInfo(self.request).favorites
+        print(x := CDEK().auth)
+        return context | {
+            'text': x,
+        }
 
 
 class IndexView(View):
@@ -94,13 +110,6 @@ class CareView(View):
             через плотную ткань; \n\n- Работайте руками быстро, не задерживайтесь с утюгом на месте;\n\n- Не используйте парогенератор."""})
 
 
-class ContactsView(ListView):
-    queryset = Product.published.all()
-    context_object_name = 'products'
-    paginate_by = 3
-    template_name = 'lms/under_work.html'
-
-
 class AboutCompanyView(View):
     @staticmethod
     def get(request, *_, **__):
@@ -155,89 +164,6 @@ class AboutCompanyView(View):
                 'img': 'rosoil.jpg',
             }]
         })
-
-
-class SzChartView(View):
-    @staticmethod
-    def get(request, *_, **__):
-        title = Parameter.value_of('title_size_chart', 'Таблица размеров')
-        modal = Parameter.value_of('value_size_chart_modal', 'yes').lower().strip() == 'yes'
-        return render(request, 'lms/sz-chart-modal.html' if modal else 'lms/sz-chart-page.html', {
-            'page_title': title,
-            'page_content': 'size-chart-page',
-            'text': f"""#{title}\n\n#####Как выбрать одежду своего размера\n
-Европейский<br/>размер | Российский<br/>размер | Рост | Обхват груди | Обхват талии | Обхват бедер
----------------------- | --------------------- | ---- | ------------ | ------------ | ------------
-ХS                     | 42                    | 170  | 82-85        | 60-63        | 90-93
-S                      | 44                    | 170  | 86-89        | 64-67        | 94-97
-М                      | 46                    | 170  | 90-93        | 68-71        | 98-101
-L                      | 48                    | 170  | 94-97        | 72-75        | 102-105
-XL                     | 50                    | 170  | 98-101       | 76-80        | 106-109"""})
-
-
-class SCartView(View):
-    @staticmethod
-    @with_actual_scart_records_and_price
-    def get(request, scart, *_, **__):
-        return render(request, 'lms/scart.html', scart)
-
-
-class FavoritesView(View):
-    @staticmethod
-    def get(request, *_, **__):
-        return render(request, 'lms/favorites.html', {
-            'products': Product.published.filter(pk__in=CustomerInfo(request).favorites),
-        })
-
-
-class C6tFormView(View):
-    @staticmethod
-    def get(request, *_, **__):
-        return render(request, 'lms/c6t-form.html', {
-            'c6t_form': CheckoutForm(),
-        })
-
-
-class C6tScartView(View):
-    @staticmethod
-    @with_actual_scart_records_and_price
-    def get(request, scart, *_, **__):
-        return render(request, 'lms/c6t-scart.html', scart)
-
-
-class C6tInfoView(View):
-    @staticmethod
-    @with_actual_scart_records_and_price
-    def get(request, kind, data, scart, *_, **__):
-        match kind:
-            case 'delivery':
-                dv_cost = decimal.Decimal(459.70 if data == "sd" else 512.00)  # TODO !!!
-                dv_days = decimal.Decimal(3 if data == "sd" else 5)  # TODO !!!
-                return render(request, 'lms/c6t-d6y.html', {
-                    "cost":  floatformat(dv_cost, 2),
-                    "days": floatformat(dv_days),
-                })
-            case 'cities':
-                return render(request, 'lms/c6t-city-list.html', {
-                    "cities": ["СДЭК-Москва", "СДЭК-Донецк", "СДЭК-Луганск"] if data == 'sd' else ["ПР-Москва", "ПР-Донецк", "ПР-Луганск"],
-                })
-            case 'summary':
-                dv_cost = decimal.Decimal(719.50 if data == 'sd' else 820.10)  # TODO !!!
-                city = request.GET.get('city')
-                return render(request, 'lms/c6t-summary.html', {
-                    "items": {
-                        "Сумма": f'{floatformat(scart["price"], 2)} {Parameter.value_of("label_currency")}',
-                        "Доставка": f'{"СДЭК" if data == "sd" else "Почта России"}, {floatformat(dv_cost, 2)} {Parameter.value_of("label_currency")}',
-                        "Назначение": f'{city if city else "г. Москва, Россия"}',
-                        "Итоговая сумма": f'{floatformat(scart["price"] + dv_cost, 2)} {Parameter.value_of("label_currency")}',
-                    }
-                })
-            case _:
-                return render(request, 'lms/c6t-summary.html', {
-                    "items": {
-                        "Ошибка": "Запрошен неизвестный тип данных"
-                }
-            })
 
 
 class DeliveryView(View):
@@ -573,3 +499,85 @@ class ProductView(DetailView):
         return context | {
             'favorites': favorites,
         }
+
+class SzChartView(View):
+    @staticmethod
+    def get(request, *_, **__):
+        title = Parameter.value_of('title_size_chart', 'Таблица размеров')
+        modal = Parameter.value_of('value_size_chart_modal', 'yes').lower().strip() == 'yes'
+        return render(request, 'lms/sz-chart-modal.html' if modal else 'lms/sz-chart-page.html', {
+            'page_title': title,
+            'page_content': 'size-chart-page',
+            'text': f"""#{title}\n\n#####Как выбрать одежду своего размера\n
+Европейский<br/>размер | Российский<br/>размер | Рост | Обхват груди | Обхват талии | Обхват бедер
+---------------------- | --------------------- | ---- | ------------ | ------------ | ------------
+ХS                     | 42                    | 170  | 82-85        | 60-63        | 90-93
+S                      | 44                    | 170  | 86-89        | 64-67        | 94-97
+М                      | 46                    | 170  | 90-93        | 68-71        | 98-101
+L                      | 48                    | 170  | 94-97        | 72-75        | 102-105
+XL                     | 50                    | 170  | 98-101       | 76-80        | 106-109"""})
+
+
+class SCartView(View):
+    @staticmethod
+    @with_actual_scart_records_and_price
+    def get(request, scart, *_, **__):
+        return render(request, 'lms/scart.html', scart)
+
+
+class FavoritesView(View):
+    @staticmethod
+    def get(request, *_, **__):
+        return render(request, 'lms/favorites.html', {
+            'products': Product.published.filter(pk__in=CustomerInfo(request).favorites),
+        })
+
+
+class C6tFormView(View):
+    @staticmethod
+    def get(request, *_, **__):
+        return render(request, 'lms/c6t-form.html', {
+            'c6t_form': CheckoutForm(),
+        })
+
+
+class C6tScartView(View):
+    @staticmethod
+    @with_actual_scart_records_and_price
+    def get(request, scart, *_, **__):
+        return render(request, 'lms/c6t-scart.html', scart)
+
+
+class C6tInfoView(View):
+    @staticmethod
+    @with_actual_scart_records_and_price
+    def get(request, kind, data, scart, *_, **__):
+        match kind:
+            case 'delivery':
+                dv_cost = decimal.Decimal(459.70 if data == "sd" else 512.00)  # TODO !!!
+                dv_days = decimal.Decimal(3 if data == "sd" else 5)  # TODO !!!
+                return render(request, 'lms/c6t-d6y.html', {
+                    "cost": floatformat(dv_cost, 2),
+                    "days": floatformat(dv_days),
+                })
+            case 'cities':
+                return render(request, 'lms/c6t-city-list.html', {
+                    "cities": ["СДЭК-Москва", "СДЭК-Донецк", "СДЭК-Луганск"] if data == 'sd' else ["ПР-Москва", "ПР-Донецк", "ПР-Луганск"],
+                })
+            case 'summary':
+                dv_cost = decimal.Decimal(719.50 if data == 'sd' else 820.10)  # TODO !!!
+                city = request.GET.get('city')
+                return render(request, 'lms/c6t-summary.html', {
+                    "items": {
+                        "Сумма": f'{floatformat(scart["price"], 2)} {Parameter.value_of("label_currency")}',
+                        "Доставка": f'{"СДЭК" if data == "sd" else "Почта России"}, {floatformat(dv_cost, 2)} {Parameter.value_of("label_currency")}',
+                        "Назначение": f'{city if city else "г. Москва, Россия"}',
+                        "Итоговая сумма": f'{floatformat(scart["price"] + dv_cost, 2)} {Parameter.value_of("label_currency")}',
+                    }
+                })
+            case _:
+                return render(request, 'lms/c6t-summary.html', {
+                    "items": {
+                        "Ошибка": "Запрошен неизвестный тип данных"
+                }
+            })
