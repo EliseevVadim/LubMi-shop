@@ -82,7 +82,7 @@ class CheckoutForm(forms.ModelForm):
             }),
             'cu_email': forms.EmailInput(attrs={
                 'id': 'c6t-cu_email',
-                'placeholder': Parameter.value_of('pholder_TODO', 'Введите Ваш email')
+                'placeholder': Parameter.value_of('pholder_enter_your_email', 'Введите Ваш email')
             }),
             'cu_city':  forms.TextInput(attrs={
                 'id': 'c6t-cu_city',

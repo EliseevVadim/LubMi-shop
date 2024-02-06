@@ -625,6 +625,8 @@ input[type="submit"] {
     padding: calc(0.75 * var(--DefPadding)) calc(2 * var(--DefPadding));
     cursor: pointer;
     text-decoration: none;
+    font-family: var(--Fonts);
+    font-weight: lighter;
 }
 
 button.medium,
@@ -998,8 +1000,6 @@ dialog {
 
 .banner-button {
     grid-area: B;
-    font-family: var(--Fonts);
-    font-weight: lighter;
 }
 
 .banner-button.medium {

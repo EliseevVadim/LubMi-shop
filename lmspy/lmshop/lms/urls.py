@@ -1,6 +1,5 @@
 from django.urls import path
-from lms.more_views.perfumery import PerfumeryView
-from .more_views.delivery import DeliveryView
+
 from .views import *
 
 app_name = 'lms'
