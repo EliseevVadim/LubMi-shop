@@ -282,3 +282,32 @@ class Chat(DbItem):
 
     def __str__(self):
         return f'Телеграм-чат "{self.title}"'
+
+
+class Collaborator(DbItem):
+    key = models.CharField(primary_key=True, max_length=2)                                      # -- ключ --
+    title = models.CharField(max_length=50)                                                     # -- название --
+    description = models.TextField(null=True, blank=True)                                       # -- описание --
+    settings: QuerySet                                                                          # -- Just for IDE syntax analyzer --
+
+    def __str__(self):
+        return f'"{self.title}"'
+
+    @staticmethod
+    def value_of(cpk, spk, default=None):
+        try:
+            return Collaborator.objects.get(pk=cpk).settings.get(pk=spk).value
+        except Collaborator.DoesNotExist:
+            return default
+        except Setting.DoesNotExist:
+            return default
+
+
+class Setting(DbItem):
+    key = models.CharField(primary_key=True, max_length=32)                                     # -- ключ --
+    value = models.CharField(max_length=150)                                                    # -- значение --
+    description = models.TextField(null=True, blank=True)                                       # -- описание --
+    owner = models.ForeignKey(Collaborator, related_name="settings", on_delete=models.CASCADE)  # -- владелец --
+
+    def __str__(self):
+        return f'<{self.owner.key}>:<{self.key}>:<{self.value}>'
