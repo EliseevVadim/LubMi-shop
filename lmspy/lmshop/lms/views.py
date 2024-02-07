@@ -7,7 +7,7 @@ from django.views.generic import ListView, DetailView
 from django.views import View
 from django.template.defaultfilters import floatformat
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
-from .collaborants.cdek import Cdek
+from .collaborants.cdek import cdek_delivery
 from .forms import ShortCustomerInfoForm, CheckoutForm
 from .models import Parameter, Product
 
@@ -21,9 +21,16 @@ class ContactsView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         favorites = CustomerInfo(self.request).favorites
-        print(x := Cdek().points)
         return context | {
-            'text': x,
+            'text': [c["city"] for c in cdek_delivery.cities(page=1, size=5000)] +
+                    [cdek_delivery.tariff(
+                        480,
+                        cdek_delivery.location(code=270),
+                        cdek_delivery.location(code=270),
+                        [cdek_delivery.package(weight=4000)],
+                        [],
+                        type=1
+                    )],
         }
 
 
