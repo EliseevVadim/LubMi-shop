@@ -177,7 +177,7 @@ class DeliveryView(View):
     @staticmethod
     def get(request, *_, **__):
         dl_link = Parameter.value_of("value_link_application_form")
-        ra_sdek = Parameter.value_of("value_return_address_sdek")
+        ra_cdek = Parameter.value_of("value_return_address_cdek")
         ra_prus = Parameter.value_of("value_return_address_pr")
         re_phne = Parameter.value_of("value_contact_phone")
         return render(request, 'lms/delivery.html', {
@@ -208,7 +208,7 @@ class DeliveryView(View):
             этикетки, ярлыки, и потребительские свойства.\n\nК товару на возврат приложите заявление на возврат. Упакуйте все вещи для возврата в пакет и 
             коробку, в которой был получен данный заказ. Отправьте на номер {re_phne} следующую информацию: фотографию 
             заполненного заявления и трек номер отправления. Отправьте посылку курьерской компанией СДЭК или Почтой России.\n\n###Отправка через ПВЗ СДЭК
-            \n\n> {ra_sdek}  \nОтправлять на имя Мишанковой Любови Алексеевны  \nКонтактный телефон: ({re_phne})\n\n###Отправка Почтой России
+            \n\n> {ra_cdek}  \nОтправлять на имя Мишанковой Любови Алексеевны  \nКонтактный телефон: ({re_phne})\n\n###Отправка Почтой России
             \n\n> {ra_prus}  \nНа имя Мишанковой Л.А. ({re_phne})\n\nПосле получения и проверки возврата, покупателю будут перечислены денежные средства на 
             карту или банковский счет в срок до 10ти рабочих дней, для этого необходимо заполнить полные реквизиты для перевода денежных средств в заявлении 
             на возврат. В случае проблем с прохождением платежа с вами свяжется сотрудник онлайн-бутика для уточнения реквизитов. Обращаем ваше внимание, 
@@ -561,23 +561,23 @@ class C6tInfoView(View):
     def get(request, kind, data, scart, *_, **__):
         match kind:
             case 'delivery':
-                dv_cost = decimal.Decimal(459.70 if data == "sd" else 512.00)  # TODO !!!
-                dv_days = decimal.Decimal(3 if data == "sd" else 5)  # TODO !!!
+                dv_cost = decimal.Decimal(459.70 if data == "cd" else 512.00)  # TODO !!!
+                dv_days = decimal.Decimal(3 if data == "cd" else 5)  # TODO !!!
                 return render(request, 'lms/c6t-d6y.html', {
                     "cost": floatformat(dv_cost, 2),
                     "days": floatformat(dv_days),
                 })
             case 'cities':
                 return render(request, 'lms/c6t-city-list.html', {
-                    "cities": ["СДЭК-Москва", "СДЭК-Донецк", "СДЭК-Луганск"] if data == 'sd' else ["ПР-Москва", "ПР-Донецк", "ПР-Луганск"],
+                    "cities": ["СДЭК-Москва", "СДЭК-Донецк", "СДЭК-Луганск"] if data == 'cd' else ["ПР-Москва", "ПР-Донецк", "ПР-Луганск"],
                 })
             case 'summary':
-                dv_cost = decimal.Decimal(719.50 if data == 'sd' else 820.10)  # TODO !!!
+                dv_cost = decimal.Decimal(719.50 if data == 'cd' else 820.10)  # TODO !!!
                 city = request.GET.get('city')
                 return render(request, 'lms/c6t-summary.html', {
                     "items": {
                         "Сумма": f'{floatformat(scart["price"], 2)} {Parameter.value_of("label_currency")}',
-                        "Доставка": f'{"СДЭК" if data == "sd" else "Почта России"}, {floatformat(dv_cost, 2)} {Parameter.value_of("label_currency")}',
+                        "Доставка": f'{"СДЭК" if data == "cd" else "Почта России"}, {floatformat(dv_cost, 2)} {Parameter.value_of("label_currency")}',
                         "Назначение": f'{city if city else "г. Москва, Россия"}',
                         "Итоговая сумма": f'{floatformat(scart["price"] + dv_cost, 2)} {Parameter.value_of("label_currency")}',
                     }

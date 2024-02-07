@@ -107,7 +107,7 @@ c6t_dialog.show = () => {
                 update_summary();
             });
             window.addEventListener(EventType.SCART_CHANGED, c6t_dialog.__on_scart_changed);
-            fetch('{% url "lms:c6t_info" kind="delivery" data="sd" %}').then(response => response.text()).then(html => {
+            fetch('{% url "lms:c6t_info" kind="delivery" data="cd" %}').then(response => response.text()).then(html => {
                 _d6y_service_0.parentElement.insertAdjacentHTML('beforeEnd', html);
             });
             fetch('{% url "lms:c6t_info" kind="delivery" data="pr" %}').then(response => response.text()).then(html => {
