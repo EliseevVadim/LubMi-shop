@@ -6,7 +6,9 @@
   <a href='{% url "lms:perfumery" %}'>{{param_title_perfumery}}</a>
   <a href='{% url "lms:delivery" %}'>{{param_title_shipping_and_payment}}</a>
   <a href='{% url "lms:care" %}'>{{param_title_care}}</a>
-  <a href='{% url "lms:contacts" %}'>{{param_title_contacts}}</a>
+  {% if param_value_contacts_modal.lower.strip == "yes" %}
+  <a onclick="show_contacts();" class="hand">{{param_title_contacts}}</a>{% else %}
+  <a href='{% url "lms:contacts" %}'>{{param_title_contacts}}</a>{% endif %}
   <a href='{% url "lms:about" %}'>{{param_title_about_company}}</a>
   <a class="picto hand" onclick="right_sidebar.show_favorites();"><img src="{% static 'svg/heart.svg' %}"/></a>
   <a class="picto hand" onclick="right_sidebar.show_scart();"><img src="{% static 'svg/bag.svg' %}"/></a>

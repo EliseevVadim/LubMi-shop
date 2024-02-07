@@ -9,10 +9,8 @@
     <h6>{{param_title_for_buyers}}</h6>
     <a href='{% url "lms:delivery" %}'>{{param_title_shipping_and_payment}}</a>
     {% if param_value_size_chart_modal.lower.strip == "yes" %}
-    <a onclick="show_size_chart();" class="hand">{{param_title_size_chart}}</a>
-    {% else %}
-    <a href='{% url "lms:sz_chart" %}'>{{param_title_size_chart}}</a>
-    {% endif %}
+    <a onclick="show_size_chart();" class="hand">{{param_title_size_chart}}</a>{% else %}
+    <a href='{% url "lms:sz_chart" %}'>{{param_title_size_chart}}</a>{% endif %}
   </div>
   <div class="std-footer-item-3">
     <h6>{{param_title_about_company}}</h6>

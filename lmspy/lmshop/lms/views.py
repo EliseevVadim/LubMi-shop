@@ -12,28 +12,6 @@ from .forms import ShortCustomerInfoForm, CheckoutForm
 from .models import Parameter, Product
 
 
-class ContactsView(ListView):
-    queryset = Product.published.all()
-    context_object_name = 'products'
-    paginate_by = 3
-    template_name = 'lms/under_work.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        favorites = CustomerInfo(self.request).favorites
-        return context | {
-            'text': [c["city"] for c in cdek_delivery.cities(page=1, size=5000)] +
-                    [cdek_delivery.tariff(
-                        480,
-                        cdek_delivery.location(code=270),
-                        cdek_delivery.location(code=270),
-                        [cdek_delivery.package(weight=4000)],
-                        [],
-                        type=1
-                    )],
-        }
-
-
 class IndexView(View):
     page_size = 10
     default_order = 'novelties-first'
@@ -506,6 +484,31 @@ class ProductView(DetailView):
         return context | {
             'favorites': favorites,
         }
+
+
+class ContactsView(View):
+    @staticmethod
+    def get(request, *_, **__):
+        def parameter(name, pre=None):
+            return Parameter.value_of(name, pre)
+        title = parameter('title_contacts', 'Контакты')
+        modal = parameter('value_contacts_modal', 'yes').lower().strip() == 'yes'
+        ph = parameter("value_contact_phone")
+        tg = parameter("value_contact_telegram")
+        em = parameter("value_contact_email")
+        ph = f'<a href="tel:{ph}">{ph}</a>'
+        tg = f'<a href="tg:{tg}">{tg}</a>'
+        em = f'<a href="mailto:{em}">{em}</a>'
+        return render(request, 'lms/contacts-modal.html' if modal else 'lms/contacts-page.html', {
+            'page_title': title,
+            'page_content': 'contacts-page',
+            'text': f"""#{title}\n\n#####Как с нами связаться\n
+Вид связи | Реквизиты | Примечания 
+--------- | --------- | -----------------------------
+Телефон   | {ph}      | В будние дни с 10:00 до 18:00
+Телеграм  | {tg}      | В будние дни с 10:00 до 18:00
+E-mail    | {em}      | """})
+
 
 class SzChartView(View):
     @staticmethod

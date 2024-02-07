@@ -737,10 +737,13 @@ input[type="submit"]:hover {
     margin-bottom: var(--DefBottomPadding);
 }
 
-/* Size chart -----------------------------------------------------------------------------------------------------------*/
+/* Size chart ---------------------------------------------------------------------------------------------------------*/
+
+.size-chart-page > *:last-child {
+    margin-bottom: var(--DefBottomPadding);
+}
 
 .size-chart-container {
-    margin-bottom: var(--DefBottomPadding);
     display: flex;
     flex-flow: column;
     place-items: center;
@@ -776,6 +779,56 @@ input[type="submit"]:hover {
     padding: 1rem;
     text-align: center;
     border-bottom: solid thin black;
+}
+
+/* Contacts -----------------------------------------------------------------------------------------------------------*/
+
+.contacts-page > *:last-child {
+    margin-bottom: var(--DefBottomPadding);
+}
+
+.contacts-container {
+    display: flex;
+    flex-flow: column;
+    place-items: center;
+}
+
+.contacts {
+    display: flex;
+    flex-flow: column;
+}
+
+.contacts * {
+    font-weight: normal;
+}
+
+.contacts h1 {
+    margin-bottom: 0.25rem;
+    text-align: center;
+}
+
+.contacts h5 {
+    text-align: center;
+}
+
+.contacts table {
+    table-layout: fixed;
+    border-collapse:collapse;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.contacts th,
+.contacts td {
+    padding: 1rem;
+    text-align: center;
+    border-bottom: solid thin gray;
+}
+
+.contacts a {
+    text-decoration: none;
+    font-weight: bold;
+    color: black;
 }
 
 /* Диалоги и формы -----------------------------------------------------------------------------------------------------*/
