@@ -494,20 +494,11 @@ class ContactsView(View):
         title = parameter('title_contacts', 'Контакты')
         modal = parameter('value_contacts_modal', 'yes').lower().strip() == 'yes'
         ph = parameter("value_contact_phone")
-        tg = parameter("value_contact_telegram")
-        em = parameter("value_contact_email")
         ph = f'<a href="tel:{ph}">{ph}</a>'
-        tg = f'<a href="tg:{tg}">{tg}</a>'
-        em = f'<a href="mailto:{em}">{em}</a>'
         return render(request, 'lms/contacts-modal.html' if modal else 'lms/contacts-page.html', {
             'page_title': title,
             'page_content': 'contacts-page',
-            'text': f"""#{title}\n\n#####Как с нами связаться\n
-Вид связи | Реквизиты | Примечания 
---------- | --------- | -----------------------------
-Телефон   | {ph}      | В будние дни с 10:00 до 18:00
-Телеграм  | {tg}      | В будние дни с 10:00 до 18:00
-E-mail    | {em}      | """})
+            'text': f"""#{title}\n\nТелефон клиентской поддержки **{ph},**  \nпн-пт с 11:00 до 21:00\n\n\nТакже Вы можете связаться с нами  \nудобным для Вас способом:"""})
 
 
 class SzChartView(View):
