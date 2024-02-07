@@ -90,6 +90,7 @@ class Product(DbItem):
     slug = models.SlugField(unique=True, max_length=200)                                                    # слаг
     description = models.TextField(null=True, blank=True)                                                   # описание
     color = models.CharField(max_length=50, null=True, blank=True)                                          # цвет
+    weight = models.BigIntegerField(validators=[MinValueValidator(0)])                                      # вес
     actual_price = MoneyField(
         max_digits=14,
         decimal_places=2,
@@ -204,7 +205,7 @@ class Image(DbItem):
 
 class Order(DbItem):
     class DeliveryService(models.TextChoices):
-        sd = "sd", "СДЭК"
+        cd = "cd", "СДЭК"
         pr = "pr", "Почта России"
 
     slug = models.SlugField(unique=True, max_length=200)                                        # -- слаг --
@@ -213,7 +214,7 @@ class Order(DbItem):
     delivery_service = models.CharField(                                                        # -- тип доставки --
         max_length=2,
         choices=DeliveryService.choices,
-        default=DeliveryService.sd)
+        default=DeliveryService.cd)
     delivery_cost = MoneyField(                                                                 # -- стоимость доставки --
         max_digits=14,
         decimal_places=2,
