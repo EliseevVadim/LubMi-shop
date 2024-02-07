@@ -3,7 +3,7 @@ import re
 import functools
 
 from lms.deco import copy_result
-from lms.models import Parameter
+from lms.models import Coworker
 from urllib.parse import quote
 from datetime import datetime
 from threading import Lock
@@ -12,10 +12,14 @@ from threading import Lock
 class Cdek:
     uuid_re = re.compile("^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$")
 
+    @staticmethod
+    def setting(name):
+        return Coworker.setting("cd", name)
+
     def __init__(self,
-                 address=Parameter.value_of("value_cdek_api_address"),
-                 client_id=Parameter.value_of("value_cdek_client_id"),
-                 client_secret=Parameter.value_of("value_cdek_client_secret")):
+                 address=setting("api_address"),
+                 client_id=setting("client_id"),
+                 client_secret=setting("client_secret")):
         self._address = address
         self._client_id = client_id
         self._client_secret = client_secret

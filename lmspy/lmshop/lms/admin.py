@@ -71,14 +71,14 @@ class ParamAdmin(admin.ModelAdmin):
     search_fields = ['key', 'value']
 
 
-# @admin.register(Collaborator)
-# class CollaboratorAdmin(admin.ModelAdmin):
-#     list_display = ['title', 'key', 'description']
-#     search_fields = ['title']
-#
-#
-# @admin.register(Setting)
-# class SettingAdmin(admin.ModelAdmin):
-#     list_display = ['key', 'value', 'description']
-#     list_filter = ['owner']
-#     search_fields = ['key', 'value']
+@admin.register(Coworker)
+class CoworkerAdmin(admin.ModelAdmin):
+    list_display = ['title', 'key', 'description']
+    search_fields = ['title']
+
+
+@admin.register(Setting)
+class SettingAdmin(admin.ModelAdmin):
+    list_display = ['key', 'value', 'description']
+    list_filter = ['owner']
+    search_fields = ['key', 'value']

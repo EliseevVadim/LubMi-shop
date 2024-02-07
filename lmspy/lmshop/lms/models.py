@@ -294,7 +294,7 @@ class Coworker(DbItem):
         return f'"{self.title}"'
 
     @staticmethod
-    def value_of(cpk, spk, default=None):
+    def setting(cpk, spk, default=None):
         try:
             return Coworker.objects.get(pk=cpk).settings.get(pk=spk).value
         except Coworker.DoesNotExist:
