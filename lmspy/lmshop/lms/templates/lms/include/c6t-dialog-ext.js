@@ -7,6 +7,7 @@ c6t_dialog.close = () => {
         window.removeEventListener(EventType.SCART_CHANGED, c6t_dialog.__on_scart_changed);
         c6t_dialog.__on_scart_changed = null;
     }
+    c6t_dialog.rszo = null;
     c6t_dialog.__close();
 };
 c6t_dialog.show = () => {
@@ -65,6 +66,16 @@ c6t_dialog.show = () => {
                 else _email.setAttribute('required',''); 
             }
 
+            const update_cities = () => {
+                let ds = by_selector('input[id^="c6t-d6y_service_"]:checked').value;
+                let url = '{% url "lms:c6t_info" kind="cities" data="dvservice" %}'.replace(/\/dvservice\/$/, `/${ds}/?city=${_city.value}`);
+                fetch(url).then(response => response.text()).then(html => {
+                    dl_holder = by_id('c6t-cl-holder');
+                    dl_holder.innerHTML = html;
+                    _city.setAttribute('list', 'c6t-city-list');
+                });
+            };
+
             const update_summary = () => {
                 let ds = by_selector('input[id^="c6t-d6y_service_"]:checked').value;
                 let url = '{% url "lms:c6t_info" kind="summary" data="dvservice" %}'.replace(/\/dvservice\/$/, `/${ds}/?city=${_city.value}`);
@@ -75,18 +86,28 @@ c6t_dialog.show = () => {
             };
 
             const d6y_changed = e => {
-                let url = '{% url "lms:c6t_info" kind="cities" data="dvservice" %}'.replace(/\/dvservice\/$/, `/${e.currentTarget.value}/?city=${_city.value}`);
-                fetch(url).then(response => response.text()).then(html => {
-                    dl_holder = by_id('c6t-cl-holder');
-                    dl_holder.innerHTML = html;
-                    _city.setAttribute('list', 'c6t-city-list');
-                });
-                update_summary();
+                setTimeout(update_cities);
+                setTimeout(update_summary);
             };
+
+            _city.insertAdjacentHTML("afterEnd", '<div id="city-list" class="city-list" style="position:absolute; background: red;"><p>Проверка</p><p>Проверка</p><p>Проверка</p><p>Проверка</p></div>');
+            const move_city_list = elements => {
+                cl = document.querySelector("#city-list");
+                //cl.clientTop = _city.clientTop+_city.clientHeight;
+                cl.style.transform = `translate(100px,3rem)`;
+                cl.style.width = `${_city.clientWidth}px`;
+                debugger;
+//                cl.style.left = _city.style.left+10;
+//                alert(_city.clientWidth);
+            }
+            setTimeout(move_city_list);
 
             _d6y_service_0.onchange = d6y_changed;
             _d6y_service_1.onchange = d6y_changed;
             _city.onchange = update_summary;
+            _city.oninput = update_cities;
+
+
 
             _form.onsubmit = e => {
                 e.preventDefault();
@@ -118,7 +139,8 @@ c6t_dialog.show = () => {
             d6y_changed({currentTarget: by_selector('input[id^="c6t-d6y_service_"]:checked')});
             _email.oninput(null);
             _phone.oninput(null);
-
+            c6t_dialog.rszo = new ResizeObserver(move_city_list);
+            c6t_dialog.rszo.observe(_city);
             c6t_dialog.self().showModal();
         });
     });

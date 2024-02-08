@@ -7,9 +7,8 @@ from django.views.generic import DetailView
 from django.views import View
 from django.template.defaultfilters import floatformat
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
-from lms.coworkers.informer import Informer
 from .forms import ShortCustomerInfoForm, CheckoutForm
-from .models import Parameter, Product
+from .models import Parameter, Product, City
 
 
 class IndexView(View):
@@ -559,9 +558,12 @@ class C6tInfoView(View):
                     "days": floatformat(dv_days),
                 })
             case 'cities':
-                Informer()
+                text = request.GET.get('city')
+                text = text.lower() if text else None
+                gen_cd = (city for city in City.objects.filter(city_lc__contains=text)) if text else []
+                gen_pr = (city for city in City.objects.filter(city_lc__contains=text)) if text else []  # TODO?
                 return render(request, 'lms/c6t-city-list.html', {
-                    "cities": ["СДЭК-Москва", "СДЭК-Донецк", "СДЭК-Луганск"] if data == 'cd' else ["ПР-Москва", "ПР-Донецк", "ПР-Луганск"],
+                    "cities": list(gen_cd if data == 'cd' else gen_pr),
                 })
             case 'summary':
                 dv_cost = decimal.Decimal(719.50 if data == 'cd' else 820.10)  # TODO !!!
