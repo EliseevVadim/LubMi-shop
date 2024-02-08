@@ -1,4 +1,4 @@
-from .collaborants.telegram import Telegram
+from .coworkers.telegram import Telegram
 from .models import TelegramBot
 
 

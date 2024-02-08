@@ -2,13 +2,14 @@ import httpx
 import re
 import functools
 
-from lms.deco import copy_result
+from lms.deco import copy_result, singleton
 from lms.models import Coworker
 from urllib.parse import quote
 from datetime import datetime
 from threading import Lock
 
 
+@singleton
 class Cdek:
     uuid_re = re.compile("^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$")
 

@@ -7,7 +7,6 @@ from django.views.generic import ListView, DetailView
 from django.views import View
 from django.template.defaultfilters import floatformat
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
-from .collaborants.cdek import cdek_delivery
 from .forms import ShortCustomerInfoForm, CheckoutForm
 from .models import Parameter, Product
 
