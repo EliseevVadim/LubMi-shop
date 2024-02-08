@@ -2,16 +2,22 @@ import httpx
 import re
 import functools
 
-from lms.deco import copy_result, singleton
+from lms.deco import copy_result
 from lms.models import Coworker
 from urllib.parse import quote
 from datetime import datetime
 from threading import Lock
 
 
-@singleton
 class Cdek:
     uuid_re = re.compile("^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$")
+    instance = None
+
+    def __new__(cls):
+        def create():
+            Cdek.instance = super(Cdek, cls).__new__(cls)
+            return Cdek.instance
+        return Cdek.instance if Cdek.instance else create()
 
     @staticmethod
     def setting(name):
@@ -258,5 +264,3 @@ class Cdek:
                                packages=packages,
                                **kwargs)
 
-
-cdek_delivery = Cdek()

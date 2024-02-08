@@ -7,6 +7,7 @@ from django.views.generic import ListView, DetailView
 from django.views import View
 from django.template.defaultfilters import floatformat
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
+from .coworkers.informer import Informer
 from .forms import ShortCustomerInfoForm, CheckoutForm
 from .models import Parameter, Product
 
@@ -48,7 +49,8 @@ class IndexView(View):
                 'favorites': favorites,
                 'scui_form': ShortCustomerInfoForm(),
             })
-
+        i = Informer()
+        i.load_cdek()
         match request.GET.get('kind'):
             case 'bs':
                 pgn = bs_pgn
