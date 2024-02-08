@@ -3,11 +3,11 @@ import decimal
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views.generic import ListView, DetailView
+from django.views.generic import DetailView
 from django.views import View
 from django.template.defaultfilters import floatformat
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
-from .coworkers.informer import Informer
+from lms.coworkers.informer import Informer
 from .forms import ShortCustomerInfoForm, CheckoutForm
 from .models import Parameter, Product
 
@@ -49,14 +49,12 @@ class IndexView(View):
                 'favorites': favorites,
                 'scui_form': ShortCustomerInfoForm(),
             })
-        i = Informer()
-        i.load_cdek()
+
         match request.GET.get('kind'):
             case 'bs':
                 pgn = bs_pgn
             case _:
                 pgn = pd_pgn
-
         try:
             return render(request, 'lms/plist.html', {
                 'products': pgn.page(page),
@@ -561,6 +559,7 @@ class C6tInfoView(View):
                     "days": floatformat(dv_days),
                 })
             case 'cities':
+                Informer()
                 return render(request, 'lms/c6t-city-list.html', {
                     "cities": ["СДЭК-Москва", "СДЭК-Донецк", "СДЭК-Луганск"] if data == 'cd' else ["ПР-Москва", "ПР-Донецк", "ПР-Луганск"],
                 })

@@ -1,26 +1,17 @@
-from lms.coworkers.cdek import Cdek
-from lms.models import Region
+from lms.models import Region, City
 
 
 class Informer:
+    instance = None
+
+    def __new__(cls):
+        def create():
+            Informer.instance = super(Informer, cls).__new__(cls)
+            return Informer.instance
+        return Informer.instance if Informer.instance else create()
+
     def __init__(self):
-        self._cities: dict[int, dict] = dict()
-        self._search: dict[str, int] = dict()
+        self.index: dict[str, set[int]] = dict()
 
-    def load_cdek(self):
-        print("-----------------------------------------")
-        cdek = Cdek()
-        page = 0
-        size = 1000
-        while True:
-            pack = cdek.regions(size=size, page=page)
-
-            if len(pack):
-                for r in pack:
-                    rg = Region(region_code=r["region_code"], region=r["region"])
-                    rg.save()
-                page += 1
-            else:
-                break
-
-
+        for city in City.objects.all():
+            print(city)
