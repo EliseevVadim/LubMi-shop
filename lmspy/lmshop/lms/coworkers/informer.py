@@ -1,4 +1,5 @@
 from lms.coworkers.cdek import Cdek
+from lms.models import Region
 
 
 class Informer:
@@ -16,7 +17,8 @@ class Informer:
 
             if len(pack):
                 for r in pack:
-                    print(r)
+                    rg = Region(region_code=r["region_code"], region=r["region"])
+                    rg.save()
                 page += 1
             else:
                 break
