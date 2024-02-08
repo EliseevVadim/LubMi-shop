@@ -75,7 +75,7 @@ c6t_dialog.show = () => {
             };
 
             const d6y_changed = e => {
-                let url = '{% url "lms:c6t_info" kind="cities" data="dvservice" %}'.replace(/\/dvservice\/$/, `/${e.currentTarget.value}/`);
+                let url = '{% url "lms:c6t_info" kind="cities" data="dvservice" %}'.replace(/\/dvservice\/$/, `/${e.currentTarget.value}/?city=${_city.value}`);
                 fetch(url).then(response => response.text()).then(html => {
                     dl_holder = by_id('c6t-cl-holder');
                     dl_holder.innerHTML = html;

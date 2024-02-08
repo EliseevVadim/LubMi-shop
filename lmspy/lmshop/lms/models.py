@@ -334,6 +334,7 @@ class City(DbItem):
     city_uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)          # -- ключ СДЭК --
     code = models.BigIntegerField(editable=False)                                               # -- код СДЭК --
     city = models.CharField(max_length=100)                                                     # -- название --
+    city_lc = models.CharField(max_length=100)                                                  # -- название в нижнем регистре --
     country_code = models.CharField(max_length=2, default='RU')                                 # -- код страны --
     country = models.CharField(max_length=50, default='Россия')                                 # -- название страны --
     sub_region = models.CharField(max_length=100, null=True)                                    # -- район --
@@ -347,7 +348,7 @@ class City(DbItem):
 
     class Meta:
         ordering = ["city"]
-        indexes = [models.Index(fields=["city", "code", "city_uuid"])]
+        indexes = [models.Index(fields=["city_lc", "city"])]
 
     def __str__(self):
         return f'{self.city}'
