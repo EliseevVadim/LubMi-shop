@@ -204,6 +204,44 @@ class Image(DbItem):
     def __str__(self):
         return 'изображение'
 
+class Region(DbItem):
+    region_code = models.IntegerField(primary_key=True, editable=False)                         # -- код СДЭК --
+    region = models.CharField(max_length=100)                                                   # -- название --
+    country_code = models.CharField(max_length=2, default='RU')                                 # -- код страны --
+    country = models.CharField(max_length=50, default='Россия')                                 # -- название страны --
+    cities: QuerySet                                                                            # -- Just for IDE syntax analyzer --
+
+    class Meta:
+        ordering = ["region"]
+        indexes = [models.Index(fields=["region"])]
+
+    def __str__(self):
+        return f'{self.region}'
+
+
+class City(DbItem):
+    city_uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)          # -- ключ СДЭК --
+    code = models.BigIntegerField(editable=False)                                               # -- код СДЭК --
+    city = models.CharField(max_length=100)                                                     # -- название --
+    city_lc = models.CharField(max_length=100)                                                  # -- название в нижнем регистре --
+    country_code = models.CharField(max_length=2, default='RU')                                 # -- код страны --
+    country = models.CharField(max_length=50, default='Россия')                                 # -- название страны --
+    sub_region = models.CharField(max_length=100, null=True)                                    # -- район --
+    longitude = models.FloatField(editable=False)                                               # -- долгота --
+    latitude = models.FloatField(editable=False)                                                # -- широта --
+    time_zone = models.CharField(max_length=50)                                                 # -- часовая зона --
+    region = models.ForeignKey(Region,                                                          # -- регион --
+                               null=True,
+                               related_name="cities",
+                               on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ["city"]
+        indexes = [models.Index(fields=["city_lc", "city"])]
+
+    def __str__(self):
+        return f'{self.city}'
+
 
 class Order(DbItem):
     class DeliveryService(models.TextChoices):
@@ -213,6 +251,7 @@ class Order(DbItem):
     slug = models.SlugField(unique=True, max_length=200)                                        # -- слаг --
     bank_payment_id = models.CharField(max_length=250)                                          # -- Id банковской платежки --
     closed_at = models.DateTimeField(null=True, blank=True, default=None)                       # -- время и флаг выполнения --
+    city = models.ForeignKey(City, null=False, on_delete=models.PROTECT)
     delivery_service = models.CharField(                                                        # -- тип доставки --
         max_length=2,
         choices=DeliveryService.choices,
@@ -224,8 +263,10 @@ class Order(DbItem):
     cu_name = models.CharField(max_length=250)                                                  # -- как обращаться --
     cu_phone = models.CharField(null=True, max_length=50, validators=[Tunable.validate_phone])  # -- телефон --
     cu_email = models.CharField(null=True, max_length=250)                                      # -- email --
-    cu_country = models.CharField(max_length=100, default="Россия")                             # -- страна --
+    cu_city_uuid = models.UUIDField(null=True)                                                  # -- город --
     cu_city = models.CharField(max_length=100)                                                  # -- город --
+    cu_city_region = models.CharField(null=True, max_length=100)                                # -- город --
+    cu_city_subregion = models.CharField(null=True, max_length=100)                             # -- город --
     cu_street = models.CharField(max_length=200)                                                # -- улица --
     cu_building = models.CharField(max_length=50)                                               # -- здание --
     cu_entrance = models.CharField(max_length=50)                                               # -- подъезд --
@@ -313,43 +354,3 @@ class Setting(DbItem):
 
     def __str__(self):
         return f'<{self.owner.key}>:<{self.key}>:<{self.value}>'
-
-
-class Region(DbItem):
-    region_code = models.IntegerField(primary_key=True, editable=False)                         # -- код СДЭК --
-    region = models.CharField(max_length=100)                                                   # -- название --
-    country_code = models.CharField(max_length=2, default='RU')                                 # -- код страны --
-    country = models.CharField(max_length=50, default='Россия')                                 # -- название страны --
-    cities: QuerySet                                                                            # -- Just for IDE syntax analyzer --
-
-    class Meta:
-        ordering = ["region"]
-        indexes = [models.Index(fields=["region"])]
-
-    def __str__(self):
-        return f'{self.region}'
-
-
-class City(DbItem):
-    city_uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)          # -- ключ СДЭК --
-    code = models.BigIntegerField(editable=False)                                               # -- код СДЭК --
-    city = models.CharField(max_length=100)                                                     # -- название --
-    city_lc = models.CharField(max_length=100)                                                  # -- название в нижнем регистре --
-    country_code = models.CharField(max_length=2, default='RU')                                 # -- код страны --
-    country = models.CharField(max_length=50, default='Россия')                                 # -- название страны --
-    sub_region = models.CharField(max_length=100, null=True)                                    # -- район --
-    longitude = models.FloatField(editable=False)                                               # -- долгота --
-    latitude = models.FloatField(editable=False)                                                # -- широта --
-    time_zone = models.CharField(max_length=50)                                                 # -- часовая зона --
-    region = models.ForeignKey(Region,                                                          # -- регион --
-                               null=True,
-                               related_name="cities",
-                               on_delete=models.CASCADE)
-
-    class Meta:
-        ordering = ["city"]
-        indexes = [models.Index(fields=["city_lc", "city"])]
-
-    def __str__(self):
-        return f'{self.city}'
-
