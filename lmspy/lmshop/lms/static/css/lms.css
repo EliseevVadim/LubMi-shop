@@ -172,6 +172,7 @@ select, select:focus {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(var(--CatItemWidth), 1fr));
     gap: var(--Gap);
+    margin-bottom: 1rem;
 }
 
 .catalogue > * {
@@ -618,7 +619,7 @@ img.bkg {
 button,
 input[type="submit"] {
     border: solid black thin;
-    border-radius: 1px;
+    border-radius: 4px;
     color: black;
     background: none;
     box-shadow: none;
@@ -627,6 +628,7 @@ input[type="submit"] {
     text-decoration: none;
     font-family: var(--Fonts);
     font-weight: lighter;
+    box-shadow: 0px 10px 20px #3333;
 }
 
 button.medium,
@@ -652,6 +654,7 @@ input[type="submit"]:hover {
     background: rgba(0, 0, 0, 0.15);
     color: black;
     border-color: black;
+    box-shadow: inset 0px 10px 25px #fff9;
 }
 
 /* Perfumery -----------------------------------------------------------------------------------------------------------*/
@@ -661,6 +664,14 @@ input[type="submit"]:hover {
     margin-bottom: 1rem;
     font-size: 4rem;
     font-weight: bolder;
+}
+
+.perfumery .grid12 h1 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 4rem;
+    font-weight: bolder;
+    border: none;
 }
 
 .perfumery h2 {
@@ -903,8 +914,6 @@ dialog {
 }
 
 /* Popup -----------------------------------------------------------------------------------------------------*/
-
-
 
 .popup {
     display: flex;
