@@ -560,12 +560,9 @@ class C6tInfoView(View):
             case 'cities':
                 text = request.GET.get('city')
                 text = text.lower() if text else None
-                print("------------------------------")
-                gen_cd = (city for city in City.objects.filter(city_lc__contains=text)) if text else []
-                gen_pr = (city for city in City.objects.filter(city_lc__contains=text)) if text else []  # TODO?
-                print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-                cities = list(gen_cd if data == 'cd' else gen_pr)
-                print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+                gen_cd = lambda: (city for city in City.objects.filter(city_lc__contains=text)) if text else []
+                gen_pr = lambda: (city for city in City.objects.filter(city_lc__contains=text)) if text else []  # TODO?
+                cities = list(gen_cd() if data == 'cd' else gen_pr())
                 return render(request, 'lms/c6t-city-list.html', {
                     "cities": cities,
                 })

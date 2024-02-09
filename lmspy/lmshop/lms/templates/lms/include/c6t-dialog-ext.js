@@ -74,11 +74,24 @@ c6t_dialog.show = () => {
             }
 
             const update_cities = () => {
+                if(_city.controller) { _city.controller.abort(); }
                 let ds = by_selector('input[id^="c6t-d6y_service_"]:checked').value;
                 let url = '{% url "lms:c6t_info" kind="cities" data="dvservice" %}'.replace(/\/dvservice\/$/, `/${ds}/?city=${_city.value}`);
-                fetch(url).then(response => response.text()).then(html => {
+                _city.controller = new AbortController();
+                fetch(url, {signal: _city.controller.signal}).then(response => response.text()).then(html => {
                     c6t_dialog.city_list().innerHTML = html;
+                    _city.controller = null;
+                }).catch(e=>{
                 });
+            };
+
+            _city.tmo_id = null;
+            _city.oninput = e => {
+                if(_city.tmo_id) { clearTimeout(_city.tmo_id); }
+                _city.tmo_id = setTimeout(() => {
+                    _city.tmo_id = null;
+                    update_cities();
+                }, 1500);
             };
 
             const update_summary = () => {
@@ -90,7 +103,7 @@ c6t_dialog.show = () => {
                 });
             };
 
-            const d6y_changed = e => {
+            const d6y_changed = () => {
                 setTimeout(update_cities);
                 setTimeout(update_summary);
             };
@@ -98,16 +111,6 @@ c6t_dialog.show = () => {
             _d6y_service_0.onchange = d6y_changed;
             _d6y_service_1.onchange = d6y_changed;
             _city.onchange = update_summary;
-            _city.tmo_id = null;
-            _city.oninput = e => {
-                if(_city.tmo_id) {
-                    clearTimeout(_city.tmo_id);
-                }
-                _city.tmo_id = setTimeout(() => {
-                    _city.tmo_id = null;
-                    update_cities();
-                }, 1500);
-            };
 
             _form.onsubmit = e => {
                 e.preventDefault();
