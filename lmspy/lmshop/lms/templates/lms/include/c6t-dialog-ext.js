@@ -144,7 +144,8 @@ c6t_dialog.show = () => {
                     cu_entrance: _entrance.value,
                     cu_floor: _floor.value,
                     cu_apartment: _apartment.value,
-                    cu_fullname: _fullname.value
+                    cu_fullname: _fullname.value,
+                    cu_confirm: _confirm.value
                 }, result => {
                     if(result.success) {
                     } else {

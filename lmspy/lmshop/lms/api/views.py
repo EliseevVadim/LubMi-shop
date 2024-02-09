@@ -174,7 +174,7 @@ class CheckoutSCartView(APIView):
                 data["cu_name"], \
                 data["cu_phone"], \
                 data["cu_email"], \
-                data["cu_country"], \
+                data["cu_country"] if "cu_country" in data else "RU", \
                 data["cu_city_uuid"], \
                 data["cu_city"], \
                 data["cu_street"], \
@@ -201,7 +201,7 @@ class CheckoutSCartView(APIView):
                 cu_apartment and \
                 cu_fullname and \
                 cu_confirm:
-            if cu_confirm != "true":
+            if cu_confirm != "true":  # TODO "on"
                 return Parameter.value_of('message_you_must_agree_pp', 'Необходимо согласиться с политикой конфиденциальности')
             # TODO validate all data we can validate here
             try:  # -- save order --
