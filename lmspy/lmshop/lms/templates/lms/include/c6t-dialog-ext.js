@@ -1,5 +1,6 @@
 c6t_dialog.form_container = () => document.querySelector("#c6t-dialog .c6t-form-container");
 c6t_dialog.sidebar = () => document.querySelector("#c6t-dialog .c6t-sidebar");
+c6t_dialog.city_list = () => document.querySelector("#c6t-dialog .c6t-city-list");
 c6t_dialog.__on_scart_changed = null;
 c6t_dialog.__close = c6t_dialog.close;
 c6t_dialog.close = () => {
@@ -24,9 +25,7 @@ c6t_dialog.show = () => {
         <section id="c6t-status">
         </section>
     </div>
-</div>
-<section style="display:none" id="c6t-cl-holder">
-</section>`;
+</div>`;
         c6t_dialog.form_container().innerHTML = html;
 
         __api_call__('{% url "api:get_customer_info" flags=15 %}', null, answer => {
@@ -56,6 +55,14 @@ c6t_dialog.show = () => {
             _apartment.value = answer.address.apartment;
             _fullname.value = answer.address.fullname;
 
+            _city.insertAdjacentHTML("afterEnd", '<div id="c6t-city-list" class="c6t-city-list"><p>Проверка</p><p>Проверка</p><p>Проверка</p><p>Проверка</p></div>');
+            const move_city_list = elements => {
+                cl = c6t_dialog.city_list();
+                pe = _city.parentElement;
+                cl.style.transform = `translate(10px, ${pe.clientHeight + 5}px)`;
+                cl.style.width = `${pe.clientWidth}px`;
+            }; setTimeout(move_city_list);
+
             _email.oninput = _ => { 
                 if(_email.value) _phone.removeAttribute('required'); 
                 else _phone.setAttribute('required',''); 
@@ -70,9 +77,7 @@ c6t_dialog.show = () => {
                 let ds = by_selector('input[id^="c6t-d6y_service_"]:checked').value;
                 let url = '{% url "lms:c6t_info" kind="cities" data="dvservice" %}'.replace(/\/dvservice\/$/, `/${ds}/?city=${_city.value}`);
                 fetch(url).then(response => response.text()).then(html => {
-                    dl_holder = by_id('c6t-cl-holder');
-                    dl_holder.innerHTML = html;
-                    _city.setAttribute('list', 'c6t-city-list');
+                    c6t_dialog.city_list().innerHTML = html;
                 });
             };
 
@@ -90,24 +95,19 @@ c6t_dialog.show = () => {
                 setTimeout(update_summary);
             };
 
-            _city.insertAdjacentHTML("afterEnd", '<div id="city-list" class="city-list" style="position:absolute; background: red;"><p>Проверка</p><p>Проверка</p><p>Проверка</p><p>Проверка</p></div>');
-            const move_city_list = elements => {
-                cl = document.querySelector("#city-list");
-                //cl.clientTop = _city.clientTop+_city.clientHeight;
-                cl.style.transform = `translate(100px,3rem)`;
-                cl.style.width = `${_city.clientWidth}px`;
-                debugger;
-//                cl.style.left = _city.style.left+10;
-//                alert(_city.clientWidth);
-            }
-            setTimeout(move_city_list);
-
             _d6y_service_0.onchange = d6y_changed;
             _d6y_service_1.onchange = d6y_changed;
             _city.onchange = update_summary;
-            _city.oninput = update_cities;
-
-
+            _city.tmo_id = null;
+            _city.oninput = e => {
+                if(_city.tmo_id) {
+                    clearTimeout(_city.tmo_id);
+                }
+                _city.tmo_id = setTimeout(() => {
+                    _city.tmo_id = null;
+                    update_cities();
+                }, 1500);
+            };
 
             _form.onsubmit = e => {
                 e.preventDefault();
