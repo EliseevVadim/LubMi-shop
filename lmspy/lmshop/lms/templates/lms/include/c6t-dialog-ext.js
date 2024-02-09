@@ -59,8 +59,8 @@ c6t_dialog.show = () => {
             const move_city_list = elements => {
                 cl = c6t_dialog.city_list();
                 pe = _city.parentElement;
-                cl.style.transform = `translate(10px, ${pe.clientHeight + 5}px)`;
-                cl.style.width = `${pe.clientWidth}px`;
+                cl.style.transform = `translate(0px, ${pe.clientHeight + 5}px)`;
+                cl.style.width = `${_city.clientWidth}px`;
             }; setTimeout(move_city_list);
 
             _email.oninput = _ => { 

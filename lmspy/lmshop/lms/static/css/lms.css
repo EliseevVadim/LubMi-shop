@@ -878,8 +878,9 @@ dialog {
     border: solid thin gray;
     background: white;
     box-shadow: 0px 3px 3px gray;
-    /*display: flex;
-    flex-flow:column;*/
+    box-sizing: border-box;
+    display: flex;
+    flex-flow:column;
     padding: 1rem;
     overflow: auto;
     max-height: 10rem;

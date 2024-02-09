@@ -1,3 +1,7 @@
+{% if cities %}
 {% for c in cities %}
 <p>{{c}}<br/><span class="gray">{{c.region|default:"Неизвестный регион"}}</span></p>
 {% endfor %}
+{% else %}
+Ничего не найдено
+{% endif %}
