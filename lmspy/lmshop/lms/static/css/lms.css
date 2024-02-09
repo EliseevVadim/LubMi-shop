@@ -873,6 +873,10 @@ dialog {
     gap: 4rem;
 }
 
+#c6t-dialog td {
+    vertical-align: top;
+}
+
 #c6t-dialog .c6t-city-list {
     position:absolute;
     border: solid thin gray;

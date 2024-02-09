@@ -1,5 +1,5 @@
 <table class="gray">
     {% for k, v in items.items %}
-    <tr><td>{{k}}:</td><td>&nbsp;{{v}}</td></tr>
+    <tr><td>{{k}}:</td><td>&nbsp;</td><td>{{v|linebreaksbr}}</td></tr>
     {% endfor %}
 </table>

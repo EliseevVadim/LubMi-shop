@@ -204,6 +204,7 @@ class Image(DbItem):
     def __str__(self):
         return 'изображение'
 
+
 class Region(DbItem):
     region_code = models.IntegerField(primary_key=True, editable=False)                         # -- код СДЭК --
     region = models.CharField(max_length=100)                                                   # -- название --
@@ -241,6 +242,14 @@ class City(DbItem):
 
     def __str__(self):
         return f'{self.city}'
+
+    @property
+    def region_full(self):
+        return f'{self.region.region if self.region else "регион неизвестен"}{", " + self.sub_region if self.sub_region else ""}'
+
+    @property
+    def city_full(self):
+        return f'{self.city}, {self.region_full}'
 
 
 class Order(DbItem):

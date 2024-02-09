@@ -1,7 +1,7 @@
 {% if cities %}
 {% for c in cities %}
-<p>{{c}}<br/><span class="gray">{{c.region|default:"Неизвестный регион"}}</span></p>
+<p onclick="c6t_dialog.choose_city('{{c.city_full}}','{{c.city_uuid}}');">{{c}}<br/><span class="gray">{{c.region_full}}</span></p>
 {% endfor %}
 {% else %}
-Ничего не найдено
+{{on_empty}}
 {% endif %}

@@ -174,6 +174,7 @@ class CustomerInfo:
     def address(self):
         return self._get_or_create_item("address", lambda: {
             "country": "",
+            "city_uuid": "",
             "city": "",
             "street": "",
             "building": "",

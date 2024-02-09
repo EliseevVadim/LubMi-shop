@@ -565,6 +565,7 @@ class C6tInfoView(View):
                 cities = list(gen_cd() if data == 'cd' else gen_pr())
                 return render(request, 'lms/c6t-city-list.html', {
                     "cities": cities,
+                    "on_empty": "Ничего не найдено" if text else "Укажите населенный пункт",
                 })
             case 'summary':
                 dv_cost = decimal.Decimal(719.50 if data == 'cd' else 820.10)  # TODO !!!
@@ -573,7 +574,7 @@ class C6tInfoView(View):
                     "items": {
                         "Сумма": f'{floatformat(scart["price"], 2)} {Parameter.value_of("label_currency")}',
                         "Доставка": f'{"СДЭК" if data == "cd" else "Почта России"}, {floatformat(dv_cost, 2)} {Parameter.value_of("label_currency")}',
-                        "Назначение": f'{city if city else "г. Москва, Россия"}',
+                        "Назначение": f'{city if city else "г. Москва, Россия"}'.replace(", ", ",\n"),
                         "Итоговая сумма": f'{floatformat(scart["price"] + dv_cost, 2)} {Parameter.value_of("label_currency")}',
                     }
                 })

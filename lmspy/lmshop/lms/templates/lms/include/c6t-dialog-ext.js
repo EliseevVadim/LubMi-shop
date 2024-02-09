@@ -33,6 +33,7 @@ c6t_dialog.show = () => {
             _name = by_id('c6t-cu_name');
             _phone = by_id('c6t-cu_phone');
             _email = by_id('c6t-cu_email');
+            _city_uuid = by_id('c6t-cu_city_uuid');
             _city = by_id('c6t-cu_city');
             _street = by_id('c6t-cu_street');
             _building = by_id('c6t-cu_building');
@@ -47,6 +48,7 @@ c6t_dialog.show = () => {
             _name.value = answer.name;
             _phone.value = answer.phone;
             _email.value = answer.email;
+            _city_uuid.value = answer.address.city_uuid;
             _city.value = answer.address.city;
             _street.value = answer.address.street;
             _building.value = answer.address.building;
@@ -55,13 +57,50 @@ c6t_dialog.show = () => {
             _apartment.value = answer.address.apartment;
             _fullname.value = answer.address.fullname;
 
-            _city.insertAdjacentHTML("afterEnd", '<div id="c6t-city-list" class="c6t-city-list"><p>Проверка</p><p>Проверка</p><p>Проверка</p><p>Проверка</p></div>');
+            const city_chosen = () => !!_city_uuid.value;
+            c6t_dialog.choose_city = (text, uuid) => {
+                _city_uuid.value = uuid;
+                _city.value = text;
+                c6t_dialog.city_list().style.visibility = 'hidden';
+                setTimeout(update_summary);
+            }
+
+            _city.insertAdjacentHTML("afterEnd", '<div id="c6t-city-list" class="c6t-city-list"></div>');
             const move_city_list = elements => {
                 cl = c6t_dialog.city_list();
                 pe = _city.parentElement;
                 cl.style.transform = `translate(0px, ${pe.clientHeight + 5}px)`;
                 cl.style.width = `${_city.clientWidth}px`;
             }; setTimeout(move_city_list);
+
+            const update_cities = () => {
+                if(_city.controller) { _city.controller.abort(); }
+                let ds = by_selector('input[id^="c6t-d6y_service_"]:checked').value;
+                let url = '{% url "lms:c6t_info" kind="cities" data="dvservice" %}'.replace(/\/dvservice\/$/, `/${ds}/?city=${_city.value}`);
+                _city.controller = new AbortController();
+                fetch(url, {signal: _city.controller.signal}).then(response => response.text()).then(html => {
+                    _city.controller = null;
+                    c6t_dialog.city_list().innerHTML = html;
+                    c6t_dialog.city_list().style.visibility = 'visible';
+                }).catch(_=>{});
+            };
+
+            const update_summary = () => {
+                let c6t_status = by_id("c6t-status");
+                if(c6t_status.controller) { c6t_status.controller.abort(); }
+                let ds = by_selector('input[id^="c6t-d6y_service_"]:checked').value;
+                let url = '{% url "lms:c6t_info" kind="summary" data="dvservice" %}'.replace(/\/dvservice\/$/, `/${ds}/?city=${_city.value}`);
+                c6t_status.controller = new AbortController();
+                fetch(url, {signal: c6t_status.controller.signal}).then(response => response.text()).then(html => {
+                    c6t_status.controller = null;
+                    c6t_status.innerHTML = html;
+                }).catch(_=>{});
+            };
+
+            const d6y_changed = () => {
+                if(!city_chosen()) { setTimeout(update_cities); }
+                setTimeout(update_summary);
+            };
 
             _email.oninput = _ => { 
                 if(_email.value) _phone.removeAttribute('required'); 
@@ -73,45 +112,21 @@ c6t_dialog.show = () => {
                 else _email.setAttribute('required',''); 
             }
 
-            const update_cities = () => {
-                if(_city.controller) { _city.controller.abort(); }
-                let ds = by_selector('input[id^="c6t-d6y_service_"]:checked').value;
-                let url = '{% url "lms:c6t_info" kind="cities" data="dvservice" %}'.replace(/\/dvservice\/$/, `/${ds}/?city=${_city.value}`);
-                _city.controller = new AbortController();
-                fetch(url, {signal: _city.controller.signal}).then(response => response.text()).then(html => {
-                    c6t_dialog.city_list().innerHTML = html;
-                    _city.controller = null;
-                }).catch(e=>{
-                });
-            };
-
             _city.tmo_id = null;
             _city.oninput = e => {
                 if(_city.tmo_id) { clearTimeout(_city.tmo_id); }
+                if(city_chosen()) {
+                    _city.value = null;
+                    _city_uuid.value = null;
+                }
                 _city.tmo_id = setTimeout(() => {
-                    _city.tmo_id = null;
                     update_cities();
-                }, 1500);
-            };
-
-            const update_summary = () => {
-                let ds = by_selector('input[id^="c6t-d6y_service_"]:checked').value;
-                let url = '{% url "lms:c6t_info" kind="summary" data="dvservice" %}'.replace(/\/dvservice\/$/, `/${ds}/?city=${_city.value}`);
-                fetch(url).then(response => response.text()).then(html => {
-                    let c6t_status = by_id("c6t-status");
-                    c6t_status.innerHTML = html;
-                });
-            };
-
-            const d6y_changed = () => {
-                setTimeout(update_cities);
-                setTimeout(update_summary);
+                    _city.tmo_id = null;
+                }, 1000);
             };
 
             _d6y_service_0.onchange = d6y_changed;
             _d6y_service_1.onchange = d6y_changed;
-            _city.onchange = update_summary;
-
             _form.onsubmit = e => {
                 e.preventDefault();
                 __api_call__('{% url "api:c6t" %}', {
@@ -122,10 +137,11 @@ c6t_dialog.show = () => {
                 }, result => {
                     if(result.success) {
                     } else {
-                        alert(result.why);
+                        alert(result.why); //TODO custom message box
                     }
                 });
             }
+
             c6t_dialog.__on_scart_changed = e => fetch('{% url "lms:c6t_scart" %}').then(response => response.text()).then(html => {
                 c6t_dialog.sidebar().innerHTML = html;
                 update_summary();

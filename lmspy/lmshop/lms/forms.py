@@ -46,6 +46,7 @@ class CheckoutForm(forms.ModelForm):
             'cu_name',
             'cu_phone',
             'cu_email',
+            'cu_city_uuid',
             'cu_city',
             'delivery_service',
             'cu_fullname',
@@ -60,6 +61,7 @@ class CheckoutForm(forms.ModelForm):
             "cu_name": '',
             "cu_phone": '',
             "cu_email": '',
+            'cu_city_uuid': '',
             'cu_city': 'Доставка',
             'delivery_service': '',
             'cu_fullname': 'Получатель',
@@ -83,6 +85,9 @@ class CheckoutForm(forms.ModelForm):
             'cu_email': forms.EmailInput(attrs={
                 'id': 'c6t-cu_email',
                 'placeholder': Parameter.value_of('pholder_enter_your_email', 'Введите Ваш email')
+            }),
+            'cu_city_uuid': forms.HiddenInput(attrs={
+                'id': 'c6t-cu_city_uuid'
             }),
             'cu_city':  forms.TextInput(attrs={
                 'id': 'c6t-cu_city',
