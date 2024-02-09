@@ -162,6 +162,7 @@ class CheckoutSCartView(APIView):
                 cu_phone, \
                 cu_email, \
                 cu_country, \
+                cu_city_uuid, \
                 cu_city, \
                 cu_street, \
                 cu_building, \
@@ -174,6 +175,7 @@ class CheckoutSCartView(APIView):
                 data["cu_phone"], \
                 data["cu_email"], \
                 data["cu_country"], \
+                data["cu_city_uuid"], \
                 data["cu_city"], \
                 data["cu_street"], \
                 data["cu_building"], \
@@ -190,6 +192,7 @@ class CheckoutSCartView(APIView):
                 cu_name and \
                 (cu_phone or cu_email) and \
                 cu_country and \
+                cu_city_uuid and \
                 cu_city and \
                 cu_street and \
                 cu_building and \
@@ -206,7 +209,7 @@ class CheckoutSCartView(APIView):
                     records, price = scart["records"], scart["price"]
                     if not records:
                         return Parameter.value_of('message_shopping_cart_empty', 'Корзина пуста. Добавьте в корзину хотя бы один товар!')
-                    delivery_cost = ask_delivery_service_for_cost(delivery_service)
+                    delivery_cost = ask_delivery_service_for_cost(delivery_service)  # TODO !
                     bps_id, bps_redirect = ask_bank_for_payment_statement(price + delivery_cost)
                     order = Order(delivery_service=delivery_service,
                                   delivery_cost=delivery_cost,
@@ -230,7 +233,8 @@ class CheckoutSCartView(APIView):
                                          title=str(rec.product),
                                          size=rec.size.size,
                                          quantity=rec.quantity,
-                                         price=rec.product.actual_price)
+                                         price=rec.product.actual_price,
+                                         weight=rec.product.weight)
                         item.save()
                         rec.product.sales_quantity += rec.quantity
                         rec.product.save()

@@ -92,7 +92,7 @@ class Product(DbItem):
     slug = models.SlugField(unique=True, max_length=200)                                                    # слаг
     description = models.TextField(null=True, blank=True)                                                   # описание
     color = models.CharField(max_length=50, null=True, blank=True)                                          # цвет
-    weight = models.BigIntegerField(validators=[MinValueValidator(0)])                                      # вес
+    weight = models.BigIntegerField(validators=[MinValueValidator(0)])                                      # вес, в граммах
     actual_price = MoneyField(
         max_digits=14,
         decimal_places=2,
@@ -301,6 +301,7 @@ class OrderItem(DbItem):
     size = models.CharField(max_length=30, validators=[Tunable.validate_size])                              # -- размер --
     quantity = models.BigIntegerField(validators=[MinValueValidator(1)])                                    # -- количество --
     price = MoneyField(max_digits=14, decimal_places=2, default_currency='RUR')                             # -- цена на момент заказа --
+    weight = models.BigIntegerField(validators=[MinValueValidator(0)])                                      # -- вес, в граммах --
 
     def __str__(self):
         return f'{self.title} ({self.quantity})'

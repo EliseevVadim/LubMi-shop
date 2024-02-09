@@ -131,11 +131,20 @@ c6t_dialog.show = () => {
 
             _form.onsubmit = e => {
                 e.preventDefault();
+                let ds = by_selector('input[id^="c6t-d6y_service_"]:checked').value;
                 __api_call__('{% url "api:c6t" %}', {
+                    delivery: ds,
                     cu_name: _name.value,
                     cu_phone: _phone.value,
-                    cu_email: _email.value
-                    // TODO -- other --
+                    cu_email: _email.value,
+                    cu_city_uuid: _city_uuid.value,
+                    cu_city: _city.value,
+                    cu_street: _street.value,
+                    cu_building: _building.value,
+                    cu_entrance: _entrance.value,
+                    cu_floor: _floor.value,
+                    cu_apartment: _apartment.value,
+                    cu_fullname: _fullname.value
                 }, result => {
                     if(result.success) {
                     } else {
