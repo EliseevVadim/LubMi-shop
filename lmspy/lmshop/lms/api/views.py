@@ -250,6 +250,7 @@ class CheckoutSCartView(APIView):
                 info.email = cu_email or info.email
                 info.address = {
                     "country": cu_country,
+                    "city_uuid": cu_city_uuid,
                     "city": cu_city,
                     "street": cu_street,
                     "building": cu_building,
