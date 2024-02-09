@@ -170,6 +170,11 @@ class Cdek:
         return self.auth["jti"]
 
     @staticmethod
+    def extract_error(response):
+        errs = (er["message"] for er in response["errors"]) if "errors" in response else None
+        return '; '.join(errs) if errs else "Неизвестная ошибка"
+
+    @staticmethod
     def location(**kwargs):
         return Cdek._construct_({
             "code": (int, None),                            # -- Код населенного пункта, integer
@@ -263,4 +268,5 @@ class Cdek:
                                to_location=to_location,
                                packages=packages,
                                **kwargs)
+
 

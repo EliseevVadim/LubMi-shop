@@ -89,7 +89,7 @@ c6t_dialog.show = () => {
                 let c6t_status = by_id("c6t-status");
                 if(c6t_status.controller) { c6t_status.controller.abort(); }
                 let ds = by_selector('input[id^="c6t-d6y_service_"]:checked').value;
-                let url = '{% url "lms:c6t_info" kind="summary" data="dvservice" %}'.replace(/\/dvservice\/$/, `/${ds}/?city=${_city.value}`);
+                let url = '{% url "lms:c6t_info" kind="summary" data="dvservice" %}'.replace(/\/dvservice\/$/, `/${ds}/?city_uuid=${_city_uuid.value}`);
                 c6t_status.controller = new AbortController();
                 fetch(url, {signal: c6t_status.controller.signal}).then(response => response.text()).then(html => {
                     c6t_status.controller = null;
@@ -118,6 +118,7 @@ c6t_dialog.show = () => {
                 if(city_chosen()) {
                     _city.value = null;
                     _city_uuid.value = null;
+                    setTimeout(update_summary)
                 }
                 _city.tmo_id = setTimeout(() => {
                     update_cities();
@@ -127,6 +128,7 @@ c6t_dialog.show = () => {
 
             _d6y_service_0.onchange = d6y_changed;
             _d6y_service_1.onchange = d6y_changed;
+
             _form.onsubmit = e => {
                 e.preventDefault();
                 __api_call__('{% url "api:c6t" %}', {

@@ -1,14 +1,19 @@
 import decimal
+from _decimal import Decimal
 
+from django.core.exceptions import ValidationError
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import DetailView
 from django.views import View
 from django.template.defaultfilters import floatformat
+from httpx import TransportError
+
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
+from .coworkers.cdek import Cdek
 from .forms import ShortCustomerInfoForm, CheckoutForm
-from .models import Parameter, Product, City
+from .models import Parameter, Product, City, Coworker
 
 
 class IndexView(View):
@@ -568,14 +573,46 @@ class C6tInfoView(View):
                     "on_empty": "Ничего не найдено" if text else "Укажите населенный пункт",
                 })
             case 'summary':
-                dv_cost = decimal.Decimal(719.50 if data == 'cd' else 820.10)  # TODO !!!
-                city = request.GET.get('city')
+                if len(scart["records"]) > 0:
+                    city_uuid = request.GET.get('city_uuid')
+                    try:
+                        city = City.objects.get(pk=city_uuid)
+                    except City.DoesNotExist:
+                        city = None
+                    except ValidationError:
+                        city = None
+
+                    def dv_cost_cd():
+                        tariff_code = int(Coworker.setting("cd", "tariff_code"))
+                        city_code_from = int(Coworker.setting("cd", "location_from_code"))
+                        city_code_to = city.code if city else city_code_from
+                        try:
+                            tariff = Cdek().tariff(
+                                tariff_code,
+                                Cdek.location(code=city_code_from),
+                                Cdek.location(code=city_code_to),
+                                [Cdek.package(weight=scart["weight"])],
+                                [])  # TODO scart weight
+                            return (float(tariff["delivery_sum"]), None) if "delivery_sum" in tariff else (0.0, Cdek.extract_error(tariff))
+                        except KeyError as e:
+                            return 0.0, e
+                        except ValueError as e:
+                            return 0.0, e
+                        except TransportError as e:
+                            return 0.0, e
+
+                    dv_cost, error = dv_cost_cd() if data == 'cd' else (820.10, None)  # TODO for PR!!!
+                else:
+                    error = Parameter.value_of('message_shopping_cart_empty')
                 return render(request, 'lms/c6t-summary.html', {
                     "items": {
                         "Сумма": f'{floatformat(scart["price"], 2)} {Parameter.value_of("label_currency")}',
+                        "Вес": f'{floatformat(scart["weight"] / Decimal(1000), 2)} кг',
                         "Доставка": f'{"СДЭК" if data == "cd" else "Почта России"}, {floatformat(dv_cost, 2)} {Parameter.value_of("label_currency")}',
-                        "Назначение": f'{city if city else "г. Москва, Россия"}'.replace(", ", ",\n"),
-                        "Итоговая сумма": f'{floatformat(scart["price"] + dv_cost, 2)} {Parameter.value_of("label_currency")}',
+                        "Назначение": f'{city.city_full if city else Coworker.setting("cd", "location_from_city")}'.replace(", ", ",\n"),
+                        "Итоговая сумма": f'{floatformat(scart["price"] + Decimal(dv_cost), 2)} {Parameter.value_of("label_currency")}',
+                    } if not error else {
+                        "Хьюстон, у нас проблема": error
                     }
                 })
             case _:

@@ -212,6 +212,7 @@ def with_actual_scart_records_and_price(func):
     def deco(request, *args, **kwargs):
         records = []
         price = Decimal(0)
+        weight = 0
         for ppk, sizes in CustomerInfo(request).scart.items():
             try:
                 product = Product.published.get(pk=ppk)
@@ -229,5 +230,6 @@ def with_actual_scart_records_and_price(func):
                         'quantity': quantity
                     }]
                     price += quantity * product.actual_price.amount
-        return func(request, *args, **kwargs, scart={'records': records, 'price': price})
+                    weight += quantity * product.weight
+        return func(request, *args, **kwargs, scart={'records': records, 'price': price, 'weight': weight})
     return deco
