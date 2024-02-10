@@ -3,8 +3,16 @@ const {{unique}}_banner = {
     button: () => document.querySelector("#banner-{{unique}}  .banner-button"),
     slogan: () => document.querySelector("#banner-{{unique}}  .banner-slogan"),
     init: () => {
-        im1 = new Image(); im1.src = '{{img_1}}';
-        im2 = new Image(); im2.src = '{{img_2}}';
+        let pre_1 = document.createElement('link')
+        let pre_2 = document.createElement('link')
+            pre_1.href = '{{img_1}}'
+            pre_2.href = '{{img_2}}'
+            pre_1.rel = 'preload'
+            pre_2.rel = 'preload'
+            pre_1.as = 'image'
+            pre_2.as = 'image'
+        document.head.appendChild(pre_1)
+        document.head.appendChild(pre_2)
         svg_1 = `<svg width="5mm" height="5mm" viewBox="0 0 7 7">
                  <g><circle id="{{unique}}-switch-1" cx="3" cy="3" r="2.5" fill="#fff" stroke="#fff" stroke-width="0.25px"/></g></svg>`;
         svg_2 = `<svg width="5mm" height="5mm" viewBox="0 0 7 7">

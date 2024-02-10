@@ -256,10 +256,10 @@ aside {
     top: 0;
     height: 100vh;
     width: min(30rem, 40vw);
-    visibility: hidden;
     padding: var(--DefPadding);
     box-shadow: 0 0 0 100vw #7777;
     z-index: var(--ZixPanels);
+    visibility: hidden;
     opacity: 0.0;
     transition: opacity 0.25s ease;
 }
