@@ -208,7 +208,8 @@ figcaption {
     background-repeat: no-repeat;
     max-height: calc(var(--CatItemWidth) * 1.5);
     min-height: calc(var(--CatItemWidth) * 1.5);
-    padding: var(--DefPadding)
+    padding: var(--DefPadding);
+    transition: background 0.25s ease;
 }
 
 .p-card-a.details {
@@ -246,7 +247,6 @@ input[type="checkbox"] ~ svg {
 }
 
 input[type="checkbox"]:checked ~ svg { fill: white; }
-
 input[type="checkbox"]:not(:checked) ~ svg { fill: none; }
 
 /* Панели --------------------------------------------------------------------------------------------------------------*/
@@ -629,6 +629,7 @@ input[type="submit"] {
     font-family: var(--Fonts);
     font-weight: lighter;
     box-shadow: 0px 10px 20px #3333;
+    transition: background 0.25s ease;
 }
 
 button.medium,
@@ -1024,6 +1025,7 @@ dialog {
     background-repeat: no-repeat;
     padding: 2rem;
     box-sizing: border-box;
+    transition: background 0.25s ease;
 }
 
 .banner-A {
