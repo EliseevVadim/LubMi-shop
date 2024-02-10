@@ -5,19 +5,11 @@ import functools
 from lms.deco import copy_result
 from lms.models import Coworker
 from urllib.parse import quote
-from datetime import datetime
-from threading import Lock
+from django.core.cache import cache
 
 
 class Cdek:
     uuid_re = re.compile("^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$")
-    instance = None
-
-    def __new__(cls):
-        def create():
-            Cdek.instance = super(Cdek, cls).__new__(cls)
-            return Cdek.instance
-        return Cdek.instance if Cdek.instance else create()
 
     @staticmethod
     def setting(name):
@@ -30,8 +22,6 @@ class Cdek:
         self._address = address
         self._client_id = client_id
         self._client_secret = client_secret
-        self._lock_auth = Lock()
-        self._auth = self._tp_auth = None
 
     @staticmethod
     def _quoted(kwargs):
@@ -42,7 +32,7 @@ class Cdek:
     def auth(self):
         def ask_auth():
             with httpx.Client() as client:
-                self._auth = client.post(
+                return client.post(
                     f"{self._address}/oauth/token?parameters",
                     headers={"Content-Type": "application/x-www-form-urlencoded"},
                     data={
@@ -51,14 +41,12 @@ class Cdek:
                         "client_secret": quote(self._client_secret)
                     }
                 ).json()
-                self._tp_auth = datetime.now()
-                return self._auth
 
-        def auth_alive():
-            return self._auth and self._tp_auth and 5 + (datetime.now() - self._tp_auth).seconds < self._auth["expires_in"]
-
-        with self._lock_auth:
-            return self._auth if auth_alive() else ask_auth()
+        a = cache.get("cdek-auth")
+        if a is None:
+            a = ask_auth()
+            cache.set("cdek-auth", a, int(a["expires_in"]) - 5)
+        return a
 
     def _post(self, func, **kwargs):
         with httpx.Client() as client:
@@ -143,11 +131,6 @@ class Cdek:
     @functools.lru_cache
     def _one_of_(*args):
         return lambda v: v in frozenset(args)
-
-    @auth.deleter
-    def auth(self):
-        with self._lock_auth:
-            self._auth = self._tp_auth = None
 
     @property
     def access_token(self):
