@@ -17,5 +17,4 @@ const {{unique}}_dialog = {
         {% endif %}
         {{unique}}_dialog.self().close();
     }
-
 };

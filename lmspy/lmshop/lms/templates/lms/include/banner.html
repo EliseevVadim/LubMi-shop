@@ -1,4 +1,4 @@
-<section class="banner banner-{{type}}" style="background-image: url('{{img}}')">
+<section {%if unique%}id="banner-{{unique}}"{%endif%}class="banner banner-{{type}}" style="background-image: url('{{img}}')">
     {% if slogan %}
     <div class="banner-slogan {{s_cls}}">{{slogan}}</div>
     {% endif %}
