@@ -13,10 +13,8 @@ const {{unique}}_banner = {
             pre_2.as = 'image'
         document.head.appendChild(pre_1)
         document.head.appendChild(pre_2)
-        svg_1 = `<svg width="5mm" height="5mm" viewBox="0 0 7 7">
-                 <g><circle id="{{unique}}-switch-1" cx="3" cy="3" r="2.5" fill="#fff" stroke="#fff" stroke-width="0.25px"/></g></svg>`;
-        svg_2 = `<svg width="5mm" height="5mm" viewBox="0 0 7 7">
-                 <g><circle id="{{unique}}-switch-2" cx="3" cy="3" r="2.5" fill="#0000" stroke="#fff" stroke-width="0.25px"/></g></svg>`;
+        svg_1 = `<svg width="5mm" height="5mm" viewBox="0 0 7 7"><g><circle id="{{unique}}-switch-1" cx="3" cy="3" r="2.5" fill="#fff" stroke="#fff" stroke-width="0.25px"/></g></svg>`;
+        svg_2 = `<svg width="5mm" height="5mm" viewBox="0 0 7 7"><g><circle id="{{unique}}-switch-2" cx="3" cy="3" r="2.5" fill="#0000" stroke="#fff" stroke-width="0.25px"/></g></svg>`;
         const switch_action = (sw_on, sw_off, img, b_text, s_text, ref) => {
             return _ => {
                 {{unique}}_banner.self().style['background-image'] = `url(${img})`;
@@ -30,10 +28,12 @@ const {{unique}}_banner = {
         {{unique}}_banner.self().insertAdjacentHTML('beforeEnd', `<div class="banner-switch">${svg_1}${svg_2}</div>`);
         sw1 = document.querySelector('#{{unique}}-switch-1');
         sw2 = document.querySelector('#{{unique}}-switch-2');
-        a1 = switch_action(sw1, sw2, '{{img_1}}', '{{button_1}}', '{{slogan_1}}', '{{ref_1}}');
-        a2 = switch_action(sw2, sw1, '{{img_2}}', '{{button_2}}', '{{slogan_2}}', '{{ref_2}}');
-        sw1.addEventListener('click', a1);
-        sw2.addEventListener('click', a2);
-        a1();
+        sa1 = switch_action(sw1, sw2, '{{img_1}}', '{{button_1}}', '{{slogan_1}}', '{{ref_1}}');
+        sa2 = switch_action(sw2, sw1, '{{img_2}}', '{{button_2}}', '{{slogan_2}}', '{{ref_2}}');
+        sw1.addEventListener('click', sa1);
+        sw2.addEventListener('click', sa2);
+        {% if show %}
+        sa{{show}}();
+        {% endif %}
     },
 };
