@@ -8,6 +8,7 @@ const {{side}}_sidebar = {
             {{side}}_sidebar.hide();
             {{side}}_sidebar.content().innerHTML = html;
             {{side}}_sidebar.self().style.visibility = 'visible';
+            {{side}}_sidebar.self().style.opacity = 1.0;
             {{side}}_sidebar.ctype = ctype;
             if(ctype == ContentType.SCART && !{{side}}_sidebar.__on_scart_changed) {
                 {{side}}_sidebar.__on_scart_changed = e => { if({{side}}_sidebar.visible()) {{side}}_sidebar.show(url, ctype); };
@@ -18,6 +19,7 @@ const {{side}}_sidebar = {
     hide: () => {
         {{side}}_sidebar.content().innerHTML = '';
         {{side}}_sidebar.self().style.visibility = "hidden";
+        {{side}}_sidebar.self().style.opacity = 0.0;
         {{side}}_sidebar.ctype = ContentType.NONE;
         if(!!{{side}}_sidebar.__on_scart_changed) {
             window.removeEventListener(EventType.SCART_CHANGED, {{side}}_sidebar.__on_scart_changed);
