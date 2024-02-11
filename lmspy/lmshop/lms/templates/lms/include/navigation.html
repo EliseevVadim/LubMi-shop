@@ -10,6 +10,8 @@
   <a onclick="show_contacts();" class="hand">{{param_title_contacts}}</a>{% else %}
   <a href='{% url "lms:contacts" %}'>{{param_title_contacts}}</a>{% endif %}
   <a href='{% url "lms:about" %}'>{{param_title_about_company}}</a>
+  <section class="nav-icons">
   <a class="picto hand" onclick="right_sidebar.show_favorites();"><img src="{% static 'svg/heart.svg' %}"/></a>
   <a class="picto hand" onclick="right_sidebar.show_scart();"><img src="{% static 'svg/bag.svg' %}"/></a>
+  </section>
 </nav>

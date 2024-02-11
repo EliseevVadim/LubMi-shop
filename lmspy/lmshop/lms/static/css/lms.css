@@ -81,7 +81,19 @@ body, aside, .content, .leading {
     margin-right: auto;
 }
 
-.leading > nav > a > img, a.logo > img {
+.nav-icons {
+    margin-left: auto;
+    display: inline-flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-icons > * {
+    margin: 0 1rem 0 1rem;
+}
+
+.leading > nav > a > img, a.logo > img, .nav-icons img {
     height: calc(var(--LeadingHeight) * 0.95);
 }
 
