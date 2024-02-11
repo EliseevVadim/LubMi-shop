@@ -572,6 +572,10 @@ img.bkg {
     margin-top: var(--DefPadding);
 }
 
+.mt15 {
+    margin-top: calc(1.5 * var(--DefPadding));
+}
+
 .mb1 {
     margin-bottom: var(--DefPadding);
 }
