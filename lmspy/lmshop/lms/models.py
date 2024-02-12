@@ -257,9 +257,15 @@ class Order(DbItem):
         cd = "cd", "СДЭК"
         pr = "pr", "Почта России"
 
+    class Status(models.IntegerChoices):
+        open = 0, "Открыт, но не оплачен",
+        paid = 1, "Открыт и оплачен",
+        closed = 2, "Выполнен и закрыт",
+
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)               # -- UUID заказа --
     slug = models.SlugField(unique=True, max_length=100)                                        # -- слаг --
-    bank_payment_id = models.UUIDField(null=True)                                               # -- Id банковской платежки --
+    payment_id = models.UUIDField(null=True)                                                    # -- Id банковской платежки --
+    status = models.IntegerField(choices=Status.choices, default=Status.open)                   # -- статус заказа ---
     closed_at = models.DateTimeField(null=True, blank=True, default=None)                       # -- время и флаг выполнения --
     city = models.ForeignKey(City, null=False, on_delete=models.PROTECT)
     delivery_service = models.CharField(                                                        # -- тип доставки --
