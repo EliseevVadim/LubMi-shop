@@ -1,3 +1,4 @@
 *.bak 
 build-lmshop-*
 *pro.user
+.idea
