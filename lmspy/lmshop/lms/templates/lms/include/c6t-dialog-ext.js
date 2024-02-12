@@ -11,6 +11,7 @@ c6t_dialog.close = () => {
     c6t_dialog.rszo = null;
     c6t_dialog.__close();
 };
+
 c6t_dialog.show = () => {
     const by_id = id => document.getElementById(id);
     const by_selector = sel => document.querySelector(sel);
@@ -54,10 +55,6 @@ c6t_dialog.show = () => {
             _floor.value = answer.address.floor;
             _apartment.value = answer.address.apartment;
             _fullname.value = answer.address.fullname;
-
-
-//            _city_uuid.value = answer.address.city_uuid;
-//            _city.value = answer.address.city;
 
             _city.insertAdjacentHTML("afterEnd", '<div id="c6t-city-list" class="c6t-city-list"></div>');
             const move_city_list = elements => {
@@ -170,8 +167,10 @@ c6t_dialog.show = () => {
             });
 
             scart_changed();
+
             c6t_dialog.choose_city(answer.address.city, answer.address.city_uuid, false);
             d6y_changed({currentTarget: by_selector('input[id^="c6t-d6y_service_"]:checked')});
+
             _email.oninput(null);
             _phone.oninput(null);
 
