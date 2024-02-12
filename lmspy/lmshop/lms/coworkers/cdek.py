@@ -10,7 +10,11 @@ from django.core.cache import cache
 
 class Cdek(ApiClient):
     def __init__(self):
-        super().__init__("cd", Coworker.setting("cd", "api_address"), Coworker.setting("cd", "client_id"), Coworker.setting("cd", "client_secret"))
+        super().__init__(
+            "cd",
+            Coworker.setting("cd", "api_address"),
+            Coworker.setting("cd", "client_id"),
+            Coworker.setting("cd", "client_secret"))
 
     @property
     @copy_result

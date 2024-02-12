@@ -7,7 +7,11 @@ from django.urls import reverse
 
 class Yookassa(ApiClient):
     def __init__(self):
-        super().__init__("yo", Coworker.setting("yo", "api_address"), Coworker.setting("yo", "account_id"), Coworker.setting("yo", "secret_key"))
+        super().__init__(
+            "yo",
+            Coworker.setting("yo", "api_address"),
+            Coworker.setting("yo", "account_id"),
+            Coworker.setting("yo", "secret_key"))
 
     @staticmethod
     def amount(**kwargs):
