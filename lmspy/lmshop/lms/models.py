@@ -349,9 +349,9 @@ class Coworker(DbItem):
         return f'"{self.title}"'
 
     @staticmethod
-    def setting(cpk, spk, default=None):
+    def setting(cpk, skey, default=None):
         try:
-            return Coworker.objects.get(pk=cpk).settings.get(pk=spk).value
+            return Coworker.objects.get(pk=cpk).settings.get(key=skey).value
         except Coworker.DoesNotExist:
             return default
         except Setting.DoesNotExist:
@@ -359,10 +359,18 @@ class Coworker(DbItem):
 
 
 class Setting(DbItem):
-    key = models.CharField(primary_key=True, max_length=32)                                     # -- ключ --
+    key = models.CharField(max_length=32)                                                       # -- ключ --
     value = models.CharField(max_length=150)                                                    # -- значение --
     description = models.TextField(null=True, blank=True)                                       # -- описание --
     owner = models.ForeignKey(Coworker, related_name="settings", on_delete=models.CASCADE)      # -- владелец --
+
+    class Meta:
+        ordering = ["key"]
+        indexes = [models.Index(fields=["key"])]
+        constraints = [models.UniqueConstraint(
+            fields=["key", "owner_id"],
+            name="unique_key_per_owner"
+        )]
 
     def __str__(self):
         return f'<{self.owner.key}>:<{self.key}>:<{self.value}>'
