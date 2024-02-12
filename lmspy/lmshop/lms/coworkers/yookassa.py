@@ -14,7 +14,7 @@ class Yookassa(ApiClient):
             {"Idempotence-Key": order_uuid},
             (self.client_id, self.client_secret),
             amount={"value": f"{summ:.2f}", "currency": "RUB"},
-            confirmation={"type": "redirect", "return_url": f'http://localhost:8000{reverse("lms:about")}'},  # TODO !!
+            confirmation={"type": "redirect", "return_url": f'{self.setting("back_address")}{reverse("lms:about")}'},  # TODO !!
             capture=False,
             description=f"Заказ {order_uuid}",
             metadata={'orderNumber': order_uuid},
@@ -31,11 +31,11 @@ class Yookassa(ApiClient):
                         "value": f"{item.price.amount:.2f}",
                         "currency": "RUB"
                     },
-                    "vat_code": Coworker.setting("yo", "vat_code"),
+                    "vat_code": self.setting("vat_code"),
                     "supplier": {
-                        "name": Coworker.setting("yo", "supplier_name"),
-                        "phone": Coworker.setting("yo", "supplier_phone"),
-                        "inn": Coworker.setting("yo", "supplier_inn")
+                        "name": self.setting("supplier_name"),
+                        "phone": self.setting("supplier_phone"),
+                        "inn": self.setting("supplier_inn")
                     }
                 } for item in order.items.all()]
             })

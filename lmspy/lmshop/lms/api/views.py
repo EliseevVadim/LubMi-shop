@@ -1,6 +1,7 @@
 from django.utils.html import escape
 from django.shortcuts import get_object_or_404, Http404
 from django.db import transaction, IntegrityError
+from httpx import TransportError
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework import generics
@@ -249,11 +250,17 @@ class CheckoutSCartView(APIView):
                         size.save()
                     order.save()
                     yo_result = Yookassa().create_payment(order, price + delivery_cost)
-                    if "status" not in yo_result:
+                    if "status" in yo_result and "id" in yo_result and yo_result["status"] == "pending":
+                        pass  # TODO okay!
+                        raise ValueError(100)
+                    else:
                         raise ValueError(yo_result)
-
             except IntegrityError as error:
-                return 'IntegrityError'  # TODO test this!
+                return 'IntegrityError'  # Не хватило товара
+            except ValueError:
+                return 'Проблемы с оплатой'
+            except TransportError:
+                return 'Проблемы с оплатой'
             else:
                 info = CustomerInfo(request)  # -- update session info --
                 info.last_bps_id = bps_id
