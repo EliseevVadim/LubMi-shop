@@ -1,6 +1,6 @@
 import httpx
-from httpx import TransportError
 
+from httpx import TransportError
 from lms.coworkers.apiclient import ApiClient
 from lms.deco import copy_result
 from lms.models import Coworker
