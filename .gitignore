@@ -1,4 +1,5 @@
 *.bak 
+lmspy/lmshop/lmshop.sqlite3
 build-lmshop-*
 *pro.user
 .idea
