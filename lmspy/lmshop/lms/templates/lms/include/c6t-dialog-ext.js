@@ -112,7 +112,7 @@ c6t_dialog.show = () => {
             }
 
             _city.tmo_id = null;
-            _city.oninput = e => {
+            _city.oninput = _ => {
                 if(_city.tmo_id) { clearTimeout(_city.tmo_id); }
                 if(city_chosen()) {
                     _city.value = null;
