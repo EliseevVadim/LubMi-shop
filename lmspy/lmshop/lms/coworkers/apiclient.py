@@ -1,5 +1,6 @@
 import httpx
 import functools
+import re
 
 from lms.models import Coworker
 from urllib.parse import quote
@@ -11,6 +12,8 @@ class ApiClient:
         self._address = address
         self._client_id = client_id
         self._client_secret = client_secret
+
+    uuid_re = re.compile("^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$")
 
     @staticmethod
     def _quoted(kwargs):
@@ -39,10 +42,13 @@ class ApiClient:
     def authorization(self):
         return f"{self.client_id}:{self.client_secret}"
 
+    def func_url(self, func):
+        return f"{self.address}/{func}"
+
     def _post_x_www_form(self, func, headers=None, **kwargs):
         with httpx.Client() as client:
             result = client.post(
-                f"{self.address}/{func}",
+                self.func_url(func),
                 headers={
                     "Authorization": self.authorization,
                     "Content-Type": "application/x-www-form-urlencoded"
@@ -54,7 +60,7 @@ class ApiClient:
     def _post_json(self, func, headers=None, **kwargs):
         with httpx.Client() as client:
             result = client.post(
-                f"{self.address}/{func}",
+                self.func_url(func),
                 headers={
                     "Authorization": self.authorization,
                     "Content-Type": "application/json"
@@ -66,7 +72,7 @@ class ApiClient:
     def _get(self, func, headers=None, **kwargs):
         with httpx.Client() as client:
             result = client.get(
-                f"{self.address}/{func}",
+                self.func_url(func),
                 headers={
                     "Authorization": self.authorization,
                     "Content-Type": "application/x-www-form-urlencoded"

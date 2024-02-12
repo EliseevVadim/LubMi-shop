@@ -1,5 +1,4 @@
 import httpx
-import re
 
 from lms.coworkers.apiclient import ApiClient
 from lms.deco import copy_result
@@ -9,8 +8,6 @@ from django.core.cache import cache
 
 
 class Cdek(ApiClient):
-    uuid_re = re.compile("^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$")
-
     def __init__(self):
         super().__init__("cd", Coworker.setting("cd", "api_address"), Coworker.setting("cd", "client_id"), Coworker.setting("cd", "client_secret"))
 
