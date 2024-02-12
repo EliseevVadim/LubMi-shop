@@ -259,7 +259,7 @@ class Order(DbItem):
 
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)               # -- UUID заказа --
     slug = models.SlugField(unique=True, max_length=100)                                        # -- слаг --
-    bank_payment_id = models.CharField(null=True, max_length=250)                               # -- Id банковской платежки --
+    bank_payment_id = models.UUIDField(null=True)                                               # -- Id банковской платежки --
     closed_at = models.DateTimeField(null=True, blank=True, default=None)                       # -- время и флаг выполнения --
     city = models.ForeignKey(City, null=False, on_delete=models.PROTECT)
     delivery_service = models.CharField(                                                        # -- тип доставки --
