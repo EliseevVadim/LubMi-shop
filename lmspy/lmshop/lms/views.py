@@ -12,6 +12,7 @@ from httpx import TransportError
 
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
 from .coworkers.cdek import Cdek
+from .coworkers.postru import PostRu
 from .forms import ShortCustomerInfoForm, CheckoutForm
 from .models import Parameter, Product, City, Coworker
 
@@ -556,10 +557,10 @@ class C6tInfoView(View):
     def get(request, kind, data, scart, *_, **__):
         match kind:
             case 'delivery':
-                dv_cost = decimal.Decimal(459.70 if data == "cd" else 512.00)  # TODO !!!
+                d6y_cost = decimal.Decimal(459.70 if data == "cd" else 512.00)  # TODO !!!
                 dv_days = decimal.Decimal(3 if data == "cd" else 5)  # TODO !!!
                 return render(request, 'lms/c6t-d6y.html', {
-                    "cost": floatformat(dv_cost, 2),
+                    "cost": floatformat(d6y_cost, 2),
                     "days": floatformat(dv_days),
                 })
             case 'cities':
@@ -581,36 +582,19 @@ class C6tInfoView(View):
                         city = None
                     except ValidationError:
                         city = None
-
-                    def dv_cost_cd():
-                        tariff_code = int(Coworker.setting("cd", "tariff_code"))
-                        city_code_from = int(Coworker.setting("cd", "location_from_code"))
-                        city_code_to = city.code if city else city_code_from
-                        try:
-                            tariff = Cdek().tariff(
-                                tariff_code,
-                                Cdek.location(code=city_code_from),
-                                Cdek.location(code=city_code_to),
-                                [Cdek.package(weight=scart["weight"])],
-                                [])  # TODO scart weight
-                            return (float(tariff["delivery_sum"]), None) if "delivery_sum" in tariff else (0.0, Cdek.extract_error(tariff))
-                        except KeyError as e:
-                            return 0.0, e
-                        except ValueError as e:
-                            return 0.0, e
-                        except TransportError as e:
-                            return 0.0, e
-
-                    dv_cost, error = dv_cost_cd() if data == 'cd' else (820.10, None)  # TODO for PR!!!
+                    d6y_cost, error = {
+                        'cd': Cdek(),
+                        'pr': PostRu()
+                    }[data].delivery_cost(city.code if city else None, scart["weight"])
                 else:
                     error = Parameter.value_of('message_shopping_cart_empty')
                 return render(request, 'lms/c6t-summary.html', {
                     "items": {
                         "Сумма": f'{floatformat(scart["price"], 2)} {Parameter.value_of("label_currency")}',
                         "Вес": f'{floatformat(scart["weight"] / Decimal(1000), 2)} кг',
-                        "Доставка": f'{"СДЭК" if data == "cd" else "Почта России"}, {floatformat(dv_cost, 2)} {Parameter.value_of("label_currency")}',
+                        "Доставка": f'{"СДЭК" if data == "cd" else "Почта России"}, {floatformat(d6y_cost, 2)} {Parameter.value_of("label_currency")}',
                         "Назначение": f'{city.city_full if city else Coworker.setting("cd", "location_from_city")}'.replace(", ", ",\n"),
-                        "Итоговая сумма": f'{floatformat(scart["price"] + Decimal(dv_cost), 2)} {Parameter.value_of("label_currency")}',
+                        "Итоговая сумма": f'{floatformat(scart["price"] + Decimal(d6y_cost), 2)} {Parameter.value_of("label_currency")}',
                     } if not error else {
                         "Хьюстон, у нас проблема": error
                     }

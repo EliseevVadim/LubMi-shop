@@ -147,7 +147,7 @@ c6t_dialog.show = () => {
                     cu_floor: _floor.value,
                     cu_apartment: _apartment.value,
                     cu_fullname: _fullname.value,
-                    cu_confirm: _confirm.value
+                    cu_confirm: _confirm.checked
                 }, result => {
                     if(result.success) {
                         window.location.href = result.redirect;

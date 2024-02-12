@@ -262,7 +262,7 @@ class Order(DbItem):
         paid = 1, "Открыт и оплачен",
         closed = 2, "Выполнен и закрыт",
 
-    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)               # -- UUID заказа --
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4)                               # -- UUID заказа --
     slug = models.SlugField(unique=True, max_length=100)                                        # -- слаг --
     payment_id = models.UUIDField(null=True)                                                    # -- Id банковской платежки --
     status = models.IntegerField(choices=Status.choices, default=Status.open)                   # -- статус заказа ---

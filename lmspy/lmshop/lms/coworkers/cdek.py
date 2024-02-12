@@ -1,4 +1,5 @@
 import httpx
+from httpx import TransportError
 
 from lms.coworkers.apiclient import ApiClient
 from lms.deco import copy_result
@@ -156,4 +157,22 @@ class Cdek(ApiClient):
                                packages=packages,
                                **kwargs)
 
+    def delivery_cost(self, dst_city_code, weight):
+        tariff_code = int(self.setting("tariff_code"))
+        city_code_from = int(self.setting("location_from_code"))
+        city_code_to = dst_city_code or city_code_from
+        try:
+            tariff = Cdek().tariff(
+                tariff_code,
+                Cdek.location(code=city_code_from),
+                Cdek.location(code=city_code_to),
+                [Cdek.package(weight=weight)],
+                [])
+            return (float(tariff["delivery_sum"]), None) if "delivery_sum" in tariff else (0.0, Cdek.extract_error(tariff))
+        except KeyError:
+            return 0.0, "Возникли проблемы с подключением к транспортному сервису"
+        except ValueError:
+            return 0.0, "Возникли проблемы с подключением к транспортному сервису"
+        except TransportError:
+            return 0.0, "Возникли проблемы с подключением к транспортному сервису"
 

@@ -1,11 +1,13 @@
 from django.utils.html import escape
 from django.shortcuts import get_object_or_404, Http404
 from django.db import transaction, IntegrityError
-from httpx import TransportError
+from decimal import Decimal
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework import generics
 from lms.api.decorators import api_response
+from lms.coworkers.cdek import Cdek
+from lms.coworkers.postru import PostRu
 from lms.models import Product, NotificationRequest, AvailableSize, Parameter, Order, OrderItem, City
 from lms.api.serializers import ProductSerializer
 from lms.utils import send_message_via_telegram, ask_delivery_service_for_cost
@@ -203,7 +205,7 @@ class CheckoutSCartView(APIView):
                 cu_apartment and \
                 cu_fullname and \
                 cu_confirm:
-            if cu_confirm != "on":
+            if cu_confirm != "True":
                 return Parameter.value_of('message_you_must_agree_pp', 'Необходимо согласиться с политикой конфиденциальности')
             records, price = scart["records"], scart["price"]
             if not records:
@@ -212,12 +214,16 @@ class CheckoutSCartView(APIView):
                 city = City.objects.get(pk=cu_city_uuid)
             except City.DoesNotExist:
                 return "Пункт назначения заказа неверен."
-            delivery_cost = ask_delivery_service_for_cost(delivery_service)  # TODO !
-            # TODO validate all data we can validate here
-            try:  # -- save order --
+            d6y_cost, error = {
+                'cd': Cdek(),
+                'pr': PostRu()
+            }[delivery_service].delivery_cost(city.code if city else None, scart["weight"])
+            if error:
+                return error
+            try:  # -- create order and process it --
                 with transaction.atomic():
                     order = Order(delivery_service=delivery_service,
-                                  delivery_cost=delivery_cost,
+                                  delivery_cost=d6y_cost,
                                   city=city,
                                   cu_name=cu_name,
                                   cu_phone=cu_phone,
@@ -251,7 +257,7 @@ class CheckoutSCartView(APIView):
                         size.quantity -= quantity  # TODO ensure validation works !!!
                         size.save()
                     order.save()
-                    payment_id, payment_url, error = Yookassa().create_payment(order, price + delivery_cost)
+                    payment_id, payment_url, error = Yookassa().create_payment(order, price + Decimal(d6y_cost))
                     if error:
                         raise ValueError(error)  # breaks transaction!
                     order.payment_id = payment_id
