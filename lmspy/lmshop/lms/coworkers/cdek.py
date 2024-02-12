@@ -30,7 +30,6 @@ class Cdek(ApiClient):
                         "client_secret": quote(self._client_secret)
                     }
                 ).json()
-
         auth_ = cache.get("cdek-auth")
         if auth_ is None:
             auth_ = ask_auth()
