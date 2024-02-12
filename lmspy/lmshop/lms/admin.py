@@ -47,7 +47,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ['slug', 'cu_fullname', 'closed_at']
     list_filter = ['cu_fullname']
     search_fields = ['cu_fullname']
-    prepopulated_fields = {'slug': ('created_at', 'id')}
+    prepopulated_fields = {'slug': ('uuid',)}
 
 
 @admin.register(TelegramBot)

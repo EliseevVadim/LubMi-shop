@@ -257,7 +257,8 @@ class Order(DbItem):
         cd = "cd", "СДЭК"
         pr = "pr", "Почта России"
 
-    slug = models.SlugField(unique=True, max_length=200)                                        # -- слаг --
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)               # -- UUID заказа --
+    slug = models.SlugField(unique=True, max_length=100)                                        # -- слаг --
     bank_payment_id = models.CharField(max_length=250)                                          # -- Id банковской платежки --
     closed_at = models.DateTimeField(null=True, blank=True, default=None)                       # -- время и флаг выполнения --
     city = models.ForeignKey(City, null=False, on_delete=models.PROTECT)
@@ -287,7 +288,7 @@ class Order(DbItem):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = text.slugify(self.created_at, self.id)
+            self.slug = text.slugify(self.uuid)
         super().save(*args, **kwargs)
 
     def __str__(self):
