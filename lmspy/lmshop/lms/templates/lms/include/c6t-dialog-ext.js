@@ -48,8 +48,6 @@ c6t_dialog.show = () => {
             _name.value = answer.name;
             _phone.value = answer.phone;
             _email.value = answer.email;
-            _city_uuid.value = answer.address.city_uuid;
-            _city.value = answer.address.city;
             _street.value = answer.address.street;
             _building.value = answer.address.building;
             _entrance.value = answer.address.entrance;
@@ -57,13 +55,9 @@ c6t_dialog.show = () => {
             _apartment.value = answer.address.apartment;
             _fullname.value = answer.address.fullname;
 
-            const city_chosen = () => !!_city_uuid.value;
-            c6t_dialog.choose_city = (text, uuid) => {
-                _city_uuid.value = uuid;
-                _city.value = text;
-                c6t_dialog.city_list().style.visibility = 'hidden';
-                setTimeout(update_summary);
-            }
+
+//            _city_uuid.value = answer.address.city_uuid;
+//            _city.value = answer.address.city;
 
             _city.insertAdjacentHTML("afterEnd", '<div id="c6t-city-list" class="c6t-city-list"></div>');
             const move_city_list = elements => {
@@ -96,6 +90,14 @@ c6t_dialog.show = () => {
                     c6t_status.innerHTML = html;
                 }).catch(_=>{});
             };
+
+            const city_chosen = () => !!_city_uuid.value;
+            c6t_dialog.choose_city = (text, uuid, do_update_summary = true) => {
+                _city_uuid.value = uuid;
+                _city.value = text;
+                if(text && uuid) { c6t_dialog.city_list().style.visibility = 'hidden'; }
+                if(do_update_summary) { setTimeout(update_summary); }
+            }
 
             const d6y_changed = () => {
                 if(!city_chosen()) { setTimeout(update_cities); }
@@ -148,6 +150,7 @@ c6t_dialog.show = () => {
                     cu_confirm: _confirm.value
                 }, result => {
                     if(result.success) {
+                        window.location.href = result.redirect;
                     } else {
                         alert(result.why); //TODO custom message box
                     }
@@ -167,9 +170,11 @@ c6t_dialog.show = () => {
             });
 
             scart_changed();
+            c6t_dialog.choose_city(answer.address.city, answer.address.city_uuid, false);
             d6y_changed({currentTarget: by_selector('input[id^="c6t-d6y_service_"]:checked')});
             _email.oninput(null);
             _phone.oninput(null);
+
             c6t_dialog.rszo = new ResizeObserver(move_city_list);
             c6t_dialog.rszo.observe(_city);
             c6t_dialog.self().showModal();

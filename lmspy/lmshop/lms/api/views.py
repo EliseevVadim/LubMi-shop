@@ -205,25 +205,27 @@ class CheckoutSCartView(APIView):
                 cu_confirm:
             if cu_confirm != "on":
                 return Parameter.value_of('message_you_must_agree_pp', 'Необходимо согласиться с политикой конфиденциальности')
+            records, price = scart["records"], scart["price"]
+            if not records:
+                return Parameter.value_of('message_shopping_cart_empty', 'Корзина пуста. Добавьте в корзину хотя бы один товар!')
+            try:
+                city = City.objects.get(pk=cu_city_uuid)
+            except City.DoesNotExist:
+                return "Пункт назначения заказа неверен."
+            delivery_cost = ask_delivery_service_for_cost(delivery_service)  # TODO !
             # TODO validate all data we can validate here
-            city = City.objects.get(pk=cu_city_uuid)
             try:  # -- save order --
                 with transaction.atomic():
-                    records, price = scart["records"], scart["price"]
-                    if not records:
-                        return Parameter.value_of('message_shopping_cart_empty', 'Корзина пуста. Добавьте в корзину хотя бы один товар!')
-                    delivery_cost = ask_delivery_service_for_cost(delivery_service)  # TODO !
                     order = Order(delivery_service=delivery_service,
                                   delivery_cost=delivery_cost,
                                   city=city,
-                                  # bank_payment_id=bps_id, # TODO !
                                   cu_name=cu_name,
                                   cu_phone=cu_phone,
                                   cu_email=cu_email,
                                   cu_country=cu_country,
                                   cu_city_uuid=city.city_uuid,
                                   cu_city=cu_city,
-                                  cu_city_region=city.region,
+                                  cu_city_region=city.region.region,
                                   cu_city_subregion=city.sub_region,
                                   cu_street=cu_street,
                                   cu_building=cu_building,
@@ -249,21 +251,19 @@ class CheckoutSCartView(APIView):
                         size.quantity -= quantity  # TODO ensure validation works !!!
                         size.save()
                     order.save()
-                    yo_result = Yookassa().create_payment(order, price + delivery_cost)
-                    if "status" in yo_result and "id" in yo_result and yo_result["status"] == "pending":
-                        pass  # TODO okay!
-                        raise ValueError(100)
-                    else:
-                        raise ValueError(yo_result)
-            except IntegrityError as error:
-                return 'IntegrityError'  # Не хватило товара
-            except ValueError:
-                return 'Проблемы с оплатой'
-            except TransportError:
-                return 'Проблемы с оплатой'
+                    payment_id, payment_url, error = Yookassa().create_payment(order, price + delivery_cost)
+                    if error:
+                        raise ValueError(error)  # breaks transaction!
+                    order.payment_id = payment_id
+                    order.save()
+            except IntegrityError:
+                return "Указанное количество товара недоступно. Возможно, кто-то уже купил его, пока Вы оформляли заказ."
+            except ValueError as e:
+                return e.args[0]
             else:
                 info = CustomerInfo(request)  # -- update session info --
-                info.last_bps_id = bps_id
+                info.clear_scart()
+                info.payment_id = payment_id
                 info.name = cu_name
                 info.phone = cu_phone or info.phone
                 info.email = cu_email or info.email
@@ -278,6 +278,5 @@ class CheckoutSCartView(APIView):
                     "apartment": cu_apartment,
                     "fullname": cu_fullname,
                 }
-                info.clear_scart()
-                return {'bps_redirect': bps_redirect}
+                return {'redirect': payment_url}
         return Parameter.value_of('message_wrong_input', 'Пожалуйста, правильно введите данные')

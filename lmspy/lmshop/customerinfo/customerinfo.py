@@ -196,15 +196,15 @@ class CustomerInfo:
     # -- Last Payment Id --
 
     @property
-    def last_bps_id(self):
+    def payment_id(self):
         return self._get_or_create_item("last_bps_id", str)
 
-    @last_bps_id.setter
-    def last_bps_id(self, value):
+    @payment_id.setter
+    def payment_id(self, value):
         self._set_item("last_bps_id", value)
 
-    @last_bps_id.deleter
-    def last_bps_id(self):
+    @payment_id.deleter
+    def payment_id(self):
         self._delete_item("last_bps_id")
 
 
