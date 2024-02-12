@@ -259,7 +259,7 @@ class Order(DbItem):
 
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)               # -- UUID заказа --
     slug = models.SlugField(unique=True, max_length=100)                                        # -- слаг --
-    bank_payment_id = models.CharField(max_length=250)                                          # -- Id банковской платежки --
+    bank_payment_id = models.CharField(null=True, max_length=250)                               # -- Id банковской платежки --
     closed_at = models.DateTimeField(null=True, blank=True, default=None)                       # -- время и флаг выполнения --
     city = models.ForeignKey(City, null=False, on_delete=models.PROTECT)
     delivery_service = models.CharField(                                                        # -- тип доставки --
@@ -273,6 +273,7 @@ class Order(DbItem):
     cu_name = models.CharField(max_length=250)                                                  # -- как обращаться --
     cu_phone = models.CharField(null=True, max_length=50, validators=[Tunable.validate_phone])  # -- телефон --
     cu_email = models.CharField(null=True, max_length=250)                                      # -- email --
+    cu_country = models.CharField(max_length=2, default='RU')                                   # -- код страны --
     cu_city_uuid = models.UUIDField(null=True)                                                  # -- город --
     cu_city = models.CharField(max_length=100)                                                  # -- город --
     cu_city_region = models.CharField(null=True, max_length=100)                                # -- город --

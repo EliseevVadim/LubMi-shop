@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework import generics
 from lms.api.decorators import api_response
-from lms.models import Product, NotificationRequest, AvailableSize, Parameter, Order, OrderItem
+from lms.models import Product, NotificationRequest, AvailableSize, Parameter, Order, OrderItem, City
 from lms.api.serializers import ProductSerializer
 from lms.utils import send_message_via_telegram, ask_bank_for_payment_statement, ask_delivery_service_for_cost
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
@@ -201,24 +201,28 @@ class CheckoutSCartView(APIView):
                 cu_apartment and \
                 cu_fullname and \
                 cu_confirm:
-            if cu_confirm != "true":  # TODO "on"
+            if cu_confirm != "on":
                 return Parameter.value_of('message_you_must_agree_pp', 'Необходимо согласиться с политикой конфиденциальности')
             # TODO validate all data we can validate here
+            city = City.objects.get(pk=cu_city_uuid)
             try:  # -- save order --
                 with transaction.atomic():
                     records, price = scart["records"], scart["price"]
                     if not records:
                         return Parameter.value_of('message_shopping_cart_empty', 'Корзина пуста. Добавьте в корзину хотя бы один товар!')
                     delivery_cost = ask_delivery_service_for_cost(delivery_service)  # TODO !
-                    bps_id, bps_redirect = ask_bank_for_payment_statement(price + delivery_cost)
                     order = Order(delivery_service=delivery_service,
                                   delivery_cost=delivery_cost,
-                                  bank_payment_id=bps_id,
+                                  city=city,
+                                  # bank_payment_id=bps_id, # TODO !
                                   cu_name=cu_name,
                                   cu_phone=cu_phone,
                                   cu_email=cu_email,
                                   cu_country=cu_country,
+                                  cu_city_uuid=city.city_uuid,
                                   cu_city=cu_city,
+                                  cu_city_region=city.region,
+                                  cu_city_subregion=city.sub_region,
                                   cu_street=cu_street,
                                   cu_building=cu_building,
                                   cu_entrance=cu_entrance,
@@ -226,20 +230,25 @@ class CheckoutSCartView(APIView):
                                   cu_apartment=cu_apartment,
                                   cu_fullname=cu_fullname,
                                   cu_confirm=True)
-                    order.save()
                     for rec in records:
+                        product = rec["product"]
+                        size = rec["size"]
+                        quantity = rec["quantity"]
                         item = OrderItem(order=order,
-                                         ppk=rec.product.article,
-                                         title=str(rec.product),
-                                         size=rec.size.size,
-                                         quantity=rec.quantity,
-                                         price=rec.product.actual_price,
-                                         weight=rec.product.weight)
+                                         ppk=product.article,
+                                         title=str(product),
+                                         size=size.size,
+                                         quantity=quantity,
+                                         price=product.actual_price,
+                                         weight=product.weight)
                         item.save()
-                        rec.product.sales_quantity += rec.quantity
-                        rec.product.save()
-                        rec.size.quantity -= rec.quantity  # TODO ensure validation works !!!
-                        rec.size.save()
+                        product.sales_quantity += quantity
+                        product.save()
+                        size.quantity -= quantity  # TODO ensure validation works !!!
+                        size.save()
+                    order.save()
+                    bps_id, bps_redirect = ask_bank_for_payment_statement(order, price + delivery_cost)
+
             except IntegrityError as error:
                 return 'IntegrityError'  # TODO test this!
             else:

@@ -2,30 +2,18 @@ import httpx
 import re
 import functools
 
+from lms.coworkers.apiclient import ApiClient
 from lms.deco import copy_result
 from lms.models import Coworker
 from urllib.parse import quote
 from django.core.cache import cache
 
 
-class Cdek:
+class Cdek(ApiClient):
     uuid_re = re.compile("^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$")
 
-    @staticmethod
-    def setting(name):
-        return Coworker.setting("cd", name)
-
-    def __init__(self,
-                 address=setting("api_address"),
-                 client_id=setting("client_id"),
-                 client_secret=setting("client_secret")):
-        self._address = address
-        self._client_id = client_id
-        self._client_secret = client_secret
-
-    @staticmethod
-    def _quoted(kwargs):
-        return {quote(str(k)): quote(str(v)) for k, v in kwargs.items()}
+    def __init__(self):
+        super().__init__("cd", Coworker.setting("cd", "api_address"), Coworker.setting("cd", "client_id"), Coworker.setting("cd", "client_secret"))
 
     @property
     @copy_result
@@ -33,7 +21,7 @@ class Cdek:
         def ask_auth():
             with httpx.Client() as client:
                 return client.post(
-                    f"{self._address}/oauth/token?parameters",
+                    f"{self.address}/oauth/token?parameters",
                     headers={"Content-Type": "application/x-www-form-urlencoded"},
                     data={
                         "grant_type": "client_credentials",
@@ -42,51 +30,15 @@ class Cdek:
                     }
                 ).json()
 
-        a = cache.get("cdek-auth")
-        if a is None:
-            a = ask_auth()
-            cache.set("cdek-auth", a, int(a["expires_in"]) - 5)
-        return a
-
-    def _post(self, func, **kwargs):
-        with httpx.Client() as client:
-            result = client.post(
-                f"{self._address}/{func}",
-                headers={
-                    "Authorization": f"{self.token_type} {self.access_token}",
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                data=Cdek._quoted(kwargs)
-            ).json()
-            return result
-
-    def _post_json(self, func, **kwargs):
-        with httpx.Client() as client:
-            result = client.post(
-                f"{self._address}/{func}",
-                headers={
-                    "Authorization": f"{self.token_type} {self.access_token}",
-                    "Content-Type": "application/json"
-                },
-                json=kwargs
-            ).json()
-            return result
-
-    def _get(self, func, **kwargs):
-        with httpx.Client() as client:
-            result = client.get(
-                f"{self._address}/{func}",
-                headers={
-                    "Authorization": f"{self.token_type} {self.access_token}",
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                params=Cdek._quoted(kwargs)
-            ).json()
-            return result
+        auth_ = cache.get("cdek-auth")
+        if auth_ is None:
+            auth_ = ask_auth()
+            cache.set("cdek-auth", auth_, int(auth_["expires_in"]) - 5)
+        return auth_
 
     @staticmethod
     # @functools.lru_cache
-    def _construct_(decl: dict[str, tuple], **kwargs):
+    def _construct_arg_(decl: dict[str, tuple], **kwargs):
         var = {}
         for k, v in kwargs.items():
             d = decl[k]
@@ -159,7 +111,7 @@ class Cdek:
 
     @staticmethod
     def location(**kwargs):
-        return Cdek._construct_({
+        return Cdek._construct_arg_({
             "code": (int, None),                            # -- Код населенного пункта, integer
             "fias_guid": (str, Cdek._uuid_()),              # -- Уникальный идентификатор ФИАС, UUID
             "postal_code": (str, Cdek._str_255_()),         # -- Почтовый индекс, string(255)
@@ -174,14 +126,14 @@ class Cdek:
 
     @staticmethod
     def service(**kwargs):
-        return Cdek._construct_({
+        return Cdek._construct_arg_({
             "code": (int, None),                            # -- Код дополнительной услуги, integer
             "parameter": (str, None),                       # -- Параметр дополнительной услуги, string
         }, **kwargs)
 
     @staticmethod
     def package(**kwargs):
-        return Cdek._construct_({
+        return Cdek._construct_arg_({
             "number": (str, Cdek._str_255_()),      # -- Номер упаковки, string(255)
             "weight": (int, Cdek._positive_()),     # -- Общий вес (в граммах), integer
             "length": (int, Cdek._positive_()),     # -- Габариты упаковки. Длина (в сантиметрах), integer
@@ -193,7 +145,7 @@ class Cdek:
 
     @staticmethod
     def item(**kwargs):
-        return Cdek._construct_({
+        return Cdek._construct_arg_({
             "name": (str, Cdek._str_255_()),                # -- Наименование товара (может также содержать описание товара: размер, цвет), string(255)
             "ware_key": (str, Cdek. _max_len_(20)),	        # -- Идентификатор/артикул товара, string(20)
             "payment": (dict, None),	                    # -- Оплата за товар при получении (за единицу товара в указанной валюте, значение >=0) — наложенный платеж, в случае предоплаты значение = 0, money
@@ -211,7 +163,7 @@ class Cdek:
 
     @staticmethod
     def money(**kwargs):
-        return Cdek._construct_({
+        return Cdek._construct_arg_({
             "value": (float, Cdek._no_negative_()),	            # -- Сумма в валюте, float
             "vat_sum": (float, Cdek._no_negative_()),	        # -- Сумма НДС, float
             "vat_rate": (int, Cdek._one_of_(0, 10, 12, 20)),    # -- Ставка НДС (значение - 0, 10, 12, 20, null - нет НДС)
