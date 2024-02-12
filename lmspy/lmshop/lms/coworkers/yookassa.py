@@ -9,6 +9,26 @@ class Yookassa(ApiClient):
     def __init__(self):
         super().__init__("yo", Coworker.setting("yo", "api_address"), Coworker.setting("yo", "account_id"), Coworker.setting("yo", "secret_key"))
 
+    @staticmethod
+    def amount(**kwargs):
+        return Yookassa._construct_arg_({
+            "value": (str, None),                           # -- Сумма
+            "currency": (str, Yookassa._max_len_(3)),       # -- Валюта
+        }, **kwargs)
+
+    @staticmethod
+    def confirmation(**kwargs):
+        return Yookassa._construct_arg_({
+            "type": (str, Yookassa._one_of_("redirect")),   # -- Тип
+            "return_url": (str, None),                      # -- Адрес
+        }, **kwargs)
+
+    @staticmethod
+    def metadata(**kwargs):
+        return Yookassa._construct_arg_({
+            "order_uuid": (str, Yookassa._uuid_()),         # -- UUID ордера
+        }, **kwargs)
+
     def create_payment(self, order: Order, summ):
         order_uuid = str(order.uuid)
         try:
@@ -16,11 +36,11 @@ class Yookassa(ApiClient):
                 "payments",
                 {"Idempotence-Key": order_uuid},
                 (self.client_id, self.client_secret),
-                amount={"value": f"{summ:.2f}", "currency": "RUB"},
-                confirmation={"type": "redirect", "return_url": f'{self.setting("back_address")}{reverse("lms:about")}'},  # TODO !!
+                amount=Yookassa.amount(value=f"{summ:.2f}", currency="RUB"),
+                confirmation=Yookassa.confirmation(type="redirect", return_url=f'{self.setting("back_address")}{reverse("lms:about")}'),
                 capture=False,
-                description=f"Заказ {order_uuid}",
-                metadata={'orderNumber': order_uuid},
+                description=f"Заказ #{order_uuid}",
+                metadata=Yookassa.metadata(order_uuid=order_uuid),
                 receipt={
                     "customer": {
                         "full_name": order.cu_fullname,
