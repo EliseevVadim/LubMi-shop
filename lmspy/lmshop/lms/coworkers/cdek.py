@@ -1,6 +1,5 @@
 import httpx
 import re
-import functools
 
 from lms.coworkers.apiclient import ApiClient
 from lms.deco import copy_result
@@ -36,53 +35,9 @@ class Cdek(ApiClient):
             cache.set("cdek-auth", auth_, int(auth_["expires_in"]) - 5)
         return auth_
 
-    @staticmethod
-    # @functools.lru_cache
-    def _construct_arg_(decl: dict[str, tuple], **kwargs):
-        var = {}
-        for k, v in kwargs.items():
-            d = decl[k]
-            if type(v) is not d[0]:
-                raise TypeError(v)
-            if d[1] and not d[1](v):
-                raise ValueError(v)
-            var[k] = v
-        return var
-
-    @staticmethod
-    @functools.lru_cache
-    def _max_len_(n):
-        return lambda v: len(v) <= n
-
-    @staticmethod
-    @functools.lru_cache
-    def _positive_():
-        return lambda v: v > 0
-
-    @staticmethod
-    @functools.lru_cache
-    def _no_negative_():
-        return lambda v: v > 0
-
-    @staticmethod
-    @functools.lru_cache
-    def _country_code_():
-        return Cdek._max_len_(2)
-
-    @staticmethod
-    @functools.lru_cache
-    def _str_255_():
-        return Cdek._max_len_(255)
-
-    @staticmethod
-    @functools.lru_cache
-    def _uuid_():
-        return lambda v: bool(Cdek.uuid_re.match(v))
-
-    @staticmethod
-    @functools.lru_cache
-    def _one_of_(*args):
-        return lambda v: v in frozenset(args)
+    @property
+    def authorization(self):
+        return f"{self.token_type} {self.access_token}"
 
     @property
     def access_token(self):

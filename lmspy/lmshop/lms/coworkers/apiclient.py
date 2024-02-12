@@ -1,4 +1,5 @@
 import httpx
+import functools
 
 from lms.models import Coworker
 from urllib.parse import quote
@@ -38,7 +39,7 @@ class ApiClient:
     def authorization(self):
         return f"{self.client_id}:{self.client_secret}"
 
-    def _post(self, func, **kwargs):
+    def _post_x_www_form(self, func, **kwargs):
         with httpx.Client() as client:
             result = client.post(
                 f"{self.address}/{func}",
@@ -73,3 +74,52 @@ class ApiClient:
                 params=ApiClient._quoted(kwargs)
             ).json()
             return result
+
+    @staticmethod
+    # @functools.lru_cache
+    def _construct_arg_(decl: dict[str, tuple], **kwargs):
+        var = {}
+        for k, v in kwargs.items():
+            d = decl[k]
+            if type(v) is not d[0]:
+                raise TypeError(v)
+            if d[1] and not d[1](v):
+                raise ValueError(v)
+            var[k] = v
+        return var
+
+    @staticmethod
+    @functools.lru_cache
+    def _max_len_(n):
+        return lambda v: len(v) <= n
+
+    @staticmethod
+    @functools.lru_cache
+    def _positive_():
+        return lambda v: v > 0
+
+    @staticmethod
+    @functools.lru_cache
+    def _no_negative_():
+        return lambda v: v > 0
+
+    @staticmethod
+    @functools.lru_cache
+    def _country_code_():
+        return ApiClient._max_len_(2)
+
+    @staticmethod
+    @functools.lru_cache
+    def _str_255_():
+        return ApiClient._max_len_(255)
+
+    @staticmethod
+    @functools.lru_cache
+    def _uuid_():
+        return lambda v: bool(ApiClient.uuid_re.match(v))
+
+    @staticmethod
+    @functools.lru_cache
+    def _one_of_(*args):
+        return lambda v: v in frozenset(args)
+
