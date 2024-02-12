@@ -1,10 +1,42 @@
 from lms.coworkers.apiclient import ApiClient
-from lms.deco import copy_result
-from lms.models import Coworker
-from urllib.parse import quote
-from django.core.cache import cache
+from lms.models import Coworker, Order
+from django.urls import reverse
 
 
 class Yookassa(ApiClient):
     def __init__(self):
-        super().__init__("yo", Coworker.setting("yo", "api_address"), Coworker.setting("yo", "account_id"), Coworker.setting("cd", "client_secret"))
+        super().__init__("yo", Coworker.setting("yo", "api_address"), Coworker.setting("yo", "account_id"), Coworker.setting("yo", "secret_key"))
+
+    def create_payment(self, order: Order, summ):
+        order_uuid = str(order.uuid)
+        res = self._post_json(
+            "payments",
+            {"Idempotence-Key": order_uuid},
+            (self.client_id, self.client_secret),
+            amount={"value": f"{summ:.2f}", "currency": "RUB"},
+            confirmation={"type": "redirect", "return_url": f'http://localhost:8000{reverse("lms:about")}'},  # TODO !!
+            capture=False,
+            description=f"Заказ {order_uuid}",
+            metadata={'orderNumber': order_uuid},
+            receipt={
+                "customer": {
+                    "full_name": order.cu_fullname,
+                    "email": order.cu_email,
+                    "phone": order.cu_phone,
+                },
+                "items": [{
+                    "description": item.title,
+                    "quantity": f"{item.quantity}",
+                    "amount": {
+                        "value": f"{item.price.amount:.2f}",
+                        "currency": "RUB"
+                    },
+                    "vat_code": Coworker.setting("yo", "vat_code"),
+                    "supplier": {
+                        "name": Coworker.setting("yo", "supplier_name"),
+                        "phone": Coworker.setting("yo", "supplier_phone"),
+                        "inn": Coworker.setting("yo", "supplier_inn")
+                    }
+                } for item in order.items.all()]
+            })
+        return res

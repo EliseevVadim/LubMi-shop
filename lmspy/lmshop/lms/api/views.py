@@ -7,8 +7,9 @@ from rest_framework import generics
 from lms.api.decorators import api_response
 from lms.models import Product, NotificationRequest, AvailableSize, Parameter, Order, OrderItem, City
 from lms.api.serializers import ProductSerializer
-from lms.utils import send_message_via_telegram, ask_bank_for_payment_statement, ask_delivery_service_for_cost
+from lms.utils import send_message_via_telegram, ask_delivery_service_for_cost
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
+from lms.coworkers.yookassa import Yookassa
 
 
 class ProductListView(generics.ListAPIView):
@@ -247,7 +248,9 @@ class CheckoutSCartView(APIView):
                         size.quantity -= quantity  # TODO ensure validation works !!!
                         size.save()
                     order.save()
-                    bps_id, bps_redirect = ask_bank_for_payment_statement(order, price + delivery_cost)
+                    yo_result = Yookassa().create_payment(order, price + delivery_cost)
+                    if "status" not in yo_result:
+                        raise ValueError(yo_result)
 
             except IntegrityError as error:
                 return 'IntegrityError'  # TODO test this!

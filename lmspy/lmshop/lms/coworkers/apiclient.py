@@ -45,26 +45,28 @@ class ApiClient:
     def func_url(self, func):
         return f"{self.address}/{func}"
 
-    def _post_x_www_form(self, func, headers=None, **kwargs):
+    def _post_x_www_form(self, func, headers=None, auth=None, **kwargs):
         with httpx.Client() as client:
             result = client.post(
                 self.func_url(func),
+                auth=auth,
                 headers={
                     "Authorization": self.authorization,
                     "Content-Type": "application/x-www-form-urlencoded"
-                } | ({h: v for h, v in headers} if headers else {}),
+                } | ({h: v for h, v in headers.items()} if headers.items() else {}),
                 data=ApiClient._quoted(kwargs)
             ).json()
             return result
 
-    def _post_json(self, func, headers=None, **kwargs):
+    def _post_json(self, func, headers=None, auth=None, **kwargs):
         with httpx.Client() as client:
             result = client.post(
                 self.func_url(func),
+                auth=auth,
                 headers={
                     "Authorization": self.authorization,
                     "Content-Type": "application/json"
-                } | ({h: v for h, v in headers} if headers else {}),
+                } | ({h: v for h, v in headers.items()} if headers else {}),
                 json=kwargs
             ).json()
             return result
@@ -76,7 +78,7 @@ class ApiClient:
                 headers={
                     "Authorization": self.authorization,
                     "Content-Type": "application/x-www-form-urlencoded"
-                } | ({h: v for h, v in headers} if headers else {}),
+                } | ({h: v for h, v in headers.items()} if headers.items() else {}),
                 params=ApiClient._quoted(kwargs)
             ).json()
             return result
