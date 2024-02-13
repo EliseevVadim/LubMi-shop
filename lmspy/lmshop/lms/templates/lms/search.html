@@ -1,0 +1,6 @@
+<div id="search-box">
+    <input id="search-text" type="text" oninput="sch.update(this.value);" />
+    <section id="search-result">
+    {% include "lms/include/catalogue-type-A.html" with title="123" products=bestsellers pages=10 kind="sch" %}
+    </section>
+</div>

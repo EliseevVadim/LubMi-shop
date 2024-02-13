@@ -603,13 +603,19 @@ class C6tInfoView(View):
                 return render(request, 'lms/c6t-summary.html', {
                     "items": {
                         "Ошибка": "Запрошен неизвестный тип данных"
-                }
-            })
+                    }
+                })
+
+
+class SearchView(View):
+    @staticmethod
+    def get(request, *_, **__):
+        return render(request, 'lms/search.html', {})
 
 
 class MessageView(View):
     @staticmethod
-    def get(request, kind,  *_, **__):
+    def get(request, kind, *_, **__):
         msg = {
             "pmt": Parameter.value_of("message_order_paid"),
             "nop": Parameter.value_of("message_order_not_paid"),
@@ -622,7 +628,7 @@ class MessageView(View):
 
 class JsMessageView(View):
     @staticmethod
-    def get(request, message,  *_, **__):
+    def get(request, message, *_, **__):
         return render(request, 'lms/message.html', {
             "message": message
         })
