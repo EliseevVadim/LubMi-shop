@@ -71,10 +71,11 @@ class ApiClient:
             ).json()
             return result
 
-    def _get(self, func, headers=None, **kwargs):
+    def _get(self, func, headers=None, auth=None, **kwargs):
         with httpx.Client() as client:
             result = client.get(
                 self.func_url(func),
+                auth=auth,
                 headers={
                     "Authorization": self.authorization,
                     "Content-Type": "application/x-www-form-urlencoded"

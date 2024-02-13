@@ -16,32 +16,33 @@ class Yookassa(ApiClient):
     @staticmethod
     def amount(**kwargs):
         return Yookassa._construct_arg_({
-            "value": (str, None),                           # -- Сумма
-            "currency": (str, Yookassa._max_len_(3)),       # -- Валюта
+            "value": (str, None),  # -- Сумма
+            "currency": (str, Yookassa._max_len_(3)),  # -- Валюта
         }, **kwargs)
 
     @staticmethod
     def confirmation(**kwargs):
         return Yookassa._construct_arg_({
-            "type": (str, Yookassa._one_of_("redirect")),   # -- Тип
-            "return_url": (str, None),                      # -- Адрес
+            "type": (str, Yookassa._one_of_("redirect")),  # -- Тип
+            "return_url": (str, None),  # -- Адрес
         }, **kwargs)
 
     @staticmethod
     def metadata(**kwargs):
         return Yookassa._construct_arg_({
-            "order_uuid": (str, Yookassa._uuid_()),         # -- UUID ордера
+            "order_uuid": (str, Yookassa._uuid_()),  # -- UUID ордера
         }, **kwargs)
 
     def create_payment(self, order: Order, summ):
         order_uuid = str(order.uuid)
+        back_page = f"lms:{self.setting('back_page')}"
         try:
             res = self._post_json(
                 "payments",
                 {"Idempotence-Key": order_uuid},
                 (self.client_id, self.client_secret),
                 amount=Yookassa.amount(value=f"{summ:.2f}", currency="RUB"),
-                confirmation=Yookassa.confirmation(type="redirect", return_url=f'{self.setting("back_address")}{reverse("lms:about")}'),
+                confirmation=Yookassa.confirmation(type="redirect", return_url=f'{self.setting("back_address")}{reverse(back_page)}'),
                 capture=False,
                 description=f"Заказ #{order_uuid}",
                 metadata=Yookassa.metadata(order_uuid=order_uuid),
@@ -73,3 +74,16 @@ class Yookassa(ApiClient):
                 return res["id"], res["confirmation"]["confirmation_url"], None
         except KeyError:
             return None, None, "Возникли проблемы с подключением к платежной системе.\nПопробуйте повторить попытку позже или обратитесь к администрации сайта."
+
+    def payment_state(self, payment_id):
+        try:
+            res = self._get(
+                f"payments/{payment_id}",
+                {},
+                (self.client_id, self.client_secret))
+        except TransportError:
+            return None, "Возникли проблемы с подключением к платежной системе.\nопробуйте повторить попытку позже или обратитесь к администрации сайта."
+        try:
+            return res["paid"], None
+        except KeyError:
+            return None, "Возникли проблемы с подключением к платежной системе.\nПопробуйте повторить попытку позже или обратитесь к администрации сайта."

@@ -197,15 +197,15 @@ class CustomerInfo:
 
     @property
     def payment_id(self):
-        return self._get_or_create_item("last_bps_id", str)
+        return self._get_or_create_item("payment_id", str)
 
     @payment_id.setter
     def payment_id(self, value):
-        self._set_item("last_bps_id", value)
+        self._set_item("payment_id", value)
 
     @payment_id.deleter
     def payment_id(self):
-        self._delete_item("last_bps_id")
+        self._delete_item("payment_id")
 
 
 def with_actual_scart_records_and_price(func):

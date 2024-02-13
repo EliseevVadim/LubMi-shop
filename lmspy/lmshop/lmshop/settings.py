@@ -54,6 +54,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'lms.processors.processors.parameters_processor',
+                'lms.processors.processors.payment_processor',
             ],
         },
     },
