@@ -23,9 +23,11 @@
 			{%csrf_token%}
 			<div class="dialog-footer"><input class="medium inverted" type="submit" value="{{form.confirmation|default:'Укажите подтверждение'}}"/></div>
 			</form>
-		{% else %}{% lorem %}{% endif %}
+		{% else %}{% lorem %}{% endif %} {# TODO kill lorem #}
 	</div>
-	{% if not form %}
-	<div class="dialog-footer"></div>
+	{% if not form and confirmation %}
+	<div class="dialog-footer">
+		<button class="medium inverted" onclick="">{{confirmation}}</button>
+	</div>
 	{% endif %}
 </dialog>

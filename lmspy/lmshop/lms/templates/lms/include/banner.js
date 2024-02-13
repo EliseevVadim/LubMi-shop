@@ -3,6 +3,7 @@ const {{unique}}_banner = {
     button: () => document.querySelector("#banner-{{unique}}  .banner-button"),
     slogan: () => document.querySelector("#banner-{{unique}}  .banner-slogan"),
     init: () => {
+        if(!{{unique}}_banner.self()) { return; }
         let pre_1 = document.createElement('link')
         let pre_2 = document.createElement('link')
             pre_1.href = '{{img_1}}'

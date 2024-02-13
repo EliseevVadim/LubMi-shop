@@ -21,4 +21,5 @@ urlpatterns = [
     path('backstage/c6t-scart/', C6tScartView.as_view(), name='c6t_scart'),
     path('backstage/c6t-form/', C6tFormView.as_view(), name='c6t_form'),
     path('backstage/c6t-info/<kind>/<data>/', C6tInfoView.as_view(), name='c6t_info'),
+    path('backstage/message/<kind>/', MessageView.as_view(), name='message'),
 ]

@@ -997,6 +997,9 @@ dialog {
 
 .dialog-footer {
     margin-top: 1rem;
+    display: flex;
+    flex-flow: column;
+    place-items: center;
 }
 
 /* HoF            -----------------------------------------------------------------------------------------------------*/
