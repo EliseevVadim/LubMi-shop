@@ -286,3 +286,38 @@ class CheckoutSCartView(APIView):
                 }
                 return {'redirect': payment_url}
         return Parameter.value_of('message_wrong_input', 'Пожалуйста, правильно введите данные')
+
+
+class CheckPaymentStateView(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    @api_response
+    def post(request, _=None):
+        data = request.data
+        try:
+            payment_id = data['payment_id']
+        except KeyError:
+            return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
+        except ValueError:
+            return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
+
+        state, error = Yookassa().payment_state(payment_id)
+        if error:
+            return error
+        try:
+            order = Order.objects.get(payment_id=payment_id)
+        except Order.DoesNotExist:
+            if state:
+                return f"**Немедленно свяжитесь с администрацией сайта!!!** Ваш платеж -- {payment_id} -- \
+                был проведен, но заказ, возможно, был **УТЕРЯН**! Сделайте скриншот экрана с этим сообщением \
+                и сохраните его в надежном месте, он послужит подтверждением Ваших претензий к продавцу!"
+            else:
+                return {}
+        if state:
+            order.status = Order.Status.paid
+            order.save()
+        else:
+            order.delete()
+        return {}
+

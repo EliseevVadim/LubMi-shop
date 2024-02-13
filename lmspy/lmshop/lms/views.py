@@ -613,8 +613,16 @@ class MessageView(View):
         msg = {
             "pmt": Parameter.value_of("message_order_paid"),
             "nop": Parameter.value_of("message_order_not_paid"),
-            "err": Parameter.value_of("message_order_error"),
+            "per": Parameter.value_of("message_order_error"),
         }
         return render(request, 'lms/message.html', {
             "message": msg[kind]
+        })
+
+
+class JsMessageView(View):
+    @staticmethod
+    def get(request, message,  *_, **__):
+        return render(request, 'lms/message.html', {
+            "message": message
         })

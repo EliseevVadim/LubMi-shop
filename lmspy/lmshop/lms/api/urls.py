@@ -15,4 +15,5 @@ urlpatterns = [
     path('customer/add-product-to-scart/', views.ProductToSCartView.as_view(), name='product_to_scart'),
     path('customer/remove-product-from-scart/', views.KillProductInSCartView.as_view(), name='kill_product_in_scart'),
     path('customer/checkout/', views.CheckoutSCartView.as_view(), name='c6t'),
+    path('customer/check-payment-state/', views.CheckPaymentStateView.as_view(), name='check_payment'),
 ]

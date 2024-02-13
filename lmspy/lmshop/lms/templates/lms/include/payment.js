@@ -1,20 +1,12 @@
 {% if payment_id %}
+__api_call__('{% url "api:check_payment" %}', { payment_id: '{{payment_id}}' }, result => {if(!result.success) {show_js_message(result.why);}});
 {% if payment_state != 'error' %}
 {% if payment_state %}
-setTimeout(() => {
-    pmt_dialog.show('{% url "lms:message" kind="pmt" %}', () => { window.location.href='{{param_value_link_support}}'; })
-}, 500);
-//alert("Поздравляем с покупкой!"); // TODO custom message dialog call API to eliminate order // TODO webhooks!!!!!!!!!!!!
+setTimeout(() => {pmt_dialog.show('{% url "lms:message" kind="pmt" %}', () => { window.location.href='{{param_value_link_support}}'; })}, 500);
 {% else %}
-setTimeout(() => {
-    nop_dialog.show('{% url "lms:message" kind="nop" %}', () => { window.location.href='{{param_value_link_support}}'; })
-}, 500);
-//alert("Жаль! Заказ отменен"); // TODO custom message dialog? call API to eliminate order
+setTimeout(() => {nop_dialog.show('{% url "lms:message" kind="nop" %}', () => { window.location.href='{{param_value_link_support}}'; })}, 500);
 {% endif %}
 {% else %}
-setTimeout(() => {
-    err_dialog.show('{% url "lms:message" kind="err" %}', () => { window.location.href='{{param_value_link_support}}'; })
-}, 500);
-//alert("При проверке статуса оплаты заказа произошла ошибка. Обновите страницу.");
+setTimeout(() => {per_dialog.show('{% url "lms:message" kind="per" %}', () => { window.location.href='{{param_value_link_support}}'; })}, 500);
 {% endif %}
 {% endif %}

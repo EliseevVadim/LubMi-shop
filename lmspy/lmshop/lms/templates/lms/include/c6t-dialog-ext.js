@@ -149,7 +149,7 @@ c6t_dialog.show = () => {
                     if(result.success) {
                         window.location.href = result.redirect;
                     } else {
-                        alert(result.why); //TODO custom message box
+                        show_js_message(result.why);
                     }
                 });
             }
