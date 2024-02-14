@@ -1,4 +1,5 @@
 {% include "lms/include/undo.js" with unique="scart" %}
+
 const pcard_like_click = (input, url) => {
     url = url.replace(/\/\d\/$/, `/${input.checked?1:0}/`);
     __api_call__(url, null, answer => {
@@ -16,6 +17,7 @@ const pcard_like_click = (input, url) => {
             right_sidebar.show_favorites();
     });
 };
+
 const notify_delivery = ppk => {
     __api_call__('{% url "api:get_customer_info" flags=7 %}', null, answer => {
         cu_form = document.getElementById('scui-form');
@@ -43,15 +45,12 @@ const notify_delivery = ppk => {
         ndd_dialog.self().showModal();
     });
 }
-const do_checkout = () => {
-    left_sidebar.hide();
-    right_sidebar.hide();
-    c6t_dialog.show();
-}
+
 const scart_changed = () => {
     let e = new CustomEvent(EventType.SCART_CHANGED);
     window.dispatchEvent(e);
 };
+
 const product_to_scart = (ppk, size_id, quantity, on_success=null) => {
     __api_call__('{% url "api:product_to_scart" %}', { ppk: String(ppk), size_id: Number(size_id), quantity: String(quantity) }, result => {
         if(result.success) {
@@ -62,6 +61,7 @@ const product_to_scart = (ppk, size_id, quantity, on_success=null) => {
         }
     });
 };
+
 const kill_product_in_scart = (ppk, product_title, size_id, size) => {
     __api_call__('{% url "api:kill_product_in_scart" %}', { ppk: String(ppk), size: String(size) }, result => {
         if(result.success) {
@@ -94,8 +94,15 @@ const kill_product_in_scart = (ppk, product_title, size_id, size) => {
         }
     });
 };
+
 const show_product_details = url => {
     left_sidebar.hide();
     right_sidebar.hide();
     gp_dialog.show(url);
 };
+
+const do_checkout = () => {
+    left_sidebar.hide();
+    right_sidebar.hide();
+    c6t_dialog.show();
+}

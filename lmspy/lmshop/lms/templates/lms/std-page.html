@@ -28,6 +28,8 @@ LubMi - {{page_title}}
 {% include "lms/include/dialog.html" with unique="per" dialog_id="per-dialog" form=None title="Произошла ошибка" confirmation="Перейти в чат техподдержки" %}
 {% include "lms/include/dialog.html" with unique="msg" dialog_id="msg-dialog" form=None title="Сообщение" confirmation="Закрыть" %}
 {% include "lms/include/dialog.html" with unique="sch" dialog_id="sch-dialog" form=None headless=True %}
+{% include "lms/include/dialog.html" with unique="ndd" dialog_id="notify-delivery-dialog" form=scui_form %}
+{% include "lms/include/dialog.html" with unique="c6t" dialog_id="c6t-dialog" title=param_title_checkout description=" " %}
 {% endblock %}
 
 {% block javascript %}
@@ -40,12 +42,16 @@ LubMi - {{page_title}}
 {% include "lms/include/dialog.js" with dialog_id="per-dialog" unique="per" dynamic=True %}
 {% include "lms/include/dialog.js" with dialog_id="msg-dialog" unique="msg" dynamic=True %}
 {% include "lms/include/dialog.js" with dialog_id="sch-dialog" unique="sch" dynamic=True %}
+{% include "lms/include/dialog.js" with dialog_id="notify-delivery-dialog" unique="ndd" dynamic=False %}
+{% include "lms/include/dialog.js" with dialog_id="c6t-dialog" unique="c6t" dynamic=True %}
+{% include "lms/include/c6t-dialog-ext.js" %}
 {% include "lms/include/sidebar.js" with side="left" %}
 {% include "lms/include/sidebar.js" with side="right" %}
 {% include "lms/include/search.js" %}
 {% include "lms/include/contacts.js" %}
 {% include "lms/include/message.js" %}
 {% include "lms/include/sz-chart.js" %}
+{% include "lms/include/business.js" %}
 {% endblock %}
 
 {% block DOM_ready_script %}

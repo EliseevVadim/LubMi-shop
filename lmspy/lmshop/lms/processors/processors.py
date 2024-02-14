@@ -1,7 +1,7 @@
 from django.utils.safestring import mark_safe
-
 from customerinfo.customerinfo import CustomerInfo
 from lms.coworkers.yookassa import Yookassa
+from lms.forms import ShortCustomerInfoForm
 from lms.models import Parameter
 
 
@@ -29,3 +29,9 @@ def payment_processor(request):  # TODO -- dont forget WebHooks for payment chec
             if not error:
                 del info.payment_id
     return {}
+
+
+def scui_processor(_):
+    return {
+        'scui_form': ShortCustomerInfoForm()
+    }

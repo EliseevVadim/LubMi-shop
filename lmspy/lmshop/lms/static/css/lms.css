@@ -1142,6 +1142,7 @@ dialog {
 #sch-dialog:not(.full-screen) #sch-result,
 #sch-dialog:not(.full-screen) #sch-footer {
     visibility: collapse;
+    padding: 0;
 }
 
 #sch-text {

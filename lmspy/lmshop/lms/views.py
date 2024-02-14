@@ -11,7 +11,7 @@ from django.template.defaultfilters import floatformat
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
 from .coworkers.cdek import Cdek
 from .coworkers.postru import PostRu
-from .forms import ShortCustomerInfoForm, CheckoutForm
+from .forms import CheckoutForm
 from .models import Parameter, Product, City, Coworker
 
 
@@ -50,7 +50,6 @@ class IndexView(View):
                 'order': order,
                 'order_variants': {order_value: order_item[0] for order_value, order_item in IndexView.ordering.items()},
                 'favorites': favorites,
-                'scui_form': ShortCustomerInfoForm(),
             })
 
         match request.GET.get('kind'):

@@ -20,9 +20,6 @@
 {% endblock %}
 
 {% block javascript %} {{block.super}}
-{% include "lms/include/dialog.js" with dialog_id="notify-delivery-dialog" unique="ndd" dynamic=False %}
-{% include "lms/include/dialog.js" with dialog_id="c6t-dialog" unique="c6t" dynamic=True %}
-{% include "lms/include/c6t-dialog-ext.js" %}
 {% static "img/bkg-001.jpg" as img_1 %}
 {% static "img/bkg-002.jpg" as img_2 %}
 {% url "lms:catalogue" as ref_1 %}
@@ -32,12 +29,6 @@
 {% include "lms/include/banner.js" with unique="main" slogan_1="Новая коллекция" slogan_2="Коллекция<br/>ароматов" show=1 %}
 {% endwith %}
 {% endwith %}
-{% include "lms/include/index.js" %}
-{% endblock %}
-
-{% block modal_forms %} {{block.super}}
-{% include "lms/include/dialog.html" with unique="ndd" dialog_id="notify-delivery-dialog" form=scui_form %}
-{% include "lms/include/dialog.html" with unique="c6t" dialog_id="c6t-dialog" title=param_title_checkout description=" " %}
 {% endblock %}
 
 {% block DOM_ready_script %} {{block.super}}
