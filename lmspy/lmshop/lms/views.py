@@ -12,7 +12,7 @@ from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_an
 from .coworkers.cdek import Cdek
 from .coworkers.postru import PostRu
 from .forms import CheckoutForm
-from .models import Parameter, Product, City, Coworker
+from .models import Parameter, Product, City, Coworker, AboutItem
 
 
 class IndexView(View):
@@ -111,44 +111,8 @@ class AboutCompanyView(View):
             подчеркивают природную женскую красоту – это всё о бренде LubMi.\n\nНадевая одежду от LubMi вы проявляете истинную любовь к себе!""",
             'text_02': """##Нас выбирают""",
             'text_03': """##Партнеры""",
-            'electorates': [{
-                'img': 'pic-08.jpg',
-                'label': '**Анна Иванова**',
-                'description': 'стилист, блогер',
-            }, {
-                'img': 'pic-08.jpg',
-                'label': '**Анна Иванова**',
-                'description': 'стилист, блогер',
-            }, {
-                'img': 'pic-08.jpg',
-                'label': '**Анна Иванова**',
-                'description': 'стилист, блогер',
-            }, {
-                'img': 'pic-08.jpg',
-                'label': '**Анна Иванова**',
-                'description': 'стилист, блогер',
-            }, {
-                'img': 'pic-08.jpg',
-                'label': '**Анна Иванова**',
-                'description': 'стилист, блогер',
-            }, {
-                'img': 'pic-08.jpg',
-                'label': '**Анна Иванова**',
-                'description': 'стилист, блогер',
-            }],
-            'partners': [{
-                'img': 'rosoil.jpg',
-            }, {
-                'img': 'rosoil.jpg',
-            }, {
-                'img': 'rosoil.jpg',
-            }, {
-                'img': 'rosoil.jpg',
-            }, {
-                'img': 'rosoil.jpg',
-            }, {
-                'img': 'rosoil.jpg',
-            }]
+            'electorates': AboutItem.electorates.all(),
+            'partners':  AboutItem.partners.all(),
         })
 
 

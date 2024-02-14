@@ -1,10 +1,9 @@
 {% load custom_tags %}
-{% load static %}
+{% load thumbnail %}
 <section class="hall-of-fame">
 {% for item in items %}
-    {% with prefix|default:'img/'|add:item.img as img %}
     <figure>
-        <img src="{% static img %}"/>
+        <img src="{% thumbnail item.image 200x200 crop=smart %}"/>
         {% if item.label or item.descr %}
         <figcaption>
             {{item.label | markdown}}
@@ -12,6 +11,5 @@
         </figcaption>
         {% endif %}
     </figure>
-    {% endwith %}
 {% endfor %}
 </section>

@@ -7,8 +7,12 @@
 <div class="g12-ia">{{ text_01 | markdown }}</div>
 {% include "lms/include/picture.html" with classes="g12-ib" pic_file='img/pic-08.jpg' %}
 </div>
+{% if electorates.count %}
 {{ text_02 | markdown }}
 {% include "lms/include/hall-of-fame.html" with items=electorates %}
+{% endif %}
+{% if partners.count %}
 {{ text_03 | markdown }}
 {% include "lms/include/hall-of-fame.html" with items=partners %}
+{% endif %}
 {% endblock %}

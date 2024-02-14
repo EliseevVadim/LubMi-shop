@@ -380,3 +380,29 @@ class Setting(DbItem):
 
     def __str__(self):
         return f'<{self.owner.key}>:<{self.key}>:<{self.value}>'
+
+
+class AboutItem(DbItem):
+    class Kind(models.IntegerChoices):
+        elector = 0, "Выбрал нас",
+        partner = 1, "Партнёр",
+
+    image = models.ImageField(upload_to='brand/%Y/%m/%d')                                   # -- картинка --
+    label = models.CharField(max_length=50)                                                 # -- название --
+    description = models.CharField(max_length=50)                                           # -- описание --
+    kind = models.IntegerField(choices=Kind.choices, default=Kind.elector)                  # -- тип --
+
+    class ElectoratesManager(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset().filter(kind=AboutItem.Kind.elector)
+
+    class PartnersManager(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset().filter(kind=AboutItem.Kind.partner)
+
+    objects = models.Manager()
+    electorates = ElectoratesManager()
+    partners = PartnersManager()
+
+    def __str__(self):
+        return 'Элемент информации о бренде'
