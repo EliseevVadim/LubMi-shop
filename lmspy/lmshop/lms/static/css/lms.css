@@ -516,6 +516,13 @@ img.bkg {
     font-size: 1.25rem;
 }
 
+.pseudo-icon {
+    font-size: 2rem;
+    font-weight: light;
+    margin-left: var(--DefPadding);
+    margin-right: var(--DefPadding);
+}
+
 .like-note {
     font-size: 0.75rem;
 }
@@ -894,6 +901,50 @@ dialog {
     border: none;
 }
 
+.dialog-header {
+    display: flex;
+    flex-flow:column;
+    place-items:center;
+    margin: 2rem 0 0 0;
+}
+
+.dialog-header label {
+    margin: 1rem;
+}
+
+.cancel-dialog {
+    font-size: 2rem;
+    color: gray;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    cursor: pointer;
+    display: inline-flex;
+    flex-flow: row;
+}
+
+.cancel-dialog:hover {
+    color: black;
+}
+
+.cancel-dialog.arrow-left {
+    left: 1rem;
+    right: auto;
+}
+
+.cancel-dialog.arrow-left span {
+    display: inline-flex;
+    align-items: center;
+    font-size: 1.25rem;
+}
+
+.dialog-footer {
+    margin-top: 1rem;
+    display: flex;
+    flex-flow: column;
+    place-items: center;
+}
+
 .c6t-sidebar,
 #c6t-form {
     min-width: min(30rem, 40vw);
@@ -958,50 +1009,6 @@ dialog {
     color: black;
 }
 
-.dialog-header {
-    display: flex;
-    flex-flow:column;
-    place-items:center;
-    margin: 2rem 0 0 0;
-}
-
-.dialog-header label {
-    margin: 1rem;
-}
-
-.cancel-dialog {
-    font-size: 2rem;
-    color: gray;
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    cursor: pointer;
-    display: inline-flex;
-    flex-flow: row;
-}
-
-.cancel-dialog:hover {
-    color: black;
-}
-
-.cancel-dialog.arrow-left {
-    left: 1rem;
-    right: auto;
-}
-
-.cancel-dialog.arrow-left span {
-    display: inline-flex;
-    align-items: center;
-    font-size: 1.25rem;
-}
-
-.dialog-footer {
-    margin-top: 1rem;
-    display: flex;
-    flex-flow: column;
-    place-items: center;
-}
-
 /* HoF            -----------------------------------------------------------------------------------------------------*/
 
 .hall-of-fame {
@@ -1040,30 +1047,67 @@ dialog {
 #sch-dialog {
     max-width: 100vw;
     max-height: 100vw;
-    margin: 0vw !important;
     position: fixed;
+    margin: 0 0 auto 0;
+    width: auto;
+    height: fit-content;
+    left: 0;
+    right: 0;
+    top: 0;
+    border: none;
+    padding: calc(2.5 * var(--DefPadding));
+}
+
+#sch-dialog.full-screen {
+    margin: 0;
+    height: auto;
+    bottom: 0;
+}
+
+#sch-box {
+    position: absolute;
+    margin: 0;
+    padding: 0;
     width: auto;
     height: auto;
-    left: 0 !important;
-    right: 0 !important;
-    top: 0 !important;
-    bottom: 0 !important;
-    border: none;
-}
 
-#search-box {
-    /*min-width: 90vw;
-    max-width: 90vw;*/
-    width: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+
     display: flex;
     flex-flow: column;
-    place-items: top;
+    align-items: stretch;
+
 }
 
-#search-result {
-    height: 1fr;
+#sch-header {
+    flex: 0 0 auto;
+    align-self: center;
 }
 
+#sch-result {
+    overflow: auto;
+    flex: 1 1 auto;
+}
+
+#sch-footer {
+    flex: 0 0 auto;
+}
+
+#sch-dialog:not(.full-screen) #sch-result,
+#sch-dialog:not(.full-screen) #sch-footer {
+    visibility: collapse;
+}
+
+#sch-text {
+    border: none;
+    border-bottom: solid thin black;
+    min-width: min(var(--NarrowPageWidth), 40vw);
+    padding:0;
+    margin:0;
+}
 
 /* Banner         -----------------------------------------------------------------------------------------------------*/
 

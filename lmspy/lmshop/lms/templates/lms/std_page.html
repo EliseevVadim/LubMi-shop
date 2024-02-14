@@ -27,7 +27,7 @@ LubMi - {{page_title}}
 {% include "lms/include/dialog.html" with unique="nop" dialog_id="nop-dialog" form=None title="Заказ отменен" description="Сожалеем" confirmation="Перейти в чат техподдержки" %}
 {% include "lms/include/dialog.html" with unique="per" dialog_id="per-dialog" form=None title="Произошла ошибка" confirmation="Перейти в чат техподдержки" %}
 {% include "lms/include/dialog.html" with unique="msg" dialog_id="msg-dialog" form=None title="Сообщение" confirmation="Закрыть" %}
-{% include "lms/include/dialog.html" with unique="sch" dialog_id="sch-dialog" form=None %}
+{% include "lms/include/dialog.html" with unique="sch" dialog_id="sch-dialog" form=None headless=True %}
 {% endblock %}
 
 {% block javascript %}

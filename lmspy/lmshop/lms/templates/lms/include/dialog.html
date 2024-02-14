@@ -1,4 +1,5 @@
 <dialog id="{{dialog_id}}">
+	{% if not headless %}
 	<div>
 		<label class="cancel-dialog arrow-left" onclick="{{unique}}_dialog.close();">{{param_label_back}}</label>
 		{% if form %}
@@ -16,6 +17,7 @@
 			{% if description %}<label>{{description}}</label>{% endif %}
 		{% endif %}
 	</div>
+	{% endif %}
 	<div class="dialog-body">
 		{% if form %}
 			<form id="{{form.id}}" action="" method="post">
