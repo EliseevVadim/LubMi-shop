@@ -2,6 +2,7 @@ const sch = {
     dialog: () => document.querySelector('#sch-dialog'),
     box: () => document.querySelector('#sch-box'),
     text: () => document.querySelector('#sch-text'),
+    info: () => document.querySelector('#sch-info'),
     result: () => document.querySelector('#sch-result'),
     footer: () => document.querySelector('#sch-footer'),
     open: () => {
@@ -19,8 +20,11 @@ const sch = {
     tid: null,
     page: null,
     filter: null,
-    update_page_and_footer: () => {
+    update_elements: () => {
         if(sch.page && sch.filter) {
+            fetch(`{% url "lms:search" item="sch-info" %}?page=${sch.page}&filter=${sch.filter}`).then(response => response.text()).then(html => {
+                sch.info().innerHTML = html;
+            });
             fetch(`{% url "lms:search" item="sch-page" %}?page=${sch.page}&filter=${sch.filter}`).then(response => response.text()).then(html => {
                 sch.result().innerHTML = html;
             });
@@ -28,6 +32,7 @@ const sch = {
                 sch.footer().innerHTML = html;
             });
         } else {
+            sch.info().innerHTML = '';
             sch.result().innerHTML = '';
             sch.footer().innerHTML = '';
         }
@@ -39,12 +44,12 @@ const sch = {
             (text ? sch.expand : sch.collapse)();
             sch.filter = text ? text : null;
             sch.page = text ? 1 : null;
-            sch.update_page_and_footer();
+            sch.update_elements();
         }, text ? 1000 : 100);
     },
     go_page: page => {
         sch.page = page;
-        sch.update_page_and_footer();
+        sch.update_elements();
     },
     go_prev_page: () => {
         if(sch.page > 1) {

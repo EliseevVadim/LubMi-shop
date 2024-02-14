@@ -1096,7 +1096,6 @@ dialog {
     display: flex;
     flex-flow: column;
     align-items: stretch;
-
 }
 
 #sch-header {
@@ -1104,9 +1103,14 @@ dialog {
     align-self: center;
 }
 
+#sch-info {
+    flex: 0 0 auto;
+    padding: var(--DefPadding);
+}
+
 #sch-result {
-    overflow: auto;
     flex: 1 1 auto;
+    overflow: auto;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(var(--CatItemWidth), 1fr));
     gap: var(--Gap);
@@ -1127,38 +1131,14 @@ dialog {
    max-width: calc(var(--CatItemWidth));
    min-width: calc(var(--CatItemWidth));
 }
-/*
-.catalogue {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(var(--CatItemWidth), 1fr));
-    gap: var(--Gap);
-    margin-bottom: 1rem;
-}
-
-.catalogue > * {
-   display: flex;
-   flex-flow: column;
-   place-items: center;
-}
-
-.catalogue > * > a {
-   display: flex;
-   flex-flow: column;
-   place-items: center;
-}
-
-.catalogue > * > * {
-   max-width: calc(var(--CatItemWidth));
-   min-width: calc(var(--CatItemWidth));
-}
-*/
 
 #sch-footer {
+    flex: 0 0 auto;
     padding: var(--DefPadding);
     align-self: center;
-    flex: 0 0 auto;
 }
 
+#sch-dialog:not(.full-screen) #sch-info,
 #sch-dialog:not(.full-screen) #sch-result,
 #sch-dialog:not(.full-screen) #sch-footer {
     visibility: collapse;
@@ -1168,8 +1148,8 @@ dialog {
     border: none;
     border-bottom: solid thin black;
     min-width: min(var(--NarrowPageWidth), 40vw);
-    padding:0;
-    margin:0;
+    padding: 0;
+    margin: 0;
 }
 
 /* Banner         -----------------------------------------------------------------------------------------------------*/

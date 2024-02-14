@@ -1,0 +1,5 @@
+{% if pgn.count %}
+<p>{{pgn.count}} результат{{suffix}} по запросу: {{filter}}</p>
+{% else %}
+<p>Ничего не найдено по запросу: {{filter}}</p>
+{% endif %}
