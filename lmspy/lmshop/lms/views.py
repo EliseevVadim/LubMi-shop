@@ -8,8 +8,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import DetailView
 from django.views import View
 from django.template.defaultfilters import floatformat
-from httpx import TransportError
-
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
 from .coworkers.cdek import Cdek
 from .coworkers.postru import PostRu
@@ -18,7 +16,7 @@ from .models import Parameter, Product, City, Coworker
 
 
 class IndexView(View):
-    page_size = 10
+    page_size = int(Parameter.value_of("value_catalogue_page_size", 12))
     default_order = 'novelties-first'
     ordering = {
         default_order: ("Порядок: по умолчанию", lambda q: q.order_by('-published_at')),  # TODO -- move labels to parameters! --
@@ -607,10 +605,115 @@ class C6tInfoView(View):
                 })
 
 
+# class IndexView(View):
+#     page_size = int(Parameter.value_of("value_catalogue_page_size", 12))
+#     default_order = 'novelties-first'
+#     ordering = {
+#         default_order: ("Порядок: по умолчанию", lambda q: q.order_by('-published_at')),  # TODO -- move labels to parameters! --
+#         'price-asc': ("Цена: по возрастанию", lambda q: q.order_by('actual_price')),
+#         'price-dsc': ("Цена: по убыванию", lambda q: q.order_by('-actual_price')),
+#         'title-asc': ("Название: А-Я", lambda q: q.order_by('title')),
+#         'title-dsc': ("Название: Я-А", lambda q: q.order_by('-title')),
+#     }
+#
+#     @property
+#     def template_name(self):
+#         return 'lms/index.html'
+#
+#     def get(self, request, *_, **__):
+#         page = request.GET.get('page')
+#         order = request.GET.get('order')
+#         order = order if order in IndexView.ordering else IndexView.default_order
+#         products = IndexView.ordering[order][1](Product.published.all())
+#         bestsellers = Product.bestsellers.all()
+#         pd_pgn = Paginator(products, IndexView.page_size)
+#         bs_pgn = Paginator(bestsellers, IndexView.page_size)
+#         favorites = CustomerInfo(request).favorites
+#
+#         if not page:
+#             return render(request, self.template_name, {
+#                 'page_title': Parameter.value_of("title_main_page", "Главная"),
+#                 'products': pd_pgn.page(1),
+#                 'bestsellers': bs_pgn.page(1),
+#                 'product_pages': pd_pgn.num_pages,
+#                 'bestseller_pages': bs_pgn.num_pages,
+#                 'order': order,
+#                 'order_variants': {order_value: order_item[0] for order_value, order_item in IndexView.ordering.items()},
+#                 'favorites': favorites,
+#                 'scui_form': ShortCustomerInfoForm(),
+#             })
+#
+#         match request.GET.get('kind'):
+#             case 'bs':
+#                 pgn = bs_pgn
+#             case _:
+#                 pgn = pd_pgn
+#         try:
+#             return render(request, 'lms/plist.html', {
+#                 'products': pgn.page(page),
+#                 'favorites': favorites,
+#             })
+#         except PageNotAnInteger:
+#             return HttpResponse('')
+#         except EmptyPage:
+#             return HttpResponse('')
+#         except ValueError:
+#             return HttpResponse('')
+
+
 class SearchView(View):
+    page_size = int(Parameter.value_of("value_search_page_size", 12))
+    order = Parameter.value_of("value_search_order", 'title-asc')
+    ordering = {
+        'novelties-first': lambda q: q.order_by('-published_at'),
+        'price-asc': lambda q: q.order_by('actual_price'),
+        'price-dsc': lambda q: q.order_by('-actual_price'),
+        'title-asc': lambda q: q.order_by('title'),
+        'title-dsc': lambda q: q.order_by('-title'),
+    }
+
     @staticmethod
-    def get(request, *_, **__):
-        return render(request, 'lms/search.html', {})
+    def clipped(a, b):
+        if a < b:
+            if b - a > 2:
+                return [a, "-", b - 1]
+            return [x for x in range(a, b)]
+        elif b < a:
+            return SearchView.clipped(b + 1, a + 1)
+        else:
+            return []
+
+    @staticmethod
+    def get(request, item, *_, **__):
+        context = {}
+        if item in frozenset({'sch-page', 'sch-footer'}):
+            filter_ = request.GET.get('filter')
+            page = int(request.GET.get('page'))
+            products = SearchView.ordering[SearchView.order](Product.published.filter(title__icontains=filter_))
+            pgn = Paginator(products, SearchView.page_size)
+            context = {
+                'filter': filter_,
+                'page': page,
+                'products': pgn.page(page),
+                'pgn': pgn,
+                'before': SearchView.clipped(1, page),
+                'after': SearchView.clipped(pgn.num_pages, page),
+                'favorites': CustomerInfo(request).favorites,
+            }
+        try:
+            match item:
+                case 'sch-box':
+                    return render(request, 'lms/sch-box.html', {})
+                case 'sch-page':
+                    return render(request, 'lms/sch-page.html', context)
+                case 'sch-footer':
+                    return render(request, 'lms/sch-footer.html', context)
+        except PageNotAnInteger:
+            return HttpResponse('')
+        except EmptyPage:
+            return HttpResponse('')
+        except ValueError:
+            return HttpResponse('')
 
 
 class MessageView(View):

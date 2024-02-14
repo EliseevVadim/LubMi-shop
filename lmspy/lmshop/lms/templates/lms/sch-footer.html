@@ -1,0 +1,19 @@
+{% if pgn.num_pages %}<div class="pseudo-icon-small hand" onclick="sch.go_page(1);">&#171;</div>{% endif %}
+{% if page > 1 %}<div class="pseudo-icon-small hand" onclick="sch.go_prev_page();">&#8249;</div>{% endif %}
+{% for p in before %}
+{% if p != '-' %}
+<div class="pseudo-icon-small hand" onclick="sch.go_page({{p}});">{{p}}</div>
+{% else %}
+<div class="pseudo-icon-small">&hellip;</div>
+{% endif %}
+{% endfor %}
+<div class="pseudo-icon-small hand inverted" onclick="sch.go_page({{page}});">{{page}}</div>
+{% for p in after %}
+{% if p != '-' %}
+<div class="pseudo-icon-small hand" onclick="sch.go_page({{p}});">{{p}}</div>
+{% else %}
+<div class="pseudo-icon-small">&hellip;</div>
+{% endif %}
+{% endfor %}
+{% if page < pgn.num_pages %}<div class="pseudo-icon-small hand" onclick="sch.go_next_page({{pgn.num_pages}});">&#8250;</div>{% endif %}
+{% if pgn.num_pages %}<div class="pseudo-icon-small hand" onclick="sch.go_page({{pgn.num_pages}});">&#187;</div>{% endif %}

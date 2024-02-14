@@ -11,7 +11,7 @@ def parameters_processor(_):  # TODO -- dont forget fixtures for params! --
     }
 
 
-def payment_processor(request):
+def payment_processor(request):  # TODO -- dont forget WebHooks for payment checks! --
     info = CustomerInfo(request)
     payment_id = info.payment_id
     if payment_id:

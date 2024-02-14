@@ -523,6 +523,23 @@ img.bkg {
     margin-right: var(--DefPadding);
 }
 
+.pseudo-icon-small {
+    font-weight: light;
+    max-width: 1rem;
+    min-width: 1rem;
+    max-height: 1rem;
+    min-height: 1rem;
+    text-align: center;
+    vertical-align: middle;
+    padding: calc(0.5 * var(--DefPadding));
+}
+
+.pseudo-icon-small.inverted {
+    color: white;
+    background: black;
+    border-radius: 1.5rem;
+}
+
 .like-note {
     font-size: 0.75rem;
 }
@@ -1090,9 +1107,55 @@ dialog {
 #sch-result {
     overflow: auto;
     flex: 1 1 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(var(--CatItemWidth), 1fr));
+    gap: var(--Gap);
+}
+#sch-result > * {
+   display: flex;
+   flex-flow: column;
+   place-items: center;
 }
 
+#sch-result > * > a {
+   display: flex;
+   flex-flow: column;
+   place-items: center;
+}
+
+#sch-result > * > * {
+   max-width: calc(var(--CatItemWidth));
+   min-width: calc(var(--CatItemWidth));
+}
+/*
+.catalogue {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(var(--CatItemWidth), 1fr));
+    gap: var(--Gap);
+    margin-bottom: 1rem;
+}
+
+.catalogue > * {
+   display: flex;
+   flex-flow: column;
+   place-items: center;
+}
+
+.catalogue > * > a {
+   display: flex;
+   flex-flow: column;
+   place-items: center;
+}
+
+.catalogue > * > * {
+   max-width: calc(var(--CatItemWidth));
+   min-width: calc(var(--CatItemWidth));
+}
+*/
+
 #sch-footer {
+    padding: var(--DefPadding);
+    align-self: center;
     flex: 0 0 auto;
 }
 

@@ -23,5 +23,5 @@ urlpatterns = [
     path('backstage/c6t-info/<kind>/<data>/', C6tInfoView.as_view(), name='c6t_info'),
     path('backstage/message/<kind>/', MessageView.as_view(), name='message'),
     path('backstage/js-message/<message>/', JsMessageView.as_view(), name='js_message'),
-    path('backstage/search/', SearchView.as_view(), name='search'),
+    path('backstage/search/<item>/', SearchView.as_view(), name='search'),
 ]

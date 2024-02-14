@@ -6,7 +6,7 @@ const sch = {
     footer: () => document.querySelector('#sch-footer'),
     open: () => {
         sch.dialog().classList.remove('full-screen');
-        sch_dialog.show('{% url "lms:search" %}');
+        sch_dialog.show('{% url "lms:search" item="sch-box" %}');
     },
     expand: () => {
         sch.footer().innerHTML = '<p>Кнопки</p>';
@@ -17,13 +17,43 @@ const sch = {
         sch.dialog().classList.remove('full-screen');
     },
     tid: null,
+    page: null,
+    filter: null,
+    update_page_and_footer: () => {
+        if(sch.page && sch.filter) {
+            fetch(`{% url "lms:search" item="sch-page" %}?page=${sch.page}&filter=${sch.filter}`).then(response => response.text()).then(html => {
+                sch.result().innerHTML = html;
+            });
+            fetch(`{% url "lms:search" item="sch-footer" %}?page=${sch.page}&filter=${sch.filter}`).then(response => response.text()).then(html => {
+                sch.footer().innerHTML = html;
+            });
+        } else {
+            sch.result().innerHTML = '';
+            sch.footer().innerHTML = '';
+        }
+    },
     update: (text) => {
+        text = encodeURIComponent(text);
         if(sch.tid) { clearTimeout(sch.tid) }
         sch.tid = setTimeout(_ => {
             (text ? sch.expand : sch.collapse)();
-            fetch('{% url "lms:index" %}'+'?page=1').then(response => response.text()).then(html => {
-                sch.result().innerHTML = html;
-            });
+            sch.filter = text ? text : null;
+            sch.page = text ? 1 : null;
+            sch.update_page_and_footer();
         }, text ? 1000 : 100);
+    },
+    go_page: page => {
+        sch.page = page;
+        sch.update_page_and_footer();
+    },
+    go_prev_page: () => {
+        if(sch.page > 1) {
+            sch.go_page(sch.page - 1);
+        }
+    },
+    go_next_page: page_count => {
+        if(sch.page < page_count) {
+            sch.go_page(sch.page + 1);
+        }
     },
 };
