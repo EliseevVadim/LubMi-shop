@@ -10,7 +10,7 @@ from lms.coworkers.cdek import Cdek
 from lms.coworkers.postru import PostRu
 from lms.models import Product, NotificationRequest, AvailableSize, Parameter, Order, OrderItem, City
 from lms.api.serializers import ProductSerializer
-from lms.utils import send_message_via_telegram, ask_delivery_service_for_cost
+from lms.utils import send_message_via_telegram
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
 from lms.coworkers.yookassa import Yookassa
 
