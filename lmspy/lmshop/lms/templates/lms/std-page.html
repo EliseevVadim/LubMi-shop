@@ -52,9 +52,11 @@ LubMi - {{page_title}}
 {% include "lms/include/message.js" %}
 {% include "lms/include/sz-chart.js" %}
 {% include "lms/include/business.js" %}
+{% include "lms/include/geoloc.js" %}
 {% endblock %}
 
 {% block DOM_ready_script %}
+glocate();
 popup.hide();
 {% include "lms/include/payment.js" %}
 {% endblock %}

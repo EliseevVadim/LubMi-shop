@@ -193,7 +193,7 @@ class CustomerInfo:
         self._delete_item("address")
 
     # -------------------------------------------------------------------------
-    # -- Last Payment Id --
+    # -- Payment Id --
 
     @property
     def payment_id(self):
@@ -206,6 +206,25 @@ class CustomerInfo:
     @payment_id.deleter
     def payment_id(self):
         self._delete_item("payment_id")
+
+    # -------------------------------------------------------------------------
+    # -- Location --
+
+    @property
+    def location(self):
+        return self._get_or_create_item("location", lambda: {
+            "latitude": None,
+            "longitude": None,
+            "accuracy": None,
+        })
+
+    @location.setter
+    def location(self, value):
+        self._set_item("location", value)
+
+    @location.deleter
+    def location(self):
+        self._delete_item("location")
 
 
 def with_actual_scart_records_and_price(func):

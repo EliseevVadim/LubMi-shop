@@ -68,6 +68,7 @@ class GetCustomerInfoView(APIView):
             0b000001000: lambda: {"address": info.address},
             0b000010000: lambda: {"favorites": info.favorites},
             0b000100000: lambda: {"scart": info.scart},
+            0b001000000: lambda: {"location": info.location},
         }
         result = {}
         for mask in items.keys():
@@ -321,3 +322,23 @@ class CheckPaymentStateView(APIView):
             order.delete()
         return {}
 
+
+class SetLocationView(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    @api_response
+    def post(request, _=None):
+        data = request.data
+        try:
+            location = {
+                "latitude": float(data["latitude"]),
+                "longitude": float(data["longitude"]),
+                "accuracy": float(data["accuracy"]),
+            }
+        except KeyError:
+            return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
+        except ValueError:
+            return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
+        CustomerInfo(request).location = location
+        return location
