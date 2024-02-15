@@ -18,16 +18,16 @@ def payment_processor(request):
     payment_id = info.payment_id
     if payment_id:
         yo = Yookassa()
-        status = yo.get_payment_status(payment_id)
+        payment_status, payment = yo.get_payment_status(payment_id)
         try:
-            if status in Yookassa.final_statuses:
-                yo.payment_status_determined(payment_id, status)
+            if payment_status in Yookassa.final_statuses:
+                yo.payment_life_cycle_is_completed(payment_id, payment_status, payment)
             return {
                 "payment_id": payment_id,
-                "payment_status": status.value,
-            } if status in Yookassa.notification_statuses else {}
+                "payment_status": payment_status.value,
+            } if payment_status in Yookassa.notification_statuses else {}
         finally:
-            if status not in Yookassa.transient_statuses:
+            if payment_status not in Yookassa.transient_statuses:
                 del info.payment_id
     return {}
 

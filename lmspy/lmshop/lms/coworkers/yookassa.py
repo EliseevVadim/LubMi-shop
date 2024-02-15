@@ -1,3 +1,6 @@
+import logging
+import json
+
 from enum import StrEnum
 from httpx import TransportError
 from lms.coworkers.apiclient import ApiClient
@@ -90,12 +93,25 @@ class Yookassa(ApiClient):
         try:
             payment = self._get(f"payments/{payment_id}", {}, (self.client_id, self.client_secret))
         except TransportError:
-            return Yookassa.PaymentStatus.UNKNOWN
+            return Yookassa.PaymentStatus.UNKNOWN, None
         try:
-            return Yookassa.PaymentStatus(payment["status"])
+            return Yookassa.PaymentStatus(payment["status"]), payment
         except (KeyError, ValueError):
-            return Yookassa.PaymentStatus.UNKNOWN
+            return Yookassa.PaymentStatus.UNKNOWN, None
 
-    def payment_status_determined(self, payment_id, status):  # TODO implement
-        pass
+    @staticmethod
+    def payment_life_cycle_is_completed(payment_id, payment_status, payment=None):
+        if payment_status not in Yookassa.final_statuses:
+            raise ValueError(payment_status)
+        try:
+            order = Order.objects.get(payment_id=payment_id)
+        except Order.DoesNotExist:
+            logging.warning(f"Получено подтверждение платежа {payment_id}, но соответствующий заказ не найден!")
+            raise
+        else:
+            order.status = Order.Status.payment_paid if payment_status == Yookassa.PaymentStatus.SUCCEEDED else Order.Status.payment_canceled
+            order.payment_json = json.dumps(payment) if payment else None
+            order.save()
+            logging.info(f"Заказ {order.uuid} оплачен, платеж {payment_id}")
+
 

@@ -265,9 +265,9 @@ class Order(DbItem):
 
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4)                               # -- UUID заказа --
     slug = models.SlugField(unique=True, max_length=100)                                        # -- слаг --
+    status = models.IntegerField(choices=Status.choices, default=Status.pending)                # -- статус заказа ---
     payment_id = models.UUIDField(null=True)                                                    # -- Id банковской платежки --
     payment_json = models.TextField(null=True, blank=True)                                      # -- описание --
-    status = models.IntegerField(choices=Status.choices, default=Status.pending)                # -- статус заказа ---
     completed_at = models.DateTimeField(null=True, blank=True, default=None)                    # -- время и флаг выполнения --
     city = models.ForeignKey(City, null=False, on_delete=models.PROTECT)
     delivery_service = models.CharField(                                                        # -- тип доставки --

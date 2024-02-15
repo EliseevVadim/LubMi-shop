@@ -299,22 +299,15 @@ class YoPaymentsWebHookView(APIView):
         data = request.data
         logging.info(f"Получено уведомление: {data}")
         try:
-            if data["type"] == "notification" and data["event"] == "payment.succeeded":
+            if data["type"] == "notification" and data["event"].startswith("payment."):
                 payment = data["object"]
                 payment_id = payment["id"]
-                if payment["paid"]:
-                    try:
-                        order = Order.objects.get(payment_id=payment_id)
-                    except Order.DoesNotExist:
-                        logging.warning(f"Получено подтверждение платежа {payment_id}, но соответствующий заказ не найден!")
-                    else:
-                        order.status = Order.Status.payment_paid
-                        order.save()
-                else:
-                    logging.warning(f"Получено подтверждение платежа {payment_id}, но флаг оплаты не выставлен!")
-        except KeyError:
+                payment_status = Yookassa.PaymentStatus(payment["status"])
+                if payment_status in Yookassa.final_statuses:
+                    Yookassa().payment_life_cycle_is_completed(payment_id, payment_status, payment)
+        except (KeyError, ValueError):
             logging.warning(f"Ошибка в структуре уведомления: {data}")
-        return data
+        return {}
 
 
 class SetLocationView(APIView):
