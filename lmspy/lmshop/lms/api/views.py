@@ -303,7 +303,7 @@ class YoPaymentsWebHookView(APIView):
                 payment = data["object"]
                 payment_id = payment["id"]
                 payment_status = Yookassa.PaymentStatus(payment["status"])
-                if payment_status in Yookassa.final_statuses:
+                if payment_status in Yookassa.final_payment_statuses:
                     Yookassa().payment_life_cycle_is_completed(payment_id, payment_status, payment)
         except (KeyError, ValueError):
             logging.warning(f"Ошибка в структуре уведомления: {data}")

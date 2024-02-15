@@ -16,9 +16,9 @@ class Yookassa(ApiClient):
         CANCELED = "canceled"
         UNKNOWN = "unknown"
 
-    final_statuses = frozenset((PaymentStatus.SUCCEEDED, PaymentStatus.CANCELED))
-    transient_statuses = frozenset((PaymentStatus.PENDING, PaymentStatus.UNKNOWN))
-    notification_statuses = final_statuses | {PaymentStatus.UNKNOWN}
+    final_payment_statuses = frozenset((PaymentStatus.SUCCEEDED, PaymentStatus.CANCELED))
+    transient_payment_statuses = frozenset((PaymentStatus.PENDING, PaymentStatus.UNKNOWN))
+    payment_statuses_are_notification_subjects = final_payment_statuses | {PaymentStatus.UNKNOWN}
 
     def __init__(self):
         super().__init__(
@@ -101,7 +101,7 @@ class Yookassa(ApiClient):
 
     @staticmethod
     def payment_life_cycle_is_completed(payment_id, payment_status, payment=None):
-        if payment_status not in Yookassa.final_statuses:
+        if payment_status not in Yookassa.final_payment_statuses:
             raise ValueError(payment_status)
         try:
             order = Order.objects.get(payment_id=payment_id)

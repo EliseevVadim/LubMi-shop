@@ -1,5 +1,3 @@
-import uuid
-
 from django.utils.safestring import mark_safe
 from customerinfo.customerinfo import CustomerInfo
 from lms.coworkers.yookassa import Yookassa
@@ -20,14 +18,14 @@ def payment_processor(request):
         yo = Yookassa()
         payment_status, payment = yo.get_payment_status(payment_id)
         try:
-            if payment_status in Yookassa.final_statuses:
+            if payment_status in Yookassa.final_payment_statuses:
                 yo.payment_life_cycle_is_completed(payment_id, payment_status, payment)
             return {
                 "payment_id": payment_id,
                 "payment_status": payment_status.value,
-            } if payment_status in Yookassa.notification_statuses else {}
+            } if payment_status in Yookassa.payment_statuses_are_notification_subjects else {}
         finally:
-            if payment_status not in Yookassa.transient_statuses:
+            if payment_status not in Yookassa.transient_payment_statuses:
                 del info.payment_id
     return {}
 
