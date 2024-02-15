@@ -14,6 +14,11 @@ const glocate = () => {
     };
     const gloc_error = err => {
         console.warn(`ERROR(${err.code}): ${err.message}`);
+        __api_call__('{% url "api:set_location" %}', {
+            latitude: 55.75222, // Москва
+            longitude: 37.61556,
+            accuracy: 100.0
+        }, result => { });
     };
     navigator.geolocation.getCurrentPosition(gloc_success, gloc_error, gloc_options);
 };

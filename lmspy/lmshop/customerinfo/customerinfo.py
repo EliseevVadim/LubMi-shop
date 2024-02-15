@@ -2,6 +2,7 @@ from _decimal import Decimal
 from django.conf import settings
 from hashlib import sha256
 from lms.models import Product, AvailableSize
+from lms.utils import find_nearest_city, sph_dist
 from functools import lru_cache
 
 
@@ -220,6 +221,43 @@ class CustomerInfo:
 
     @location.setter
     def location(self, value):
+        def update_city(lat, lng):
+            try:
+                addr = self.address
+                if not addr["city_uuid"] and not addr["city"]:
+                    city = find_nearest_city(lat, lng)
+                    if city:
+                        addr["city_uuid"], addr["city"] = str(city.city_uuid), city.city_full
+                        self.address = addr
+            except (KeyError, ValueError, TypeError):
+                pass
+        try:
+            n_lat = value['latitude']
+            n_lng = value['longitude']
+        except KeyError:
+            return
+        else:
+            try:
+                n_lat = float(n_lat)
+                n_lng = float(n_lng)
+            except (TypeError, ValueError):
+                return
+            else:
+                current = self.location
+                try:
+                    c_lat = current['latitude']
+                    c_lng = current['longitude']
+                except KeyError:
+                    update_city(n_lat, n_lng)
+                else:
+                    try:
+                        c_lat = float(c_lat)
+                        c_lng = float(c_lng)
+                    except (TypeError, ValueError):
+                        update_city(n_lat, n_lng)
+                    else:
+                        if sph_dist(c_lat, c_lng, n_lat, n_lng) > 1000.0:
+                            update_city(n_lat, n_lng)
         self._set_item("location", value)
 
     @location.deleter
