@@ -17,7 +17,7 @@ def payment_processor(request):  # TODO -- dont forget WebHooks for payment chec
     info = CustomerInfo(request)
     payment_id = info.payment_id
     if payment_id:
-        state, error = Yookassa().payment_state(payment_id)
+        state, error = Yookassa().get_payment_status(payment_id)
         try:
             return {
                 "payment_id": payment_id,

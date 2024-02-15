@@ -304,7 +304,7 @@ class SetPaymentStateView(APIView):
         except ValueError:
             return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
 
-        state, error = Yookassa().payment_state(payment_id)
+        state, error = Yookassa().get_payment_status(payment_id)
         if error:
             return error
         try:

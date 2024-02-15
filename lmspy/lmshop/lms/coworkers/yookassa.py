@@ -1,11 +1,18 @@
+from enum import StrEnum
 from httpx import TransportError
-
 from lms.coworkers.apiclient import ApiClient
 from lms.models import Coworker, Order
 from django.urls import reverse
 
 
 class Yookassa(ApiClient):
+    class PaymentStatus(StrEnum):
+        PENDING = "pending"
+        WAITING_FOR_CAPTURE = "waiting_for_capture"
+        SUCCEEDED = "succeeded"
+        CANCELED = "canceled"
+        UNKNOWN = "unknown"
+
     def __init__(self):
         super().__init__(
             "yo",
@@ -36,6 +43,7 @@ class Yookassa(ApiClient):
     def create_payment(self, order: Order, summ):
         order_uuid = str(order.uuid)
         back_page = f"lms:{self.setting('back_page')}"
+        bad_result = None, None, "Проблемы с созданием платежа"
         try:
             res = self._post_json(
                 "payments",
@@ -68,20 +76,18 @@ class Yookassa(ApiClient):
                     } for item in order.items.all()]
                 })
         except TransportError:
-            return None, None, "Возникли проблемы с подключением к платежной системе.\nопробуйте повторить попытку позже или обратитесь к администрации сайта."
+            return bad_result
         try:
-            if res["status"] == "pending":
-                return res["id"], res["confirmation"]["confirmation_url"], None
+            return (res["id"], res["confirmation"]["confirmation_url"], None) if res["status"] == Yookassa.PaymentStatus.PENDING else bad_result
         except KeyError:
-            return None, None, "Возникли проблемы с подключением к платежной системе.\nПопробуйте повторить попытку позже или обратитесь к администрации сайта."
+            return bad_result
 
-    def payment_state(self, payment_id):
+    def get_payment_status(self, payment_id):
         try:
-            res = self._get(
-                f"payments/{payment_id}", {}, (self.client_id, self.client_secret))
+            payment = self._get(f"payments/{payment_id}", {}, (self.client_id, self.client_secret))
         except TransportError:
-            return None, "Возникли проблемы с подключением к платежной системе.\nопробуйте повторить попытку позже или обратитесь к администрации сайта."
+            return Yookassa.PaymentStatus.UNKNOWN
         try:
-            return res["paid"], None
-        except KeyError:
-            return None, "Возникли проблемы с подключением к платежной системе.\nПопробуйте повторить попытку позже или обратитесь к администрации сайта."
+            return Yookassa.PaymentStatus(payment["status"])
+        except (KeyError, ValueError):
+            return Yookassa.PaymentStatus.UNKNOWN
