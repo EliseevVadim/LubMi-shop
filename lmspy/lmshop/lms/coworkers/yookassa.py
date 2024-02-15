@@ -13,6 +13,10 @@ class Yookassa(ApiClient):
         CANCELED = "canceled"
         UNKNOWN = "unknown"
 
+    final_statuses = frozenset((PaymentStatus.SUCCEEDED, PaymentStatus.CANCELED))
+    transient_statuses = frozenset((PaymentStatus.PENDING, PaymentStatus.UNKNOWN))
+    notification_statuses = final_statuses | {PaymentStatus.UNKNOWN}
+
     def __init__(self):
         super().__init__(
             "yo",
@@ -91,3 +95,7 @@ class Yookassa(ApiClient):
             return Yookassa.PaymentStatus(payment["status"])
         except (KeyError, ValueError):
             return Yookassa.PaymentStatus.UNKNOWN
+
+    def payment_status_determined(self, payment_id, status):  # TODO implement
+        pass
+

@@ -23,9 +23,9 @@ LubMi - {{page_title}}
 {% block modal_forms %}
 {% include "lms/include/popup.html" with popup_id="popup-message" %}
 {% include "lms/include/dialog.html" with unique="gp" dialog_id="gp-dialog" form=None %}
-{% include "lms/include/dialog.html" with unique="pmt" dialog_id="pmt-dialog" form=None title="Спасибо за покупку!" description="Поздравляем!" confirmation="Перейти в чат техподдержки" %}
-{% include "lms/include/dialog.html" with unique="nop" dialog_id="nop-dialog" form=None title="Заказ отменен" description="Сожалеем" confirmation="Перейти в чат техподдержки" %}
-{% include "lms/include/dialog.html" with unique="per" dialog_id="per-dialog" form=None title="Произошла ошибка" confirmation="Перейти в чат техподдержки" %}
+{% include "lms/include/dialog.html" with unique="psu" dialog_id="psu-dialog" form=None title="Спасибо за покупку!" description="Поздравляем!" confirmation="Перейти в чат техподдержки" %}
+{% include "lms/include/dialog.html" with unique="pca" dialog_id="pca-dialog" form=None title="Заказ отменен" description="Сожалеем" confirmation="Перейти в чат техподдержки" %}
+{% include "lms/include/dialog.html" with unique="puk" dialog_id="puk-dialog" form=None title="Произошла ошибка" confirmation="Перейти в чат техподдержки" %}
 {% include "lms/include/dialog.html" with unique="msg" dialog_id="msg-dialog" form=None title="Сообщение" confirmation="Закрыть" %}
 {% include "lms/include/dialog.html" with unique="sch" dialog_id="sch-dialog" form=None headless=True %}
 {% include "lms/include/dialog.html" with unique="ndd" dialog_id="notify-delivery-dialog" form=scui_form %}
@@ -37,9 +37,9 @@ LubMi - {{page_title}}
 {% include "lms/include/catalogue-type-A.js" with kind="bs" pages=bestseller_pages %}
 {% include "lms/include/popup.js" with popup_id="popup-message" %}
 {% include "lms/include/dialog.js" with dialog_id="gp-dialog" unique="gp" dynamic=True %}
-{% include "lms/include/dialog.js" with dialog_id="pmt-dialog" unique="pmt" dynamic=True %}
-{% include "lms/include/dialog.js" with dialog_id="nop-dialog" unique="nop" dynamic=True %}
-{% include "lms/include/dialog.js" with dialog_id="per-dialog" unique="per" dynamic=True %}
+{% include "lms/include/dialog.js" with dialog_id="psu-dialog" unique="psu" dynamic=True %}
+{% include "lms/include/dialog.js" with dialog_id="pca-dialog" unique="pca" dynamic=True %}
+{% include "lms/include/dialog.js" with dialog_id="puk-dialog" unique="puk" dynamic=True %}
 {% include "lms/include/dialog.js" with dialog_id="msg-dialog" unique="msg" dynamic=True %}
 {% include "lms/include/dialog.js" with dialog_id="sch-dialog" unique="sch" dynamic=True %}
 {% include "lms/include/dialog.js" with dialog_id="notify-delivery-dialog" unique="ndd" dynamic=False %}

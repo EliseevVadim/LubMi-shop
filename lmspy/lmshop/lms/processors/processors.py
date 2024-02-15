@@ -13,22 +13,21 @@ def parameters_processor(_):  # TODO -- dont forget fixtures for params! --
     }
 
 
-def payment_processor(request):  # TODO -- dont forget WebHooks for payment checks! --
+def payment_processor(request):
     info = CustomerInfo(request)
     payment_id = info.payment_id
     if payment_id:
-        state, error = Yookassa().get_payment_status(payment_id)
+        yo = Yookassa()
+        status = yo.get_payment_status(payment_id)
         try:
+            if status in Yookassa.final_statuses:
+                yo.payment_status_determined(payment_id, status)
             return {
                 "payment_id": payment_id,
-                "payment_state": "error",
-                "payment_error": error
-            } if error else {
-                "payment_id": payment_id,
-                "payment_state": state,
-            }
+                "payment_status": status.value,
+            } if status in Yookassa.notification_statuses else {}
         finally:
-            if not error:
+            if status not in Yookassa.transient_statuses:
                 del info.payment_id
     return {}
 

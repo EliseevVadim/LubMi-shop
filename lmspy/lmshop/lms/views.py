@@ -11,6 +11,7 @@ from django.template.defaultfilters import floatformat
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
 from .coworkers.cdek import Cdek
 from .coworkers.postru import PostRu
+from .coworkers.yookassa import Yookassa
 from .forms import CheckoutForm
 from .models import Parameter, Product, City, Coworker, AboutItem
 
@@ -621,16 +622,17 @@ class SearchView(View):
             return HttpResponse('')
 
 
-class MessageView(View):
+class PaymentMessageView(View):
     @staticmethod
-    def get(request, kind, *_, **__):
+    def get(request, status, *_, **__):
+        status = Yookassa.PaymentStatus(status)
         msg = {
-            "pmt": Parameter.value_of("message_order_paid"),
-            "nop": Parameter.value_of("message_order_not_paid"),
-            "per": Parameter.value_of("message_order_error"),
+            Yookassa.PaymentStatus.SUCCEEDED: "message_payment_succeeded",
+            Yookassa.PaymentStatus.CANCELED: "message_payment_canceled",
+            Yookassa.PaymentStatus.UNKNOWN: "message_payment_unknown",
         }
         return render(request, 'lms/message.html', {
-            "message": msg[kind]
+            "message": Parameter.value_of(msg[status])
         })
 
 
