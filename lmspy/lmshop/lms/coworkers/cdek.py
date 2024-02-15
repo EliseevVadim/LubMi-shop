@@ -172,10 +172,6 @@ class Cdek(ApiClient):
                 [Cdek.package(weight=weight)],
                 [])
             return (float(tariff["delivery_sum"]), None) if "delivery_sum" in tariff else (0.0, Cdek.extract_error(tariff))
-        except KeyError:
-            return 0.0, "Возникли проблемы с подключением к транспортному сервису"
-        except ValueError:
-            return 0.0, "Возникли проблемы с подключением к транспортному сервису"
-        except TransportError:
+        except (KeyError, ValueError, TransportError):
             return 0.0, "Возникли проблемы с подключением к транспортному сервису"
 

@@ -358,9 +358,7 @@ class Coworker(DbItem):
     def setting(cpk, skey, default=None):
         try:
             return Coworker.objects.get(pk=cpk).settings.get(key=skey).value
-        except Coworker.DoesNotExist:
-            return default
-        except Setting.DoesNotExist:
+        except (Coworker.DoesNotExist, Setting.DoesNotExist):
             return default
 
 

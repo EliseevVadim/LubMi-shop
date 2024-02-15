@@ -62,11 +62,7 @@ class IndexView(View):
                 'products': pgn.page(page),
                 'favorites': favorites,
             })
-        except PageNotAnInteger:
-            return HttpResponse('')
-        except EmptyPage:
-            return HttpResponse('')
-        except ValueError:
+        except (PageNotAnInteger, EmptyPage, ValueError):
             return HttpResponse('')
 
 
@@ -539,9 +535,7 @@ class C6tInfoView(View):
                     city_uuid = request.GET.get('city_uuid')
                     try:
                         city = City.objects.get(pk=city_uuid)
-                    except City.DoesNotExist:
-                        city = None
-                    except ValidationError:
+                    except (City.DoesNotExist, ValidationError):
                         city = None
                     d6y_cost, error = {
                         'cd': Cdek(),
@@ -623,11 +617,7 @@ class SearchView(View):
                     return render(request, 'lms/sch-page.html', context)
                 case 'sch-footer':
                     return render(request, 'lms/sch-footer.html', context)
-        except PageNotAnInteger:
-            return HttpResponse('')
-        except EmptyPage:
-            return HttpResponse('')
-        except ValueError:
+        except (PageNotAnInteger, EmptyPage, ValueError):
             return HttpResponse('')
 
 

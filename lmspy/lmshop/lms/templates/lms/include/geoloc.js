@@ -10,13 +10,13 @@ const glocate = () => {
             latitude: crd.latitude,
             longitude: crd.longitude,
             accuracy: crd.accuracy
-        }, result => { });
+        }, result => {});
     };
     const gloc_error = err => {
         console.warn(`ERROR(${err.code}): ${err.message}`);
         __api_call__('{% url "api:set_location" %}', {
-            latitude: 55.75222, // Москва
-            longitude: 37.61556,
+            latitude: {{param_value_default_latitude}},
+            longitude: {{param_value_default_longitude}},
             accuracy: 100.0
         }, result => { });
     };
