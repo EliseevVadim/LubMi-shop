@@ -15,7 +15,7 @@ urlpatterns = [
     path('customer/add-product-to-scart/', views.ProductToSCartView.as_view(), name='product_to_scart'),
     path('customer/remove-product-from-scart/', views.KillProductInSCartView.as_view(), name='kill_product_in_scart'),
     path('customer/checkout/', views.CheckoutSCartView.as_view(), name='c6t'),
-    path('customer/check-payment-state/', views.CheckPaymentStateView.as_view(), name='check_payment'),
+    path('customer/check-payment-state/', views.SetPaymentStateView.as_view(), name='set_payment_state'),
     path('customer/set-location/', views.SetLocationView.as_view(), name='set_location'),
     # -- Yookassa API --
     path('yookassa/payments/', views.YoPaymentsWebHookView.as_view(), name='yo_payments_webhook'),

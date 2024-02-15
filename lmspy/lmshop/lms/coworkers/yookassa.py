@@ -78,9 +78,7 @@ class Yookassa(ApiClient):
     def payment_state(self, payment_id):
         try:
             res = self._get(
-                f"payments/{payment_id}",
-                {},
-                (self.client_id, self.client_secret))
+                f"payments/{payment_id}", {}, (self.client_id, self.client_secret))
         except TransportError:
             return None, "Возникли проблемы с подключением к платежной системе.\nопробуйте повторить попытку позже или обратитесь к администрации сайта."
         try:

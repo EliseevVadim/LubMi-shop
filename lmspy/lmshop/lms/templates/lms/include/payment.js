@@ -1,5 +1,5 @@
 {% if payment_id %}
-__api_call__('{% url "api:check_payment" %}', { payment_id: '{{payment_id}}' }, result => {if(!result.success) {show_js_message(result.why);}});
+__api_call__('{% url "api:set_payment_state" %}', { payment_id: '{{payment_id}}' }, result => {if(!result.success) {show_js_message(result.why);}});
 {% if payment_state != 'error' %}
 {% if payment_state %}
 setTimeout(() => {pmt_dialog.show('{% url "lms:message" kind="pmt" %}', () => { window.location.href='{{param_value_link_support}}'; })}, 500);

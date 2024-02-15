@@ -13,6 +13,7 @@ from lms.api.serializers import ProductSerializer
 from lms.utils import send_message_via_telegram
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
 from lms.coworkers.yookassa import Yookassa
+import logging
 
 
 class ProductListView(generics.ListAPIView):
@@ -289,7 +290,7 @@ class CheckoutSCartView(APIView):
         return Parameter.value_of('message_wrong_input', 'Пожалуйста, правильно введите данные')
 
 
-class CheckPaymentStateView(APIView):
+class SetPaymentStateView(APIView):
     permission_classes = [AllowAny]
 
     @staticmethod
@@ -310,6 +311,7 @@ class CheckPaymentStateView(APIView):
             order = Order.objects.get(payment_id=payment_id)
         except Order.DoesNotExist:
             if state:
+                logging.warning(f"Получено подтверждение платежа {payment_id}, но соответствующий заказ не найден!")
                 return f"**Немедленно свяжитесь с администрацией сайта!!!** Ваш платеж -- {payment_id} -- \
                 был проведен, но заказ, возможно, был **УТЕРЯН**! Сделайте скриншот экрана с этим сообщением \
                 и сохраните его в надежном месте, он послужит подтверждением Ваших претензий к продавцу!"
@@ -321,6 +323,33 @@ class CheckPaymentStateView(APIView):
         else:
             order.delete()
         return {}
+
+
+class YoPaymentsWebHookView(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    @api_response
+    def post(request, _=None):  # Проверялось только локально!
+        data = request.data
+        logging.info(f"Получено уведомление: {data}")
+        try:
+            if data["type"] == "notification" and data["event"] == "payment.succeeded":
+                payment = data["object"]
+                payment_id = payment["id"]
+                if payment["paid"]:
+                    try:
+                        order = Order.objects.get(payment_id=payment_id)
+                    except Order.DoesNotExist:
+                        logging.warning(f"Получено подтверждение платежа {payment_id}, но соответствующий заказ не найден!")
+                    else:
+                        order.status = Order.Status.paid
+                        order.save()
+                else:
+                    logging.warning(f"Получено подтверждение платежа {payment_id}, но флаг оплаты не выставлен!")
+        except KeyError:
+            logging.warning(f"Ошибка в структуре уведомления: {data}")
+        return data
 
 
 class SetLocationView(APIView):
@@ -343,13 +372,4 @@ class SetLocationView(APIView):
         CustomerInfo(request).location = location
         return location
 
-
-class YoPaymentsWebHookView(APIView):
-    permission_classes = [AllowAny]
-
-    @staticmethod
-    @api_response
-    def post(request, _=None):
-        data = request.data
-        return data
 
