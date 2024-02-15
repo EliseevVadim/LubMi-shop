@@ -318,7 +318,7 @@ class SetPaymentStateView(APIView):
             else:
                 return {}
         if state:
-            order.status = Order.Status.paid
+            order.status = Order.Status.payment_paid
             order.save()
         else:
             order.delete()
@@ -343,7 +343,7 @@ class YoPaymentsWebHookView(APIView):
                     except Order.DoesNotExist:
                         logging.warning(f"Получено подтверждение платежа {payment_id}, но соответствующий заказ не найден!")
                     else:
-                        order.status = Order.Status.paid
+                        order.status = Order.Status.payment_paid
                         order.save()
                 else:
                     logging.warning(f"Получено подтверждение платежа {payment_id}, но флаг оплаты не выставлен!")
