@@ -261,7 +261,7 @@ class Order(DbItem):
         pending = 0, "Создан",
         payment_paid = 1, "Оплачен",
         payment_canceled = 2, "Платёж провален",
-        copmleted = 3, "Выполнен",
+        completed = 3, "Выполнен",
 
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4)                               # -- UUID заказа --
     slug = models.SlugField(unique=True, max_length=100)                                        # -- слаг --
@@ -294,6 +294,40 @@ class Order(DbItem):
     cu_fullname = models.CharField(max_length=250)                                              # -- полное имя заказчика --
     cu_confirm = models.BooleanField(default=False)                                             # -- поставил галочку про конфиденциальность? --
     items: QuerySet                                                                             # -- компоненты, Just for IDE syntax analyzer --
+
+    class OrdersByStatusManager(models.Manager):
+        @property
+        def status(self):
+            return None
+
+        def get_queryset(self):
+            return super().get_queryset().filter(status=self.status)
+
+    class PendingManager(OrdersByStatusManager):
+        @property
+        def status(self):
+            return Order.Status.pending
+
+    class PaidManager(OrdersByStatusManager):
+        @property
+        def status(self):
+            return Order.Status.payment_paid
+
+    class CanceledManager(OrdersByStatusManager):
+        @property
+        def status(self):
+            return Order.Status.payment_canceled
+
+    class CompletedManager(OrdersByStatusManager):
+        @property
+        def status(self):
+            return Order.Status.completed
+
+    objects = models.Manager()
+    pending = PendingManager()
+    paid = PaidManager()
+    canceled = CanceledManager()
+    completed = CompletedManager()
 
     def save(self, *args, **kwargs):
         if not self.slug:
