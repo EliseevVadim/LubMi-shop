@@ -4,7 +4,7 @@ from django.utils.safestring import mark_safe
 from customerinfo.customerinfo import CustomerInfo
 from lms.coworkers.yookassa import Yookassa
 from lms.forms import ShortCustomerInfoForm
-from lms.models import Parameter, Coworker, Setting
+from lms.models import Parameter
 
 
 def parameters_processor(_):  # TODO -- dont forget fixtures for params! --
@@ -31,19 +31,6 @@ def payment_processor(request):  # TODO -- dont forget WebHooks for payment chec
             if not error:
                 del info.payment_id
     return {}
-
-
-def yookassa_webhooks_processor(_):
-    yo = Yookassa()
-    ik = yo.setting("idempotence_key")
-    if ik is None:
-        ik = str(uuid.uuid4())
-        setting = Setting(owner=Coworker.objects.get(pk="yo"), key="idempotence_key", value=ik, description="Idempotence key")
-        setting.save()
-    return {
-        "yo_idempotence_key": ik,
-    }
-
 
 
 def scui_processor(_):

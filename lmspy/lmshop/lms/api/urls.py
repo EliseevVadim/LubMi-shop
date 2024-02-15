@@ -17,4 +17,6 @@ urlpatterns = [
     path('customer/checkout/', views.CheckoutSCartView.as_view(), name='c6t'),
     path('customer/check-payment-state/', views.CheckPaymentStateView.as_view(), name='check_payment'),
     path('customer/set-location/', views.SetLocationView.as_view(), name='set_location'),
+    # -- Yookassa API --
+    path('yookassa/payments/', views.YoPaymentsWebHookView.as_view(), name='yo_payments_webhook'),
 ]

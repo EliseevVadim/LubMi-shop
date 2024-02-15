@@ -342,3 +342,14 @@ class SetLocationView(APIView):
             return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
         CustomerInfo(request).location = location
         return location
+
+
+class YoPaymentsWebHookView(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    @api_response
+    def post(request, _=None):
+        data = request.data
+        return data
+

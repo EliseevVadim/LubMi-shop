@@ -19,6 +19,10 @@ class ApiClient:
     def _quoted(kwargs):
         return {quote(str(k)): quote(str(v)) for k, v in kwargs.items()}
 
+    def _compose_headers(self, content_type, headers):
+        auth_str = self.authorization
+        return {"Content-Type": content_type} | ({"Authorization": auth_str} if auth_str else {}) | ({h: v for h, v in headers.items()} if headers else {})
+
     @property
     def key(self):
         return self._key
@@ -40,7 +44,7 @@ class ApiClient:
 
     @property
     def authorization(self):
-        return f"{self.client_id}:{self.client_secret}"
+        return None
 
     def func_url(self, func):
         return f"{self.address}/{func}"
@@ -50,10 +54,7 @@ class ApiClient:
             result = client.post(
                 self.func_url(func),
                 auth=auth,
-                headers={
-                    "Authorization": self.authorization,
-                    "Content-Type": "application/x-www-form-urlencoded"
-                } | ({h: v for h, v in headers.items()} if headers.items() else {}),
+                headers=self._compose_headers("application/x-www-form-urlencoded", headers),
                 data=ApiClient._quoted(kwargs)
             ).json()
             return result
@@ -63,10 +64,7 @@ class ApiClient:
             result = client.post(
                 self.func_url(func),
                 auth=auth,
-                headers={
-                    "Authorization": self.authorization,
-                    "Content-Type": "application/json"
-                } | ({h: v for h, v in headers.items()} if headers else {}),
+                headers=self._compose_headers("application/json", headers),
                 json=kwargs
             ).json()
             return result
@@ -76,10 +74,7 @@ class ApiClient:
             result = client.get(
                 self.func_url(func),
                 auth=auth,
-                headers={
-                    "Authorization": self.authorization,
-                    "Content-Type": "application/x-www-form-urlencoded"
-                } | ({h: v for h, v in headers.items()} if headers.items() else {}),
+                headers=self._compose_headers("application/x-www-form-urlencoded", headers),
                 params=ApiClient._quoted(kwargs)
             ).json()
             return result

@@ -43,7 +43,7 @@ class Yookassa(ApiClient):
                 (self.client_id, self.client_secret),
                 amount=Yookassa.amount(value=f"{summ:.2f}", currency="RUB"),
                 confirmation=Yookassa.confirmation(type="redirect", return_url=f'{self.setting("back_address")}{reverse(back_page)}'),
-                capture=False,
+                capture=True,
                 description=f"Заказ #{order_uuid}",
                 metadata=Yookassa.metadata(order_uuid=order_uuid),
                 receipt={
