@@ -1,6 +1,7 @@
 import decimal
 from decimal import Decimal
 from django.core.exceptions import ValidationError
+from django.core.cache import cache
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -109,7 +110,7 @@ class AboutCompanyView(View):
             'text_02': """##Нас выбирают""",
             'text_03': """##Партнеры""",
             'electorates': AboutItem.electorates.all(),
-            'partners':  AboutItem.partners.all(),
+            'partners': AboutItem.partners.all(),
         })
 
 
@@ -513,41 +514,32 @@ class C6tInfoView(View):
     @staticmethod
     @with_actual_scart_records_and_price
     def get(request, kind, data, scart, *_, **__):
-        def d6y_name(short):
-            names = {
-                D6Y.CD: 'СДЭК',
-                D6Y.PR: 'Почта России',
-            }
-            return names[short] if short in names else ""
+        d6y = D6Y(data)
 
-        def render_summary(render_proc):
+        def d6y_name(abbrev):
+            names = {D6Y.CD: 'СДЭК', D6Y.PR: 'Почта России'}
+            return names[abbrev] if abbrev in names else ""
+
+        def summary(functor):
+            c_uuid, street, building, price, scart_len = \
+                request.GET.get('city_uuid'), request.GET.get('street'), request.GET.get('building'), scart['price'], len(scart["records"])
+            signature = f"{c_uuid}:{street}:{building}:{price}:{scart_len}:{d6y}"
+            stored_args = cache.get(signature)
+            if stored_args is not None:
+                return functor(*stored_args)
             if len(scart["records"]) > 0:
-                c_uuid = request.GET.get('city_uuid')
                 try:
                     cit = City.objects.get(pk=c_uuid)
                 except (City.DoesNotExist, ValidationError):
                     cit, cost, time, err = None, None, None, "Город не указан"
                 else:
-                    cost, time, err = {
-                        D6Y.CD: Cdek(),
-                        D6Y.PR: PostRu()
-                    }[data].delivery_cost(
-                        cit.code,
-                        scart["weight"],
-                        city=cit.city_full,
-                        street=request.GET.get('street'),
-                        building=request.GET.get('building'),
-                        price=scart['price'])
+                    cost, time, err = {D6Y.CD: Cdek(), D6Y.PR: PostRu()}[d6y].delivery_cost(cit.code, scart["weight"], city=cit.city_full, street=street, building=building, price=price)
             else:
                 cit, cost, time, err = None, None, None, Parameter.value_of('message_shopping_cart_empty')
-            return render_proc(cit, cost, time, err)
+            cache.set(signature, (cit, cost, time, err), 300)
+            return functor(cit, cost, time, err)
 
         match kind:
-            case 'delivery':
-                return render_summary(lambda _city, _d_cost, _d_time, error: render(request, 'lms/c6t-d6y.html', {
-                    "cost": floatformat(_d_cost, 2),
-                    "days": floatformat(_d_time),
-                })  if not error else HttpResponse())
             case 'cities':
                 text = request.GET.get('city')
                 text = text.lower() if text else None
@@ -557,23 +549,27 @@ class C6tInfoView(View):
                     "cities": cities,
                     "on_empty": "Ничего не найдено" if text else "Укажите населенный пункт",
                 })
+            case 'delivery':
+                return summary(lambda _city, _d_cost, _d_time, _error: render(request, 'lms/c6t-d6y.html', {
+                    "cost": floatformat(_d_cost, 2),
+                    "days": floatformat(_d_time),
+                }) if not _error else HttpResponse())
             case 'summary':
-                return render_summary(lambda _city, _d_cost, _d_time, error: render(request, 'lms/c6t-summary.html', {
+                return summary(lambda _city, _d_cost, _d_time, _error: render(request, 'lms/c6t-summary.html', {
                     "items": {
                         "Сумма": f'{floatformat(scart["price"], 2)} {Parameter.value_of("label_currency")}',
                         "Вес": f'{floatformat(scart["weight"] / Decimal(1000), 2)} кг',
-                        "Доставка": f'{d6y_name(data)}, {floatformat(_d_cost, 2)} {Parameter.value_of("label_currency")}, от {_d_time} дней',
+                        "Доставка": f'{d6y_name(d6y)}, {floatformat(_d_cost, 2)} {Parameter.value_of("label_currency")}, от {_d_time} дней',
                         "Назначение": f'{_city.city_full}'.replace(", ", ",\n"),
                         "Итоговая сумма": f'{floatformat(scart["price"] + Decimal(_d_cost), 2)} {Parameter.value_of("label_currency")}',
-                    } if not error else {
-                        "Проблема": error
+                    } if not _error else {
+                        "Проблема": _error
                     }}))
             case _:
                 return render(request, 'lms/c6t-summary.html', {
                     "items": {
                         "Ошибка": "Запрошен неизвестный тип данных"
-                    }
-                })
+                    }})
 
 
 class SearchView(View):

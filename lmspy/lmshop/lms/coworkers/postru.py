@@ -5,21 +5,21 @@ from lms.utils import D6Y
 
 
 class PostRu(ApiClient):
-    q_codes = frozenset({'GOOD', 'POSTAL_BOX', 'ON_DEMAND', 'UNDEF_05'})
-    v_codes = frozenset({'VALIDATED', 'OVERRIDDEN' 'CONFIRMED_MANUALLY'})
+    acceptable_quality_codes = frozenset({'GOOD', 'POSTAL_BOX', 'ON_DEMAND', 'UNDEF_05'})
+    acceptable_validation_codes = frozenset({'VALIDATED', 'OVERRIDDEN' 'CONFIRMED_MANUALLY'})
 
     def __init__(self):
         super().__init__(D6Y.PR, Coworker.setting(D6Y.PR, "api_address"), "", "")
-        self._token = self.setting("access_token")
-        self._user_key = self.setting("user_auth_key")
+        self._access_token = self.setting("access_token")
+        self._user_auth_key = self.setting("user_auth_key")
 
     @property
     def token(self):
-        return self._token
+        return self._access_token
 
     @property
     def user_key(self):
-        return self._user_key
+        return self._user_auth_key
 
     @property
     def authorization(self):
@@ -30,17 +30,17 @@ class PostRu(ApiClient):
         return None
 
     def compose_headers(self, content_type, headers):
-        xua = {"X-User-Authorization": f"Basic {self.user_key}"} if self.user_key else {}
-        ctp = {"Content-type": "application/json;charset=UTF-8"}
-        a = {"Accept": "application/json;charset=UTF-8"}
-        return super().compose_headers(content_type, headers) | xua | ctp | a
+        x_user_auth = {"X-User-Authorization": f"Basic {self.user_key}"} if self.user_key else {}
+        cont_type = {"Content-type": "application/json;charset=UTF-8"}
+        accept = {"Accept": "application/json;charset=UTF-8"}
+        return super().compose_headers(content_type, headers) | x_user_auth | cont_type | accept
 
     def index_by_address(self, address):
         na = self._post_json("clean/address", _json_=[{
             "id": "1",
             "original-address": address,
         }])[0]
-        if not (na["quality-code"] in PostRu.q_codes and na["validation-code"] in PostRu.v_codes):
+        if not (na["quality-code"] in PostRu.acceptable_quality_codes and na["validation-code"] in PostRu.acceptable_validation_codes):
             raise ValueError(na)
         return na["index"]
 
