@@ -26,8 +26,8 @@ class Cdek(ApiClient):
                     headers={"Content-Type": "application/x-www-form-urlencoded"},
                     data={
                         "grant_type": "client_credentials",
-                        "client_id": quote(self._client_id),
-                        "client_secret": quote(self._client_secret)
+                        "client_id": quote(self.client_id),
+                        "client_secret": quote(self.client_secret)
                     }
                 ).json()
         auth_ = cache.get("cdek-auth")
@@ -39,6 +39,10 @@ class Cdek(ApiClient):
     @property
     def authorization(self):
         return f"{self.token_type} {self.access_token}"
+
+    @property
+    def basic_auth(self):
+        return None
 
     @property
     def access_token(self):
@@ -141,24 +145,14 @@ class Cdek(ApiClient):
                packages,            # -- Список информации по местам (упаковкам), package[] --
                services,            # -- Дополнительные услуги, service[] --
                **kwargs):
-        return self._post_json("calculator/tariff",
-                               tariff_code=tariff_code,
-                               from_location=from_location,
-                               to_location=to_location,
-                               packages=packages,
-                               services=services,
-                               **kwargs)
+        return self._post_json("calculator/tariff", tariff_code=tariff_code, from_location=from_location, to_location=to_location, packages=packages, services=services, **kwargs)
 
     def tariff_list(self,
                     from_location,  # -- Адрес отправления, location --
                     to_location,    # -- Адрес получения, location --
                     packages,       # -- Список информации по местам (упаковкам), package[] --
                     **kwargs):
-        return self._post_json("calculator/tarifflist",
-                               from_location=from_location,
-                               to_location=to_location,
-                               packages=packages,
-                               **kwargs)
+        return self._post_json("calculator/tarifflist", from_location=from_location, to_location=to_location, packages=packages, **kwargs)
 
     def delivery_cost(self, dst_city_code, weight):
         tariff_code = int(self.setting("tariff_code"))

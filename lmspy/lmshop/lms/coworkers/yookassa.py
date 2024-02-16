@@ -52,16 +52,9 @@ class Yookassa(ApiClient):
         back_page = f"lms:{self.setting('back_page')}"
         bad_result = None, None, "Проблемы с созданием платежа"
         try:
-            res = self._post_json(
-                "payments",
-                {"Idempotence-Key": order_uuid},
-                (self.client_id, self.client_secret),
-                amount=Yookassa.amount(value=f"{summ:.2f}", currency="RUB"),
-                confirmation=Yookassa.confirmation(type="redirect", return_url=f'{self.setting("back_address")}{reverse(back_page)}'),
-                capture=True,
-                description=f"Заказ #{order_uuid}",
-                metadata=Yookassa.metadata(order_uuid=order_uuid),
-                receipt={
+            res = self._post_json("payments", {"Idempotence-Key": order_uuid}, amount=Yookassa.amount(value=f"{summ:.2f}", currency="RUB"),
+                                  confirmation=Yookassa.confirmation(type="redirect", return_url=f'{self.setting("back_address")}{reverse(back_page)}'), capture=True,
+                                  description=f"Заказ #{order_uuid}", metadata=Yookassa.metadata(order_uuid=order_uuid), receipt={
                     "customer": {
                         "full_name": order.cu_fullname,
                         "email": order.cu_email,
@@ -91,7 +84,7 @@ class Yookassa(ApiClient):
 
     def get_payment_status(self, payment_id):
         try:
-            payment = self._get(f"payments/{payment_id}", {}, (self.client_id, self.client_secret))
+            payment = self._get(f"payments/{payment_id}")
         except TransportError:
             return Yookassa.PaymentStatus.UNKNOWN, None
         try:

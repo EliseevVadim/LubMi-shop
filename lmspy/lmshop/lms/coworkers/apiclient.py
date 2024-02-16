@@ -19,10 +19,6 @@ class ApiClient:
     def _quoted(kwargs):
         return {quote(str(k)): quote(str(v)) for k, v in kwargs.items()}
 
-    def _compose_headers(self, content_type, headers):
-        auth_str = self.authorization
-        return {"Content-Type": content_type} | ({"Authorization": auth_str} if auth_str else {}) | ({h: v for h, v in headers.items()} if headers else {})
-
     @property
     def key(self):
         return self._key
@@ -46,35 +42,43 @@ class ApiClient:
     def authorization(self):
         return None
 
+    @property
+    def basic_auth(self):
+        return (self.client_id, self.client_secret) if self.client_id and self.client_secret else None
+
     def func_url(self, func):
         return f"{self.address}/{func}"
 
-    def _post_x_www_form(self, func, headers=None, auth=None, **kwargs):
+    def compose_headers(self, content_type, headers):
+        auth_str = self.authorization
+        return {"Content-Type": content_type} | ({"Authorization": auth_str} if auth_str else {}) | ({h: v for h, v in headers.items()} if headers else {})
+
+    def _post_x_www_form(self, func, headers=None, **kwargs):
         with httpx.Client() as client:
             result = client.post(
                 self.func_url(func),
-                auth=auth,
-                headers=self._compose_headers("application/x-www-form-urlencoded", headers),
+                auth=self.basic_auth,
+                headers=self.compose_headers("application/x-www-form-urlencoded", headers),
                 data=ApiClient._quoted(kwargs)
             ).json()
             return result
 
-    def _post_json(self, func, headers=None, auth=None, **kwargs):
+    def _post_json(self, func, headers=None, **kwargs):
         with httpx.Client() as client:
             result = client.post(
                 self.func_url(func),
-                auth=auth,
-                headers=self._compose_headers("application/json", headers),
+                auth=self.basic_auth,
+                headers=self.compose_headers("application/json", headers),
                 json=kwargs
             ).json()
             return result
 
-    def _get(self, func, headers=None, auth=None, **kwargs):
+    def _get(self, func, headers=None, **kwargs):
         with httpx.Client() as client:
             result = client.get(
                 self.func_url(func),
-                auth=auth,
-                headers=self._compose_headers("application/x-www-form-urlencoded", headers),
+                auth=self.basic_auth,
+                headers=self.compose_headers("application/x-www-form-urlencoded", headers),
                 params=ApiClient._quoted(kwargs)
             ).json()
             return result
