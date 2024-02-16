@@ -519,6 +519,37 @@ class C6tInfoView(View):
             }
             return names[short] if short in names else ""
 
+        # def render_summary():
+        #     if len(scart["records"]) > 0:
+        #         city_uuid = request.GET.get('city_uuid')
+        #         try:
+        #             city = City.objects.get(pk=city_uuid)
+        #         except (City.DoesNotExist, ValidationError):
+        #             city, d6y_cost, d6y_time, error = None, None, None, "Город не указан"
+        #         else:
+        #             d6y_cost, d6y_time, error = {
+        #                 'cd': Cdek(),
+        #                 'pr': PostRu()
+        #             }[data].delivery_cost(
+        #                 city.code,
+        #                 scart["weight"],
+        #                 city=city.city_full,
+        #                 street=request.GET.get('street'),
+        #                 building=request.GET.get('building'),
+        #                 price=scart["price"])
+        #     else:
+        #         city, d6y_cost, d6y_time, error = None, None, None, Parameter.value_of('message_shopping_cart_empty')
+        #     return render(request, 'lms/c6t-summary.html', {
+        #         "items": {
+        #             "Сумма": f'{floatformat(scart["price"], 2)} {Parameter.value_of("label_currency")}',
+        #             "Вес": f'{floatformat(scart["weight"] / Decimal(1000), 2)} кг',
+        #             "Доставка": f'{d6y_name(data)}, {floatformat(d6y_cost, 2)} {Parameter.value_of("label_currency")}, от {d6y_time} дней',
+        #             "Назначение": f'{city.city_full}'.replace(", ", ",\n"),
+        #             "Итоговая сумма": f'{floatformat(scart["price"] + Decimal(d6y_cost), 2)} {Parameter.value_of("label_currency")}',
+        #         } if not error else {
+        #             "Проблема": error
+        #         }})
+
         match kind:
             case 'delivery':
                 d6y_cost = decimal.Decimal(459.70 if data == "cd" else 512.00)  # TODO !!!
@@ -565,8 +596,7 @@ class C6tInfoView(View):
                         "Итоговая сумма": f'{floatformat(scart["price"] + Decimal(d6y_cost), 2)} {Parameter.value_of("label_currency")}',
                     } if not error else {
                         "Проблема": error
-                    }
-                })
+                    }})
             case _:
                 return render(request, 'lms/c6t-summary.html', {
                     "items": {

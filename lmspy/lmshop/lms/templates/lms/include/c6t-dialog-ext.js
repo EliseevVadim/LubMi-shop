@@ -1,6 +1,8 @@
 c6t_dialog.form_container = () => document.querySelector("#c6t-dialog .c6t-form-container");
 c6t_dialog.sidebar = () => document.querySelector("#c6t-dialog .c6t-sidebar");
 c6t_dialog.city_list = () => document.querySelector("#c6t-dialog .c6t-city-list");
+c6t_dialog.cd_info = () => document.querySelector("#c6t-dialog #c6t-cd-info");
+c6t_dialog.pr_info = () => document.querySelector("#c6t-dialog #c6t-pr-info");
 c6t_dialog.__on_scart_changed = null;
 c6t_dialog.__close = c6t_dialog.close;
 c6t_dialog.close = () => {
@@ -45,6 +47,8 @@ c6t_dialog.show = () => {
             _confirm = by_id('c6t-cu_confirm');
             _d6y_service_0 = by_id('c6t-d6y_service_0');
             _d6y_service_1 = by_id('c6t-d6y_service_1');
+            _d6y_service_0.parentElement.insertAdjacentHTML('beforeEnd', `&nbsp;<span id='c6t-cd-info'></span>`);
+            _d6y_service_1.parentElement.insertAdjacentHTML('beforeEnd', `&nbsp;<span id='c6t-pr-info'></span>`);
 
             _name.value = answer.name;
             _phone.value = answer.phone;
@@ -88,11 +92,11 @@ c6t_dialog.show = () => {
                 }).catch(_=>{});
                 fetch(`{% url "lms:c6t_info" kind="delivery" data="cd" %}?city_uuid=${_city_uuid.value}&street=${_street.value}&building=${_building.value}`)
                 .then(response => response.text()).then(html => {
-                    _d6y_service_0.parentElement.insertAdjacentHTML('beforeEnd', html);
+                    c6t_dialog.cd_info().innerHTML = html;
                 }).catch(_=>{});
                 fetch(`{% url "lms:c6t_info" kind="delivery" data="pr" %}?city_uuid=${_city_uuid.value}&street=${_street.value}&building=${_building.value}`)
                 .then(response => response.text()).then(html => {
-                    _d6y_service_1.parentElement.insertAdjacentHTML('beforeEnd', html);
+                    c6t_dialog.pr_info().innerHTML = html;
                 }).catch(_=>{});
             };
 
