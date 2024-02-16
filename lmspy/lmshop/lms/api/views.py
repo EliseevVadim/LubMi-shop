@@ -225,7 +225,7 @@ class CheckoutSCartView(APIView):
                 city=city.city_full,
                 street=cu_street,
                 building=cu_building,
-                price=scart["price"])
+                price=price)
             if error:
                 return error
             try:  # -- create order and process it --

@@ -67,7 +67,11 @@ class PostRu(ApiClient):
         price = int(round(float(price) * 100))
         try:
             index = self.index_by_address(','.join([city, street, building]))
+        except (KeyError, ValueError, TransportError):
+            return None, None, "Не удалось найти адрес доставки"
+        tariff = {}
+        try:
             tariff = self.tariff(index, price, weight)
             return tariff["total-rate"] / 100.0, tariff["delivery-time"]["min-days"], None
         except (KeyError, ValueError, TransportError):
-            return None, None, "Не удалось определить параметры доставки"
+            return None, None, tariff['desc'] if 'desc' in tariff else "Не удалось определить параметры доставки"
