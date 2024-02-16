@@ -519,45 +519,34 @@ class C6tInfoView(View):
             }
             return names[short] if short in names else ""
 
-        # def render_summary():
-        #     if len(scart["records"]) > 0:
-        #         city_uuid = request.GET.get('city_uuid')
-        #         try:
-        #             city = City.objects.get(pk=city_uuid)
-        #         except (City.DoesNotExist, ValidationError):
-        #             city, d6y_cost, d6y_time, error = None, None, None, "Город не указан"
-        #         else:
-        #             d6y_cost, d6y_time, error = {
-        #                 'cd': Cdek(),
-        #                 'pr': PostRu()
-        #             }[data].delivery_cost(
-        #                 city.code,
-        #                 scart["weight"],
-        #                 city=city.city_full,
-        #                 street=request.GET.get('street'),
-        #                 building=request.GET.get('building'),
-        #                 price=scart["price"])
-        #     else:
-        #         city, d6y_cost, d6y_time, error = None, None, None, Parameter.value_of('message_shopping_cart_empty')
-        #     return render(request, 'lms/c6t-summary.html', {
-        #         "items": {
-        #             "Сумма": f'{floatformat(scart["price"], 2)} {Parameter.value_of("label_currency")}',
-        #             "Вес": f'{floatformat(scart["weight"] / Decimal(1000), 2)} кг',
-        #             "Доставка": f'{d6y_name(data)}, {floatformat(d6y_cost, 2)} {Parameter.value_of("label_currency")}, от {d6y_time} дней',
-        #             "Назначение": f'{city.city_full}'.replace(", ", ",\n"),
-        #             "Итоговая сумма": f'{floatformat(scart["price"] + Decimal(d6y_cost), 2)} {Parameter.value_of("label_currency")}',
-        #         } if not error else {
-        #             "Проблема": error
-        #         }})
+        def render_summary(render_proc):
+            if len(scart["records"]) > 0:
+                c_uuid = request.GET.get('city_uuid')
+                try:
+                    cit = City.objects.get(pk=c_uuid)
+                except (City.DoesNotExist, ValidationError):
+                    cit, cost, time, err = None, None, None, "Город не указан"
+                else:
+                    cost, time, err = {
+                        'cd': Cdek(),
+                        'pr': PostRu()
+                    }[data].delivery_cost(
+                        cit.code,
+                        scart["weight"],
+                        city=cit.city_full,
+                        street=request.GET.get('street'),
+                        building=request.GET.get('building'),
+                        price=scart["price"])
+            else:
+                cit, cost, time, err = None, None, None, Parameter.value_of('message_shopping_cart_empty')
+            return render_proc(cit, cost, time, err)
 
         match kind:
             case 'delivery':
-                d6y_cost = decimal.Decimal(459.70 if data == "cd" else 512.00)  # TODO !!!
-                dv_days = decimal.Decimal(3 if data == "cd" else 5)  # TODO !!!
-                return render(request, 'lms/c6t-d6y.html', {
-                    "cost": floatformat(d6y_cost, 2),
-                    "days": floatformat(dv_days),
-                })
+                return render_summary(lambda _city, _d_cost, _d_time, error: render(request, 'lms/c6t-d6y.html', {
+                    "cost": floatformat(_d_cost, 2),
+                    "days": floatformat(_d_time),
+                })  if not error else HttpResponse())
             case 'cities':
                 text = request.GET.get('city')
                 text = text.lower() if text else None
@@ -568,35 +557,45 @@ class C6tInfoView(View):
                     "on_empty": "Ничего не найдено" if text else "Укажите населенный пункт",
                 })
             case 'summary':
-                if len(scart["records"]) > 0:
-                    city_uuid = request.GET.get('city_uuid')
-                    try:
-                        city = City.objects.get(pk=city_uuid)
-                    except (City.DoesNotExist, ValidationError):
-                        city, d6y_cost, d6y_time, error = None, None, None, "Город не указан"
-                    else:
-                        d6y_cost, d6y_time, error = {
-                            'cd': Cdek(),
-                            'pr': PostRu()
-                        }[data].delivery_cost(
-                            city.code,
-                            scart["weight"],
-                            city=city.city_full,
-                            street=request.GET.get('street'),
-                            building=request.GET.get('building'),
-                            price=scart["price"])
-                else:
-                    city, d6y_cost, d6y_time, error = None, None, None, Parameter.value_of('message_shopping_cart_empty')
-                return render(request, 'lms/c6t-summary.html', {
+                # if len(scart["records"]) > 0:
+                #     city_uuid = request.GET.get('city_uuid')
+                #     try:
+                #         city = City.objects.get(pk=city_uuid)
+                #     except (City.DoesNotExist, ValidationError):
+                #         city, d6y_cost, d6y_time, error = None, None, None, "Город не указан"
+                #     else:
+                #         d6y_cost, d6y_time, error = {
+                #             'cd': Cdek(),
+                #             'pr': PostRu()
+                #         }[data].delivery_cost(
+                #             city.code,
+                #             scart["weight"],
+                #             city=city.city_full,
+                #             street=request.GET.get('street'),
+                #             building=request.GET.get('building'),
+                #             price=scart["price"])
+                # else:
+                #     city, d6y_cost, d6y_time, error = None, None, None, Parameter.value_of('message_shopping_cart_empty')
+                # return render(request, 'lms/c6t-summary.html', {
+                #     "items": {
+                #         "Сумма": f'{floatformat(scart["price"], 2)} {Parameter.value_of("label_currency")}',
+                #         "Вес": f'{floatformat(scart["weight"] / Decimal(1000), 2)} кг',
+                #         "Доставка": f'{d6y_name(data)}, {floatformat(d6y_cost, 2)} {Parameter.value_of("label_currency")}, от {d6y_time} дней',
+                #         "Назначение": f'{city.city_full}'.replace(", ", ",\n"),
+                #         "Итоговая сумма": f'{floatformat(scart["price"] + Decimal(d6y_cost), 2)} {Parameter.value_of("label_currency")}',
+                #     } if not error else {
+                #         "Проблема": error
+                #     }})
+                return render_summary(lambda _city, _d_cost, _d_time, error: render(request, 'lms/c6t-summary.html', {
                     "items": {
                         "Сумма": f'{floatformat(scart["price"], 2)} {Parameter.value_of("label_currency")}',
                         "Вес": f'{floatformat(scart["weight"] / Decimal(1000), 2)} кг',
-                        "Доставка": f'{d6y_name(data)}, {floatformat(d6y_cost, 2)} {Parameter.value_of("label_currency")}, от {d6y_time} дней',
-                        "Назначение": f'{city.city_full}'.replace(", ", ",\n"),
-                        "Итоговая сумма": f'{floatformat(scart["price"] + Decimal(d6y_cost), 2)} {Parameter.value_of("label_currency")}',
+                        "Доставка": f'{d6y_name(data)}, {floatformat(_d_cost, 2)} {Parameter.value_of("label_currency")}, от {_d_time} дней',
+                        "Назначение": f'{_city.city_full}'.replace(", ", ",\n"),
+                        "Итоговая сумма": f'{floatformat(scart["price"] + Decimal(_d_cost), 2)} {Parameter.value_of("label_currency")}',
                     } if not error else {
                         "Проблема": error
-                    }})
+                    }}))
             case _:
                 return render(request, 'lms/c6t-summary.html', {
                     "items": {
