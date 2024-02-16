@@ -80,7 +80,7 @@ c6t_dialog.show = () => {
                 let c6t_status = by_id("c6t-status");
                 if(c6t_status.controller) { c6t_status.controller.abort(); }
                 let ds = by_selector('input[id^="c6t-d6y_service_"]:checked').value;
-                let url = '{% url "lms:c6t_info" kind="summary" data="dvservice" %}'.replace(/\/dvservice\/$/, `/${ds}/?city_uuid=${_city_uuid.value}`);
+                let url = '{% url "lms:c6t_info" kind="summary" data="dvservice" %}'.replace(/\/dvservice\/$/, `/${ds}/?city_uuid=${_city_uuid.value}&street=${_street.value}&building=${_building.value}`);
                 c6t_status.controller = new AbortController();
                 fetch(url, {signal: c6t_status.controller.signal}).then(response => response.text()).then(html => {
                     c6t_status.controller = null;

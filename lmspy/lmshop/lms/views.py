@@ -512,6 +512,13 @@ class C6tInfoView(View):
     @staticmethod
     @with_actual_scart_records_and_price
     def get(request, kind, data, scart, *_, **__):
+        def d6y_name(short):
+            names = {
+                'cd': 'СДЭК',
+                'pr': "Почта России",
+            }
+            return names[short] if short in names else ""
+
         match kind:
             case 'delivery':
                 d6y_cost = decimal.Decimal(459.70 if data == "cd" else 512.00)  # TODO !!!
@@ -523,9 +530,8 @@ class C6tInfoView(View):
             case 'cities':
                 text = request.GET.get('city')
                 text = text.lower() if text else None
-                gen_cd = lambda: (city for city in City.objects.filter(city_lc__contains=text)) if text else []
-                gen_pr = lambda: (city for city in City.objects.filter(city_lc__contains=text)) if text else []  # TODO?
-                cities = list(gen_cd() if data == 'cd' else gen_pr())
+                enumerator = lambda: (ct for ct in City.objects.filter(city_lc__contains=text)) if text else []
+                cities = list(enumerator())
                 return render(request, 'lms/c6t-city-list.html', {
                     "cities": cities,
                     "on_empty": "Ничего не найдено" if text else "Укажите населенный пункт",
@@ -536,19 +542,26 @@ class C6tInfoView(View):
                     try:
                         city = City.objects.get(pk=city_uuid)
                     except (City.DoesNotExist, ValidationError):
-                        city = None
-                    d6y_cost, error = {
-                        'cd': Cdek(),
-                        'pr': PostRu()
-                    }[data].delivery_cost(city.code if city else None, scart["weight"])
+                        city, d6y_cost, d6y_time, error = None, None, None, "Город не указан"
+                    else:
+                        d6y_cost, d6y_time, error = {
+                            'cd': Cdek(),
+                            'pr': PostRu()
+                        }[data].delivery_cost(
+                            city.code,
+                            scart["weight"],
+                            city=city.city_full,
+                            street=request.GET.get('street'),
+                            building=request.GET.get('building'),
+                            price=scart["price"])
                 else:
-                    error = Parameter.value_of('message_shopping_cart_empty')
+                    city, d6y_cost, d6y_time, error = None, None, None, Parameter.value_of('message_shopping_cart_empty')
                 return render(request, 'lms/c6t-summary.html', {
                     "items": {
                         "Сумма": f'{floatformat(scart["price"], 2)} {Parameter.value_of("label_currency")}',
                         "Вес": f'{floatformat(scart["weight"] / Decimal(1000), 2)} кг',
-                        "Доставка": f'{"СДЭК" if data == "cd" else "Почта России"}, {floatformat(d6y_cost, 2)} {Parameter.value_of("label_currency")}',
-                        "Назначение": f'{city.city_full if city else Coworker.setting("cd", "location_from_city")}'.replace(", ", ",\n"),
+                        "Доставка": f'{d6y_name(data)}, {floatformat(d6y_cost, 2)} {Parameter.value_of("label_currency")}, от {d6y_time} дней',
+                        "Назначение": f'{city.city_full}'.replace(", ", ",\n"),
                         "Итоговая сумма": f'{floatformat(scart["price"] + Decimal(d6y_cost), 2)} {Parameter.value_of("label_currency")}',
                     } if not error else {
                         "Хьюстон, у нас проблема": error

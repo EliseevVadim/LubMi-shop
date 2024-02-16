@@ -154,18 +154,17 @@ class Cdek(ApiClient):
                     **kwargs):
         return self._post_json("calculator/tarifflist", from_location=from_location, to_location=to_location, packages=packages, **kwargs)
 
-    def delivery_cost(self, dst_city_code, weight):
+    def delivery_cost(self, dst_city_code, weight, **kwargs):
         tariff_code = int(self.setting("tariff_code"))
-        city_code_from = int(self.setting("location_from_code"))
-        city_code_to = dst_city_code or city_code_from
+        src_city_code = int(self.setting("location_from_code"))
         try:
             tariff = Cdek().tariff(
                 tariff_code,
-                Cdek.location(code=city_code_from),
-                Cdek.location(code=city_code_to),
+                Cdek.location(code=src_city_code),
+                Cdek.location(code=dst_city_code),
                 [Cdek.package(weight=weight)],
                 [])
-            return (float(tariff["delivery_sum"]), None) if "delivery_sum" in tariff else (0.0, Cdek.extract_error(tariff))
+            return (float(tariff["delivery_sum"]), tariff["period_min"], None) if "delivery_sum" in tariff and "period_min" in tariff else (0.0, 0, Cdek.extract_error(tariff))
         except (KeyError, ValueError, TransportError):
-            return 0.0, "Возникли проблемы с подключением к транспортному сервису"
+            return 0.0, 0, "Не удалось определить параметры доставки"
 

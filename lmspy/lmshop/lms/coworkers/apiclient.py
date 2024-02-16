@@ -68,8 +68,8 @@ class ApiClient:
             result = client.post(
                 self.func_url(func),
                 auth=self.basic_auth,
-                headers=self.compose_headers("application/json", headers),
-                json=kwargs
+                headers=self.compose_headers("application/json;charset=UTF-8", headers),
+                json=kwargs["_json_"] if "_json_" in kwargs else kwargs
             ).json()
             return result
 
