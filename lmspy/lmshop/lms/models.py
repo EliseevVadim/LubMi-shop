@@ -108,6 +108,10 @@ class Product(DbItem):
     sales_quantity = models.BigIntegerField(default=0, validators=[MinValueValidator(0)])                   # количество продаж
     published_at = models.DateTimeField(null=True, blank=True, default=timezone.now)                        # время публикации(опубликован, если published_at < now())
     categories = models.ManyToManyField(Category, related_name="products")                                  # категории
+    images: QuerySet                                                                                        # -- Just for IDE syntax analyzer --
+    sizes: QuerySet
+    attributes: QuerySet
+    orders: QuerySet
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -125,11 +129,6 @@ class Product(DbItem):
     objects = models.Manager()
     published = PublishedManager()
     bestsellers = BestsellersManager()
-
-    images: QuerySet                                                                            # -- Just for IDE syntax analyzer --
-    sizes: QuerySet
-    attributes: QuerySet
-    orders: QuerySet
 
     class Meta:
         ordering = ["published_at"]
