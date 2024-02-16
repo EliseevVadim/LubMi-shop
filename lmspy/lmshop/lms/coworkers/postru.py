@@ -68,7 +68,7 @@ class PostRu(ApiClient):
         try:
             index = self.index_by_address(','.join([city, street, building]))
         except (KeyError, ValueError, TransportError):
-            return None, None, "Не удалось найти адрес доставки"
+            return None, None, "Не удалось подтвердить адрес доставки"
         tariff = {}
         try:
             tariff = self.tariff(index, price, weight)

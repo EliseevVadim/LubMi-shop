@@ -564,7 +564,7 @@ class C6tInfoView(View):
                         "Назначение": f'{city.city_full}'.replace(", ", ",\n"),
                         "Итоговая сумма": f'{floatformat(scart["price"] + Decimal(d6y_cost), 2)} {Parameter.value_of("label_currency")}',
                     } if not error else {
-                        "Хьюстон, у нас проблема": error
+                        "Проблема": error
                     }
                 })
             case _:

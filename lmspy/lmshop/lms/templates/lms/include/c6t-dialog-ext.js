@@ -86,6 +86,14 @@ c6t_dialog.show = () => {
                     c6t_status.controller = null;
                     c6t_status.innerHTML = html;
                 }).catch(_=>{});
+                fetch(`{% url "lms:c6t_info" kind="delivery" data="cd" %}?city_uuid=${_city_uuid.value}&street=${_street.value}&building=${_building.value}`)
+                .then(response => response.text()).then(html => {
+                    _d6y_service_0.parentElement.insertAdjacentHTML('beforeEnd', html);
+                }).catch(_=>{});
+                fetch(`{% url "lms:c6t_info" kind="delivery" data="pr" %}?city_uuid=${_city_uuid.value}&street=${_street.value}&building=${_building.value}`)
+                .then(response => response.text()).then(html => {
+                    _d6y_service_1.parentElement.insertAdjacentHTML('beforeEnd', html);
+                }).catch(_=>{});
             };
 
             const city_chosen = () => !!_city_uuid.value;
@@ -125,6 +133,24 @@ c6t_dialog.show = () => {
                 }, 1000);
             };
 
+            _street.tmo_id = null;
+            _street.oninput = _ => {
+                if(_street.tmo_id) { clearTimeout(_street.tmo_id); }
+                _street.tmo_id = setTimeout(() => {
+                    update_summary();
+                    _street.tmo_id = null;
+                }, 2000);
+            };
+            
+            _building.tmo_id = null;
+            _building.oninput = _ => {
+                if(_building.tmo_id) { clearTimeout(_building.tmo_id); }
+                _building.tmo_id = setTimeout(() => {
+                    update_summary();
+                    _building.tmo_id = null;
+                }, 2000);
+            };
+
             _d6y_service_0.onchange = d6y_changed;
             _d6y_service_1.onchange = d6y_changed;
 
@@ -159,21 +185,11 @@ c6t_dialog.show = () => {
                 update_summary();
             });
             window.addEventListener(EventType.SCART_CHANGED, c6t_dialog.__on_scart_changed);
-            fetch('{% url "lms:c6t_info" kind="delivery" data="cd" %}').then(response => response.text()).then(html => {
-                _d6y_service_0.parentElement.insertAdjacentHTML('beforeEnd', html);
-            });
-            fetch('{% url "lms:c6t_info" kind="delivery" data="pr" %}').then(response => response.text()).then(html => {
-                _d6y_service_1.parentElement.insertAdjacentHTML('beforeEnd', html);
-            });
-
             scart_changed();
-
             c6t_dialog.choose_city(answer.address.city, answer.address.city_uuid, false);
             d6y_changed({currentTarget: by_selector('input[id^="c6t-d6y_service_"]:checked')});
-
             _email.oninput(null);
             _phone.oninput(null);
-
             c6t_dialog.rszo = new ResizeObserver(move_city_list);
             c6t_dialog.rszo.observe(_city);
             c6t_dialog.self().showModal();
