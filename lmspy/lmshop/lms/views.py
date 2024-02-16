@@ -13,6 +13,7 @@ from .coworkers.postru import PostRu
 from .coworkers.yookassa import Yookassa
 from .forms import CheckoutForm
 from .models import Parameter, Product, City, Coworker, AboutItem
+from .utils import D6Y
 
 
 class IndexView(View):
@@ -514,8 +515,8 @@ class C6tInfoView(View):
     def get(request, kind, data, scart, *_, **__):
         def d6y_name(short):
             names = {
-                'cd': 'СДЭК',
-                'pr': "Почта России",
+                D6Y.CD: 'СДЭК',
+                D6Y.PR: 'Почта России',
             }
             return names[short] if short in names else ""
 
@@ -528,15 +529,15 @@ class C6tInfoView(View):
                     cit, cost, time, err = None, None, None, "Город не указан"
                 else:
                     cost, time, err = {
-                        'cd': Cdek(),
-                        'pr': PostRu()
+                        D6Y.CD: Cdek(),
+                        D6Y.PR: PostRu()
                     }[data].delivery_cost(
                         cit.code,
                         scart["weight"],
                         city=cit.city_full,
                         street=request.GET.get('street'),
                         building=request.GET.get('building'),
-                        price=scart["price"])
+                        price=scart['price'])
             else:
                 cit, cost, time, err = None, None, None, Parameter.value_of('message_shopping_cart_empty')
             return render_proc(cit, cost, time, err)

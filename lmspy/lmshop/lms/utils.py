@@ -1,8 +1,14 @@
+from enum import StrEnum
 from math import radians, sin, acos, cos, fabs
 from .coworkers.telegram import Telegram
 from .models import TelegramBot, City
 from functools import lru_cache
 from sys import float_info
+
+
+class D6Y(StrEnum):
+    CD = "cd"
+    PR = "pr"
 
 
 def send_message_via_telegram(message: str):

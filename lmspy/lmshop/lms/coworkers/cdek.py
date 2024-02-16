@@ -6,15 +6,16 @@ from lms.deco import copy_result
 from lms.models import Coworker
 from urllib.parse import quote
 from django.core.cache import cache
+from lms.utils import D6Y
 
 
 class Cdek(ApiClient):
     def __init__(self):
         super().__init__(
-            "cd",
-            Coworker.setting("cd", "api_address"),
-            Coworker.setting("cd", "client_id"),
-            Coworker.setting("cd", "client_secret"))
+            D6Y.CD,
+            Coworker.setting(D6Y.CD, "api_address"),
+            Coworker.setting(D6Y.CD, "client_id"),
+            Coworker.setting(D6Y.CD, "client_secret"))
 
     @property
     @copy_result

@@ -10,7 +10,7 @@ from lms.coworkers.cdek import Cdek
 from lms.coworkers.postru import PostRu
 from lms.models import Product, NotificationRequest, AvailableSize, Parameter, Order, OrderItem, City
 from lms.api.serializers import ProductSerializer
-from lms.utils import send_message_via_telegram
+from lms.utils import send_message_via_telegram, D6Y
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
 from lms.coworkers.yookassa import Yookassa
 import logging
@@ -217,8 +217,8 @@ class CheckoutSCartView(APIView):
             except City.DoesNotExist:
                 return "Пункт назначения заказа неверен."
             d6y_cost, d6y_time, error = {
-                'cd': Cdek(),
-                'pr': PostRu()
+                D6Y.CD: Cdek(),
+                D6Y.PR: PostRu()
             }[delivery_service].delivery_cost(
                 city.code,
                 scart["weight"],

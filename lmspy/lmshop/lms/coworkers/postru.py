@@ -1,7 +1,7 @@
 from httpx import TransportError
-
 from lms.coworkers.apiclient import ApiClient
 from lms.models import Coworker
+from lms.utils import D6Y
 
 
 class PostRu(ApiClient):
@@ -9,7 +9,7 @@ class PostRu(ApiClient):
     v_codes = frozenset({'VALIDATED', 'OVERRIDDEN' 'CONFIRMED_MANUALLY'})
 
     def __init__(self):
-        super().__init__("pr", Coworker.setting("pr", "api_address"), "", "")
+        super().__init__(D6Y.PR, Coworker.setting(D6Y.PR, "api_address"), "", "")
         self._token = self.setting("access_token")
         self._user_key = self.setting("user_auth_key")
 
