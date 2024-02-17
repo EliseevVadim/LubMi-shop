@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework import generics
 
-from lms.api.business import create_notify_request
+from lms.api.business import create_notify_request, check_payment_life_cycle_is_completed
 from lms.api.decorators import api_response
 from lms.coworkers.cdek import Cdek
 from lms.coworkers.postru import PostRu
@@ -302,8 +302,7 @@ class YoPaymentsWebHookView(APIView):
                 payment = data["object"]
                 payment_id = payment["id"]
                 payment_status = Yookassa.PaymentStatus(payment["status"])
-                if payment_status in Yookassa.final_payment_statuses:
-                    Yookassa().payment_life_cycle_is_completed(payment_id, payment_status, payment)
+                check_payment_life_cycle_is_completed(payment_id, payment_status, payment)
         except (KeyError, ValueError):
             logging.warning(f"Ошибка в структуре уведомления: {data}")
         return {}

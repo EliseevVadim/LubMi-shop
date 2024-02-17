@@ -1,7 +1,7 @@
 import uuid
 
 from django.db import models
-from django.db.models import QuerySet
+from django.db.models import QuerySet, F, Sum
 from django.utils import timezone, text
 from django.core.validators import MinValueValidator, RegexValidator
 from djmoney.models.fields import MoneyField
@@ -331,7 +331,7 @@ class Order(DbItem):
 
     @property
     def total_price(self):
-        return self.items.aggregate(models.Sum("price", default=0))["price__sum"] + self.delivery_cost.amount
+        return self.items.aggregate(total=Sum(F("price") * F('quantity')))["total"] + self.delivery_cost.amount
 
     def __str__(self):
         return f'заказ #{self.slug} от {self.cu_name}'
