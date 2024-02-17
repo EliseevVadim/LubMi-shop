@@ -263,7 +263,7 @@ class Order(DbItem):
     payment_id = models.UUIDField(null=True)                                                    # -- Id банковской платежки --
     payment_json = models.TextField(null=True, blank=True)                                      # -- описание --
     completed_at = models.DateTimeField(null=True, blank=True, default=None)                    # -- время и флаг выполнения --
-    city = models.ForeignKey(City, null=False, on_delete=models.PROTECT)
+    city = models.ForeignKey(City, null=False, on_delete=models.PROTECT)                        # -- город - источник заказа --
     delivery_service = models.CharField(                                                        # -- тип доставки --
         max_length=2,
         choices=DeliveryService.choices,
