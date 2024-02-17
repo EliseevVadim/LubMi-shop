@@ -170,10 +170,9 @@ class AvailableSize(DbItem):
 
     class Meta:
         ordering = ["size"]
-        constraints = [models.UniqueConstraint(
-            fields=["size", "product_id"],
-            name="unique_size_per_product"
-        )]
+        constraints = [
+            models.UniqueConstraint(fields=["size", "product_id"], name="unique_size_per_product"),
+            models.CheckConstraint(check=models.Q(quantity__gte=0), name="quantity_positive")]
 
     def __str__(self):
         return self.size

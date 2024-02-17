@@ -268,8 +268,8 @@ class CheckoutSCartView(APIView):
                     order.save()
             except IntegrityError:
                 return "Указанное количество товара недоступно. Возможно, кто-то уже купил его, пока Вы оформляли заказ."
-            except ValueError as e:
-                return e.args[0]
+            except ValueError as exc:
+                return exc.args[0]
             else:
                 info = CustomerInfo(request)  # -- update session info --
                 info.clear_scart()
