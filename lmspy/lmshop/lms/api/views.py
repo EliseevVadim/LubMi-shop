@@ -159,7 +159,7 @@ class CheckoutSCartView(APIView):
     def post(request, scart, _=None):
         data = {k: escape(v) for k, v in request.data.items()}
         try:
-            delivery_service, \
+            d6y_service, \
                 cu_name, \
                 cu_phone, \
                 cu_email, \
@@ -172,7 +172,7 @@ class CheckoutSCartView(APIView):
                 cu_floor, \
                 cu_apartment, \
                 cu_fullname, \
-                cu_confirm = data["delivery"], \
+                cu_confirm = D6Y(data["delivery"]), \
                 data["cu_name"], \
                 data["cu_phone"], \
                 data["cu_email"], \
@@ -190,7 +190,7 @@ class CheckoutSCartView(APIView):
             return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
         except ValueError:
             return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
-        if delivery_service and \
+        if d6y_service and \
                 cu_name and \
                 (cu_phone or cu_email) and \
                 cu_country and \
@@ -215,7 +215,7 @@ class CheckoutSCartView(APIView):
             d6y_cost, d6y_time, error = {
                 D6Y.CD: Cdek(),
                 D6Y.PR: PostRu()
-            }[delivery_service].delivery_cost(
+            }[d6y_service].delivery_cost(
                 city.code,
                 scart["weight"],
                 city=city.city_full,
@@ -226,7 +226,7 @@ class CheckoutSCartView(APIView):
                 return error
             try:
                 with transaction.atomic():
-                    order = Order(delivery_service=delivery_service,
+                    order = Order(delivery_service=d6y_service,
                                   delivery_cost=d6y_cost,
                                   city=city,
                                   cu_name=cu_name,
