@@ -1,8 +1,5 @@
-from decimal import Decimal
-from django.db import transaction, IntegrityError
 from customerinfo.customerinfo import CustomerInfo
-from lms.coworkers.yookassa import Yookassa
-from lms.models import NotificationRequest, Order, OrderItem
+from lms.models import NotificationRequest
 from lms.utils import send_message_via_telegram
 
 
