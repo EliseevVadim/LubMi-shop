@@ -47,8 +47,7 @@ class Tunable:
             "regex_cloth_size",
             "message_invalid_cloth_size",
             """^(\d*(?:M|X{0,2}[SL]))(?:$|\s+.*$)""",
-            "Размер не соответствует образцу"
-        )(value)
+            "Размер не соответствует образцу")(value)
 
     @staticmethod
     def validate_article(value):
@@ -56,8 +55,7 @@ class Tunable:
             "regex_article",
             "message_invalid_article",
             """[А-Яа-яЁё\w\d\-]+""",
-            "Артикул не соответствует образцу"
-        )(value)
+            "Артикул не соответствует образцу")(value)
 
     @staticmethod
     def validate_phone(value):
@@ -65,8 +63,7 @@ class Tunable:
             "regex_phone_number",
             "message_invalid_phone_number",
             """^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$""",
-            "Номер телефона не соответствует образцу"
-        )(value)
+            "Номер телефона не соответствует образцу")(value)
 
 
 class Category(DbItem):
@@ -111,7 +108,6 @@ class Product(DbItem):
     images: QuerySet                                                                                        # -- Just for IDE syntax analyzer --
     sizes: QuerySet
     attributes: QuerySet
-    orders: QuerySet
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -168,7 +164,7 @@ class AvailableSize(DbItem):
         ordering = ["size"]
         constraints = [
             models.UniqueConstraint(fields=["size", "product_id"], name="unique_size_per_product"),
-            models.CheckConstraint(check=models.Q(quantity__gte=0), name="quantity_positive")]
+            models.CheckConstraint(check=models.Q(quantity__gte=0), name="quantity_no_negative")]
 
     def __str__(self):
         return self.size
@@ -338,12 +334,16 @@ class Order(DbItem):
 
 class OrderItem(DbItem):
     order = models.ForeignKey(Order, related_name="items", on_delete=models.CASCADE)                        # -- заказ --
+    product = models.ForeignKey(Product, null=True, on_delete=models.PROTECT)                               # -- продукт --
     ppk = models.CharField(max_length=100, validators=[Tunable.validate_article])                           # -- внутренний артикул --
     title = models.CharField(max_length=150)                                                                # -- название --
     size = models.CharField(max_length=30, validators=[Tunable.validate_size])                              # -- размер --
     quantity = models.BigIntegerField(validators=[MinValueValidator(1)])                                    # -- количество --
     price = MoneyField(max_digits=14, decimal_places=2, default_currency='RUR')                             # -- цена на момент заказа --
     weight = models.BigIntegerField(validators=[MinValueValidator(0)])                                      # -- вес, в граммах --
+
+    class Meta:
+        constraints = [models.CheckConstraint(check=models.Q(quantity__gt=0), name="quantity_positive")]
 
     def __str__(self):
         return f'{self.title} ({self.quantity})'

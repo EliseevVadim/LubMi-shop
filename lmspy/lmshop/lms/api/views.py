@@ -5,7 +5,6 @@ from decimal import Decimal
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework import generics
-
 from lms.api.business import create_notify_request, check_payment_life_cycle_is_completed
 from lms.api.decorators import api_response
 from lms.coworkers.cdek import Cdek
@@ -246,6 +245,7 @@ class CheckoutSCartView(APIView):
                         size = rec["size"]
                         quantity = rec["quantity"]
                         item = OrderItem(order=order,
+                                         product=product,
                                          ppk=product.article,
                                          title=str(product),
                                          size=size.size,
