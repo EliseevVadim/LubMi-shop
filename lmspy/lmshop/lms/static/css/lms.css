@@ -1222,6 +1222,7 @@ dialog {
     font-size: 4.5rem;
     font-weight: bold;
     text-transform: uppercase;
+    text-shadow: #2227 0 0 1rem
 }
 
 .banner-switch {
