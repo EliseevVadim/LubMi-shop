@@ -1,11 +1,13 @@
 import uuid
-
+from decimal import Decimal
 from django.db import models
 from django.db.models import QuerySet
 from django.utils import timezone, text
 from django.core.validators import MinValueValidator, RegexValidator
 from djmoney.models.fields import MoneyField
 from datetime import datetime
+
+from djmoney.money import Money
 
 
 class DbItem(models.Model):
@@ -97,14 +99,14 @@ class Product(DbItem):
         max_digits=14,
         decimal_places=2,
         default_currency='RUR',
-        validators=[MinValueValidator(0.01)])                                                               # цена
+        validators=[MinValueValidator(Money(0.01, currency='RUR'))])                                        # цена
     old_price = MoneyField(
         max_digits=14,
         decimal_places=2,
         default_currency='RUR',
         null=True,
         blank=True,
-        validators=[MinValueValidator(0.01)])                                                               # старая цена (до акции), null -- нет акции
+        validators=[MinValueValidator(Money(0.01, currency='RUR'))])                                        # старая цена (до акции), null -- нет акции
     sales_quantity = models.BigIntegerField(default=0, validators=[MinValueValidator(0)])                   # количество продаж
     published_at = models.DateTimeField(null=True, blank=True, default=timezone.now)                        # время публикации(опубликован, если published_at < now())
     categories = models.ManyToManyField(Category, related_name="products")                                  # категории
@@ -141,10 +143,6 @@ class Product(DbItem):
     def primary_image(self):
         query = self.images.filter(primary=True)
         return query.first() if query.exists() else None
-
-    @property
-    def absolute_url(self):
-        return ""                           # TODO -- implement me --
 
     @property
     def quantity(self):
@@ -331,6 +329,10 @@ class Order(DbItem):
         if not self.slug:
             self.slug = text.slugify(self.uuid)
         super().save(*args, **kwargs)
+
+    @property
+    def total_price(self):
+        return self.items.aggregate(models.Sum("price", default=0))["price__sum"] + self.delivery_cost.amount
 
     def __str__(self):
         return f'заказ #{self.slug} от {self.cu_name}'
