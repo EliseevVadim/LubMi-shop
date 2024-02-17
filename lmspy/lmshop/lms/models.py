@@ -1,12 +1,11 @@
 import uuid
-from decimal import Decimal
+
 from django.db import models
 from django.db.models import QuerySet
 from django.utils import timezone, text
 from django.core.validators import MinValueValidator, RegexValidator
 from djmoney.models.fields import MoneyField
 from datetime import datetime
-
 from djmoney.money import Money
 
 
