@@ -212,10 +212,7 @@ class CheckoutSCartView(APIView):
                 city = City.objects.get(pk=cu_city_uuid)
             except City.DoesNotExist:
                 return "Пункт назначения заказа неверен."
-            d6y_cost, d6y_time, error = {
-                D6Y.CD: Cdek(),
-                D6Y.PR: PostRu()
-            }[d6y_service].delivery_cost(
+            d6y_cost, d6y_time, error = {D6Y.CD: Cdek(), D6Y.PR: PostRu()}[d6y_service].delivery_cost(
                 city.code,
                 scart["weight"],
                 city=city.city_full,
@@ -258,7 +255,7 @@ class CheckoutSCartView(APIView):
                         item.save()
                         product.sales_quantity += quantity
                         product.save()
-                        size.quantity -= quantity  # TODO ensure validation works !!!
+                        size.quantity -= quantity  # or IntegrityError on constraint
                         size.save()
                     order.save()
                     payment_id, payment_url, error = Yookassa().create_payment(order, price + Decimal(d6y_cost))
@@ -267,7 +264,7 @@ class CheckoutSCartView(APIView):
                     order.payment_id = payment_id
                     order.save()
             except IntegrityError:
-                return "Указанное количество товара недоступно. Возможно, кто-то уже купил его, пока Вы оформляли заказ."
+                return Parameter.value_of("message_overkill_in_shopping_cart", "Указанное количество товара недоступно. Возможно, кто-то уже купил его, пока Вы оформляли заказ.")
             except ValueError as exc:
                 return exc.args[0]
             else:
