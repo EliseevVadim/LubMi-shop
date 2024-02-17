@@ -12,8 +12,13 @@
     {% with product.primary_image as img %}
     {% if img %}
     <figure class="sidebar-fig">
+        {% if card_type == "favorites" %}
+        <div class="sidebar-img hand" style="background-image: url('{% thumbnail img.image 100x0 %}');" onclick="show_product_details('{% url 'lms:product_details' slug=product.slug %}');">
+        </div>
+        {% else %}
         <div class="sidebar-img" style="background-image: url('{% thumbnail img.image 100x0 %}');">
         </div>
+        {% endif %}
     </figure>
     {% endif %}
     {% endwith %}
