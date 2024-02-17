@@ -92,7 +92,7 @@ class NotifyMeForDeliveryView(APIView):
         except KeyError:
             return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
         if name and ppk and (email or phone):
-            create_notify_request(email, name, phone, ppk, request)
+            create_notify_request(email, name, phone, ppk, CustomerInfo(request))
             return {'success': True}
         return Parameter.value_of('message_unable_notify', 'Имя, а также почта или телефон должны быть указаны')
 
@@ -224,7 +224,7 @@ class CheckoutSCartView(APIView):
                 price=price)
             if error:
                 return error
-            try:  # -- create order and process it --
+            try:
                 with transaction.atomic():
                     order = Order(delivery_service=delivery_service,
                                   delivery_cost=d6y_cost,
