@@ -1,5 +1,5 @@
 from enum import StrEnum
-from math import radians, sin, acos, cos, fabs
+from math import radians, sin, acos, cos
 from .coworkers.telegram import Telegram
 from .models import TelegramBot, City
 from functools import lru_cache
@@ -18,19 +18,32 @@ def send_message_via_telegram(message: str):
 
 
 @lru_cache
-def sph_dist(lat_0, lng_0, lat_1, lng_1, r=6371000, in_degrees=True):
+def earth_dist(lat_0, lng_0, lat_1, lng_1, er=6371000, in_degrees=True):
     if in_degrees:
         lat_0, lng_0, lat_1, lng_1 = radians(lat_0), radians(lng_0), radians(lat_1), radians(lng_1)
-    return r * acos(cos(lat_0) * cos(lat_1) * cos(lng_0 - lng_1) + sin(lat_0) * sin(lat_1))
+    return er * acos(cos(lat_0) * cos(lat_1) * cos(lng_0 - lng_1) + sin(lat_0) * sin(lat_1))
 
 
 def find_nearest_city(lat, lng):
-    dist_0 = float_info.max
+    min_dist = float_info.max
     result = None
     for city in City.objects.all():
-        dist_1 = sph_dist(lat, lng, city.latitude, city.longitude)
-        if dist_1 < dist_0:
-            dist_0 = dist_1
+        dist = earth_dist(lat, lng, city.latitude, city.longitude)
+        if dist < min_dist:
+            min_dist = dist
             result = city
     return result
 
+
+def suffix(n):
+    sf = "ов" if 10 < n % 100 < 20 else ["ов", "", "а", "а", "а", "ов", "ов", "ов", "ов", "ов"][n % 10]
+    return sf
+
+
+def clipped_range(a, b):
+    if a < b:
+        return [a, "-", b - 1] if b - a > 2 else [x for x in range(a, b)]
+    elif b < a:
+        return clipped_range(b + 1, a + 1)
+    else:
+        return []

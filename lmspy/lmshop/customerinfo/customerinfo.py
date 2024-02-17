@@ -2,7 +2,7 @@ from _decimal import Decimal
 from django.conf import settings
 from hashlib import sha256
 from lms.models import Product, AvailableSize
-from lms.utils import find_nearest_city, sph_dist
+from lms.utils import find_nearest_city, earth_dist
 from functools import lru_cache
 
 
@@ -256,7 +256,7 @@ class CustomerInfo:
                     except (TypeError, ValueError):
                         update_city(n_lat, n_lng)
                     else:
-                        if sph_dist(c_lat, c_lng, n_lat, n_lng) > 1000.0:
+                        if earth_dist(c_lat, c_lng, n_lat, n_lng) > 1000.0:
                             update_city(n_lat, n_lng)
         self._set_item("location", value)
 

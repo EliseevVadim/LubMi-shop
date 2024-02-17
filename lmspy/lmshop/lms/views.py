@@ -1,4 +1,3 @@
-import decimal
 from decimal import Decimal
 from django.core.exceptions import ValidationError
 from django.core.cache import cache
@@ -13,8 +12,8 @@ from .coworkers.cdek import Cdek
 from .coworkers.postru import PostRu
 from .coworkers.yookassa import Yookassa
 from .forms import CheckoutForm
-from .models import Parameter, Product, City, Coworker, AboutItem
-from .utils import D6Y
+from .models import Parameter, Product, City, AboutItem
+from .utils import D6Y, suffix, clipped_range
 
 
 class IndexView(View):
@@ -473,11 +472,11 @@ class SzChartView(View):
             'text': f"""#{title}\n\n#####Как выбрать одежду своего размера\n
 Европейский<br/>размер | Российский<br/>размер | Рост | Обхват груди | Обхват талии | Обхват бедер
 ---------------------- | --------------------- | ---- | ------------ | ------------ | ------------
-ХS                     | 42                    | 170  | 82-85        | 60-63        | 90-93
-S                      | 44                    | 170  | 86-89        | 64-67        | 94-97
-М                      | 46                    | 170  | 90-93        | 68-71        | 98-101
-L                      | 48                    | 170  | 94-97        | 72-75        | 102-105
-XL                     | 50                    | 170  | 98-101       | 76-80        | 106-109"""})
+ХS | 42 | 170 | 82-85 | 60-63 | 90-93
+S | 44 | 170 | 86-89 | 64-67 | 94-97
+М | 46 | 170 | 90-93 | 68-71 | 98-101
+L | 48 | 170 | 94-97 | 72-75 | 102-105
+XL | 50 | 170 | 98-101 | 76-80 | 106-109"""})
 
 
 class SCartView(View):
@@ -584,22 +583,6 @@ class SearchView(View):
     }
 
     @staticmethod
-    def clipped(a, b):
-        if a < b:
-            if b - a > 2:
-                return [a, "-", b - 1]
-            return [x for x in range(a, b)]
-        elif b < a:
-            return SearchView.clipped(b + 1, a + 1)
-        else:
-            return []
-
-    @staticmethod
-    def suffix(n):
-        s = "ов" if 10 < n % 100 < 20 else ["ов", "", "а", "а", "а", "ов", "ов", "ов", "ов", "ов"][n % 10]
-        return s
-
-    @staticmethod
     def get(request, item, *_, **__):
         context = {}
         if item in frozenset({'sch-page', 'sch-footer', 'sch-info'}):
@@ -612,10 +595,10 @@ class SearchView(View):
                 'page': page,
                 'products': pgn.page(page),
                 'pgn': pgn,
-                'before': SearchView.clipped(1, page),
-                'after': SearchView.clipped(pgn.num_pages, page),
+                'before': clipped_range(1, page),
+                'after': clipped_range(pgn.num_pages, page),
                 'favorites': CustomerInfo(request).favorites,
-                'suffix': SearchView.suffix(pgn.count)
+                'suffix': suffix(pgn.count)
             }
         try:
             match item:
