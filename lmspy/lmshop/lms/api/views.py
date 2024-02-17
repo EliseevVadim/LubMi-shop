@@ -5,12 +5,14 @@ from decimal import Decimal
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework import generics
+
+from lms.api.business import create_notify_request
 from lms.api.decorators import api_response
 from lms.coworkers.cdek import Cdek
 from lms.coworkers.postru import PostRu
-from lms.models import Product, NotificationRequest, AvailableSize, Parameter, Order, OrderItem, City
+from lms.models import Product, AvailableSize, Parameter, Order, OrderItem, City
 from lms.api.serializers import ProductSerializer
-from lms.utils import send_message_via_telegram, D6Y
+from lms.utils import D6Y
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
 from lms.coworkers.yookassa import Yookassa
 import logging
@@ -90,13 +92,7 @@ class NotifyMeForDeliveryView(APIView):
         except KeyError:
             return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
         if name and ppk and (email or phone):
-            nrq = NotificationRequest(name=name, phone=phone, email=email, ppk=ppk)
-            nrq.save()
-            send_message_via_telegram(str(nrq))
-            info = CustomerInfo(request)
-            info.name = name
-            info.phone = phone or info.phone
-            info.email = email or info.email
+            create_notify_request(email, name, phone, ppk, request)
             return {'success': True}
         return Parameter.value_of('message_unable_notify', 'Имя, а также почта или телефон должны быть указаны')
 
