@@ -437,15 +437,16 @@ class PerfumeryView(View):
 
 class ProductView(DetailView):
     model = Product
-    queryset = Product.published.all()
+    # queryset = Product.published.all()
     template_name = 'lms/pcard.html'
+
+    def get_object(self, *args, **kwargs):
+        return Product.published.get(slug=self.kwargs['slug'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         favorites = CustomerInfo(self.request).favorites
-        return context | {
-            'favorites': favorites,
-        }
+        return context | {'favorites': favorites}
 
 
 class ContactsView(View):
