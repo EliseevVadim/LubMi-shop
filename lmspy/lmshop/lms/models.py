@@ -5,7 +5,6 @@ from django.db.models import QuerySet, F, Sum
 from django.utils import timezone, text
 from django.core.validators import MinValueValidator, RegexValidator
 from djmoney.models.fields import MoneyField
-from datetime import datetime
 from djmoney.money import Money
 
 
@@ -153,7 +152,7 @@ class Product(DbItem):
 
     @property
     def novelty(self):
-        return (datetime.now().date() - self.published_at.date()).days < 30 if self.published_at else False
+        return (timezone.now().date() - self.published_at.date()).days < 30 if self.published_at else False
 
     @property
     def variants(self):
