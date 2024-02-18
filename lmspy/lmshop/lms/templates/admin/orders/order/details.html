@@ -1,13 +1,19 @@
 {% extends "admin/base_site.html" %}
 {% block title %}Заказ {{ block.super }}{% endblock %}
 
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url "admin:index" %}">Home</a> &rsaquo; <a href="{% url "admin:lms_order_changelist" %}">Заказы</a> &rsaquo; Детали
+</div>
+{% endblock %}
+
 {% block content %}
 <div class="module">
     <h1>Заказ #{{ order.uuid }}</h1>
     <ul>
         <li><a href="#" onclick="window.print();">Печатать</a></li>
         {% if order.status == 1 %}
-        <li><a href="#" onclick="window.print();">Закрыть заказ</a></li>
+        <li><a href="{% url 'lms:admin_complete_order' slug=order.slug %}">Закрыть заказ</a></li>
         {% endif %}
     </ul>
     <table>
@@ -18,30 +24,27 @@
         {% endif %}
         <tr><td>Заказчик:</td><td>{{order.cu_fullname}}</td></tr>
         <tr><td>Служба доставки:</td><td>{{order.get_delivery_service_display}}</td></tr>
-        <tr><td>Адрес доставки:</td><td>{{order.cu_city}}{%if order.cu_region%}, {{order.cu_region}}{%endif%}{%if order.cu_subregion%}, {{order.cu_subregion}}{%endif%}, улица: {{order.cu_street}}, здание: {{order.cu_building}}, подъезд: {{order.cu_entrance}}, этаж: {{order.cu_floor}}, квартира/офис: {{order.cu_apartment}}</td></tr>
-    </table>
-    {# Перечень позиций #}
-    <h1>Позиции по заказу</h1>
-    <table>
-        <tr><td>Создан:</td><td>{{order.created_at}}</td></tr>
-        <tr><td>Статус:</td><td>{{order.get_status_display}}</td></tr>
-        {% if order.status == 1 %}
-        <tr><td>Закрыт:</td><td>{{order.completed_at}}</td></tr>
+        <tr><td>Адрес доставки:</td><td>Нас. пункт: {{order.cu_city}}{%if order.cu_region%}, {{order.cu_region}}{%endif%}{%if order.cu_subregion%}, {{order.cu_subregion}}{%endif%},<br/>улица: {{order.cu_street}}, здание: {{order.cu_building}}, подъезд: {{order.cu_entrance}}, этаж: {{order.cu_floor}}, квартира/офис: {{order.cu_apartment}}</td></tr>
+        {% if order.delivery_service == "cd" %}
+        <tr><td>Код города СДЭК:</td><td>{{order.city.code}}</td></tr>
         {% endif %}
-        <tr><td>Заказчик:</td><td>{{order.cu_fullname}}</td></tr>
-        <tr><td>Служба доставки:</td><td>{{order.get_delivery_service_display}}</td></tr>
-        <tr><td>Адрес доставки:</td><td>{{order.get_delivery_service_display}}</td></tr>
+        <tr><td>Платеж:</td><td>{{order.payment_id}}</td></tr>
     </table>
-    {# Стоимость доставки и общая стоимость #}
-    <table>
-        <tr><td>Создан:</td><td>{{order.created_at}}</td></tr>
-        <tr><td>Статус:</td><td>{{order.get_status_display}}</td></tr>
-        {% if order.status == 1 %}
-        <tr><td>Закрыт:</td><td>{{order.completed_at}}</td></tr>
-        {% endif %}
-        <tr><td>Заказчик:</td><td>{{order.cu_fullname}}</td></tr>
-        <tr><td>Служба доставки:</td><td>{{order.get_delivery_service_display}}</td></tr>
-        <tr><td>Адрес доставки:</td><td>{{order.get_delivery_service_display}}</td></tr>
-    </table>
+    <div class="module">
+        <h2>Позиции по заказу</h2>
+        <table>
+            <tr><th>Название</th><th>Размер</th><th>Количество</th><th>Цена</th><th>Вес</th></tr>
+            {% for item in order.items.all %}
+            <tr><td>{{item.title}}</td><td>{{item.size}}</td><td>{{item.quantity}}</td><td>{{item.price}}</td><td>{{item.weight}}</td></tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="module">
+        <h2>Стоимость</h2>
+        <table>
+            <tr><td>Стоимость доставки:</td><td>{{order.delivery_cost}}</td></tr>
+            <tr><td>Полная стоимость заказа:</td><td><strong>{{order.total_price}}</strong></td></tr>
+        </table>
+    </div>
 </div>
 {% endblock %}

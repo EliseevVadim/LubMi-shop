@@ -3,7 +3,7 @@ from decimal import Decimal
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.exceptions import ValidationError
 from django.core.cache import cache
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.decorators import method_decorator
@@ -11,6 +11,7 @@ from django.views.generic import DetailView
 from django.views import View
 from django.template.defaultfilters import floatformat
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
+from .api.business import set_order_completed
 from .coworkers.cdek import Cdek
 from .coworkers.postru import PostRu
 from .coworkers.yookassa import Yookassa
@@ -451,6 +452,27 @@ class AdminOrderView(DetailView):
 
     def get(self, *_, **__):
         return super().get(*_, **__)
+
+
+@method_decorator(staff_member_required, name="get")
+@method_decorator(staff_member_required, name="post")
+class AdminCompleteOrderView(DetailView):
+    model = Order
+    template_name = 'admin/orders/order/complete.html'
+
+    def get_object(self, *_, **__):
+        try:
+            order = Order.objects.get(slug=self.kwargs['slug'])
+            return order
+        except Order.DoesNotexists:
+            return None
+
+    def get(self, *_, **__):
+        return super().get(*_, **__)
+
+    def post(self, ___, slug, *_, **__):
+        set_order_completed(slug, by_slug=True)
+        return redirect("lms:admin_order_details", slug=slug)
 
 
 class ProductView(DetailView):

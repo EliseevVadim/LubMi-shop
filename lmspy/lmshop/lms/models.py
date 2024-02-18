@@ -131,7 +131,7 @@ class Product(DbItem):
         indexes = [models.Index(fields=["title"])]
 
     def __str__(self):
-        return f"{self.article}:{self.title}"
+        return f"{self.article}: {self.title}"
 
     @property
     def primary_image(self):
@@ -326,7 +326,7 @@ class Order(DbItem):
 
     @property
     def total_price(self):
-        return self.items.aggregate(total=Sum(F("price") * F('quantity')))["total"] + self.delivery_cost.amount
+        return Money(self.items.aggregate(total=Sum(F("price") * F('quantity')))["total"] + self.delivery_cost.amount, currency="RUR")
 
     def __str__(self):
         return f'заказ #{self.slug} от {self.cu_name}'

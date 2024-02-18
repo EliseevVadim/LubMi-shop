@@ -61,11 +61,11 @@ def check_payment_life_cycle_is_completed(payment_id, payment_status, payment=No
         (set_order_paid_by_payment if payment_status == Yookassa.PaymentStatus.SUCCEEDED else set_order_canceled_by_payment)(payment_id, payment)
 
 
-def set_order_completed(order_uuid):
+def set_order_completed(order_id, by_slug=False):
     try:
-        order = Order.paid.get(pk=order_uuid)
+        order = Order.paid.get(slug=order_id) if by_slug else Order.paid.get(pk=order_id)
     except Order.DoesNotExist:
-        logging.warning(f"Заказ {order_uuid} не найден при попытке закрыть его; игнорируется!")
+        logging.warning(f"Заказ {order_id} не найден при попытке закрыть его; игнорируется!")
     else:
         order.status = Order.Status.completed
         order.completed_at = timezone.now()
