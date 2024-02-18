@@ -48,7 +48,7 @@ class ImageAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['cu_fullname', 'slug', 'status', 'total_price', 'items_link']
+    list_display = ['cu_fullname', 'slug', 'status', 'total_price', 'items_link', 'details']
     list_filter = ['cu_fullname', 'status']
     search_fields = ['cu_fullname']
     prepopulated_fields = {'slug': ('uuid',)}
@@ -56,7 +56,11 @@ class OrderAdmin(admin.ModelAdmin):
     def items_link(self, order):
         count = order.items.count()
         url = f"""{reverse("admin:lms_orderitem_changelist")}?{urlencode({"order_id": f"{order.uuid}"})}"""
-        return format_html('<a href="{}">{} позиций</a>', url, count)
+        return format_html('<a href="{}">Позиции ({})</a>', url, count)
+
+    def details(self, order):
+        url = f"""{reverse("lms:admin_order_details", args=[order.slug])}"""
+        return format_html('<a href="{}">Детали</a>', url)
 
 
 @admin.register(OrderItem)

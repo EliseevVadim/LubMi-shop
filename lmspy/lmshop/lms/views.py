@@ -1,9 +1,12 @@
 from decimal import Decimal
+
+from django.contrib.admin.views.decorators import staff_member_required
 from django.core.exceptions import ValidationError
 from django.core.cache import cache
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.utils.decorators import method_decorator
 from django.views.generic import DetailView
 from django.views import View
 from django.template.defaultfilters import floatformat
@@ -12,7 +15,7 @@ from .coworkers.cdek import Cdek
 from .coworkers.postru import PostRu
 from .coworkers.yookassa import Yookassa
 from .forms import CheckoutForm
-from .models import Parameter, Product, City, AboutItem
+from .models import Parameter, Product, City, AboutItem, Order
 from .utils import D6Y, suffix, clipped_range
 
 
@@ -431,17 +434,34 @@ class PerfumeryView(View):
                     WATER\n\n1. MAISON FRANCIS KURKDJIAN BACCARAT ROUGE 540\n\n1. EX NIHILO LUST IN PARADISE\n\n1. KILIAN GOOD GIRL GONE BAD
                     \n\n1. FRANCK BOCLET COCAINE\n\n1. MARC-ANTOINE BARROIS GANYMEDE\n\n1. TOM FORD LOST CHERRY\n\n1. TOM FORD TOBACCO VANILLE
                     \n\n1. JULIETTE HAS A GUN NOT A PERFUME\n\n1. MONTALE INTENSE TIARE\n\n1. BYREDO PARFUMS MOJAVE GHOST""",
-            },
-        })
+            }})
+
+
+@method_decorator(staff_member_required, name="get")
+class AdminOrderView(DetailView):
+    model = Order
+    template_name = 'admin/orders/order/details.html'
+
+    def get_object(self, *_, **__):
+        try:
+            order = Order.objects.get(slug=self.kwargs['slug'])
+            return order
+        except Order.DoesNotexists:
+            return None
+
+    def get(self, *_, **__):
+        return super().get(*_, **__)
 
 
 class ProductView(DetailView):
     model = Product
-    # queryset = Product.published.all()
     template_name = 'lms/pcard.html'
 
     def get_object(self, *args, **kwargs):
-        return Product.published.get(slug=self.kwargs['slug'])
+        try:
+            return Product.published.get(slug=self.kwargs['slug'])
+        except Product.DoesNotExist:
+            return None
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -635,3 +655,5 @@ class JsMessageView(View):
         return render(request, 'lms/message.html', {
             "message": message
         })
+
+

@@ -13,6 +13,8 @@ urlpatterns = [
     path('care/', CareView.as_view(), name='care'),
     path('contacts/', ContactsView.as_view(), name='contacts'),
     path('about/', AboutCompanyView.as_view(), name='about'),
+    # -- admin --
+    path('admin/order/<slug:slug>/', AdminOrderView.as_view(), name='admin_order_details'),
     # -- backstage --
     path('backstage/product/<slug:slug>/', ProductView.as_view(), name='product_details'),
     path('backstage/sz-chart/', SzChartView.as_view(), name='sz_chart'),
