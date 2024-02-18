@@ -62,7 +62,7 @@ class PostRu(ApiClient):
             })
         return tf
 
-    def delivery_cost(self, _, weight, **kwargs):  # TODO implement
+    def delivery_cost(self, _, weight, **kwargs):
         city, street, building, price = str(kwargs['city']), str(kwargs['street']), str(kwargs['building']), str(kwargs['price'])
         price = int(round(float(price) * 100))
         try:
