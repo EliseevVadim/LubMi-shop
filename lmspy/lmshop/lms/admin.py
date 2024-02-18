@@ -1,4 +1,8 @@
 from django.contrib import admin
+from django.urls import reverse
+from django.utils.html import format_html
+from django.utils.http import urlencode
+
 from .models import *
 
 
@@ -44,10 +48,20 @@ class ImageAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['cu_fullname', 'slug', 'status', 'total_price']
+    list_display = ['cu_fullname', 'slug', 'status', 'total_price', 'items_link']
     list_filter = ['cu_fullname', 'status']
     search_fields = ['cu_fullname']
     prepopulated_fields = {'slug': ('uuid',)}
+
+    def items_link(self, order):
+        count = order.items.count()
+        url = f"""{reverse("admin:lms_orderitem_changelist")}?{urlencode({"order_id": f"{order.uuid}"})}"""
+        return format_html('<a href="{}">{} позиций</a>', url, count)
+
+
+@admin.register(OrderItem)
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ['title', 'size', 'quantity', 'price']
 
 
 @admin.register(TelegramBot)
