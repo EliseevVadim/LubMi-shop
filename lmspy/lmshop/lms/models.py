@@ -25,6 +25,10 @@ class Parameter(DbItem):
     def __str__(self):
         return f'Параметр "{self.key}"'
 
+    class Meta:
+        verbose_name = "Параметр"
+        verbose_name_plural = "Параметры"
+
     @staticmethod
     def value_of(key, default=""):
         try:
@@ -78,6 +82,8 @@ class Category(DbItem):
     class Meta:
         ordering = ["title"]
         indexes = [models.Index(fields=["title"])]
+        verbose_name = "Категория"
+        verbose_name_plural = "Категории"
 
     def __str__(self):
         return self.title
@@ -129,6 +135,8 @@ class Product(DbItem):
     class Meta:
         ordering = ["published_at"]
         indexes = [models.Index(fields=["title"])]
+        verbose_name = "Товар"
+        verbose_name_plural = "Товары"
 
     def __str__(self):
         return f"{self.article}: {self.title}"
@@ -165,6 +173,8 @@ class AvailableSize(DbItem):
         constraints = [
             models.UniqueConstraint(fields=["size", "product_id"], name="unique_size_per_product"),
             models.CheckConstraint(check=models.Q(quantity__gte=0), name="quantity_no_negative")]
+        verbose_name = "Доступный размер"
+        verbose_name_plural = "Доступные размеры"
 
     def __str__(self):
         return self.size
@@ -178,6 +188,10 @@ class Attribute(DbItem):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = "Атрибут"
+        verbose_name_plural = "Атрибуты"
+
 
 class Image(DbItem):
     primary = models.BooleanField()                                                             # основное изображение?
@@ -190,6 +204,10 @@ class Image(DbItem):
 
     objects = models.Manager()
     primaries = PrimariesManager()
+
+    class Meta:
+        verbose_name = "Изображение"
+        verbose_name_plural = "Изображения"
 
     def __str__(self):
         return 'изображение'
@@ -205,6 +223,8 @@ class Region(DbItem):
     class Meta:
         ordering = ["region"]
         indexes = [models.Index(fields=["region"])]
+        verbose_name = "Регион"
+        verbose_name_plural = "Регионы"
 
     def __str__(self):
         return f'{self.region}'
@@ -229,6 +249,8 @@ class City(DbItem):
     class Meta:
         ordering = ["city"]
         indexes = [models.Index(fields=["city_lc", "city"])]
+        verbose_name = "Населённый пункт"
+        verbose_name_plural = "Населённые пункты"
 
     def __str__(self):
         return f'{self.city}'
@@ -319,6 +341,10 @@ class Order(DbItem):
     canceled = CanceledManager()
     completed = CompletedManager()
 
+    class Meta:
+        verbose_name = "Заказ"
+        verbose_name_plural = "Заказы"
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = text.slugify(self.uuid)
@@ -344,6 +370,8 @@ class OrderItem(DbItem):
 
     class Meta:
         constraints = [models.CheckConstraint(check=models.Q(quantity__gt=0), name="quantity_positive")]
+        verbose_name = "Позиция"
+        verbose_name_plural = "Позиции"
 
     def __str__(self):
         return f'{self.title} ({self.quantity})'
@@ -365,6 +393,10 @@ class TelegramBot(DbItem):
     token = models.CharField(max_length=150)                                                    # -- токен --
     chats: QuerySet                                                                             # -- Just for IDE syntax analyzer --
 
+    class Meta:
+        verbose_name = "Telegram-бот"
+        verbose_name_plural = "Telegram-боты"
+
     def __str__(self):
         return f'Телеграм-бот "{self.title}"'
 
@@ -374,6 +406,10 @@ class Chat(DbItem):
     cid = models.IntegerField(blank=False)                                                      # -- идентификатор чата --
     active = models.BooleanField(default=True)                                                  # -- активен? --
     bot = models.ForeignKey(TelegramBot, related_name="chats", on_delete=models.CASCADE)        # -- бот --
+
+    class Meta:
+        verbose_name = "Чат"
+        verbose_name_plural = "Чаты"
 
     def __str__(self):
         return f'Телеграм-чат "{self.title}"'
@@ -387,6 +423,10 @@ class Coworker(DbItem):
 
     def __str__(self):
         return f'"{self.title}"'
+
+    class Meta:
+        verbose_name = "Служба"
+        verbose_name_plural = "Службы"
 
     @staticmethod
     def setting(cpk, skey, default=None):
@@ -409,6 +449,8 @@ class Setting(DbItem):
             fields=["key", "owner_id"],
             name="unique_key_per_owner"
         )]
+        verbose_name = "Настройка"
+        verbose_name_plural = "Настройки"
 
     def __str__(self):
         return f'<{self.owner.key}>:<{self.key}>:<{self.value}>'
@@ -435,6 +477,10 @@ class AboutItem(DbItem):
     objects = models.Manager()
     electorates = ElectoratesManager()
     partners = PartnersManager()
+
+    class Meta:
+        verbose_name = """"О бренде" - элемент"""
+        verbose_name_plural = """"О бренде" - элементы"""
 
     def __str__(self):
         return 'Элемент информации о бренде'

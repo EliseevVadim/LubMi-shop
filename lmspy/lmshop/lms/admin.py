@@ -49,7 +49,7 @@ class ImageAdmin(admin.ModelAdmin):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['cu_fullname', 'slug', 'status', 'total_price', 'details']
-    list_filter = ['cu_fullname', 'status']
+    list_filter = ['status', 'cu_fullname']
     search_fields = ['cu_fullname']
     prepopulated_fields = {'slug': ('uuid',)}
 

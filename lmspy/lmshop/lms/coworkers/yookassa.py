@@ -46,32 +46,12 @@ class Yookassa(ApiClient):
 
     def create_payment(self, order: Order, summ):
         order_uuid = str(order.uuid)
-        back_page = f"lms:{self.setting('back_page')}"
+        back_page = f"lms:{self.setting('back_jump_page')}"
         bad_result = None, None, "Проблемы с созданием платежа"
         try:
             res = self._post_json("payments", {"Idempotence-Key": order_uuid}, amount=Yookassa.amount(value=f"{summ:.2f}", currency="RUB"),
-                                  confirmation=Yookassa.confirmation(type="redirect", return_url=f'{self.setting("back_address")}{reverse(back_page)}'), capture=True,
-                                  description=f"Заказ #{order_uuid}", metadata=Yookassa.metadata(order_uuid=order_uuid), receipt={
-                    "customer": {
-                        "full_name": order.cu_fullname,
-                        "email": order.cu_email,
-                        "phone": order.cu_phone,
-                    },
-                    "items": [{
-                        "description": item.title,
-                        "quantity": f"{item.quantity}",
-                        "amount": {
-                            "value": f"{item.price.amount:.2f}",
-                            "currency": "RUB"
-                        },
-                        "vat_code": self.setting("vat_code"),
-                        "supplier": {
-                            "name": self.setting("supplier_name"),
-                            "phone": self.setting("supplier_phone"),
-                            "inn": self.setting("supplier_inn")
-                        }
-                    } for item in order.items.all()]
-                })
+                                  confirmation=Yookassa.confirmation(type="redirect", return_url=f'{self.setting("back_jump_address")}{reverse(back_page)}'), capture=True,
+                                  description=f"Заказ #{order_uuid}", metadata=Yookassa.metadata(order_uuid=order_uuid))
         except TransportError:
             return bad_result
         try:
