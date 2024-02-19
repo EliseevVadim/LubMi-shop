@@ -70,12 +70,22 @@ body, aside, .content, .leading {
 }
 
 .leading > nav > a {
+    visibility: visible;
     margin-left: 1rem;
     margin-right: 1rem;
     text-decoration: none;
     text-transform: uppercase;
     color: black;
 }
+
+.leading > nav > a.nav {
+    display: none;
+}
+
+@media screen and (min-width: 70rem) {
+.leading > nav > a.nav {
+    display: block;
+}}
 
 .leading > nav > a.logo {
     margin-right: auto;
