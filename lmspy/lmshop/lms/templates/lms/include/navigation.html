@@ -1,15 +1,7 @@
 {% load static %}
 <nav>
   <a class="logo" href='{% url "lms:index" %}'><img src="{% static 'svg/logo.svg' %}"/></a>
-  <a href='{% url "lms:index" %}'>{{param_title_main_page}}</a>
-  <a href='{% url "lms:catalogue" %}'>{{param_title_catalogue}}</a>
-  <a href='{% url "lms:perfumery" %}'>{{param_title_perfumery}}</a>
-  <a href='{% url "lms:delivery" %}'>{{param_title_shipping_and_payment}}</a>
-  <a href='{% url "lms:care" %}'>{{param_title_care}}</a>
-  {% if param_value_contacts_modal.lower.strip == "yes" %}
-  <a onclick="show_contacts();" class="hand">{{param_title_contacts}}</a>{% else %}
-  <a href='{% url "lms:contacts" %}'>{{param_title_contacts}}</a>{% endif %}
-  <a href='{% url "lms:about" %}'>{{param_title_about_company}}</a>
+  {% include "lms/include/nav-menu.html" %}
   <section class="nav-icons">
   <a class="picto hand" onclick="sch.open();"><img src="{% static 'svg/lens.svg' %}"/></a>
   <a class="picto hand" onclick="right_sidebar.show_favorites();"><img src="{% static 'svg/heart.svg' %}"/></a>
