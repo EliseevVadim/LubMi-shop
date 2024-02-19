@@ -18,7 +18,7 @@
   </div>
   <div class="std-footer-item-4">
     <small>{{param_label_copyright}}</small>
-    <img style="height:1em" src="{% static 'svg/footer.svg' %}"/>
+    {% include "lms/include/socials.html" %}
     <a href='{{param_value_link_privacy_policy}}'><small>{{param_title_privacy_policy}}</small></a>
     <a href='{{param_value_link_public_offer}}'><small>{{param_title_public_offer}}</small></a>
   </div>

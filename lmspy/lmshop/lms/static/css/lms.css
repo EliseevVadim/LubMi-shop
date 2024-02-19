@@ -117,6 +117,86 @@ body, aside, .content, .leading {
     height: calc(var(--LeadingHeight) * 0.95);
 }
 
+/* Футер ------------------------------------------------------------------------------------------------------------- */
+
+footer.page {
+    border-top:1px solid black;
+    flex: 0 0 var(--FooterHeight);
+    padding: var(--DefPadding)
+}
+
+footer.page .socials {
+    max-height: 1rem;
+}
+
+footer.page .socials img {
+    max-height: 0.75rem;
+}
+
+// narrow
+
+.std-footer {
+    padding: var(--DefPadding);
+    display: flex;
+    flex-flow: column;
+}
+
+[class^='std-footer-item'] {
+    display: flex;
+    flex-flow: column;
+    margin-bottom: 1rem;
+}
+
+[class^='std-footer-item'] > * {
+    text-decoration: none;
+    color: black;
+    margin: 0;
+}
+
+.std-footer-item-4 {
+    margin-top: 1rem;
+}
+
+footer.page .socials {
+    display: none;
+}
+
+@media screen and (min-width: 50rem) {
+    .std-footer {
+        padding: var(--DefPadding);
+        display: grid;
+        grid-template-rows: auto auto;
+        grid-template-columns: auto 7rem 7rem 7rem 7rem;
+        grid-template-areas:
+            "A B B C C"
+            "D D D D D";
+    }
+
+    .std-footer-item-1 {
+        grid-area: A;
+    }
+
+    .std-footer-item-2 {
+        grid-area: B;
+    }
+
+    .std-footer-item-3 {
+        grid-area: C;
+    }
+
+    .std-footer-item-4 {
+        grid-area: D;
+        flex-flow: row;
+        justify-content: space-between;
+        place-items: center;
+        margin-top: 1rem;
+    }
+
+    footer.page .socials {
+        display: flex;
+    }
+}
+
 /* Контент ------------------------------------------------------------------------------------------------------------- */
 
 header.page {
@@ -124,55 +204,7 @@ header.page {
 }
 
 main.page {
-    /*background: #bca;*/
     padding: var(--DefPadding)
-}
-
-footer.page {
-    /*background: #abc;*/
-    border-top:1px solid black;
-    flex: 0 0 var(--FooterHeight);
-    padding: var(--DefPadding)
-}
-
-.std-footer {
-    padding: var(--DefPadding);
-    display: grid;
-    grid-template-rows: auto auto;
-    grid-template-columns: auto 7rem 7rem 7rem 7rem;
-    grid-template-areas:
-        "A B B C C"
-        "D D D D D";
-}
-
-[class^='std-footer-item'] {
-    display: flex;
-    flex-flow: column;
-}
-
-[class^='std-footer-item'] > * {
-    text-decoration: none;
-    color: black;
-}
-
-.std-footer-item-1 {
-    grid-area: A;
-}
-
-.std-footer-item-2 {
-    grid-area: B;
-}
-
-.std-footer-item-3 {
-    grid-area: C;
-}
-
-.std-footer-item-4 {
-    grid-area: D;
-    flex-flow: row;
-    justify-content: space-between;
-    place-items: center;
-    margin-top: 1rem;
 }
 
 /* Selector ------------------------------------------------------------------------------------------------------------*/
