@@ -31,6 +31,24 @@ body, aside, .content, .leading {
     font-family: var(--Fonts);
 }
 
+.on-narrow {
+    display: block;
+}
+
+.on-wide {
+    display: none;
+}
+
+@media screen and (min-width: 70rem) {
+.on-narrow {
+    display: none;
+}
+
+.on-wide {
+    display: block;
+}
+}
+
 .content {
     position: static;
     left: 0;
@@ -77,15 +95,6 @@ body, aside, .content, .leading {
     text-transform: uppercase;
     color: black;
 }
-
-.leading > nav > a.nav {
-    display: none;
-}
-
-@media screen and (min-width: 70rem) {
-.leading > nav > a.nav {
-    display: block;
-}}
 
 .leading > nav > a.logo {
     margin-right: auto;

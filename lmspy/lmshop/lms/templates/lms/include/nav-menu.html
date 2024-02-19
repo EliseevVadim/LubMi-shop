@@ -1,9 +1,9 @@
-<a class="nav" href='{% url "lms:index" %}'>{{param_title_main_page}}</a>
-<a class="nav" href='{% url "lms:catalogue" %}'>{{param_title_catalogue}}</a>
-<a class="nav" href='{% url "lms:perfumery" %}'>{{param_title_perfumery}}</a>
-<a class="nav" href='{% url "lms:delivery" %}'>{{param_title_shipping_and_payment}}</a>
-<a class="nav" href='{% url "lms:care" %}'>{{param_title_care}}</a>
+<a class="on-wide nav" href='{% url "lms:index" %}'>{{param_title_main_page}}</a>
+<a class="on-wide nav" href='{% url "lms:catalogue" %}'>{{param_title_catalogue}}</a>
+<a class="on-wide nav" href='{% url "lms:perfumery" %}'>{{param_title_perfumery}}</a>
+<a class="on-wide nav" href='{% url "lms:delivery" %}'>{{param_title_shipping_and_payment}}</a>
+<a class="on-wide nav" href='{% url "lms:care" %}'>{{param_title_care}}</a>
 {% if param_value_contacts_modal.lower.strip == "yes" %}
-<a class="nav" onclick="show_contacts();" class="hand">{{param_title_contacts}}</a>{% else %}
-<a class="nav" href='{% url "lms:contacts" %}'>{{param_title_contacts}}</a>{% endif %}
-<a class="nav" href='{% url "lms:about" %}'>{{param_title_about_company}}</a>
+<a class="on-wide nav" onclick="show_contacts();" class="hand">{{param_title_contacts}}</a>{% else %}
+<a class="on-wide nav" href='{% url "lms:contacts" %}'>{{param_title_contacts}}</a>{% endif %}
+<a class="on-wide nav" href='{% url "lms:about" %}'>{{param_title_about_company}}</a>
