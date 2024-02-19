@@ -286,7 +286,17 @@ figcaption {
 .p-card-b {
     display: grid;
     gap: var(--Gap);
-    grid-template-columns: auto auto auto;
+    grid-template-columns: auto;
+    grid-template-rows: auto auto auto;
+}
+
+@media screen and (min-width: 70rem) {
+    .p-card-b {
+        display: grid;
+        gap: var(--Gap);
+        grid-template-columns: auto auto auto;
+        grid-template-rows: auto;
+    }
 }
 
 .icon {
