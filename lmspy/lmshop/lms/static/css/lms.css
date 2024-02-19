@@ -284,10 +284,26 @@ figcaption {
 }
 
 .p-card-b {
+    overflow: auto;
     display: grid;
-    gap: var(--Gap);
-    grid-template-columns: auto;
-    grid-template-rows: auto auto auto;
+    gap: calc(0.5 * var(--Gap));
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+}
+
+.p-card-b .icon-list {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.p-card-b .product-card {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.p-card-b .product-description {
+    grid-column: 1 / span 2;
+    grid-row: 2;
 }
 
 @media screen and (min-width: 70rem) {
@@ -297,11 +313,26 @@ figcaption {
         grid-template-columns: auto auto auto;
         grid-template-rows: auto;
     }
+
+    .p-card-b .icon-list {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .p-card-b .product-card {
+        grid-column: 2;
+        grid-row: 1;
+    }
+    .p-card-b .product-description {
+        grid-column: 3;
+        grid-row: 1;
+    }
 }
 
 .icon {
     cursor: pointer;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    margin-right: 0.5rem;
 }
 
 .heart {
