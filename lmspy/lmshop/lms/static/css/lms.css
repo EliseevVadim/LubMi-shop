@@ -31,7 +31,8 @@ body, aside, .content, .leading {
     font-family: var(--Fonts);
 }
 
-.on-narrow {
+.on-narrow,
+.on-both .on-wide {
     display: block;
 }
 
@@ -283,14 +284,19 @@ input[type="checkbox"]:not(:checked) ~ svg { fill: none; }
 /* Панели --------------------------------------------------------------------------------------------------------------*/
 
 aside {
+    visibility: hidden;
     position: fixed;
     top: 0;
-    height: 100vh;
+    bottom:0;
+    height: 1fr;
+    max-height: 1fr;
+    min-height: 1fr;
     width: min(30rem, 40vw);
     padding: var(--DefPadding);
-    box-shadow: 0 0 0 100vw #7777;
     z-index: var(--ZixPanels);
-    visibility: hidden;
+    display: flex;
+    flex-flow: column;
+    box-shadow: 0 0 0 100vw #7777;
     opacity: 0.0;
     transition: opacity 0.25s ease;
 }
@@ -321,6 +327,29 @@ aside.left {
 aside h1 {
     border-bottom: thin solid black;
     border-top: none;
+}
+
+aside a {
+    visibility: visible;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: black;
+    margin: calc(var(--DefPadding) / 2) 0;
+    font-size: 1.25rem;
+    text-align: right;
+}
+
+aside div[class*='content'] {
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+}
+
+aside footer {
+    margin: auto 0 0 0;
+    align-self: center;
 }
 
 /* Корзина ------------------------------------------------------------------------------------------------------------- */

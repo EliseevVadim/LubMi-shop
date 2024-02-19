@@ -679,3 +679,8 @@ class JsMessageView(View):
         })
 
 
+class NavMenuView(View):
+    @staticmethod
+    def get(request, *_, **__):
+        return render(request, 'lms/nav-menu.html', {})
+

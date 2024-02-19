@@ -26,5 +26,6 @@ urlpatterns = [
     path('backstage/c6t-info/<kind>/<data>/', C6tInfoView.as_view(), name='c6t_info'),
     path('backstage/payment-message/<status>/', PaymentMessageView.as_view(), name='payment_message'),
     path('backstage/js-message/<message>/', JsMessageView.as_view(), name='js_message'),
+    path('backstage/nav-menu/', NavMenuView.as_view(), name='nav_menu'),
     path('backstage/search/<item>/', SearchView.as_view(), name='search'),
 ]

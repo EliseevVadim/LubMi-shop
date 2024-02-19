@@ -28,5 +28,6 @@ const {{side}}_sidebar = {
     },
     show_scart: () => {{side}}_sidebar.show('{% url "lms:scart" %}', ContentType.SCART),
     show_favorites: () => {{side}}_sidebar.show('{% url "lms:favorites" %}', ContentType.FAVORITES),
+    show_nav_menu: () => {{side}}_sidebar.show('{% url "lms:nav_menu" %}', ContentType.NAVIGATION),
     __on_scart_changed: null
 };

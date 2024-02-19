@@ -17,6 +17,7 @@ const ContentType = {
     NONE: 0,
     SCART: 1,
     FAVORITES: 2,
+    NAVIGATION: 3
 };
 
 const EventType = {
