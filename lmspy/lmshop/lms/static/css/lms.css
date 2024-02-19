@@ -352,6 +352,20 @@ aside footer {
     align-self: center;
 }
 
+.socials {
+    color: lightgray;
+    background: black;
+    padding: 4px;
+    border-radius: 8px;
+}
+
+.socials a {
+    display: flex;
+    place-items: center;
+    margin: 0;
+    padding: 0;
+}
+
 /* Корзина ------------------------------------------------------------------------------------------------------------- */
 
 .sidebar-fig {
