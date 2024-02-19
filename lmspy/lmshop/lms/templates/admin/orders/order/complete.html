@@ -4,7 +4,7 @@
 
 {% block breadcrumbs %}
 <div class="breadcrumbs">
-<a href="{% url "admin:index" %}">Home</a> &rsaquo; <a href="{% url "admin:lms_order_changelist" %}">Заказы</a> &rsaquo; <a href="{% url "lms:admin_order_details" slug=order.slug %}">Детали</a> &rsaquo; Закрыть заказ
+<a href="{% url "admin:index" %}">Начало</a> &rsaquo; <a href="{% url "admin:lms_order_changelist" %}">Заказы</a> &rsaquo; <a href="{% url "lms:admin_order_details" slug=order.slug %}">Подробно</a> &rsaquo; Закрыть заказ
 </div>
 {% endblock %}
 
@@ -17,11 +17,11 @@
         {%csrf_token%}
         <input type="submit" value="Да, закрыть заказ" style="margin:0;background:green;" />
         <span>&nbsp;</span>
-        <a href="{% url "lms:admin_order_details" slug=order.slug %}" class="button cancel-link" style="display:inline-flex;place-items:center;" >Нет, отменить и вернуться к заказу</a>
+        <a href="{% url "lms:admin_order_details" slug=order.slug %}" class="button cancel-link" style="display:inline-flex;place-items:center;margin:0;" >Нет, отменить и вернуться к заказу</a>
     </form>
     {% else %}
     <h1>Только оплаченный заказ может быть закрыт</h1>
-    <a href="{% url "lms:admin_order_details" slug=order.slug %}" class="button cancel-link" style="display:inline-flex;place-items:center;" >Вернуться</a>
+    <a href="{% url "lms:admin_order_details" slug=order.slug %}" class="cancel-link" style="display:inline-flex;place-items:center;margin:0;" >Вернуться</a>
     {% endif %}
 </div>
 {% endblock %}

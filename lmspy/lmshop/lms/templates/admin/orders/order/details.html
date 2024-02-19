@@ -3,7 +3,7 @@
 
 {% block breadcrumbs %}
 <div class="breadcrumbs">
-<a href="{% url "admin:index" %}">Home</a> &rsaquo; <a href="{% url "admin:lms_order_changelist" %}">Заказы</a> &rsaquo; Детали
+<a href="{% url "admin:index" %}">Начало</a> &rsaquo; <a href="{% url "admin:lms_order_changelist" %}">Заказы</a> &rsaquo; Подробно
 </div>
 {% endblock %}
 
@@ -33,7 +33,7 @@
     <div class="module">
         <h2>Позиции по заказу</h2>
         <table>
-            <tr><th>Название</th><th>Размер</th><th>Количество</th><th>Цена</th><th>Вес</th></tr>
+            <tr><th>Артикул: Название</th><th>Размер</th><th>Количество</th><th>Цена</th><th>Вес</th></tr>
             {% for item in order.items.all %}
             <tr><td>{{item.title}}</td><td>{{item.size}}</td><td>{{item.quantity}}</td><td>{{item.price}}</td><td>{{item.weight}}</td></tr>
             {% endfor %}
