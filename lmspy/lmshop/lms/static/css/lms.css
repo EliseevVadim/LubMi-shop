@@ -133,7 +133,7 @@ footer.page .socials img {
     max-height: 0.75rem;
 }
 
-// narrow
+/* narrow */
 
 .std-footer {
     padding: var(--DefPadding);
@@ -315,15 +315,18 @@ input[type="checkbox"]:not(:checked) ~ svg { fill: none; }
 
 /* Панели --------------------------------------------------------------------------------------------------------------*/
 
+/* narrow */
+
 aside {
     visibility: hidden;
     position: fixed;
+    left: 0;
+    width: auto;
     top: 0;
     bottom:0;
     height: 1fr;
     max-height: 1fr;
     min-height: 1fr;
-    width: min(30rem, 40vw);
     padding: var(--DefPadding);
     z-index: var(--ZixPanels);
     display: flex;
@@ -331,6 +334,13 @@ aside {
     box-shadow: 0 0 0 100vw #7777;
     opacity: 0.0;
     transition: opacity 0.25s ease;
+}
+
+@media screen and (min-width: 40rem) {
+    aside {
+        left: auto;
+        width: min(30rem, 65vw);
+    }
 }
 
 aside.right {
