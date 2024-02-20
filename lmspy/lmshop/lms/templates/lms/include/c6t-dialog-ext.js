@@ -19,16 +19,18 @@ c6t_dialog.show = () => {
     const by_selector = sel => document.querySelector(sel);
     fetch('{% url "lms:c6t_form" %}').then(response => response.text()).then(html => {
         c6t_dialog.close();
-        c6t_dialog.body().innerHTML = `<div class="grid-c2">
+        c6t_dialog.body().innerHTML = `<div class="grid-c6t">
     <section class="c6t-form-container">
     </section>
-    <div class="items-top-down">
+    <div class="c6t-scart-container items-top-down">
         <section class="c6t-sidebar">
         </section>
-        <section id="c6t-status">
+        <section id="c6t-status" class="on-wide c6t-status">
         </section>
     </div>
-    <!--div style="display: flex; flex-flow: column;"><button class="medium inverted">XXXXXXXXXXX</button></div-->
+    <div class="c6t-button-container" style="display: flex; flex-flow: column;">
+        <button class="medium inverted" onclick="_form.onsubmit(null);">{{param_label_checkout}}</button>
+    </div>
 </div>`;
         c6t_dialog.form_container().innerHTML = html;
 
@@ -89,7 +91,10 @@ c6t_dialog.show = () => {
                 c6t_status.controller = new AbortController();
                 fetch(url, {signal: c6t_status.controller.signal}).then(response => response.text()).then(html => {
                     c6t_status.controller = null;
-                    c6t_status.innerHTML = html;
+                    let statuses = document.querySelectorAll(".c6t-status");
+                    statuses.forEach((status, arg1, arg2) => {
+                        status.innerHTML = html;
+                    });
                 }).catch(_=>{});
                 fetch(`{% url "lms:c6t_info" kind="delivery" data="cd" %}?city_uuid=${_city_uuid.value}&street=${_street.value}&building=${_building.value}`)
                 .then(response => response.text()).then(html => {
@@ -160,7 +165,7 @@ c6t_dialog.show = () => {
             _d6y_service_1.onchange = d6y_changed;
 
             _form.onsubmit = e => {
-                e.preventDefault();
+                if(e) e.preventDefault();
                 let ds = by_selector('input[id^="c6t-d6y_service_"]:checked').value;
                 __api_call__('{% url "api:c6t" %}', {
                     delivery: ds,

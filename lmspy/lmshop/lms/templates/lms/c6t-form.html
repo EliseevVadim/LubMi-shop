@@ -1,6 +1,8 @@
-<form id="{{c6t_form.id}}" action="" method="post">
+<form id="{{c6t_form.id}}" name="c6t_form" action="" method="post">
 {{c6t_form.as_div}}
 {%csrf_token%}
-<div class="dialog-footer">
-<input class="medium inverted" type="submit" value="{{c6t_form.confirmation|default:'Укажите подтверждение'}}"/></div>
+{% if form.confirmation %}
+<div class="dialog-footer"><input class="medium inverted" type="submit" value="{{c6t_form.confirmation}}"/></div>
+{% endif %}
+<section class="on-narrow c6t-status"></section>
 </form>
