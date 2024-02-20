@@ -23,7 +23,9 @@
 			<form id="{{form.id}}" action="" method="post">
 			{{form.as_div}}
 			{%csrf_token%}
-			<div class="dialog-footer"><input class="medium inverted" type="submit" value="{{form.confirmation|default:'Укажите подтверждение'}}"/></div>
+			{% if form.confirmation %}
+			<div class="dialog-footer"><input class="medium inverted" type="submit" value="{{form.confirmation}}"/></div>
+			{% endif %}
 			</form>
 		{% endif %}
 	</div>
