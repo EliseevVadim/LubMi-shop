@@ -52,6 +52,8 @@ c6t_dialog.show = () => {
             _d6y_service_1 = by_id('c6t-d6y_service_1');
             _d6y_service_0.parentElement.insertAdjacentHTML('beforeEnd', `&nbsp;<span id='c6t-cd-info'></span>`);
             _d6y_service_1.parentElement.insertAdjacentHTML('beforeEnd', `&nbsp;<span id='c6t-pr-info'></span>`);
+            _confirm.parentElement.style.flexFlow = "row-reverse";
+            _confirm.parentElement.style.justifyContent = "start";
 
             _name.value = answer.name;
             _phone.value = answer.phone;
