@@ -361,8 +361,9 @@ input[type="checkbox"]:not(:checked) ~ svg { fill: none; }
 aside {
     visibility: hidden;
     position: fixed;
-    left: 0;
     width: auto;
+    left: 0;
+    right: 0;
     top: 0;
     bottom:0;
     height: 1fr;
@@ -370,21 +371,34 @@ aside {
     min-height: 1fr;
     padding: var(--DefPadding);
     z-index: var(--ZixPanels);
-    display: flex;
-    flex-flow: column;
     box-shadow: 0 0 0 100vw #7777;
     opacity: 0.0;
     transition: opacity 0.25s ease;
 }
 
-@media screen and (min-width: 40rem) {
-    aside {
+aside.rtnr {
+    left: auto;
+    width: min(20rem, 66vw);
+}
+
+@media screen and (min-width: 50rem) {
+    aside.right {
         left: auto;
-        width: min(30rem, 65vw);
+        width: min(30rem, 75vw);
+    }
+
+    aside.left {
+        right: auto;
+        width: min(30rem, 75vw);
     }
 }
 
 aside.right {
+    right:0;
+    background: white;
+}
+
+aside.rtnr {
     right:0;
     background: white;
 }
@@ -1113,7 +1127,7 @@ dialog {
 }
 
 #c6t-dialog .grid-c2 {
-    gap: 4rem;
+    column-gap: 4rem;
 }
 
 #c6t-dialog td {

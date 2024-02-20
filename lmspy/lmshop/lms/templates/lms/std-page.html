@@ -20,6 +20,10 @@ LubMi - {{page_title}}
 {% include "lms/include/sidebar.html" with side="right" classes="items-top-down" %}
 {% endblock %}
 
+{% block rtnr_side_bar %}
+{% include "lms/include/sidebar.html" with side="rtnr" classes="items-top-down" %}
+{% endblock %}
+
 {% block modal_forms %}
 {% include "lms/include/popup.html" with popup_id="popup-message" %}
 {% include "lms/include/dialog.html" with unique="gp" dialog_id="gp-dialog" form=None %}
@@ -47,6 +51,7 @@ LubMi - {{page_title}}
 {% include "lms/include/c6t-dialog-ext.js" %}
 {% include "lms/include/sidebar.js" with side="left" %}
 {% include "lms/include/sidebar.js" with side="right" %}
+{% include "lms/include/sidebar.js" with side="rtnr" %}
 {% include "lms/include/search.js" %}
 {% include "lms/include/contacts.js" %}
 {% include "lms/include/message.js" %}
