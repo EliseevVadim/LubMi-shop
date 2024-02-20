@@ -305,7 +305,7 @@ figcaption {
     grid-row: 2;
 }
 
-@media screen and (min-width: 70rem) {
+@media screen and (orientation: landscape) {
     .p-card-b {
         display: grid;
         gap: var(--Gap);
