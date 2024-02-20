@@ -1072,7 +1072,7 @@ dialog {
 #gp-dialog,
 #c6t-dialog {
     max-width: 100vw;
-    max-height: 100vw;
+    max-height: 100vh;
     box-shadow: 0 0 0 100vw #fff;
     border: none;
 }
@@ -1225,7 +1225,7 @@ dialog {
 
 #sch-dialog {
     max-width: 100vw;
-    max-height: 100vw;
+    max-height: 100vh;
     position: fixed;
     margin: 0 0 auto 0;
     width: auto;
