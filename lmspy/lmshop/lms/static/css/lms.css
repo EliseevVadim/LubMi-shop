@@ -284,7 +284,6 @@ figcaption {
 }
 
 .p-card-b {
-    overflow: auto;
     display: grid;
     gap: calc(0.5 * var(--Gap));
     grid-template-columns: auto auto;
@@ -1066,6 +1065,7 @@ dialog,
 }
 
 dialog {
+    overflow: auto;
     padding: 3rem;
 }
 
@@ -1120,6 +1120,9 @@ dialog {
     flex-flow: column;
     place-items: center;
 }
+
+/* C6t -----------------------------------------------------------------------------------------------------*/
+
 
 .c6t-sidebar,
 #c6t-form {
