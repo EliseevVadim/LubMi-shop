@@ -574,18 +574,18 @@ h1, h2, h3, h4, h5, h6 {
 
 .grid12-aab {
     grid-template-areas:
-        "A A A A A A A A B B B B"
-        "A A A A A A A A B B B B"
-        "A A A A A A A A B B B B"
-        "A A A A A A A A B B B B"
-        "A A A A A A A A B B B B"
-        "A A A A A A A A B B B B"
-        "A A A A A A A A B B B B"
-        "A A A A A A A A B B B B"
-        "A A A A A A A A B B B B"
-        "A A A A A A A A B B B B"
-        "A A A A A A A A B B B B"
-        "A A A A A A A A B B B B";
+        "B B B B B B B B B B B B"
+        "B B B B B B B B B B B B"
+        "B B B B B B B B B B B B"
+        "B B B B B B B B B B B B"
+        "B B B B B B B B B B B B"
+        "B B B B B B B B B B B B"
+        "A A A A A A A A A A A A"
+        "A A A A A A A A A A A A"
+        "A A A A A A A A A A A A"
+        "A A A A A A A A A A A A"
+        "A A A A A A A A A A A A"
+        "A A A A A A A A A A A A";
 }
 
 .grid12-abcd {

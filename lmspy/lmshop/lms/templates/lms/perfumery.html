@@ -8,7 +8,7 @@
 {% block page_content %}
 {{ text_00 | markdown }}
 <div class="grid12 grid12-abcd"> {# ----------------------------------------------------------------------------------  #}
-<div class="g12-ia">{{ text_01 | markdown }}</div>
+<div class="g12-ia">{% include "lms/include/double-text.html" with intro=text_01_i text=text_01 %}</div>
 {% include "lms/include/picture.html" with classes="g12-ib" pic_file="img/pic-03.jpg" %}
 {% include "lms/include/picture.html" with classes="g12-ic" pic_file="img/pic-04.jpg" %}
 {% include "lms/include/picture.html" with classes="g12-id" pic_file="img/pic-05.jpg" %}
@@ -17,7 +17,7 @@
 {{text_02 | markdown}}
 <div class="grid12 grid12-ab">
 {% include "lms/include/picture.html" with classes="g12-ia" pic_file="img/pic-06.jpg" %}
-<div class="g12-ib">{{ text_03 | markdown }}</div>
+<div class="g12-ib">{% include "lms/include/double-text.html" with intro=text_03_i text=text_03 %}</div>
 </div>
 <h1></h1> {# ---------------------------------------------------------------------------------------------------------  #}
 <div class="grid12 grid12-abcde">
