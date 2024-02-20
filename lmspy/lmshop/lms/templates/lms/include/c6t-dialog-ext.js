@@ -28,6 +28,7 @@ c6t_dialog.show = () => {
         <section id="c6t-status">
         </section>
     </div>
+    <!--div style="display: flex; flex-flow: column;"><button class="medium inverted">XXXXXXXXXXX</button></div-->
 </div>`;
         c6t_dialog.form_container().innerHTML = html;
 
