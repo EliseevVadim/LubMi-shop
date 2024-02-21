@@ -3,7 +3,7 @@
     --FooterHeight: 3rem;
     --DefPadding: 1em;
     --DefBottomPadding: 3rem;
-    --Fonts: 'URW Gothic', helvetica, sans-serif;
+    --Fonts: 'URW Gothic', 'Century Gothic', 'Palas', 'Axon', helvetica, sans-serif;
     --ZixContent: 10;
     --ZixLeading: 20;
     --ZixPanels: 30;
@@ -133,8 +133,6 @@ footer.page .socials img {
     max-height: 0.75rem;
 }
 
-/* narrow */
-
 .std-footer {
     padding: var(--DefPadding);
     display: flex;
@@ -225,9 +223,9 @@ select, select:focus {
     padding: 1rem;
     font-size: 1.25rem;
     font-family: var(--Fonts);
-    /*-moz-appearance: none;
+    -moz-appearance: none;
     -webkit-appearance: none;
-    appearance: none;*/
+    appearance: none;
 }
 
 /* Каталог ------------------------------------------------------------------------------------------------------------- */
@@ -354,8 +352,6 @@ input[type="checkbox"]:checked ~ svg { fill: white; }
 input[type="checkbox"]:not(:checked) ~ svg { fill: none; }
 
 /* Панели --------------------------------------------------------------------------------------------------------------*/
-
-/* narrow */
 
 aside {
     visibility: hidden;
@@ -1623,8 +1619,6 @@ label[for="c6t-cu_confirm"] {
     }
 
     .banner-C {
-            justify-items: center;
-            text-align: center;
             grid-template-areas:
             "S S S S S S S S S S S S"
             "S S S S S S S S S S S S"

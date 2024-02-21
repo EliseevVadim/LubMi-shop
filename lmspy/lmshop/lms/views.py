@@ -1,5 +1,4 @@
 from decimal import Decimal
-
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.exceptions import ValidationError
 from django.core.cache import cache
