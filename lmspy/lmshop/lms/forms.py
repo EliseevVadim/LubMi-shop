@@ -7,7 +7,6 @@ class ShortCustomerInfoForm(forms.ModelForm):
     title = Parameter.value_of('title_notify_product_arrival', 'Сообщить о поступлении товара')
     description = Parameter.value_of('label_choose_way_to_notify', 'Выберите удобный способ для оповещения о повторном наличии данного товара')
     confirmation = Parameter.value_of('label_send_request', 'Получить уведомление')
-    # cancel = "🞨"
 
     class Meta:
         model = NotificationRequest
