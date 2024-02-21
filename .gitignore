@@ -1,5 +1,9 @@
 *.bak 
-lmspy/lmshop/lmshop.sqlite3
-build-lmshop-*
 *pro.user
 .idea
+build-lmshop-*
+lmspy/lmshop/lmshop.sqlite3
+lmspy/lmshop/lms/migrations/*
+lmspy/lmshop/media/*
+
+
