@@ -14,4 +14,5 @@ redis~=5.0.1
 requests~=2.31.0
 httpx~=0.26.0
 markdown~=3.5.2
-yookassa==3.0.1
+psycopg2~=2.9.9
+uwsgi~=2.0.24
