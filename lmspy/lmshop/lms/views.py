@@ -121,7 +121,7 @@ class DeliveryView(View):
     @staticmethod
     def get(request, *_, **__):
         dl_link = Parameter.value_of("value_link_application_form")
-        ra_cdek = Parameter.value_of("value_return_address_cdek")
+        ra_cdek = Parameter.value_of("value_return_address_cd")
         ra_prus = Parameter.value_of("value_return_address_pr")
         re_phne = Parameter.value_of("value_contact_phone")
         return render(request, 'lms/delivery.html', {
