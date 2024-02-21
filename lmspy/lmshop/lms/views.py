@@ -24,7 +24,7 @@ class IndexView(View):
     page_size = int(Parameter.value_of("value_catalogue_page_size", 12))
     default_order = 'novelties-first'
     ordering = {
-        default_order: ("Порядок: по умолчанию", lambda q: q.order_by('-published_at')),  # TODO -- move labels to parameters! --
+        default_order: ("Порядок: по умолчанию", lambda q: q.order_by('-published_at')),
         'price-asc': ("Цена: по возрастанию", lambda q: q.order_by('actual_price')),
         'price-dsc': ("Цена: по убыванию", lambda q: q.order_by('-actual_price')),
         'title-asc': ("Название: А-Я", lambda q: q.order_by('title')),

@@ -37,8 +37,7 @@ class ShortCustomerInfoForm(forms.ModelForm):
 class CheckoutForm(forms.ModelForm):
     id = 'c6t-form'
     title = Parameter.value_of('title_checkout', 'Оформление заказа')
-    description = Parameter.value_of('label_TODO', 'Введите данные, необходимые для оформления заказа')
-    # confirmation = Parameter.value_of('label_checkout', 'Оформить заказ')
+    description = Parameter.value_of('message_enter_checkout_data', 'Введите данные, необходимые для оформления заказа')
 
     class Meta:
         model = Order
@@ -70,7 +69,7 @@ class CheckoutForm(forms.ModelForm):
             'cu_apartment': '',
             'cu_entrance': '',
             'cu_floor': '',
-            'cu_confirm': Parameter.value_of('pholder_TODO', 'Я согласен/на с политикой конфиденциальности'),
+            'cu_confirm': Parameter.value_of('label_i_am_agree_pp', 'Я согласен/на с политикой конфиденциальности'),
         }
         widgets = {
             'cu_name': forms.TextInput(attrs={
@@ -91,35 +90,35 @@ class CheckoutForm(forms.ModelForm):
             }),
             'cu_city':  forms.TextInput(attrs={
                 'id': 'c6t-cu_city',
-                'placeholder': Parameter.value_of('pholder_TODO', 'Город')
+                'placeholder': Parameter.value_of('pholder_city', 'Город')
             }),
             'delivery_service':  forms.RadioSelect(attrs={
                 'id': 'c6t-d6y_service',
-                'placeholder': Parameter.value_of('pholder_TODO', 'Вариант доставки')
+                'placeholder': Parameter.value_of('pholder_delivery_service', 'Вариант доставки')
             }),
             'cu_fullname':  forms.TextInput(attrs={
                 'id': 'c6t-cu_fullname',
-                'placeholder': Parameter.value_of('pholder_TODO', 'Фамилия, имя, отчество полностью')
+                'placeholder': Parameter.value_of('pholder_full_name', 'Фамилия, имя, отчество полностью')
             }),
             'cu_street':  forms.TextInput(attrs={
                 'id': 'c6t-cu_street',
-                'placeholder': Parameter.value_of('pholder_TODO', 'Улица')
+                'placeholder': Parameter.value_of('pholder_street', 'Улица')
             }),
             'cu_building':  forms.TextInput(attrs={
                 'id': 'c6t-cu_building',
-                'placeholder': Parameter.value_of('pholder_TODO', 'Дом')
+                'placeholder': Parameter.value_of('pholder_building', 'Дом')
             }),
             'cu_entrance': forms.TextInput(attrs={
                 'id': 'c6t-cu_entrance',
-                'placeholder': Parameter.value_of('pholder_TODO', 'Подъезд')
+                'placeholder': Parameter.value_of('pholder_entrance', 'Подъезд')
             }),
             'cu_floor':  forms.TextInput(attrs={
                 'id': 'c6t-cu_floor',
-                'placeholder': Parameter.value_of('pholder_TODO', 'Этаж')
+                'placeholder': Parameter.value_of('pholder_floor', 'Этаж')
             }),
             'cu_apartment':  forms.TextInput(attrs={
                 'id': 'c6t-cu_apartment',
-                'placeholder': Parameter.value_of('pholder_TODO', 'Квартира/офис')
+                'placeholder': Parameter.value_of('pholder_apartment', 'Квартира/офис')
             }),
             'cu_confirm':  forms.CheckboxInput(attrs={
                 'id': 'c6t-cu_confirm'
