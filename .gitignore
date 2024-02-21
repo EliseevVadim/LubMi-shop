@@ -3,7 +3,6 @@
 .idea
 build-lmshop-*
 lmspy/lmshop/lmshop.sqlite3
-lmspy/lmshop/lms/migrations/*
 lmspy/lmshop/media/*
 
 
