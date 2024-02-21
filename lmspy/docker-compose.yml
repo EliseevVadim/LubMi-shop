@@ -2,18 +2,18 @@ services:
   db:
     image: postgres:16.2
     restart: always
-    volumes:
-      - ./data/db:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
   web:
     build: .
-    command: gunicorn lmshop.wsgi
+    command: gunicorn --bind=0.0.0.0:8000 lmshop.wsgi
     restart: always
     volumes:
-      - .:/code
+      - ./lmshop:/code
+    ports:
+      - "8000:8000"
     environment:
       - DJANGO_SETTINGS_MODULE=lmshop.settings.prod
       - POSTGRES_DB=postgres
@@ -21,4 +21,3 @@ services:
       - POSTGRES_PASSWORD=postgres
     depends_on:
       - db
-      - nginx
