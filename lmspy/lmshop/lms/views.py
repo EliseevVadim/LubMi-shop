@@ -505,8 +505,7 @@ class ContactsView(View):
     def get(request, *_, **__):
         title = Parameter.value_of('title_contacts', 'Контакты')
         modal = Parameter.value_of('value_contacts_modal', 'yes').lower().strip() == 'yes'
-        ph = Parameter.value_of("value_contact_phone")
-        ph = f'<a href="tel:{ph}">{ph}</a>'
+        ph = f'<a href="{Parameter.value_of("value_link_contact_call")}">{Parameter.value_of("value_contact_phone")}</a>'
         return render(request, 'lms/contacts-modal.html' if modal else 'lms/contacts-page.html', {
             'page_title': title,
             'page_content': 'contacts-page',
