@@ -8,17 +8,9 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-  nginx:
-    image: nginx:1.25.4
-    restart: always
-    volumes:
-      - ./config/nginx:/etc/nginx/templates
-      - .:/code
-    ports:
-      - "80:80"
   web:
     build: .
-    command: ["./wait-for-it.sh", "db:5432", "--", "uwsgi", "--ini", "/code/config/uwsgi/uwsgi.ini"]
+    command: gunicorn lmshop.wsgi
     restart: always
     volumes:
       - .:/code

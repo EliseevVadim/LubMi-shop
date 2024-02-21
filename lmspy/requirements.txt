@@ -15,4 +15,5 @@ requests~=2.31.0
 httpx~=0.26.0
 markdown~=3.5.2
 psycopg2~=2.9.9
-uwsgi~=2.0.24
+gunicorn~=21.2.0
+whitenoise~=6.6.0
