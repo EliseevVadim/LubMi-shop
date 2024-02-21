@@ -2,7 +2,7 @@
 {% load static %}
 <section class="contacts">
 {{text | markdown}}
-<a href="tg:{{param_value_contact_telegram}}">
+<a href="{{param_value_link_contact_telegram}}">
     <button class="inverted medium">
         Написать&nbsp;в&nbsp;Telegram&nbsp;<img src="{% static 'svg/telegram.svg' %}"/>
     </button>
