@@ -6,9 +6,19 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+  nginx:
+    image: nginx:1.23.1
+    restart: always
+    volumes:
+      - ./config/nginx:/etc/nginx/templates
+      - ./lmshop:/code
+    ports:
+      - "80:80"
+    depends_on:
+      - web
   web:
     build: .
-    command: gunicorn --bind=0.0.0.0:8000 lmshop.wsgi
+    command: gunicorn --bind=web:8000 lmshop.wsgi
     restart: always
     volumes:
       - ./lmshop:/code
@@ -21,3 +31,4 @@ services:
       - POSTGRES_PASSWORD=postgres
     depends_on:
       - db
+
