@@ -18,12 +18,10 @@ services:
       - web
   web:
     build: .
-    command: gunicorn --bind=0.0.0.0:8000 lmshop.wsgi
+    command: gunicorn --bind=web:8000 lmshop.wsgi
     restart: always
     volumes:
       - ./lmshop:/code
-    ports:
-      - "8000:8000"
     environment:
       - DJANGO_SETTINGS_MODULE=lmshop.settings.prod
       - POSTGRES_DB=postgres
