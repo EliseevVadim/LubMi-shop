@@ -7,7 +7,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 #  nginx:
-#    image: nginx:latest
+#    image: nginx:1.24.0
 #    restart: always
 #    volumes:
 #      - ./config/nginx:/etc/nginx/templates

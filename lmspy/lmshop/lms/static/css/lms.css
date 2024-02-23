@@ -1242,6 +1242,12 @@ dialog {
     max-width: min(40rem, 80vw);
 }
 
+.c6t-status {
+    min-width: 10rem;
+    max-width: 35rem;
+    overflow: hidden;
+}
+
 @media screen and (min-width: 70rem) {
     .grid-c6t {
         column-gap: 4rem;
