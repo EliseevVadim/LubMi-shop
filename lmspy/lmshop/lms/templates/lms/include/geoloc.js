@@ -1,7 +1,7 @@
 const glocate = () => {
     const gloc_options = {
         enableHighAccuracy: true,
-        timeout: {{param_value_gloc_timeout|default:10000}},
+        timeout: {{param_value_gloc_timeout|default:"10000"}},
         maximumAge: 0,
     };
     const gloc_success = pos => {
