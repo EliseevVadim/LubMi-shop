@@ -66,7 +66,7 @@ const kill_product_in_scart = (ppk, product_title, size_id, size) => {
     __api_call__('{% url "api:kill_product_in_scart" %}', { ppk: String(ppk), size: String(size) }, result => {
         if(result.success) {
             scart_changed();
-            scart_undo.start({{param_value_undo_period}} * 1000 / scart_undo.period(),
+            scart_undo.start({{param_value_undo_period|default:5.9}} * 1000 / scart_undo.period(),
                 u => {
                     if(u.alive()) {
                         let cds = u.countdowns();
