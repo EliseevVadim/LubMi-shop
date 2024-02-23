@@ -15,8 +15,8 @@ const glocate = () => {
     const gloc_error = err => {
         console.warn(`ERROR(${err.code}): ${err.message}`);
         __api_call__('{% url "api:set_location" %}', {
-            latitude: {{param_value_default_latitude|default:0.0}},
-            longitude: {{param_value_default_longitude|default:0.0}},
+            latitude: {{param_value_default_latitude|default:"0.0"}},
+            longitude: {{param_value_default_longitude|default:"0.0"}},
             accuracy: 100.0
         }, result => { });
     };

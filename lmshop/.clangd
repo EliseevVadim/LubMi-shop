@@ -1,2 +1,0 @@
-CompileFlags:
- Add: [-std=gnu++2b, -D__cpp_concepts=202002L]

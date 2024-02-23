@@ -1,5 +1,5 @@
 server {
-    listen 0.0.0.0:80;
+    listen 80 default_server;
     
     location = /favicon.ico {
         log_not_found off;
@@ -11,10 +11,10 @@ server {
     }
 
     location /static/ {
-        alias /code/static/;
+        root /code/;
     }
 
     location /media/ {
-        alias /code/media/;
+        root /code/;
     }
 }
