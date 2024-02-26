@@ -4,7 +4,7 @@ import os
 DEBUG = False
 ADMINS = [('Dmitry', 'dmitry.starushko@gmail.com')]
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['http://localhost', 'http://localhost/*']
+CSRF_TRUSTED_ORIGINS = ['http://localhost/*']
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
