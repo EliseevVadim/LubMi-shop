@@ -1497,6 +1497,10 @@ label[for="c6t-cu_confirm"] {
     transition: background 0.25s ease;
 }
 
+.banner.btc {
+    background-position: top center;
+}
+
 .banner-A {
         grid-template-areas:
         "S S S S S S S S S S S S"

@@ -3,7 +3,7 @@
 {% load custom_tags %}
 {% block page_header %}
 {% static "img/bkg-002.jpg" as img %}
-{% include "lms/include/banner.html" with type="B" slogan=param_title_perfumery s_cls="banner-end white" button="Заказать аромат" b_cls="banner-button-plain medium" ref=param_value_link_perfumery %}
+{% include "lms/include/banner.html" with type="B" slogan=param_title_perfumery s_cls="banner-end white" button="Заказать аромат" bnr_cls="btc" b_cls="banner-button-plain medium" ref=param_value_link_perfumery %}
 {% endblock %}
 {% block page_content %}
 {{ text_00 | markdown }}
