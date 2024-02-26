@@ -5,6 +5,9 @@
   <title>{% block title %}{% endblock %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link href="{% static "css/lms.css" %}" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
   <script src="{% static "js/js.cookie.min.js" %}"></script>
   <script>
     {% include "lms/include/base.js" with token="__csrf_token__" %}

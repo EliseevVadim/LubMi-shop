@@ -3,7 +3,7 @@
     --FooterHeight: 3rem;
     --DefPadding: 1em;
     --DefBottomPadding: 3rem;
-    --Fonts: 'URW Gothic', 'Century Gothic', 'Palas', 'Axon', helvetica, sans-serif;
+    --Fonts: "Geologica", sans-serif;
     --ZixContent: 10;
     --ZixLeading: 20;
     --ZixPanels: 30;
@@ -15,6 +15,20 @@
     --NarrowPageWidth: 60rem;
     --HoFSize: 9rem;
 }
+
+// <uniquifier>: Use a uniquifier for the class name
+// <weight>: Use a value from 100 to 900
+
+//.geologica-<uniquifier> {
+//  font-family: "Geologica", sans-serif;
+//  font-optical-sizing: auto;
+//  font-weight: <weight>;
+//  font-style: normal;
+//  font-variation-settings:
+//    "slnt" 0,
+//    "CRSV" 0,
+//    "SHRP" 0;
+//}
 
 * {
     outline: 0;
@@ -29,6 +43,9 @@ body, aside, .content, .leading {
     margin: 0;
     padding: 0;
     font-family: var(--Fonts);
+    font-optical-sizing: auto;
+    font-weight: 150;
+    font-style: normal;
 }
 
 .on-narrow,
