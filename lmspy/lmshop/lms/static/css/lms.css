@@ -4,6 +4,8 @@
     --DefPadding: 1em;
     --DefBottomPadding: 3rem;
     --Fonts: "Geologica", sans-serif;
+    --FsPara: 1.613rem;
+    --Fs16: 1.075rem;
     --ZixContent: 10;
     --ZixLeading: 20;
     --ZixPanels: 30;
@@ -12,7 +14,7 @@
     --ScartFigWidth: 7rem;
     --HeartSize: 1.6rem;
     --Gap: var(--DefPadding);
-    --NarrowPageWidth: 60rem;
+    --NarrowPageWidth: 91.4rem;
     --HoFSize: 9rem;
 }
 
@@ -46,6 +48,7 @@ body, aside, .content, .leading {
     font-optical-sizing: auto;
     font-weight: 150;
     font-style: normal;
+    font-size: var(--FsPara);
 }
 
 .on-narrow,
@@ -110,8 +113,13 @@ body, aside, .content, .leading {
     margin-left: 1rem;
     margin-right: 1rem;
     text-decoration: none;
-    text-transform: uppercase;
-    color: black;
+    font-size: var(--Fs16);
+    color: #222222;
+    font-size: 16px;
+    font-family: Geologica;
+    font-weight: 250;
+    line-height: 14.40px;
+    word-wrap: break-word;
 }
 
 .leading > nav > a.logo {
@@ -948,8 +956,15 @@ input[type="submit"]:hover {
 .perfumery > h1 {
     margin-top: 3rem;
     margin-bottom: 1rem;
-    font-size: 3rem;
-    font-weight: bolder;
+//    font-size: 3rem;
+//    font-weight: bolder;
+    color: #222222;
+    font-size: 120px;
+    font-family: Geologica;
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: 120px;
+    word-wrap: break-word;
 }
 
 .perfumery .grid12 h1 {
@@ -988,8 +1003,18 @@ input[type="submit"]:hover {
 
 @media screen and (min-width: 70rem) {
     .perfumery > h1 {
-        font-size: 4rem;
-        font-weight: bolder;
+        color: #222222;
+        font-size: 8rem;
+        font-family: Geologica;
+        font-weight: 400;
+        text-transform: uppercase;
+        line-height: 8rem;
+        word-wrap: break-word;
+    }
+
+    .perfumery p {
+        color: #464646;
+        word-wrap: break-word;
     }
 
     .perfumery .grid12 h1 {
@@ -1487,7 +1512,7 @@ label[for="c6t-cu_confirm"] {
 
 .banner {
     display: grid;
-    grid-template: repeat(12, 3rem) / repeat(12, minmax(2rem, 1fr));
+    grid-template: repeat(12, auto) / repeat(12, auto);
     background-color: white;
     background-size: cover;
     background-position: center center;
@@ -1495,6 +1520,8 @@ label[for="c6t-cu_confirm"] {
     padding: 2rem;
     box-sizing: border-box;
     transition: background 0.25s ease;
+    aspect-ratio: 1440 / 881;
+    gap: 0;
 }
 
 .banner.btc {
@@ -1553,24 +1580,31 @@ label[for="c6t-cu_confirm"] {
 
 .banner-slogan {
     grid-area: S;
-    font-size: 4.5rem;
-    font-weight: bold;
+    color: white;
+    font-size: 8rem;
+    font-family: Geologica;
+    font-weight: 400;
     text-transform: uppercase;
-    text-shadow: #2227 0 0 1rem
+    line-height: 120px;
+    word-wrap: break-word;
 }
 
 .banner-switch {
     grid-area: W;
     cursor: pointer;
+    align-self: center;
 }
 
 .banner-button {
+    margin: 0;
     grid-area: B;
-}
-
-.banner-button.medium {
-    min-width: 15rem;
-    margin: 0.85rem;
+    align-self: end;
+    max-height: 5.11rem;
+    min-height: 5.11rem;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 21.60px;
+    word-wrap: break-word;
 }
 
 .banner-text {
@@ -1630,6 +1664,7 @@ label[for="c6t-cu_confirm"] {
     }
 
     .banner-B {
+            grid-template: repeat(11, auto) 7rem / repeat(12, 1fr);
             grid-template-areas:
             "S S S S S S S S S S S S"
             "S S S S S S S S S S S S"
@@ -1641,11 +1676,13 @@ label[for="c6t-cu_confirm"] {
             "S S S S S S S S S S S S"
             "S S S S S S S S S S S S"
             "S S S S S S S S S S S S"
-            "B B B B . . . . . . . ."
+            "S S S S S S S S S S S S"
             "B B B B . . . . . . . .";
     }
 
     .banner-C {
+            grid-template: repeat(10, auto) 7rem 5rem / repeat(12, 1fr);
+            padding: 0;
             grid-template-areas:
             "S S S S S S S S S S S S"
             "S S S S S S S S S S S S"
@@ -1655,8 +1692,8 @@ label[for="c6t-cu_confirm"] {
             "S S S S S S S S S S S S"
             "S S S S S S S S S S S S"
             "S S S S S S S S S S S S"
-            ". . . . . . . . . . . ."
-            "B B B B B B B B B B B B"
+            "S S S S S S S S S S S S"
+            "S S S S S S S S S S S S"
             "B B B B B B B B B B B B"
             "W W W W W W W W W W W W";
     }
