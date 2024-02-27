@@ -3,7 +3,7 @@
 {% load custom_tags %}
 {% block page_header %}
 {% static "img/bkg-002.jpg" as img %}
-{% include "lms/include/banner.html" with type="B" slogan=param_title_perfumery s_cls="banner-end white" button="Заказать аромат" bnr_cls="btc" b_cls="banner-button-plain" ref=param_value_link_perfumery gradient="rgba(62, 63, 65, 1), rgba(62, 63, 65, 0), rgba(62, 63, 65, 0)" %}
+{% include "lms/include/banner.html" with type="B" slogan=param_title_perfumery s_cls="banner-end white" button="Заказать аромат" bnr_cls="btc" ref=param_value_link_perfumery gradient="rgba(62, 63, 65, 1), rgba(62, 63, 65, 0), rgba(62, 63, 65, 0)" %}
 {% endblock %}
 {% block page_content %}
 {{ text_00 | markdown }}
@@ -29,7 +29,7 @@
 </div>
 <h1></h1> {# ---------------------------------------------------------------------------------------------------------  #}
 {% static "img/bkg-003.jpg" as img %}
-{% include "lms/include/banner.html" with type="A" slogan="КАК<br/>ЗАКАЗАТЬ<br/>ПАРФЮМ" s_cls="banner-end white" button="Заказать аромат" b_cls="banner-button-plain" text=text_09|markdown t_cls="banner-end white" ref=param_value_link_perfumery %}
+{% include "lms/include/banner.html" with type="A" slogan="КАК<br/>ЗАКАЗАТЬ<br/>ПАРФЮМ" s_cls="banner-end" button="Заказать аромат" text=text_09|markdown t_cls="banner-end white" ref=param_value_link_perfumery %}
 {{text_05 | markdown}} {# --------------------------------------------------------------------------------------------  #}
 {% include "lms/include/accordion.html" with article_classes="bb1" summary_classes="bt1 pt1 pb1 hand" md=True %}
 <section><button class="mt15 medium inverted" onclick="window.location.href='{{param_value_link_perfumery}}';">Заказать аромат</button></section>
