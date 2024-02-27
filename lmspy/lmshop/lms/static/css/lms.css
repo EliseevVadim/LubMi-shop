@@ -1580,10 +1580,29 @@ label[for="c6t-cu_confirm"] {
     word-wrap: break-word;
 }
 
+.banner-slogan.c2 {
+    color: #222222;
+}
+
 .banner-switch {
     grid-area: W;
     cursor: pointer;
     align-self: center;
+    display: flex;
+    flex-flow: row;
+}
+
+.banner-switch > * {
+    margin: 0;
+    padding: 0;
+}
+
+.banner-switch > *:first-child {
+    margin-right: 0.3rem;
+}
+
+.banner-switch > *:last-child {
+    margin-left: 0.3rem;
 }
 
 .banner-button {

@@ -16,7 +16,7 @@
 {% block footer_header %}
 {% static "img/bkg-004.jpg" as img %}
 {% url "lms:perfumery" as ref %}
-{% include "lms/include/banner.html" with type="B" slogan=param_title_perfumery s_cls="banner-end" button="Ознакомиться" %}
+{% include "lms/include/banner.html" with type="B" slogan=param_title_perfumery s_cls="banner-end c2" button="Ознакомиться" %}
 {% endblock %}
 
 {% block javascript %} {{block.super}}
@@ -26,7 +26,7 @@
 {% url "lms:perfumery" as ref_2 %}
 {% with "Перейти в каталог" as button_1 %}
 {% with "Ознакомиться" as button_2 %}
-{% include "lms/include/banner.js" with unique="main" slogan_1="Новая коллекция" slogan_2="Коллекция<br/>ароматов" g1=1 g2=0 show=1 %}
+{% include "lms/include/banner.js" with unique="main" slogan_1="Новая коллекция" slogan_2="Коллекция<br/>ароматов" g1="rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)" show=1 %}
 {% endwith %}
 {% endwith %}
 {% endblock %}
