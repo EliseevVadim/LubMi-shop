@@ -157,7 +157,6 @@ body, aside, .content, .leading {
 /* Футер ------------------------------------------------------------------------------------------------------------- */
 
 footer.page {
-    border-top:1px solid black;
     flex: 0 0 var(--FooterHeight);
     padding: var(--DefPadding)
 }
@@ -199,12 +198,52 @@ footer.page .socials {
 @media screen and (min-width: 50rem) {
     .std-footer {
         padding: var(--DefPadding);
+        column-gap: 1rem;
+        row-gap: 3rem;
         display: grid;
         grid-template-rows: auto auto;
-        grid-template-columns: auto 7rem 7rem 7rem 7rem;
+        grid-template-columns: auto repeat(4, 10rem);
         grid-template-areas:
             "A B B C C"
             "D D D D D";
+    }
+
+    [class^='std-footer-item'] .item-header {
+        opacity: 0.60;
+        color: #222222;
+        font-size: 14px;
+        font-weight: 250;
+        text-transform: uppercase;
+        line-height: 19.60px;
+        letter-spacing: 0.56px;
+        word-wrap: break-word;
+    }
+
+    [class^='std-footer-item'] .logo img {
+        min-height: 7.62rem;
+    }
+
+    [class^='std-footer-item'] a {
+        color: #222222;
+        font-size: 24px;
+        font-weight: 300;
+        line-height: 28.80px;
+        word-wrap: break-word;
+    }
+
+    .std-footer-item-4 .tiny {
+        color: green;
+        color: #222222;
+        font-size: 14px;
+        font-weight: 250;
+        line-height: 18.20px;
+        word-wrap: break-word;
+    }
+
+    .std-footer-item-1 *:nth-child(2),
+    .std-footer-item-2 *:nth-child(2),
+    .std-footer-item-3 *:nth-child(2) {
+        margin-top: 1.5rem;
     }
 
     .std-footer-item-1 {
@@ -213,10 +252,12 @@ footer.page .socials {
 
     .std-footer-item-2 {
         grid-area: B;
+        justify-self: end;
     }
 
     .std-footer-item-3 {
         grid-area: C;
+        justify-self: end;
     }
 
     .std-footer-item-4 {
@@ -224,7 +265,6 @@ footer.page .socials {
         flex-flow: row;
         justify-content: space-between;
         place-items: center;
-        margin-top: 1rem;
     }
 
     footer.page .socials {

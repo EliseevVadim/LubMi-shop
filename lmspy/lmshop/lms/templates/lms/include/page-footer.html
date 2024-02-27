@@ -6,20 +6,21 @@
     <a href='{{param_value_link_contact_email}}'>{{param_value_contact_email}}</a>
   </div>
   <div class="std-footer-item-2">
-    <h6>{{param_title_for_buyers}}</h6>
+    <span class="item-header">{{param_title_for_buyers}}</span>
     <a href='{% url "lms:delivery" %}'>{{param_title_shipping_and_payment}}</a>
     {% if param_value_size_chart_modal.lower.strip == "yes" %}
     <a onclick="show_size_chart();" class="hand">{{param_title_size_chart}}</a>{% else %}
     <a href='{% url "lms:sz_chart" %}'>{{param_title_size_chart}}</a>{% endif %}
+    <a href='{{param_value_link_supplier_base}}'>{{param_title_supplier_base}}</a>
   </div>
   <div class="std-footer-item-3">
-    <h6>{{param_title_about_company}}</h6>
+    <span class="item-header">{{param_title_about_company}}</span>
     <a href='{% url "lms:about" %}'>{{param_title_about_the_brand}}</a>
   </div>
   <div class="std-footer-item-4">
-    <small>{{param_label_copyright}}</small>
+    <span class="tiny">{{param_label_copyright}}</span>
     {% include "lms/include/socials.html" %}
-    <a href='{{param_value_link_privacy_policy}}'><small>{{param_title_privacy_policy}}</small></a>
-    <a href='{{param_value_link_public_offer}}'><small>{{param_title_public_offer}}</small></a>
+    <a class="tiny" href='{{param_value_link_privacy_policy}}'>{{param_title_privacy_policy}}</a>
+    <a class="tiny" href='{{param_value_link_public_offer}}'>{{param_title_public_offer}}</a>
   </div>
 </div>
