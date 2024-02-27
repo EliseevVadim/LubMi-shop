@@ -922,7 +922,6 @@ input[type="submit"] {
     font-family: var(--Fonts);
     font-weight: lighter;
     box-shadow: 0px 10px 20px #3333;
-    transition: background 0.25s ease;
 }
 
 button.medium,
@@ -941,14 +940,6 @@ input[type="submit"].inverted {
     color: white;
     background: black;
     border-color: white;
-}
-
-button:hover,
-input[type="submit"]:hover {
-    background: rgba(0, 0, 0, 0.15);
-    color: black;
-    border-color: black;
-    box-shadow: inset 0px 7px 25px #1133;
 }
 
 /* Perfumery -----------------------------------------------------------------------------------------------------------*/
@@ -1628,21 +1619,9 @@ label[for="c6t-cu_confirm"] {
     border: solid thin white;
 }
 
-.banner-button-white:hover {
-    color: white;
-    background: #0007;
-    border: solid thin white;
-}
-
 .banner-button-plain {
     color: #444;
     background: white;
-    border: solid thin white;
-}
-
-.banner-button-plain:hover {
-    color: white;
-    background: #0007;
     border: solid thin white;
 }
 
