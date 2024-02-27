@@ -1,4 +1,4 @@
-<section {%if unique%}id="banner-{{unique}}"{%endif%}class="banner banner-{{type}} {{bnr_cls}}" style="background-image: url('{{img}}')">
+<section {%if unique%}id="banner-{{unique}}"{%endif%}class="banner banner-{{type}} {{bnr_cls}}" style="background-image: {%include 'lms/include/gradient.html'%} url({{img}})">
     {% if slogan %}
     <div class="banner-slogan {{s_cls}}">{{slogan}}</div>
     {% endif %}
