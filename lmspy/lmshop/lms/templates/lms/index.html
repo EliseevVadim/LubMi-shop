@@ -9,7 +9,9 @@
 {% endblock %}
 
 {% block page_content %}
+{{separator}}
 {% include "lms/include/catalogue-type-A.html" with title=param_title_catalogue pages=product_pages kind="pd" variants=order_variants selector_id="order-selector" %}
+{{separator}}
 {% include "lms/include/catalogue-type-A.html" with title=param_title_bestsellers products=bestsellers pages=bestseller_pages kind="bs" %}
 {% endblock %}
 

@@ -34,3 +34,9 @@ def scui_processor(_):
     return {
         'scui_form': ShortCustomerInfoForm()
     }
+
+
+def separator_processor(_):
+    return {
+        'separator': mark_safe("""<div class="separator"><svg class="separator" viewBox="0 0 10 5" preserveAspectRatio="none"><line x1="0" y1="0" x2="10" y2="0"/><line x1="5" y1="0" x2="5" y2="5"/></svg></div>""")
+    }

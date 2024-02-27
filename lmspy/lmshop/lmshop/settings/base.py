@@ -48,6 +48,7 @@ TEMPLATES = [
                 'lms.processors.processors.parameters_processor',
                 'lms.processors.processors.payment_processor',
                 'lms.processors.processors.scui_processor',
+                'lms.processors.processors.separator_processor',
             ],
         },
     },

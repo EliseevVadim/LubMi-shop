@@ -1,16 +1,19 @@
 {% extends "lms/std-page.html" %}
 {% load custom_tags %}
 {% block page_content %}
+{{separator}}
 {{ text_00 | markdown }}
 <div class="grid12 grid12-aab">
 <div class="g12-ia">{{ text_01 | markdown }}</div>
 {% include "lms/include/picture.html" with classes="g12-ib" pic_file='img/pic-08.jpg' %}
 </div>
 {% if electorates.count %}
+{{separator}}
 {{ text_02 | markdown }}
 {% include "lms/include/hall-of-fame.html" with items=electorates %}
 {% endif %}
 {% if partners.count %}
+{{separator}}
 {{ text_03 | markdown }}
 {% include "lms/include/hall-of-fame.html" with items=partners %}
 {% endif %}

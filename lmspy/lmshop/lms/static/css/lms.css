@@ -41,6 +41,18 @@
 	user-select: none;
 }
 
+svg.separator {
+    max-height: 0.95rem;
+    min-height: 0.95rem;
+    width: 100%;
+}
+
+svg.separator line {
+    stroke: black;
+    stroke-width: 1px;
+    vector-effect: non-scaling-stroke;
+}
+
 body, aside, .content, .leading {
     margin: 0;
     padding: 0;
@@ -508,7 +520,6 @@ aside footer {
 
 h1 {
     font-weight:normal;
-    border-top: 1px solid black;
     padding: 0.5rem 0 0 0;
 }
 
