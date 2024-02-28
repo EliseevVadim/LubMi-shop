@@ -141,7 +141,7 @@ body, aside, .content, .leading {
 
 footer.page {
     flex: 0 0 var(--FooterHeight);
-    padding: var(--DefPadding)
+    padding: 7rem var(--DefPadding) var(--DefPadding) var(--DefPadding)
 }
 
 .std-footer {
@@ -1044,7 +1044,7 @@ main.perfumery {
 .perfumery .inverted {
     color: white;
     background: black;
-    border-color: white;
+    border-color: black;
 }
 
 .perfumery > *:last-child {
