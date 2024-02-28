@@ -162,11 +162,11 @@ footer.page {
 }
 
 footer.page .socials {
-    max-height: 1rem;
+    max-height: 2.95rem;
 }
 
 footer.page .socials img {
-    max-height: 0.75rem;
+    max-height: 1.95rem;
 }
 
 .std-footer {
@@ -261,10 +261,15 @@ footer.page .socials {
     }
 
     .std-footer-item-4 {
+        display: flex;
         grid-area: D;
         flex-flow: row;
         justify-content: space-between;
         place-items: center;
+    }
+
+    .std-footer-item-4 > * {
+        flex=grow: 1fr;
     }
 
     footer.page .socials {
