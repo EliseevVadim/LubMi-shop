@@ -1,4 +1,4 @@
-
+{% include "lms/include/sidebar-header.html" with title=param_title_favorites side="right" %}
 {% if products %}
 {% for product in products %}
 {% include "lms/include/sidebar-item.html" with card_type="favorites" %}

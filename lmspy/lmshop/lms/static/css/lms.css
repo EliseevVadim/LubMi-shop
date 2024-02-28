@@ -460,6 +460,19 @@ aside.rtnr {
     width: min(20rem, 66vw);
 }
 
+aside div.separator {
+    margin-top: 0.5rem !important;
+}
+
+.sidebar-closer {
+    display: flex;
+    flex-flow: row;
+}
+
+.sidebar-closer *:last-child {
+    margin-left: auto;
+}
+
 @media screen and (min-width: 50rem) {
     aside.right {
         left: auto;
@@ -498,11 +511,6 @@ aside.left {
 
 .cancel-sidebar:hover {
     color: black;
-}
-
-aside h1 {
-    border-bottom: thin solid black;
-    border-top: none;
 }
 
 aside a {
@@ -1586,6 +1594,8 @@ label[for="c6t-cu_confirm"] {
 #sch-header {
     flex: 0 0 auto;
     align-self: center;
+    display: flex;
+    place-items: center;
 }
 
 #sch-info {

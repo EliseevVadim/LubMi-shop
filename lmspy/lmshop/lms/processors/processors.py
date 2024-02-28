@@ -40,7 +40,8 @@ def scui_processor(_):
 def shorts_processor(_):
     return {
         'separator': mark_safe("""<div class="separator"><svg class="separator" viewBox="0 0 10 5" preserveAspectRatio="none"><line x1="0" y1="0" x2="10" y2="0"/><line x1="5" y1="0" x2="5" y2="5"/></svg></div>"""),
-        'left_arrow': mark_safe(f"""<img src="{static("svg/larrow.svg")}"/>"""),
-        'x_cross': mark_safe(f"""<img src="{static("svg/x-cross.svg")}"/>"""),
+        'left_arrow': mark_safe(f"""<img class="hand" src="{static("svg/larrow.svg")}"/>"""),
+        'x_cross': mark_safe(f"""<img class="hand"  src="{static("svg/x-cross.svg")}"/>"""),
         'timer': mark_safe(f"""<img src="{static("svg/timer.svg")}"/>"""),
+        'lens': mark_safe(f"""<img src="{static("svg/lens.svg")}"/>"""),
     }
