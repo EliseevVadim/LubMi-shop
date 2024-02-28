@@ -26,6 +26,8 @@
 	user-select: none;
 }
 
+/* Separator ----------------------------------------------------------------------------------------------------------*/
+
 svg.separator {
     max-height: 0.95rem;
     min-height: 0.95rem;
@@ -47,6 +49,8 @@ body, aside, .content, .leading {
     font-style: normal;
     font-size: var(--FsPara);
 }
+
+/* Wide / narrow -------------------------------------------------------------------------------------------------------*/
 
 .on-narrow,
 .on-both .on-wide {
@@ -1122,9 +1126,8 @@ main.perfumery {
 
 .about-page > h2 {
     text-align: left;
-    border-top: 1px solid black;
     padding: 0.5rem 0 0 0;
-    margin: 2.5rem auto 0 auto;
+    margin: 0 auto 0 auto;
 }
 
 .about-page > *:last-child {
