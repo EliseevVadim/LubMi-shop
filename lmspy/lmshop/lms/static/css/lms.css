@@ -2,7 +2,6 @@
     --LeadingHeight: 3rem;
     --FooterHeight: 3rem;
     --DefPadding: 1rem;
-    --DefBottomPadding: 3rem;
     --Fonts: "Geologica", sans-serif;
     --FsPara: 1.613rem;
     --ZixContent: 10;
@@ -14,7 +13,7 @@
     --HeartSize: 1.6rem;
     --Gap: var(--DefPadding);
     --NarrowPageWidth: 91.4rem;
-    --HoFSize: 9rem;
+    --HoFSize: 14.785rem;
 }
 
 * {
@@ -38,6 +37,10 @@ svg.separator line {
     stroke: black;
     stroke-width: 1px;
     vector-effect: non-scaling-stroke;
+}
+
+* > div.separator:not(:first-child) {
+    margin-top: 3.2rem;
 }
 
 body, aside, .content, .leading {
@@ -562,19 +565,25 @@ h1 {
     color: #222222;
     font-size: 32px;
     font-weight: 300;
-    text-transform: uppercase;
     line-height: 32px;
     word-wrap: break-word;
+    text-transform: uppercase;
     padding: 0;
-    margin: 0;
+    margin: 0.26rem 0 0 0;
 }
 
 h2 {
-    font-weight:normal;
-    margin: 30px 0 0;
+    color: #222222;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 24px;
+    word-wrap: break-word;
+    text-transform: uppercase;
+    padding: 0;
+    margin: 4rem 0 0 0;
 }
 
-h5, h6, small {
+h5, h6 {
     opacity: 0.5;
     margin-block-start: 0.1em;
     margin-block-end: 0.5em;
@@ -582,6 +591,16 @@ h5, h6, small {
 
 h1, h2, h3, h4, h5, h6 {
     text-transform: uppercase;
+}
+
+p {
+    color: #222222;
+    font-size: 24px;
+    font-weight: 150;
+    line-height: 24px;
+    word-wrap: break-word;
+    padding: 0;
+    margin: 2rem 0 0 0;
 }
 
 .items-top-down {
@@ -996,7 +1015,7 @@ button.inverted,
 input[type="submit"].inverted {
     color: white;
     background: black;
-    border-color: white;
+    border-color: black;
 }
 
 /* Perfumery -----------------------------------------------------------------------------------------------------------*/
@@ -1009,8 +1028,6 @@ main.perfumery {
 .perfumery > h1 {
     margin-top: 3rem;
     margin-bottom: 1rem;
-//    font-size: 3rem;
-//    font-weight: bolder;
     color: #222222;
     font-size: 120px;
     font-family: Geologica;
@@ -1054,10 +1071,6 @@ main.perfumery {
     color: white;
     background: black;
     border-color: black;
-}
-
-.perfumery > *:last-child {
-    margin-bottom: var(--DefBottomPadding);
 }
 
 @media screen and (min-width: 70rem) {
@@ -1108,14 +1121,34 @@ main.perfumery {
     margin-right: auto;
 }
 
-.care-page > *:last-child {
-    margin-bottom: var(--DefBottomPadding);
+.care-page > .grid12 {
+    margin-top: 6.0rem;
 }
 
-.care-page p {
-    margin-top: 0.25rem;
-    margin-bottom: 0;
+.care-page > .grid12 h1:first-child {
+    margin-top: 0;
+    margin-bottom: 2.6rem;
 }
+
+.care-page > .grid12 h1:not(:first-child) {
+    margin-top: 4.3rem;
+    margin-bottom: 2.6rem;
+}
+
+.care-page ul {
+    margin: 0;
+    display: flex;
+    flex-flow: column;
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+.care-page ul p {
+    margin: 0;
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
 
 /* About --------------------------------------------------------------------------------------------------------------*/
 
@@ -1125,25 +1158,39 @@ main.perfumery {
     margin-right: auto;
 }
 
+.about-page > .grid12 {
+    margin-top: 2.5rem;
+}
+
+.about-page > .grid12 p:first-child {
+    margin-top: 0;
+}
+
 .about-page > h1 {
     text-align: center;
 }
 
-.about-page > h2 {
+.about-page > h1 ~ h1 {
     text-align: left;
-    padding: 0.5rem 0 0 0;
-    margin: 0 auto 0 auto;
 }
 
-.about-page > *:last-child {
-    margin-bottom: var(--DefBottomPadding);
+.hall-of-fame .title {
+    color: #222222;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 24px;
+    word-wrap: break-word;
+}
+
+.hall-of-fame .subtitle {
+    color: #222222;
+    font-size: 16px;
+    font-weight: 250;
+    line-height: 16px;
+    word-wrap: break-word;
 }
 
 /* Size chart ---------------------------------------------------------------------------------------------------------*/
-
-.size-chart-page > *:last-child {
-    margin-bottom: var(--DefBottomPadding);
-}
 
 .size-chart-container {
     display: flex;
@@ -1185,10 +1232,6 @@ main.perfumery {
 
 /* Contacts -----------------------------------------------------------------------------------------------------------*/
 
-.contacts-page > *:last-child {
-    margin-bottom: var(--DefBottomPadding);
-}
-
 .contacts-container {
     display: flex;
     flex-flow: column;
@@ -1198,11 +1241,6 @@ main.perfumery {
 .contacts {
     display: flex;
     flex-flow: column;
-    /*align-items: center;*/
-}
-
-.contacts * {
-    font-weight: normal;
 }
 
 .contacts h1 {
@@ -1212,15 +1250,26 @@ main.perfumery {
 
 .contacts p {
     text-align: center;
-    font-size: 1.2rem;
+}
+
+.contacts p {
+    margin-top: 6rem;
+}
+
+.contacts p ~ p {
+    margin-top: 4rem;
+    margin-bottom: 2rem;
 }
 
 .contacts a {
-    display:inline-flex;
+    display: inline-flex;
     flex-flow: column;
     text-decoration: none;
-    font-weight: bold;
-    color: black;
+    color: #222222;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 24px;
+    word-wrap: break-word;
 }
 
 /* Диалоги и формы -----------------------------------------------------------------------------------------------------*/

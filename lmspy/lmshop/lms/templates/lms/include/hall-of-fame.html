@@ -3,11 +3,10 @@
 <section class="hall-of-fame">
 {% for item in items %}
     <figure>
-        <img src="{% thumbnail item.image 200x200 crop=smart %}"/>
+        <img src="{% thumbnail item.image 220x220 crop %}"/>
         {% if item.label or item.descr %}
         <figcaption>
-            {{item.label | markdown}}
-            {{item.description | markdown}}
+            <span class="title">{{item.label}}</span><br/><span class="subtitle">{{item.description}}</span>
         </figcaption>
         {% endif %}
     </figure>
