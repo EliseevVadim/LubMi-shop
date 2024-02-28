@@ -161,14 +161,6 @@ footer.page {
     padding: var(--DefPadding)
 }
 
-footer.page .socials {
-    max-height: 2.95rem;
-}
-
-footer.page .socials img {
-    max-height: 1.95rem;
-}
-
 .std-footer {
     padding: var(--DefPadding);
     display: flex;
@@ -181,7 +173,8 @@ footer.page .socials img {
     margin-bottom: 1rem;
 }
 
-[class^='std-footer-item'] > * {
+[class^='std-footer-item'] > *,
+[class^='std-footer-item'] a {
     text-decoration: none;
     color: black;
     margin: 0;
@@ -202,7 +195,7 @@ footer.page .socials {
         row-gap: 3rem;
         display: grid;
         grid-template-rows: auto auto;
-        grid-template-columns: auto repeat(4, 10rem);
+        grid-template-columns: auto repeat(4, 9rem);
         grid-template-areas:
             "A B B C C"
             "D D D D D";
@@ -261,19 +254,34 @@ footer.page .socials {
     }
 
     .std-footer-item-4 {
-        display: flex;
         grid-area: D;
-        flex-flow: row;
-        justify-content: space-between;
+        display: grid;
+        grid-template: auto / 1fr auto 1fr;
         place-items: center;
     }
 
-    .std-footer-item-4 > * {
-        flex=grow: 1fr;
+    .std-footer-item-4 > *:first-child {
+        justify-self: start;
+    }
+
+    .std-footer-item-4 > *:last-child {
+        justify-self: end;
+    }
+
+    .std-footer-item-4 > div:last-child > *:last-child {
+        margin-left: 2rem;
     }
 
     footer.page .socials {
         display: flex;
+        flex-flow: row;
+        max-height: 2.95rem;
+    }
+
+    footer.page .socials img {
+        max-height: 1.95rem;
+        margin-left: 0.25rem;
+        margin-right: 0.25rem;
     }
 }
 
