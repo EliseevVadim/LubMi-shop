@@ -1,12 +1,11 @@
+{% load static %}
 <dialog id="{{dialog_id}}">
 	{% if not headless %}
-	<div>
-		<label class="cancel-dialog arrow-left" onclick="{{unique}}_dialog.close();">{{param_label_back}}</label>
-		{% if form %}
-		<label class="cancel-dialog" onclick="{{unique}}_dialog.close();">{{form.cancel|default:'&times;'}}</label>
-		{% else %}
-		<label class="cancel-dialog" onclick="{{unique}}_dialog.close();">&times;</label>
+	<div class="dialog-closer">
+		{% if has_arrow %}
+		<label class="cancel-dialog arrow-left" onclick="{{unique}}_dialog.close();">{{left_arrow}}<span>{{param_label_back}}</span></label>
 		{% endif %}
+		<label class="cancel-dialog" onclick="{{unique}}_dialog.close();">{{x_cross}}</label>
 	</div>
 	<div class="dialog-header">
 		{% if form %}

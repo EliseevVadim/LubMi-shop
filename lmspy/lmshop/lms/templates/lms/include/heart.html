@@ -2,6 +2,6 @@
   <input  data-ppk="{{product.article}}"
           type="checkbox"
           {{checked}}
-          onchange="pcard_like_click(this, '{% url 'api:set_product_like' ppk=product.article like=0 %}');">
+          onchange="pcard_like_click(this, '{% url 'api:set_product_like' ppk=product.article like=0 %}');"/>
   {% include "lms/include/heart.svg" %}
 </label>

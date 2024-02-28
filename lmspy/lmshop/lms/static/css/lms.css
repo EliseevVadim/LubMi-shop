@@ -10,7 +10,7 @@
     --ZixTop: 40;
     --CatItemWidth: 17rem;
     --ScartFigWidth: 7rem;
-    --HeartSize: 1.6rem;
+    --HeartSize: 2rem;
     --Gap: var(--DefPadding);
     --NarrowPageWidth: 91.4rem;
     --HoFSize: 14.785rem;
@@ -412,23 +412,27 @@ figcaption {
     margin-right: 0.5rem;
 }
 
-.heart {
+label.heart {
     margin-left: auto;
     max-height: calc(1.2 * var(--HeartSize));
+    display: flex;
+    flex-flow: row;
 }
 
-.heart > input[type="checkbox"] {
-    visibility: hidden;
+label.heart > input[type="checkbox"] {
+    visibility: collapse;
 }
 
 input[type="checkbox"] ~ svg {
     min-height: var(--HeartSize);
     min-width: var(--HeartSize);
     stroke: white;
+    stroke-width: 1.5px;
     cursor: pointer;
 }
 
 input[type="checkbox"]:checked ~ svg { fill: white; }
+
 input[type="checkbox"]:not(:checked) ~ svg { fill: none; }
 
 /* Панели --------------------------------------------------------------------------------------------------------------*/
@@ -1344,30 +1348,33 @@ dialog {
 }
 
 .cancel-dialog {
-    font-size: 2rem;
-    color: gray;
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
+    color: #222222;
+    font-size: 24px;
+    font-weight: 250;
+    line-height: 23px;
+    word-wrap: break-word;
     cursor: pointer;
     display: inline-flex;
     flex-flow: row;
 }
 
-.cancel-dialog:hover {
-    color: black;
-}
-
-.cancel-dialog.arrow-left {
-    left: 1rem;
-    right: auto;
-}
-
-.cancel-dialog.arrow-left span {
-    display: inline-flex;
+.dialog-closer {
+    display: flex;
+    flex-flow: row;
     align-items: center;
-    font-size: 1.25rem;
 }
+
+.dialog-closer span {
+    display: inline-flex;
+    flex-flow: column;
+    justify-content: center;
+}
+
+.dialog-closer *:last-child {
+    margin-left: auto;
+}
+
+
 
 .dialog-footer {
     margin-top: 1rem;
