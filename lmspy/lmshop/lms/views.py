@@ -520,7 +520,7 @@ class SzChartView(View):
         return render(request, 'lms/sz-chart-modal.html' if modal else 'lms/sz-chart-page.html', {
             'page_title': title,
             'page_content': 'size-chart-page',
-            'text': f"""#{title}\n\n#####Как выбрать одежду своего размера\n
+            'text': f"""#{title}\n\n###Как выбрать одежду своего размера\n
 Европейский<br/>размер | Российский<br/>размер | Рост | Обхват груди | Обхват талии | Обхват бедер
 ---------------------- | --------------------- | ---- | ------------ | ------------ | ------------
 ХS | 42 | 170 | 82-85 | 60-63 | 90-93

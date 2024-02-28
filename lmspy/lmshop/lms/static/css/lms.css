@@ -1113,6 +1113,11 @@ main.perfumery {
     margin-right: auto;
 }
 
+.delivery a {
+    color: #2F80ED;
+    text-decoration: underline;
+}
+
 /* Care ---------------------------------------------------------------------------------------------------------------*/
 
 .care-page > * {
@@ -1203,31 +1208,38 @@ main.perfumery {
     flex-flow: column;
 }
 
-.size-chart * {
-    font-weight: normal;
-}
-
 .size-chart h1 {
-    margin-bottom: 0.25rem;
     text-align: center;
 }
 
-.size-chart h5 {
+.size-chart h3 {
     text-align: center;
+    color: #222222;
+    font-size: 24px;
+    font-weight: 250;
+    line-height: 24px;
+    word-wrap: break-word;
+    margin: 3rem 0 3rem 0;
 }
 
 .size-chart table {
     table-layout: fixed;
-    border-collapse:collapse;
+    border-collapse: collapse;
     margin-left: auto;
     margin-right: auto;
 }
 
 .size-chart th,
 .size-chart td {
-    padding: 1rem;
+    padding: 1.5rem 1rem;
     text-align: center;
+    color: #222222;
+    font-size: 16px;
+    font-weight: 250;
+    line-height: 14.40px;
+    word-wrap: break-word;
     border-bottom: solid thin black;
+    text-transform: uppercase;
 }
 
 /* Contacts -----------------------------------------------------------------------------------------------------------*/
