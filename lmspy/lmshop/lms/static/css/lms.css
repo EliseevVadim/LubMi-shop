@@ -5,7 +5,6 @@
     --DefBottomPadding: 3rem;
     --Fonts: "Geologica", sans-serif;
     --FsPara: 1.613rem;
-    --Fs16: 1.075rem;
     --ZixContent: 10;
     --ZixLeading: 20;
     --ZixPanels: 30;
@@ -59,13 +58,12 @@ body, aside, .content, .leading {
 }
 
 @media screen and (min-width: 70rem) {
-.on-narrow {
-    display: none;
-}
-
-.on-wide {
-    display: block;
-}
+    .on-narrow {
+        display: none;
+    }
+    .on-wide {
+        display: block;
+    }
 }
 
 .content {
@@ -111,10 +109,9 @@ body, aside, .content, .leading {
     margin-left: 1rem;
     margin-right: 1rem;
     text-decoration: none;
-    font-size: var(--Fs16);
+    font-size: 16px;
     color: #222222;
     font-size: 16px;
-    font-family: Geologica;
     font-weight: 250;
     line-height: 14.40px;
     word-wrap: break-word;
