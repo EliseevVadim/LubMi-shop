@@ -18,20 +18,6 @@
     --HoFSize: 9rem;
 }
 
-// <uniquifier>: Use a uniquifier for the class name
-// <weight>: Use a value from 100 to 900
-
-//.geologica-<uniquifier> {
-//  font-family: "Geologica", sans-serif;
-//  font-optical-sizing: auto;
-//  font-weight: <weight>;
-//  font-style: normal;
-//  font-variation-settings:
-//    "slnt" 0,
-//    "CRSV" 0,
-//    "SHRP" 0;
-//}
-
 * {
     outline: 0;
     -webkit-user-select: none;
@@ -573,7 +559,8 @@ aside footer {
 
 h1 {
     font-weight:normal;
-    padding: 0.5rem 0 0 0;
+    padding: 0;
+    margin: 0;
 }
 
 h2 {
