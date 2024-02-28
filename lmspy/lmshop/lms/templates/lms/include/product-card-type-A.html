@@ -4,11 +4,11 @@
   {% if img %}
   {% if card_type == "catalogue" %}
   <div class="p-card-a"
-       style="background-image: url('{% thumbnail img.image 220x0 %}');"
+       style="background-image: url('{% thumbnail img.image 512x0 %}');"
        onclick="if(event.eventPhase==event.AT_TARGET) show_product_details('{% url 'lms:product_details' slug=product.slug %}');">
   {% else %}
   <div class="p-card-a details"
-       style="background-image: url('{% thumbnail img.image 220x0 %}');">
+       style="background-image: url('{% thumbnail img.image 512x0 %}');">
   {% endif%}
     {% if product.novelty %}
     <label class="white">{{param_label_novelty}}</label>

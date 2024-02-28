@@ -559,7 +559,12 @@ aside footer {
 /* Элементы оформления ------------------------------------------------------------------------------------------------- */
 
 h1 {
-    font-weight:normal;
+    color: #222222;
+    font-size: 32px;
+    font-weight: 300;
+    text-transform: uppercase;
+    line-height: 32px;
+    word-wrap: break-word;
     padding: 0;
     margin: 0;
 }
