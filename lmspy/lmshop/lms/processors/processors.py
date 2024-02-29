@@ -44,4 +44,5 @@ def shorts_processor(_):
         'x_cross': mark_safe(f"""<img class="hand"  src="{static("svg/x-cross.svg")}"/>"""),
         'timer': mark_safe(f"""<img src="{static("svg/timer.svg")}"/>"""),
         'lens': mark_safe(f"""<img src="{static("svg/lens.svg")}"/>"""),
+        'lens_gray': mark_safe(f"""<img src="{static("svg/lens-gray.svg")}"/>"""),
     }

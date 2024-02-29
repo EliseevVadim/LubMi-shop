@@ -816,7 +816,7 @@ p {
 }
 
 .old_price {
-    text-decoration: line-through red;
+    text-decoration: line-through;
     color: gray;
     margin-right: 0.5rem;
     margin-left: 0.5rem;
@@ -1595,6 +1595,13 @@ label[for="c6t-cu_confirm"] {
     flex: 0 0 auto;
     align-self: center;
     display: flex;
+    flex-flow: row;
+    place-items: center;
+}
+
+#sch-header span {
+    display: flex;
+    flex-flow: row;
     place-items: center;
 }
 
@@ -1610,6 +1617,7 @@ label[for="c6t-cu_confirm"] {
     grid-template-columns: repeat(auto-fit, minmax(var(--CatItemWidth), 1fr));
     gap: var(--Gap);
 }
+
 #sch-result > * {
    display: flex;
    flex-flow: column;
@@ -1641,8 +1649,11 @@ label[for="c6t-cu_confirm"] {
 }
 
 #sch-text {
+    color: #222222;
+    font-size: 16px;
+    font-weight: 100;
+    line-height: 16px;
     border: none;
-    border-bottom: solid thin black;
     min-width: min(var(--NarrowPageWidth), 40vw);
     padding: 0;
     margin: 0;

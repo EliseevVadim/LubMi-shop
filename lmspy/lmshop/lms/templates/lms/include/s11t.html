@@ -3,7 +3,7 @@
 {% for rec in records %}
 {% include "lms/include/sidebar-item.html" with card_type="shopping-cart" product=rec.product size=rec.size quantity=rec.quantity %}
 {% endfor %}
-<div class="items-right-left overlined mt1">
+<div class="items-right-left bt1 mt1">
     <p class="total-price like-title">{{param_label_amount_to_be_paid}}: {{price}} {{param_label_currency}}</p>
 </div>
 {% if button %}
