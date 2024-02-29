@@ -120,8 +120,8 @@ body, aside, .content, .leading {
     font-size: 16px;
     color: #222222;
     font-size: 16px;
-    font-weight: 250;
     line-height: 14.40px;
+    font-variation-settings: "wght" 100;
     word-wrap: break-word;
 }
 
@@ -210,7 +210,7 @@ footer.page .socials {
     [class^='std-footer-item'] a {
         color: #222222;
         font-size: 24px;
-        font-weight: 300;
+        font-variation-settings: "wght" 300;
         line-height: 28.80px;
         word-wrap: break-word;
     }
