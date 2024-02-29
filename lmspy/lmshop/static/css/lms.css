@@ -749,7 +749,7 @@ img.bkg {
     margin-right: var(--DefPadding);
 }
 
-.pseudo-icon-small {
+.pseudo-icon {
     font-weight: light;
     max-width: 1rem;
     min-width: 1rem;
@@ -760,7 +760,7 @@ img.bkg {
     padding: calc(0.5 * var(--DefPadding));
 }
 
-.pseudo-icon-small.inverted {
+.pseudo-icon.inverted {
     color: white;
     background: black;
     border-radius: 1.5rem;

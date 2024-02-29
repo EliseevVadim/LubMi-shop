@@ -14,6 +14,7 @@
     --Gap: var(--DefPadding);
     --NarrowPageWidth: 91.4rem;
     --HoFSize: 14.785rem;
+    --PiconSize: 1.25rem;
 }
 
 * {
@@ -856,27 +857,45 @@ img.bkg {
 }
 
 .pseudo-icon {
-    font-size: 2rem;
-    font-weight: light;
-    margin-left: var(--DefPadding);
-    margin-right: var(--DefPadding);
-}
-
-.pseudo-icon-small {
-    font-weight: light;
-    max-width: 1rem;
-    min-width: 1rem;
-    max-height: 1rem;
-    min-height: 1rem;
+    color: #222222;
+    font-size: 14px;
+    font-weight: 300;
+    margin: 0 calc(0.15 * var(--PiconSize));
+    padding: calc(0.5 * var(--PiconSize));
+    max-width: var(--PiconSize);
+    min-width: var(--PiconSize);
+    max-height: var(--PiconSize);
+    min-height: var(--PiconSize);
+    display: inline-flex;
+    flex-flow: column;
+    justify-content: center;
+    place-items: center;
     text-align: center;
-    vertical-align: middle;
-    padding: calc(0.5 * var(--DefPadding));
+    border-radius: var(--PiconSize);
+    border: solid thin lightgray;
 }
 
-.pseudo-icon-small.inverted {
+.pseudo-icon img {
+    max-width: calc(var(--PiconSize) * 0.5);
+    max-height: calc(var(--PiconSize) * 0.5);
+}
+
+.pseudo-icon.inverted {
     color: white;
     background: black;
-    border-radius: 1.5rem;
+    border-radius: var(--PiconSize);
+}
+
+.hand {
+    cursor: pointer;
+}
+
+.hand:hover {
+    color: black;
+}
+
+.hand.inverted:hover {
+    color: white;
 }
 
 .like-note {
@@ -961,14 +980,6 @@ img.bkg {
 
 .m0 {
     margin: 0;
-}
-
-.hand {
-    cursor: pointer;
-}
-
-.hand:hover {
-    color: black;
 }
 
 .overlined {
