@@ -11,7 +11,7 @@
        style="background-image: url('{% thumbnail img.image 512x0 %}');">
   {% endif%}
     {% if product.novelty %}
-    <label class="white">{{param_label_novelty}}</label>
+    <label class="novelty">{{param_label_novelty}}</label>
     {% endif %}
     {% if product.article in favorites %}
     {% include "lms/include/heart.html" with checked="checked" %}

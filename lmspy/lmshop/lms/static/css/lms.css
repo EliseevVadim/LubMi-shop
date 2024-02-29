@@ -8,9 +8,10 @@
     --ZixLeading: 20;
     --ZixPanels: 30;
     --ZixTop: 40;
-    --CatItemWidth: 17rem;
+    --CatItemWidth: 19rem;
+    --DetItemWidth: 32rem;
     --ScartFigWidth: 7rem;
-    --HeartSize: 2rem;
+    --HeartSize: 1.7rem;
     --Gap: var(--DefPadding);
     --NarrowPageWidth: 91.4rem;
     --HoFSize: 14.785rem;
@@ -343,6 +344,8 @@ figcaption {
     margin-top: 10px;
 }
 
+/* Карточки ------------------------------------------------------------------------------------------------------------- */
+
 .p-card-a {
     display: flex;
     flex-flow: row;
@@ -356,10 +359,10 @@ figcaption {
 }
 
 .p-card-a.details {
-    max-height: calc(var(--CatItemWidth) * 1.6);
-    min-height: calc(var(--CatItemWidth) * 1.6);
-    max-width: var(--CatItemWidth);
-    min-width: var(--CatItemWidth);
+    max-height: calc(var(--DetItemWidth) * 1.5);
+    min-height: calc(var(--DetItemWidth) * 1.5);
+    max-width: var(--DetItemWidth);
+    min-width: var(--DetItemWidth);
 }
 
 .p-card-b {
@@ -435,6 +438,110 @@ input[type="checkbox"] ~ svg {
 input[type="checkbox"]:checked ~ svg { fill: white; }
 
 input[type="checkbox"]:not(:checked) ~ svg { fill: none; }
+
+.novelty {
+    height: fit-content;
+    padding: 0.5em 1em 0.5em 1em;
+    background: #D9D9D9;
+    color: #222222;
+    font-size: 13.05px;
+    font-weight: 250; /* regular */
+    line-height: 11.74px;
+    word-wrap: break-word;
+}
+
+.product-title {
+    color: #222222;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 23px;
+}
+
+.price-line {
+    margin: 0.5rem 0 0 0;
+}
+
+.actual-price {
+    color: #222222;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 23px;
+}
+
+.old-price {
+    text-decoration: line-through gray;
+    opacity: 0.50;
+    color: #222222;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 23px;
+    word-wrap: break-word;
+}
+
+.not-in-stock {
+    color: #EB5757;
+    font-size: 16px;
+    font-weight: 100;
+    line-height: 23px;
+    margin: 0.5rem 0;
+}
+
+.p-card-b .product-description {
+    margin: 0 0 0 2.5rem;
+}
+
+.p-card-b .product-description > * {
+    max-width: 40rem;
+}
+
+.p-card-b .product-title {
+    font-size: 32px;
+    line-height: 32px;
+}
+
+.p-card-b .product-article {
+    opacity: 0.50;
+    color: #222222;
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 32px;
+}
+
+.p-card-b .price-line {
+    margin: 2.7rem 0;
+}
+
+.p-card-b .actual-price {
+    font-size: 32px;
+    line-height: 23px;
+}
+
+.p-card-b .size-label {
+    color: #222222;
+    font-size: 24px;
+    font-weight: 250;
+    line-height: 23px;
+    font-variation-settings: "wght" 100;
+}
+
+.p-card-b .not-in-stock {
+    margin: 0;
+}
+
+.p-card-b button {
+    margin: 2rem 0 3rem 0;
+}
+
+.p-card-b .product-notes {
+    font-size: 24px;
+    font-weight: 250;
+    line-height: 23px;
+    font-variation-settings: "wght" 100;
+}
+
+.p-card-b p {
+    margin: 0;
+}
 
 /* Панели --------------------------------------------------------------------------------------------------------------*/
 
@@ -614,6 +721,7 @@ p {
     word-wrap: break-word;
     padding: 0;
     margin: 2rem 0 0 0;
+    font-variation-settings: "wght" 150;
 }
 
 .items-top-down {
@@ -816,13 +924,6 @@ p {
     grid-area: E;
 }
 
-.old_price {
-    text-decoration: line-through;
-    color: gray;
-    margin-right: 0.5rem;
-    margin-left: 0.5rem;
-}
-
 img.bkg {
     width: 100%;
 }
@@ -1010,9 +1111,11 @@ img.bkg {
 
 button,
 input[type="submit"] {
-    color: black;
-    background: none;
-    box-shadow: none;
+    color: #222222;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 14.40px;
+    background: white;
     padding: calc(0.75 * var(--DefPadding)) calc(2 * var(--DefPadding));
     cursor: pointer;
     text-decoration: none;
@@ -1021,11 +1124,14 @@ input[type="submit"] {
     border: solid black thin;
     border-radius: 6px;
     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.25);
+    border: 1.63px #222222 solid;
 }
 
 button.medium,
 input[type="submit"].medium {
-    font-size: 1.25rem;
+    font-size: 24px;
+    font-weight: 300;
+    padding: 2rem;
 }
 
 button.large,
