@@ -1,5 +1,5 @@
 {% load custom_tags %}
-{#  Каталог ************************************************************************************************************ #}
+{#  Каталог ------------------------------------------------------------------------------------------------------------ #}
 {% if card_type == "catalogue" %}
 <span class="product-title">{{product.title}}</span><br/>
 <span class="product-title">({{product.color|default:param_message_color_missed}})</span><br/>
@@ -8,7 +8,7 @@
 </div>
 {% if not product.in_stock %}<div class="not-in-stock">{{param_label_not_available}}<br/></div>
 <button class="w-100" onclick="notify_delivery('{{product.article}}')">{{param_label_notify_delivery}}</button>{% endif %}
-{# Детальная карточка ************************************************************************************************** #}
+{# Детальная карточка -------------------------------------------------------------------------------------------------- #}
 {% elif card_type == "details" %}
 <div class="product-title">{{product.title}}&nbsp;({{product.color|default:param_message_color_missed}})</div>
 <div class="product-article">{{param_label_article}}:&nbsp;{{product.article}}</div>
@@ -26,24 +26,24 @@
 <button class="w-100 inverted medium" onclick="notify_delivery('{{product.article}}')">{{param_label_notify_delivery}}</button>
 {% endif %}
 <div class="product-notes">{{product.description|default:param_message_details_missed|markdown}}</div>
-{# Корзина ************************************************************************************************************* #}
+{# Корзина ------------------------------------------------------------------------------------------------------------- #}
 {% elif card_type == "shopping-cart" %}
 <span class="like-title">{{product.title}}&nbsp;({{product.color|default:param_message_color_missed}})</span><br/>
-<span class="gray like-note">{{param_label_article}}: {{product.article}}<br/>{{param_label_size}}: {{size.size}}</span><br/><br/>
+<span class="gray like-note">{{param_label_article}}:&nbsp;{{product.article}}<br/>{{param_label_size}}:&nbsp;{{size.size}}</span><br/><br/>
 <span class="items-left-right">
-<span>{{product.actual_price.amount}} {{param_label_currency}}</span>
+<span>{{product.actual_price.amount}}&nbsp;{{param_label_currency}}</span>
 <span class="inline-items-right-left mla like-title">{% if quantity < size.quantity %}
 <span class="hand gray" onclick="product_to_scart('{{product.article}}', {{size.id}}, 1);">&nbsp;&#8853;</span>{% endif %}
 <span>{{quantity}}</span>{% if quantity > 1 %}
 <span class="hand gray" onclick="product_to_scart('{{product.article}}', {{size.id}}, -1);">&#8854;&nbsp;</span>{% endif %}
 </span>
 </span>
-{# Избранное *********************************************************************************************************** #}
+{# Избранное ----------------------------------------------------------------------------------------------------------- #}
 {% elif card_type == "favorites" %}
 <span class="like-title">{{product.title}}&nbsp;({{product.color|default:param_message_color_missed}})</span><br/>
 <span class="gray like-note">{{param_label_article}}: {{product.article}}</span><br/><br/>
 <span>{{product.actual_price.amount}} {{param_label_currency}}</span>
-{# ********************************************************************************************************************* #}
+{# --------------------------------------------------------------------------------------------------------------------- #}
 {% else %}
 <p>Исправить! Неизвестный тип карточки!</p>
 {% endif %}
