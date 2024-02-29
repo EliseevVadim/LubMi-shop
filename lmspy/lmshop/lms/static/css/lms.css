@@ -1335,14 +1335,10 @@ form fieldset {
     border: none;
 }
 
-dialog,
-.popup {
-    max-width: 35rem;
+dialog {
+    max-width: 40rem;
     border: solid black thin;
     color: black;
-}
-
-dialog {
     overflow: auto;
     padding: 3rem;
 }
@@ -1507,27 +1503,29 @@ label[for="c6t-cu_confirm"] {
 /* Popup -----------------------------------------------------------------------------------------------------*/
 
 .popup {
-    display: flex;
-    flex-flow: row;
-    padding: 1rem;
-    font-size: 1.25rem;
+    max-width: 35rem;
     position: fixed;
+    top: calc(var(--LeadingHeight) + 4rem);
     right: 2rem;
-    top: calc(var(--LeadingHeight) + 3rem);
+    padding: 1rem 1rem 1rem 2rem;
     background: white;
     visibility: hidden;
     cursor: pointer;
+    display: flex;
+    flex-flow: row-reverse;
     z-index: var(--ZixTop);
 }
 
 .popup label {
-    margin-left: 1rem;
-    color: gray;
-    cursor: pointer;
+    margin-left: 2rem;
 }
 
-.popup label:hover {
-    color: black;
+.popup span {
+    color: #222222;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 24px;
+    word-wrap: break-word;
 }
 
 /* HoF            -----------------------------------------------------------------------------------------------------*/
