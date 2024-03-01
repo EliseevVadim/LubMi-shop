@@ -1495,28 +1495,6 @@ main.perfumery {
 
 /* Диалоги и формы -----------------------------------------------------------------------------------------------------*/
 
-form {
-    display: flex;
-    flex-flow: column;
-}
-
-form > div {
-    display: flex;
-    flex-flow: column;
-    margin-bottom: 1rem;
-}
-
-form > div input {
-    border: none;
-    border-bottom: solid thin black;
-}
-
-form fieldset {
-    margin: 0;
-    padding: 0;
-    border: none;
-}
-
 dialog {
     max-width: 40rem;
     border: solid black thin;
@@ -1537,7 +1515,7 @@ dialog {
     display: flex;
     flex-flow:column;
     place-items:center;
-    margin: 2rem 0 0 0;
+    margin: 2rem 0 1rem 0;
 }
 
 .dialog-header h1 {
@@ -1577,10 +1555,34 @@ dialog {
 }
 
 .dialog-footer {
-    margin-top: 1rem;
     display: flex;
     flex-flow: column;
     place-items: center;
+    margin-top: 1rem;
+}
+
+form > div {
+    display: flex;
+    flex-flow: column;
+}
+
+form fieldset {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+/* Ndd -----------------------------------------------------------------------------------------------------------------*/
+
+dialog #scui-form {
+    display: grid;
+    row-gap: var(--DefPadding);
+}
+
+dialog #scui-form input[type="text"],
+dialog #scui-form input[type="email"] {
+    padding: var(--DefPadding);
+    border: solid thin black;
 }
 
 /* C6t -----------------------------------------------------------------------------------------------------------------*/
