@@ -592,12 +592,12 @@ aside.right {
 }
 
 aside.rtnr {
-    right:0;
+    right: 0;
     background: white;
 }
 
 aside.left {
-    left:0;
+    left: 0;
     background:#f00;
 }
 
@@ -649,6 +649,25 @@ aside footer {
     place-items: center;
     margin: 0;
     padding: 0;
+}
+
+aside .product-title {
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 23px;
+}
+
+aside .product-article {
+    color: rgba(34, 34, 34, 0.50);
+    font-size: 16px;
+    font-weight: 100;
+    line-height: 23px;
+}
+
+aside .actual-price {
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 23px;
 }
 
 /* Корзина ------------------------------------------------------------------------------------------------------------- */
@@ -1042,6 +1061,10 @@ img.bkg {
 
 .mr1 {
     margin-right: var(--DefPadding);
+}
+
+.mt05 {
+    margin-top: calc(0.5 * var(--DefPadding));
 }
 
 .mt1 {
