@@ -9,7 +9,7 @@
     --ZixPanels: 30;
     --ZixTop: 40;
     --CatItemWidth: 19rem;
-    --DetItemWidth: 32rem;
+    --DetItemWidth: 31rem;
     --ScartFigWidth: 7rem;
     --HeartSize: 1.7rem;
     --Gap: var(--DefPadding);
@@ -404,9 +404,19 @@ figcaption {
         grid-column: 2;
         grid-row: 1;
     }
+
     .p-card-b .product-description {
         grid-column: 3;
         grid-row: 1;
+        margin: 0 0 0 2.5rem;
+        display: grid;
+        grid-template: repeat(5, auto) / auto;
+        row-gap: 2.5rem;
+        height: fit-content;
+    }
+
+    .p-card-b .product-description > * {
+        max-width: 40rem;
     }
 }
 
@@ -443,7 +453,6 @@ input[type="checkbox"]:not(:checked) ~ svg { fill: none; }
     height: fit-content;
     padding: 0.5em 1em 0.5em 1em;
     background: #D9D9D9;
-    color: #222222;
     font-size: 13.05px;
     font-weight: 250; /* regular */
     line-height: 11.74px;
@@ -451,18 +460,12 @@ input[type="checkbox"]:not(:checked) ~ svg { fill: none; }
 }
 
 .product-title {
-    color: #222222;
     font-size: 24px;
     font-weight: 300;
     line-height: 23px;
 }
 
-.price-line {
-    margin: 0.5rem 0 0 0;
-}
-
 .actual-price {
-    color: #222222;
     font-size: 24px;
     font-weight: 300;
     line-height: 23px;
@@ -471,7 +474,6 @@ input[type="checkbox"]:not(:checked) ~ svg { fill: none; }
 .old-price {
     text-decoration: line-through gray;
     opacity: 0.50;
-    color: #222222;
     font-size: 16px;
     font-weight: 300;
     line-height: 23px;
@@ -482,16 +484,14 @@ input[type="checkbox"]:not(:checked) ~ svg { fill: none; }
     color: #EB5757;
     font-size: 16px;
     font-weight: 100;
-    line-height: 23px;
-    margin: 0.5rem 0;
 }
 
-.p-card-b .product-description {
-    margin: 0 0 0 2.5rem;
-}
-
-.p-card-b .product-description > * {
-    max-width: 40rem;
+.p-card-b .size-block {
+    display: grid;
+    grid-template: auto auto / auto auto;
+    width: fit-content;
+    column-gap: 1rem;
+    place-items: center;
 }
 
 .p-card-b .product-title {
@@ -501,41 +501,27 @@ input[type="checkbox"]:not(:checked) ~ svg { fill: none; }
 
 .p-card-b .product-article {
     opacity: 0.50;
-    color: #222222;
     font-size: 20px;
     font-weight: 300;
-    line-height: 32px;
-}
-
-.p-card-b .price-line {
-    margin: 2.7rem 0;
+    line-height: 20px;
 }
 
 .p-card-b .actual-price {
     font-size: 32px;
-    line-height: 23px;
+    line-height: 32px;
 }
 
 .p-card-b .size-label {
-    color: #222222;
     font-size: 24px;
+    line-height: 24px;
     font-weight: 250;
-    line-height: 23px;
     font-variation-settings: "wght" 100;
-}
-
-.p-card-b .not-in-stock {
-    margin: 0;
-}
-
-.p-card-b button {
-    margin: 2rem 0 3rem 0;
 }
 
 .p-card-b .product-notes {
     font-size: 24px;
+    line-height: 24px;
     font-weight: 250;
-    line-height: 23px;
     font-variation-settings: "wght" 100;
 }
 
