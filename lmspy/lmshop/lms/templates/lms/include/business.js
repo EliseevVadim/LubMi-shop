@@ -77,7 +77,7 @@ const kill_product_in_scart = (ppk, product_title, size_id, size) => {
                             let count = String(Math.floor(u.count/10));
                             for(let ms of mss) ms.innerHTML = text;
                             for(let cd of cds) cd.innerHTML = count;
-                            for(let wg of wgs) wg.style.display = "block";
+                            for(let wg of wgs) wg.style.display = "grid";
                         }
                     }
                 },
