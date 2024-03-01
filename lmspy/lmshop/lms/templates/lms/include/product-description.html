@@ -14,19 +14,13 @@
 <div class="product-notes">{{product.description|default:param_message_details_missed|markdown}}</div>
 {# Корзина ------------------------------------------------------------------------------------------------------------- #}
 {% elif card_type == "shopping-cart" %}
-<span class="like-title">{{product.title}}&nbsp;({{product.color|default:param_message_color_missed}})</span><br/>
-<span class="gray like-note">{{param_label_article}}:&nbsp;{{product.article}}<br/>{{param_label_size}}:&nbsp;{{size.size}}</span><br/><br/>
-<span class="items-left-right">
-<span>{{product.actual_price.amount}}&nbsp;{{param_label_currency}}</span>
-<span class="inline-items-right-left mla like-title">{% if quantity < size.quantity %}
-<span class="hand gray" onclick="product_to_scart('{{product.article}}', {{size.id}}, 1);">&nbsp;&#8853;</span>{% endif %}
-<span>{{quantity}}</span>{% if quantity > 1 %}
-<span class="hand gray" onclick="product_to_scart('{{product.article}}', {{size.id}}, -1);">&#8854;&nbsp;</span>{% endif %}
-</span>
-</span>
+<div class="product-title">{{product.title}}&nbsp;({{product.color|default:param_message_color_missed}})</div>
+<div class="product-article">{{param_label_article}}:&nbsp;{{product.article}}</div>
+<div class="product-article">{{param_label_size}}:&nbsp;{{size.size}}</div>
 {# Избранное ----------------------------------------------------------------------------------------------------------- #}
 {% elif card_type == "favorites" %}
-<div class="items-top-down"><div class="product-title">{{product.title}}&nbsp;({{product.color|default:param_message_color_missed}})</div><div class="product-article">{{param_label_article}}:&nbsp;{{product.article}}</div></div>
+<div class="product-title">{{product.title}}&nbsp;({{product.color|default:param_message_color_missed}})</div>
+<div class="product-article">{{param_label_article}}:&nbsp;{{product.article}}</div>
 <div class="price-line"><span class="actual-price">{{product.actual_price.amount|floatformat:0}}&nbsp;{{param_label_currency}}</span></div>
 {# --------------------------------------------------------------------------------------------------------------------- #}
 {% else %}
