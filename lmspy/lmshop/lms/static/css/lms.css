@@ -336,6 +336,8 @@ select, select:focus {
    min-width: calc(var(--CatItemWidth));
 }
 
+/* Карточки ------------------------------------------------------------------------------------------------------------- */
+
 figure {
     margin: 0;
 }
@@ -343,8 +345,6 @@ figure {
 figcaption {
     margin-top: 10px;
 }
-
-/* Карточки ------------------------------------------------------------------------------------------------------------- */
 
 .p-card-a {
     display: flex;
@@ -356,6 +356,13 @@ figcaption {
     min-height: calc(var(--CatItemWidth) * 1.5);
     padding: var(--DefPadding);
     transition: background 0.25s ease;
+}
+
+.catalogue figcaption {
+    display: grid;
+    grid-template: auto / auto;
+    grid-auto-flow: row;
+    row-gap: 0.5rem;
 }
 
 .p-card-a.details {

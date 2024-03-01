@@ -1,29 +1,14 @@
 {% load custom_tags %}
 {#  Каталог ------------------------------------------------------------------------------------------------------------ #}
 {% if card_type == "catalogue" %}
-<div>
-    <span class="product-title">{{product.title}}</span><br/>
-    <span class="product-title">({{product.color|default:param_message_color_missed}})</span>
-</div>
-<div class="price-line">
-{% if product.old_price %}<span class="old-price">{{product.old_price.amount|floatformat:0}}&nbsp;{{param_label_currency}}</span>&nbsp;{% endif %}<span class="actual-price">{{product.actual_price.amount|floatformat:0}}&nbsp;{{param_label_currency}}</span><br/>
-</div>
-{% if not product.in_stock %}<div class="not-in-stock">{{param_label_not_available}}</div>
-<button class="w-100" onclick="notify_delivery('{{product.article}}')">{{param_label_notify_delivery}}</button>{% endif %}
+<div><span class="product-title">{{product.title}}</span><br/><span class="product-title">({{product.color|default:param_message_color_missed}})</span></div>
+<div class="price-line">{% if product.old_price %}<span class="old-price">{{product.old_price.amount|floatformat:0}}&nbsp;{{param_label_currency}}</span>&nbsp;{% endif %}<span class="actual-price">{{product.actual_price.amount|floatformat:0}}&nbsp;{{param_label_currency}}</span><br/></div>
+{% if not product.in_stock %}<div class="not-in-stock">{{param_label_not_available}}</div><button class="w-100" onclick="notify_delivery('{{product.article}}')">{{param_label_notify_delivery}}</button>{% endif %}
 {# Детальная карточка -------------------------------------------------------------------------------------------------- #}
 {% elif card_type == "details" %}
-<div class="items-top-down">
-    <div class="product-title">{{product.title}}&nbsp;({{product.color|default:param_message_color_missed}})</div>
-    <div class="product-article mt1">{{param_label_article}}:&nbsp;{{product.article}}</div>
-</div>
-<div class="price-line">
-    <span class="actual-price">{{product.actual_price.amount|floatformat:0}}&nbsp;{{param_label_currency}}</span>{% if product.old_price %}&nbsp;<span class="old-price">{{product.old_price.amount|floatformat:0}}&nbsp;{{param_label_currency}}</span>{% endif %}
-</div>
-<div class="size-block">
-    <div class="size-label">{{param_label_size}}:</div><div></div>
-    {% include "lms/include/selector.html" with variants=product.variants selector_id="size-selector" %}
-    <div class="not-in-stock">{{param_label_not_available}}</div>
-</div>
+<div class="items-top-down"><div class="product-title">{{product.title}}&nbsp;({{product.color|default:param_message_color_missed}})</div><div class="product-article mt1">{{param_label_article}}:&nbsp;{{product.article}}</div></div>
+<div class="price-line"><span class="actual-price">{{product.actual_price.amount|floatformat:0}}&nbsp;{{param_label_currency}}</span>{% if product.old_price %}&nbsp;<span class="old-price">{{product.old_price.amount|floatformat:0}}&nbsp;{{param_label_currency}}</span>{% endif %}</div>
+<div class="size-block"><div class="size-label">{{param_label_size}}:</div><div></div>{% include "lms/include/selector.html" with variants=product.variants selector_id="size-selector" %}<div class="not-in-stock">{{param_label_not_available}}</div></div>
 <button class="w-100 inverted medium" onclick="product_to_scart('{{product.article}}',document.getElementById('size-selector').value,1,right_sidebar.show_scart);gp_dialog.close();">{{param_label_add_to_shopping_cart}}</button>
 <!--<button class="w-100 inverted medium" onclick="notify_delivery('{{product.article}}')">{{param_label_notify_delivery}}</button>-->
 <div class="product-notes">{{product.description|default:param_message_details_missed|markdown}}</div>
