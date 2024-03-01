@@ -9,10 +9,10 @@
 	</div>
 	<div class="dialog-header">
 		{% if form %}
-			<h2>{{form.title|default:"Укажите заголовок формы"}}</h2>
+			<h1>{{form.title|default:"Укажите заголовок формы"}}</h1>
 			<label>{{form.description|default:"Укажите описание формы"}}</label>
 		{% else %}
-			{% if title %}<h2>{{title}}</h2>{% endif %}
+			{% if title %}<h1>{{title}}</h1>{% endif %}
 			{% if description %}<label>{{description}}</label>{% endif %}
 		{% endif %}
 	</div>
