@@ -1,12 +1,6 @@
 <section id="{{unique}}-undo-section">
-    <h4 class="m0 p0">
-    <span class="items-left-right">
-        <span id="{{unique}}-undo-message"></span>
-        <span class="inline-items-right-left mla">
-            <span class="gray">&nbsp;{{param_label_countdown}}</span>
-            <span id="{{unique}}-undo-countdown"></span>
-        </span>
-    </span>
-    </h4>
+    <div id="{{unique}}-undo-message"></div>
+    {{timer}}
+    <div id="{{unique}}-undo-countdown"></div>
     <button onclick="{{unique}}_undo.do_undo();">{{param_label_restore_product}}</button>
 </section>

@@ -626,6 +626,10 @@ aside a {
     text-align: right;
 }
 
+aside p {
+    margin: 0;
+}
+
 aside div[class*='content'] {
     height: 100%;
     display: flex;
@@ -718,6 +722,10 @@ aside .actual-price {
     display: none;
 }
 
+/* Undo ---------------------------------------------------------------------------------------------------------------- */
+
+
+
 /* Элементы оформления ------------------------------------------------------------------------------------------------- */
 
 h1 {
@@ -791,6 +799,10 @@ p {
 .inline-items-right-left {
     display: inline-flex;
     flex-flow: row-reverse;
+}
+
+.ass {
+    align-self: start;
 }
 
 .grid-c2 {
@@ -1102,8 +1114,16 @@ img.bkg {
     margin-top: calc(1.5 * var(--DefPadding));
 }
 
+.mt2 {
+    margin-top: calc(2 * var(--DefPadding));
+}
+
 .mb1 {
     margin-bottom: var(--DefPadding);
+}
+
+.mb15 {
+    margin-bottom: calc(1.5 * var(--DefPadding));
 }
 
 .mb2 {
