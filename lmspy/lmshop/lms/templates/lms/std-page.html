@@ -31,9 +31,9 @@ LubMi - {{page_title}}
 {% include "lms/include/dialog.html" with unique="pca" dialog_id="pca-dialog" form=None title="Заказ отменен" description="Сожалеем" confirmation="Перейти в чат техподдержки" %}
 {% include "lms/include/dialog.html" with unique="puk" dialog_id="puk-dialog" form=None title="Произошла ошибка" confirmation="Перейти в чат техподдержки" %}
 {% include "lms/include/dialog.html" with unique="msg" dialog_id="msg-dialog" form=None title="Сообщение" confirmation="Закрыть" %}
-{% include "lms/include/dialog.html" with unique="sch" dialog_id="sch-dialog" form=None headless=True %}
+{% include "lms/include/dialog.html" with unique="sch" dialog_id="sch-dialog" form=None headless=1 closerless=1 %}
 {% include "lms/include/dialog.html" with unique="ndd" dialog_id="notify-delivery-dialog" form=scui_form %}
-{% include "lms/include/dialog.html" with unique="c6t" dialog_id="c6t-dialog" title=param_title_checkout description=" " %}
+{% include "lms/include/dialog.html" with unique="c6t" dialog_id="c6t-dialog" title=param_title_checkout headless=1 has_arrow=1 %}
 {% endblock %}
 
 {% block javascript %}

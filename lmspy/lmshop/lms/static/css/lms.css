@@ -641,26 +641,6 @@ aside footer {
     align-self: center;
 }
 
-aside .product-title {
-    font-size: 24px;
-    font-weight: 300;
-    line-height: 23px;
-}
-
-aside .product-article {
-    color: rgba(34, 34, 34, 0.50);
-    font-size: 16px;
-    font-weight: 100;
-    line-height: 23px;
-}
-
-aside .price-line,
-aside .actual-price {
-    font-size: 24px;
-    font-weight: 300;
-    line-height: 23px;
-}
-
 .socials {
     color: lightgray;
     background: black;
@@ -691,6 +671,26 @@ aside .actual-price {
     grid-auto-flow: row;
 }
 
+.sidebar-item .product-title {
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 23px;
+}
+
+.sidebar-item .product-article {
+    color: rgba(34, 34, 34, 0.50);
+    font-size: 16px;
+    font-weight: 100;
+    line-height: 23px;
+}
+
+.sidebar-item .price-line,
+.sidebar-item .actual-price {
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 23px;
+}
+
 .sidebar-item > .price-line {
     grid-area: 2 / 2 / 2 / 4;
 }
@@ -717,7 +717,6 @@ aside .actual-price {
     background-position: center center;
     background-repeat: no-repeat;
 }
-
 
 /* Undo ---------------------------------------------------------------------------------------------------------------- */
 
@@ -1566,12 +1565,6 @@ form > div {
     flex-flow: column;
 }
 
-form fieldset {
-    margin: 0;
-    padding: 0;
-    border: none;
-}
-
 /* Ndd -----------------------------------------------------------------------------------------------------------------*/
 
 dialog #scui-form {
@@ -1586,6 +1579,41 @@ dialog #scui-form input[type="email"] {
 }
 
 /* C6t -----------------------------------------------------------------------------------------------------------------*/
+
+dialog #c6t-form {
+    display: grid;
+    grid-template: auto / 1fr 1fr;
+    grid-auto-columns: 1fr;
+    column-gap: var(--DefPadding);
+    row-gap: calc(2 * var(--DefPadding));
+    font-size: 24px;
+    font-weight: 250;
+    line-height: 24px;
+    font-variation-settings: "wght" 100;
+}
+
+dialog #c6t-form > *:nth-child(-n+7),
+dialog #c6t-form > *:nth-child(12) {
+    grid-column: 1 / span 2;
+}
+
+dialog #c6t-form input[type="text"],
+dialog #c6t-form input[type="email"] {
+    border: none;
+    border-bottom: solid thin black;
+    padding-bottom: 0.75rem;
+}
+
+dialog #c6t-form fieldset {
+    margin: -1rem 0 0 0;
+    padding: 0;
+    border: none;
+}
+
+dialog #c6t-form #c6t-d6y_service {
+    display: grid;
+    row-gap: 1rem;
+}
 
 .grid-c6t {
     display: grid;
@@ -1610,22 +1638,24 @@ dialog #scui-form input[type="email"] {
     grid-row: 3;
 }
 
-.c6t-sidebar,
+/*.c6t-sidebar,
 #c6t-form {
-    min-width: min(40rem, 80vw);
-    max-width: min(40rem, 80vw);
-}
+    min-width: min(45rem, 80vw);
+    max-width: min(45rem, 80vw);
+    background: red;
+}*/
 
-.c6t-status {
-    min-width: 10rem;
-    max-width: 35rem;
+.c6t-status.on-wide {
+    max-width: min(45rem, 40vw);
     overflow: hidden;
+    display: flex;
+    flex-flow: column;
 }
 
 @media screen and (min-width: 70rem) {
     .grid-c6t {
         column-gap: 4rem;
-        row-gap: 0;
+        row-gap: 1rem;
         grid-template-columns: auto auto;
         grid-template-rows: auto auto;
     }
@@ -1647,9 +1677,25 @@ dialog #scui-form input[type="email"] {
 
     .c6t-sidebar,
     #c6t-form {
-        min-width: min(30rem, 40vw);
-        max-width: min(30rem, 40vw);
+        min-width: min(45rem, 40vw);
+        max-width: min(45rem, 40vw);
     }
+}
+
+#c6t-dialog .dialog-closer {
+    margin: 0 0 2rem 0;
+}
+
+#c6t-dialog table {
+    font-size: 16px;
+    font-weight: 250;
+    line-height: 23px;
+    font-variation-settings: "wght" 100;
+    align-self: end;
+}
+
+#c6t-dialog td {
+    vertical-align: top;
 }
 
 label[for="c6t-cu_confirm"] {
@@ -1658,12 +1704,8 @@ label[for="c6t-cu_confirm"] {
     margin: 0 1rem;
 }
 
-#c6t-dialog td {
-    vertical-align: top;
-}
-
 #c6t-dialog .c6t-city-list {
-    position:absolute;
+    position: absolute;
     border: solid thin gray;
     background: white;
     box-shadow: 0px 3px 3px gray;
@@ -1674,12 +1716,20 @@ label[for="c6t-cu_confirm"] {
     overflow: auto;
     max-height: 10rem;
     z-index: 1000;
+    font-size: 16px;
+    font-weight: 250;
+    line-height: 23px;
+    font-variation-settings: "wght" 200;
 }
 
 .c6t-city-list > p {
     margin: 0;
     padding: 5px;
     cursor: pointer;
+    font-size: 16px;
+    font-weight: 250;
+    line-height: 23px;
+    font-variation-settings: "wght" 200;
 }
 
 .c6t-city-list > p:hover {

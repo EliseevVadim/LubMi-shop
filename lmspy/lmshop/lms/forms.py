@@ -38,6 +38,10 @@ class CheckoutForm(forms.ModelForm):
     title = Parameter.value_of('title_checkout', 'Оформление заказа')
     description = Parameter.value_of('message_enter_checkout_data', 'Введите данные, необходимые для оформления заказа')
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.label_suffix = ""
+
     class Meta:
         model = Order
         fields = [

@@ -1,12 +1,14 @@
 {% load static %}
 <dialog id="{{dialog_id}}">
-	{% if not headless %}
+	{% if not closerless %}
 	<div class="dialog-closer">
 		{% if has_arrow %}
 		<label class="cancel-dialog arrow-left" onclick="{{unique}}_dialog.close();">{{left_arrow}}<span>{{param_label_back}}</span></label>
 		{% endif %}
 		<label class="cancel-dialog" onclick="{{unique}}_dialog.close();">{{x_cross}}</label>
 	</div>
+	{% endif %}
+	{% if not headless %}
 	<div class="dialog-header">
 		{% if form %}
 			<h1>{{form.title|default:"Укажите заголовок формы"}}</h1>
