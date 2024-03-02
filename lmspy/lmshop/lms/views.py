@@ -608,9 +608,9 @@ class C6tInfoView(View):
                 return summary(lambda _city, _d_cost, _d_time, _error: render(request, 'lms/c6t-summary.html', {
                     "items": {
                         "Сумма": f'{floatformat(scart["price"], 2)} {Parameter.value_of("label_currency")}',
-                        "Вес": f'{floatformat(scart["weight"] / Decimal(1000), 2)} кг',
+                        # "Вес": f'{floatformat(scart["weight"] / Decimal(1000), 2)} кг',
                         "Доставка": f'{d6y_name(d6y)}, {floatformat(_d_cost, 2)} {Parameter.value_of("label_currency")}, от {_d_time} дней',
-                        "Назначение": f'{_city.city_full}'.replace(", ", ",\n"),
+                        "Город": f'{_city.city_full}'.replace(", ", ",\n"),
                         "Итоговая сумма": f'{floatformat(scart["price"] + Decimal(_d_cost), 2)} {Parameter.value_of("label_currency")}',
                     } if not _error else {
                         "Проблема": _error
