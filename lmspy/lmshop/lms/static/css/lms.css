@@ -1578,6 +1578,12 @@ dialog #scui-form input[type="email"] {
     border: solid thin black;
 }
 
+/* Msg -----------------------------------------------------------------------------------------------------------------*/
+
+#msg-dialog .dialog-footer {
+    margin-top: 2rem;
+}
+
 /* C6t -----------------------------------------------------------------------------------------------------------------*/
 
 dialog #c6t-form {
@@ -1702,6 +1708,16 @@ label[for="c6t-cu_confirm"] {
     display: flex;
     align-items: end;
     margin: 0 1rem;
+}
+
+label[for="c6t-cu_fullname"],
+label[for="c6t-cu_city"] {
+    font-size: 32px;
+    font-weight: 300;
+    font-variation-settings: "wght" 300;
+    text-transform: uppercase;
+    line-height: 32px;
+    margin-bottom: 1rem;
 }
 
 #c6t-dialog .c6t-city-list {
