@@ -1,7 +1,7 @@
 {% if variants %}
 <h1 class="with-selector">
     <span>{{title}}</span>
-    <div class="selector-container">{% include "lms/include/selector.html" %}</div>
+    {% include "lms/include/selector.html" %}
 </h1>
 {% else %}
 <h1>{{title}}</h1>

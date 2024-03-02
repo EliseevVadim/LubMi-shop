@@ -27,6 +27,50 @@
 	user-select: none;
 }
 
+input[type="text"],
+input[type="email"] {
+    font-size: 20px;
+    font-variation-settings: "wght" 100;
+    font-weight: 250;
+    font-family: var(--Fonts);
+}
+
+/* Selector ------------------------------------------------------------------------------------------------------------*/
+
+.with-selector {
+    display: flex;
+    flex-flow :row;
+}
+
+.select {
+    align-items: center;
+    display: flex;
+    flex-flow: row;
+    cursor: pointer;
+    border: none;
+
+    select, select:focus {
+        cursor: pointer;
+        border: none;
+        background: white;
+        appearance: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+    }
+
+    img {
+        height: 10px;
+        margin-left: 1rem;
+    }
+}
+
+select, select:focus, option {
+    font-size: 24px;
+    font-variation-settings: "wght" 100;
+    font-weight: 250;
+    font-family: var(--Fonts);
+}
+
 /* Separator ----------------------------------------------------------------------------------------------------------*/
 
 svg.separator {
@@ -287,29 +331,6 @@ main.page {
     padding: var(--DefPadding)
 }
 
-/* Selector ------------------------------------------------------------------------------------------------------------*/
-
-.with-selector {
-    display :flex;
-    flex-flow :row;
-}
-
-.selector-container {
-    margin-left :auto;
-    margin-right: 2rem;
-}
-
-select, select:focus {
-    border: none;
-    background :white;
-    padding: 1rem;
-    font-size: 1.25rem;
-    font-family: var(--Fonts);
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-}
-
 /* Каталог ------------------------------------------------------------------------------------------------------------- */
 
 .catalogue {
@@ -495,10 +516,16 @@ input[type="checkbox"]:not(:checked) ~ svg { fill: none; }
 
 .p-card-b .size-block {
     display: grid;
+    gap: 0.5rem;
     grid-template: auto auto / auto auto;
     width: fit-content;
     column-gap: 1rem;
     place-items: center;
+
+    .select {
+        padding: 0.25rem 0.5rem;
+        border: solid thin black;
+    }
 }
 
 .p-card-b .product-title {
@@ -745,6 +772,10 @@ h1 {
     text-transform: uppercase;
     padding: 0;
     margin: 0.26rem 0 0 0;
+
+    .select {
+        margin-left: auto;
+    }
 }
 
 h2 {

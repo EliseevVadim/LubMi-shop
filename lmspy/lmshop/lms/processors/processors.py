@@ -49,6 +49,7 @@ def shorts_processor(_):
         'minus_ring': mark_safe(f"""<img class="hand"  src="{static("svg/minus-ring.svg")}"/>"""),
         'l_ang': mark_safe(f"""<img class="hand"  src="{static("svg/l-ang.svg")}"/>"""),
         'r_ang': mark_safe(f"""<img class="hand"  src="{static("svg/r-ang.svg")}"/>"""),
+        'd_ang': mark_safe(f"""<img class="hand"  src="{static("svg/d-ang.svg")}"/>"""),
         'dl_ang': mark_safe(f"""<img class="hand"  src="{static("svg/dl-ang.svg")}"/>"""),
         'dr_ang': mark_safe(f"""<img class="hand"  src="{static("svg/dr-ang.svg")}"/>"""),
         'timer': mark_safe(f"""<img src="{static("svg/timer.svg")}"/>"""),
