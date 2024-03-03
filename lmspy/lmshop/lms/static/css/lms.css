@@ -85,9 +85,14 @@ svg.separator line {
     vector-effect: non-scaling-stroke;
 }
 
-* > div.separator:not(:first-child) {
-    margin-top: 3.2rem;
+div.separator {
+    margin-bottom: 1rem;
+    &:not(:first-of-type) {
+        margin-top: 1rem;
+    }
 }
+
+/* Commons -------------------------------------------------------------------------------------------------------------*/
 
 body, aside, .content, .leading {
     margin: 0;
@@ -332,6 +337,12 @@ main.page {
 }
 
 /* Каталог ------------------------------------------------------------------------------------------------------------- */
+
+.catalogue-page {
+    & > *:not(.separator) {
+        margin-bottom: 2.5rem;
+    }
+}
 
 .catalogue {
     display: grid;
@@ -854,9 +865,8 @@ p {
 
 .grid12 {
     display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(12, auto);
-    grid-template-rows: repeat(12, auto);
+    gap: 1.5rem;
+    grid-template: repeat(12, auto) / repeat(12, auto);
     justify-items: stretch;
 }
 
@@ -942,22 +952,28 @@ p {
     }
 
     .grid12-aab {
+        grid-template: repeat(12, auto) / repeat(6, auto) repeat(6, calc((500px - 5 * 1.5rem) / 6)) ;
         grid-template-areas:
-            "A A A A A A A A B B B B"
-            "A A A A A A A A B B B B"
-            "A A A A A A A A B B B B"
-            "A A A A A A A A B B B B"
-            "A A A A A A A A B B B B"
-            "A A A A A A A A B B B B"
-            "A A A A A A A A B B B B"
-            "A A A A A A A A B B B B"
-            "A A A A A A A A B B B B"
-            "A A A A A A A A B B B B"
-            "A A A A A A A A B B B B"
-            "A A A A A A A A B B B B";
+            "A A A A A A B B B B B B"
+            "A A A A A A B B B B B B"
+            "A A A A A A B B B B B B"
+            "A A A A A A B B B B B B"
+            "A A A A A A B B B B B B"
+            "A A A A A A B B B B B B"
+            "A A A A A A B B B B B B"
+            "A A A A A A B B B B B B"
+            "A A A A A A B B B B B B"
+            "A A A A A A B B B B B B"
+            "A A A A A A B B B B B B"
+            "A A A A A A B B B B B B";
+
+            .g12-ib {
+                aspect-ratio: 500 / 750;
+            }
     }
 
     .grid12-abcd {
+        grid-template: repeat(12, auto) / repeat(6, auto) repeat(6, calc((670px - 5 * 1.5rem) / 6)) ;
         grid-template-areas:
             "A A A A A A B B B B B B"
             "A A A A A A B B B B B B"
@@ -971,6 +987,14 @@ p {
             "C C C C C C D D D D D D"
             "C C C C C C D D D D D D"
             "C C C C C C D D D D D D";
+
+            .g12-ib {
+                aspect-ratio: 670 / 770;
+            }
+
+            .g12-id {
+                aspect-ratio: 670 / 460;
+            }
     }
 
     .grid12-ab {
@@ -1018,17 +1042,9 @@ img.bkg {
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
-    min-height: 20rem;
-    min-width: 10rem;
     height: 100%;
     width: 100%;
     overflow: hidden;
-}
-
-@media screen and (min-width: 70rem) {
-    .picture-content {
-        min-height: 15rem;
-    }
 }
 
 .toolbar {
@@ -1272,14 +1288,6 @@ main.perfumery {
     word-wrap: break-word;
 }
 
-.perfumery .grid12 h1 {
-    margin-top: 0;
-    margin-bottom: 1rem;
-    font-size: 3rem;
-    font-weight: bolder;
-    border: none;
-}
-
 .perfumery h2 {
     font-size: 1.25rem;
     font-weight: bolder;
@@ -1309,34 +1317,75 @@ main.perfumery {
 }
 
 @media screen and (min-width: 70rem) {
-    .perfumery > h1 {
-        color: #222222;
-        font-size: 8rem;
-        font-family: Geologica;
-        font-weight: 400;
-        text-transform: uppercase;
-        line-height: 8rem;
-        word-wrap: break-word;
-    }
+    .perfumery {
 
-    .perfumery p {
-        color: #464646;
-        word-wrap: break-word;
-    }
+        & > *:not(:last-child):not(.separator) {
+            margin-bottom: 2.5rem;
+        }
 
-    .perfumery .grid12 h1 {
-        font-size: 4rem;
-        font-weight: bolder;
-    }
+        h1 {
+            color: #222222;
+            font-size: 8rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            line-height: 8rem;
+            word-wrap: break-word;
+            margin: 0 auto;
+        }
 
-    .perfumery h2 {
-        font-size: 2rem;
-        font-weight: bolder;
-    }
+        h2 {
+            font-size: 60px;
+            line-height: 60px;
+            font-weight: 400;
+            margin: 0 auto;
+        }
 
-    .perfumery summary {
-        font-size: 1.25rem;
-        font-weight: bolder;
+        p {
+            color: #222222;
+            font-size: 24px;
+            font-weight: 250;
+            line-height: 26px;
+            word-wrap: break-word;
+            font-variation-settings: "wght" 100;
+        }
+
+        * p:first-of-type {
+            margin-top: 0;
+        }
+
+        p strong {
+            font-weight: 600;
+            font-variation-settings: "wght" 600;
+        }
+
+        .in-frame {
+            border: solid thin black;
+            padding: 1.5rem 3rem;
+            margin: 1rem 1rem 1rem 0;
+        }
+
+        details *:not(summary) {
+            font-size: 16px;
+            margin: 0 0 0.75em 0;
+        }
+
+        summary {
+            font-size: 24px;
+            font-weight: 400;
+            font-variation-settings: "wght" 400;
+            display: flex;
+
+            &::after {
+                margin-left: auto;
+                content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 15 10'><path d='M 15,1.76 13.24,0 7.5,5.72 1.76,0 0,1.76 7.5,9.26 Z' fill='black'/></svg>");
+            }
+        }
+
+        details[open] summary {
+            &::after {
+                transform: rotate(180deg);
+            }
+        }
     }
 }
 
@@ -1674,13 +1723,6 @@ dialog #c6t-form #c6t-d6y_service {
     grid-column: 1;
     grid-row: 3;
 }
-
-/*.c6t-sidebar,
-#c6t-form {
-    min-width: min(45rem, 80vw);
-    max-width: min(45rem, 80vw);
-    background: red;
-}*/
 
 .c6t-status.on-wide {
     max-width: min(45rem, 40vw);
