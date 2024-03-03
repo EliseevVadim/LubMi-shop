@@ -3,7 +3,6 @@
     --FooterHeight: 3rem;
     --DefPadding: 1rem;
     --Fonts: "Geologica", sans-serif;
-    --FsPara: 1.613rem;
     --ZixContent: 10;
     --ZixLeading: 20;
     --ZixPanels: 30;
@@ -16,6 +15,17 @@
     --NarrowPageWidth: 91.4rem;
     --HoFSize: 14.785rem;
     --PiconSize: 1.25rem;
+
+    --F11: 11px;
+    --F13: 13px;
+    --F14: 14px;
+    --F16: 16px;
+    --F20: 20px;
+    --F24: 24px;
+    --F30: 30px;
+    --F32: 32px;
+    --F60: 60px;
+    --F120: 120px;
 }
 
 * {
@@ -29,7 +39,7 @@
 
 input[type="text"],
 input[type="email"] {
-    font-size: 24px;
+    font-size: var(--F24);
     font-variation-settings: "wght" 100;
     font-weight: 250;
     font-family: var(--Fonts);
@@ -65,7 +75,7 @@ input[type="email"] {
 }
 
 select, select:focus, option {
-    font-size: 24px;
+    font-size: var(--F24);
     font-variation-settings: "wght" 100;
     font-weight: 250;
     font-family: var(--Fonts);
@@ -101,7 +111,7 @@ body, aside, .content, .leading {
     font-optical-sizing: auto;
     font-weight: 150;
     font-style: normal;
-    font-size: var(--FsPara);
+    font-size: var(--F24);
 }
 
 /* Wide / narrow -------------------------------------------------------------------------------------------------------*/
@@ -167,9 +177,8 @@ body, aside, .content, .leading {
     margin-left: 1rem;
     margin-right: 1rem;
     text-decoration: none;
-    font-size: 16px;
+    font-size: var(--F16);
     color: #222222;
-    font-size: 16px;
     line-height: 14.40px;
     font-variation-settings: "wght" 100;
     word-wrap: break-word;
@@ -245,7 +254,7 @@ footer.page .socials {
     [class^='std-footer-item'] .item-header {
         opacity: 0.60;
         color: #222222;
-        font-size: 14px;
+        font-size: var(--F14);
         font-weight: 250;
         text-transform: uppercase;
         line-height: 19.60px;
@@ -259,7 +268,7 @@ footer.page .socials {
 
     [class^='std-footer-item'] a {
         color: #222222;
-        font-size: 24px;
+        font-size: var(--F24);
         font-variation-settings: "wght" 300;
         line-height: 28.80px;
         word-wrap: break-word;
@@ -268,7 +277,7 @@ footer.page .socials {
     .std-footer-item-4 .tiny {
         color: green;
         color: #222222;
-        font-size: 14px;
+        font-size: var(--F14);
         font-weight: 250;
         line-height: 18.20px;
         word-wrap: break-word;
@@ -492,20 +501,20 @@ input[type="checkbox"]:not(:checked) ~ svg { fill: none; }
     height: fit-content;
     padding: 0.5em 1em 0.5em 1em;
     background: #D9D9D9;
-    font-size: 13.05px;
+    font-size: var(--F13);
     font-weight: 250; /* regular */
     line-height: 11.74px;
     word-wrap: break-word;
 }
 
 .product-title {
-    font-size: 24px;
+    font-size: var(--F24);
     font-weight: 300;
     line-height: 23px;
 }
 
 .actual-price {
-    font-size: 24px;
+    font-size: var(--F24);
     font-weight: 300;
     line-height: 23px;
 }
@@ -513,7 +522,7 @@ input[type="checkbox"]:not(:checked) ~ svg { fill: none; }
 .old-price {
     text-decoration: line-through gray;
     opacity: 0.50;
-    font-size: 16px;
+    font-size: var(--F16);
     font-weight: 300;
     line-height: 23px;
     word-wrap: break-word;
@@ -521,7 +530,7 @@ input[type="checkbox"]:not(:checked) ~ svg { fill: none; }
 
 .not-in-stock {
     color: #EB5757;
-    font-size: 16px;
+    font-size: var(--F16);
     font-weight: 100;
 }
 
@@ -540,31 +549,31 @@ input[type="checkbox"]:not(:checked) ~ svg { fill: none; }
 }
 
 .p-card-b .product-title {
-    font-size: 32px;
+    font-size: var(--F32);
     line-height: 32px;
 }
 
 .p-card-b .product-article {
     opacity: 0.50;
-    font-size: 20px;
+    font-size: var(--F20);
     font-weight: 300;
     line-height: 20px;
 }
 
 .p-card-b .actual-price {
-    font-size: 32px;
+    font-size: var(--F32);
     line-height: 32px;
 }
 
 .p-card-b .size-label {
-    font-size: 24px;
+    font-size: var(--F24);
     line-height: 24px;
     font-weight: 250;
     font-variation-settings: "wght" 100;
 }
 
 .p-card-b .product-notes {
-    font-size: 24px;
+    font-size: var(--F24);
     line-height: 24px;
     font-weight: 250;
     font-variation-settings: "wght" 100;
@@ -640,7 +649,7 @@ aside.left {
 }
 
 .cancel-sidebar {
-    font-size: 2rem;
+    font-size: var(--F30);
     color: gray;
     position: absolute;
     top: 1.9rem;
@@ -710,21 +719,21 @@ aside footer {
 }
 
 .sidebar-item .product-title {
-    font-size: 24px;
+    font-size: var(--F24);
     font-weight: 300;
     line-height: 23px;
 }
 
 .sidebar-item .product-article {
     color: rgba(34, 34, 34, 0.50);
-    font-size: 16px;
+    font-size: var(--F16);
     font-weight: 100;
     line-height: 23px;
 }
 
 .sidebar-item .price-line,
 .sidebar-item .actual-price {
-    font-size: 24px;
+    font-size: var(--F24);
     font-weight: 300;
     line-height: 23px;
 }
@@ -763,7 +772,7 @@ section[id$="undo-section"] {
     grid-template: auto auto / 25rem 1fr 2rem;
     gap: 1rem;
     margin: 0 0 2rem 0;
-    font-size: 24px;
+    font-size: var(--F24);
     font-weight: 300;
     line-height: 23px;
 }
@@ -776,7 +785,7 @@ section[id$="undo-section"] [id$="undo-countdown"] {
 
 h1 {
     color: #222222;
-    font-size: 32px;
+    font-size: var(--F32);
     font-weight: 300;
     line-height: 32px;
     word-wrap: break-word;
@@ -791,7 +800,7 @@ h1 {
 
 h2 {
     color: #222222;
-    font-size: 24px;
+    font-size: var(--F24);
     font-weight: 600;
     line-height: 24px;
     word-wrap: break-word;
@@ -812,7 +821,7 @@ h1, h2, h3, h4, h5, h6 {
 
 p {
     color: #222222;
-    font-size: 24px;
+    font-size: var(--F24);
     font-weight: 150;
     line-height: 24px;
     word-wrap: break-word;
@@ -1055,13 +1064,9 @@ img.bkg {
     padding: var(--DefPadding)
 }
 
-.like-title {
-    font-size: 1.25rem;
-}
-
 .pseudo-icon {
     color: #222222;
-    font-size: 14px;
+    font-size: var(--F14);
     font-weight: 300;
     margin: 0 calc(0.15 * var(--PiconSize));
     padding: calc(0.5 * var(--PiconSize));
@@ -1234,7 +1239,7 @@ img.bkg {
 button,
 input[type="submit"] {
     color: #222222;
-    font-size: 16px;
+    font-size: var(--F16);
     font-weight: 300;
     line-height: 14.40px;
     background: white;
@@ -1251,15 +1256,9 @@ input[type="submit"] {
 
 button.medium,
 input[type="submit"].medium {
-    font-size: 24px;
+    font-size: var(--F24);
     font-weight: 300;
     padding: 2rem;
-}
-
-button.large,
-input[type="submit"].large {
-    font-size: 3rem;
-    border-width: thick;
 }
 
 button.inverted,
@@ -1274,28 +1273,6 @@ input[type="submit"].inverted {
 main.perfumery {
     padding-left: 0;
     padding-right: 0;
-}
-
-.perfumery > h1 {
-    margin-top: 3rem;
-    margin-bottom: 1rem;
-    color: #222222;
-    font-size: 120px;
-    font-family: Geologica;
-    font-weight: 400;
-    text-transform: uppercase;
-    line-height: 120px;
-    word-wrap: break-word;
-}
-
-.perfumery h2 {
-    font-size: 1.25rem;
-    font-weight: bolder;
-}
-
-.perfumery summary {
-    font-size: 1.05rem;
-    font-weight: bolder;
 }
 
 .perfumery > * {
@@ -1325,7 +1302,7 @@ main.perfumery {
 
         h1 {
             color: #222222;
-            font-size: 8rem;
+            font-size: var(--F120);
             font-weight: 400;
             text-transform: uppercase;
             line-height: 8rem;
@@ -1334,7 +1311,7 @@ main.perfumery {
         }
 
         h2 {
-            font-size: 60px;
+            font-size: var(--F60);
             line-height: 60px;
             font-weight: 400;
             margin: 0 auto;
@@ -1342,7 +1319,7 @@ main.perfumery {
 
         p {
             color: #222222;
-            font-size: 24px;
+            font-size: var(--F24);
             font-weight: 250;
             line-height: 26px;
             word-wrap: break-word;
@@ -1365,12 +1342,12 @@ main.perfumery {
         }
 
         details *:not(summary) {
-            font-size: 16px;
+            font-size: var(--F16);
             margin: 0 0 0.75em 0;
         }
 
         summary {
-            font-size: 24px;
+            font-size: var(--F24);
             font-weight: 400;
             font-variation-settings: "wght" 400;
             display: flex;
@@ -1465,7 +1442,7 @@ main.perfumery {
 
 .hall-of-fame .title {
     color: #222222;
-    font-size: 24px;
+    font-size: var(--F24);
     font-weight: 300;
     line-height: 24px;
     word-wrap: break-word;
@@ -1473,7 +1450,7 @@ main.perfumery {
 
 .hall-of-fame .subtitle {
     color: #222222;
-    font-size: 16px;
+    font-size: var(--F16);
     font-weight: 250;
     line-height: 16px;
     word-wrap: break-word;
@@ -1499,7 +1476,7 @@ main.perfumery {
 .size-chart h3 {
     text-align: center;
     color: #222222;
-    font-size: 24px;
+    font-size: var(--F24);
     font-weight: 250;
     line-height: 24px;
     word-wrap: break-word;
@@ -1518,7 +1495,7 @@ main.perfumery {
     padding: 1.5rem 1rem;
     text-align: center;
     color: #222222;
-    font-size: 16px;
+    font-size: var(--F16);
     font-weight: 250;
     line-height: 14.40px;
     word-wrap: break-word;
@@ -1562,7 +1539,7 @@ main.perfumery {
     flex-flow: column;
     text-decoration: none;
     color: #222222;
-    font-size: 24px;
+    font-size: var(--F24);
     font-weight: 300;
     line-height: 24px;
     word-wrap: break-word;
@@ -1608,7 +1585,7 @@ dialog {
 
 .cancel-dialog {
     color: #222222;
-    font-size: 24px;
+    font-size: var(--F24);
     font-weight: 250;
     line-height: 23px;
     word-wrap: break-word;
@@ -1672,7 +1649,7 @@ dialog #c6t-form {
     grid-auto-columns: 1fr;
     column-gap: var(--DefPadding);
     row-gap: calc(2 * var(--DefPadding));
-    font-size: 24px;
+    font-size: var(--F24);
     font-weight: 250;
     line-height: 24px;
     font-variation-settings: "wght" 100;
@@ -1766,7 +1743,7 @@ dialog #c6t-form #c6t-d6y_service {
 }
 
 #c6t-dialog table {
-    font-size: 16px;
+    font-size: var(--F16);
     font-weight: 250;
     line-height: 23px;
     font-variation-settings: "wght" 100;
@@ -1785,7 +1762,7 @@ label[for="c6t-cu_confirm"] {
 
 label[for="c6t-cu_fullname"],
 label[for="c6t-cu_city"] {
-    font-size: 32px;
+    font-size: var(--F32);
     font-weight: 300;
     font-variation-settings: "wght" 300;
     text-transform: uppercase;
@@ -1805,7 +1782,7 @@ label[for="c6t-cu_city"] {
     overflow: auto;
     max-height: 10rem;
     z-index: 1000;
-    font-size: 16px;
+    font-size: var(--F16);
     font-weight: 250;
     line-height: 23px;
     font-variation-settings: "wght" 200;
@@ -1815,7 +1792,7 @@ label[for="c6t-cu_city"] {
     margin: 0;
     padding: 5px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: var(--F16);
     font-weight: 250;
     line-height: 23px;
     font-variation-settings: "wght" 200;
@@ -1848,7 +1825,7 @@ label[for="c6t-cu_city"] {
 
 .popup span {
     color: #222222;
-    font-size: 24px;
+    font-size: var(--F24);
     font-weight: 300;
     line-height: 24px;
     word-wrap: break-word;
@@ -1884,7 +1861,7 @@ label[for="c6t-cu_city"] {
 
 .hall-of-fame > figure > figcaption {
     margin-top: 0.5rem;
-    font-size: 0.75rem;
+    font-size: var(--F11);
 }
 
 /* SearchBox      -----------------------------------------------------------------------------------------------------*/
@@ -1985,7 +1962,7 @@ label[for="c6t-cu_city"] {
 
 #sch-text {
     color: #222222;
-    font-size: 16px;
+    font-size: var(--F16);
     font-weight: 100;
     line-height: 16px;
     border: none;
@@ -2067,7 +2044,7 @@ label[for="c6t-cu_city"] {
 .banner-slogan {
     grid-area: S;
     color: white;
-    font-size: 8rem;
+    font-size: var(--F120);
     font-family: Geologica;
     font-weight: 400;
     text-transform: uppercase;
@@ -2106,9 +2083,8 @@ label[for="c6t-cu_city"] {
     align-self: end;
     max-height: 5.11rem;
     min-height: 5.11rem;
-    font-size: 1.61rem;
+    font-size: var(--F24);
     font-weight: 300;
-    line-height: 1.45rem;
     word-wrap: break-word;
     background: white;
     border: 2px white solid;
@@ -2125,7 +2101,7 @@ label[for="c6t-cu_city"] {
 .banner-text {
     grid-area: T;
     color: white;
-    font-size: 2.15rem;
+    font-size: var(--F32);
     font-weight: 250;
     line-height: 2.15rem;
     word-wrap: break-word;
