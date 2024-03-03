@@ -29,7 +29,7 @@
 
 input[type="text"],
 input[type="email"] {
-    font-size: 20px;
+    font-size: 24px;
     font-variation-settings: "wght" 100;
     font-weight: 250;
     font-family: var(--Fonts);
