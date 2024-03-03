@@ -290,7 +290,8 @@ class Order(DbItem):
         max_digits=14,
         decimal_places=2,
         default_currency='RUR')
-    cu_name = models.CharField(max_length=250)                                                  # -- как обращаться --
+    cu_first_name = models.CharField(max_length=150)                                            # -- имя --
+    cu_last_name = models.CharField(max_length=150)                                             # -- фамилия --
     cu_phone = models.CharField(null=True, max_length=50, validators=[Tunable.validate_phone])  # -- телефон --
     cu_email = models.CharField(null=True, max_length=250)                                      # -- email --
     cu_country = models.CharField(max_length=2, default='RU')                                   # -- код страны --
@@ -355,7 +356,7 @@ class Order(DbItem):
         return Money(self.items.aggregate(total=Sum(F("price") * F('quantity')))["total"] + self.delivery_cost.amount, currency="RUR")
 
     def __str__(self):
-        return f'заказ #{self.slug} от {self.cu_name}'
+        return f'заказ #{self.slug} от {self.cu_first_name}'
 
 
 class OrderItem(DbItem):

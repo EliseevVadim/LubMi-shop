@@ -19,19 +19,17 @@ const pcard_like_click = (input, url) => {
 };
 
 const notify_delivery = ppk => {
-    __api_call__('{% url "api:get_customer_info" flags=7 %}', null, answer => {
+    __api_call__('{% url "api:get_customer_info" flags=6 %}', null, answer => {
         cu_form = document.getElementById('scui-form');
-        cu_name = document.getElementById('scui-name');
         cu_phone = document.getElementById('scui-phone');
         cu_email = document.getElementById('scui-email');
-        cu_name.value = answer.name;
         cu_phone.value = answer.phone;
         cu_email.value = answer.email;
         cu_email.oninput = _ => { if(cu_email.value) cu_phone.removeAttribute('required'); else cu_phone.setAttribute('required',''); }
         cu_phone.oninput = _ => { if(cu_phone.value) cu_email.removeAttribute('required'); else cu_email.setAttribute('required',''); }
         cu_form.onsubmit = e => {
             e.preventDefault();
-            __api_call__('{% url "api:notify_me_for_delivery" %}', { name: cu_name.value, phone: cu_phone.value, email: cu_email.value, ppk: ppk }, result => {
+            __api_call__('{% url "api:notify_me_for_delivery" %}', { phone: cu_phone.value, email: cu_email.value, ppk: ppk }, result => {
                 if(result.success) {
                     ndd_dialog.close();
                     popup.show("Ваш запрос на уведомление о доставке товара успешно отправлен");

@@ -36,9 +36,9 @@ c6t_dialog.show = () => {
 
         __api_call__('{% url "api:get_customer_info" flags=15 %}', null, answer => {
             _form = by_id('c6t-form');
-            _name = by_id('c6t-cu_name');
+            _first_name = by_id('c6t-cu_first_name');
+            _last_name = by_id('c6t-cu_last_name');
             _phone = by_id('c6t-cu_phone');
-            _email = by_id('c6t-cu_email');
             _city_uuid = by_id('c6t-cu_city_uuid');
             _city = by_id('c6t-cu_city');
             _street = by_id('c6t-cu_street');
@@ -55,9 +55,9 @@ c6t_dialog.show = () => {
             _confirm.parentElement.style.flexFlow = "row-reverse";
             _confirm.parentElement.style.justifyContent = "start";
 
-            _name.value = answer.name;
+            _first_name.value = answer.first_name;
+            _last_name.value = answer.last_name;
             _phone.value = answer.phone;
-            _email.value = answer.email;
             _street.value = answer.address.street;
             _building.value = answer.address.building;
             _entrance.value = answer.address.entrance;
@@ -121,16 +121,6 @@ c6t_dialog.show = () => {
                 setTimeout(update_summary);
             };
 
-            _email.oninput = _ => { 
-                if(_email.value) _phone.removeAttribute('required'); 
-                else _phone.setAttribute('required',''); 
-            }
-            
-            _phone.oninput = _ => { 
-                if(_phone.value) _email.removeAttribute('required'); 
-                else _email.setAttribute('required',''); 
-            }
-
             _city.tmo_id = null;
             _city.oninput = _ => {
                 if(_city.tmo_id) { clearTimeout(_city.tmo_id); }
@@ -171,9 +161,9 @@ c6t_dialog.show = () => {
                 let ds = by_selector('input[id^="c6t-d6y_service_"]:checked').value;
                 __api_call__('{% url "api:c6t" %}', {
                     delivery: ds,
-                    cu_name: _name.value,
+                    cu_first_name: _first_name.value,
+                    cu_last_name: _last_name.value,
                     cu_phone: _phone.value,
-                    cu_email: _email.value,
                     cu_city_uuid: _city_uuid.value,
                     cu_city: _city.value,
                     cu_street: _street.value,
@@ -200,8 +190,6 @@ c6t_dialog.show = () => {
             scart_changed();
             c6t_dialog.choose_city(answer.address.city, answer.address.city_uuid, false);
             d6y_changed({currentTarget: by_selector('input[id^="c6t-d6y_service_"]:checked')});
-            _email.oninput(null);
-            _phone.oninput(null);
             c6t_dialog.rszo = new ResizeObserver(move_city_list);
             c6t_dialog.rszo.observe(_city);
             c6t_dialog.self().showModal();

@@ -127,16 +127,32 @@ class CustomerInfo:
     # -- Name --
 
     @property
-    def name(self):
-        return self._get_or_create_item("name", str)
+    def first_name(self):
+        return self._get_or_create_item("first_name", str)
 
-    @name.setter
-    def name(self, value):
-        self._set_item("name", value)
+    @first_name.setter
+    def first_name(self, value):
+        self._set_item("first_name", value)
 
-    @name.deleter
-    def name(self):
-        self._delete_item("name")
+    @first_name.deleter
+    def first_name(self):
+        self._delete_item("first_name")
+
+    @property
+    def last_name(self):
+        return self._get_or_create_item("last_name", str)
+
+    @last_name.setter
+    def last_name(self, value):
+        self._set_item("last_name", value)
+
+    @last_name.deleter
+    def last_name(self):
+        self._delete_item("last_name")
+
+    @property
+    def short_name(self):
+        return f"{self.first_name}{' ' if self.first_name and self.last_name else ''}{self.last_name}"
 
     # -------------------------------------------------------------------------
     # -- Phone --

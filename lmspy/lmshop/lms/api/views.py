@@ -64,7 +64,7 @@ class GetCustomerInfoView(APIView):
     def post(request, flags, _=None):
         info = CustomerInfo(request)
         items = {
-            0b000000001: lambda: {"name": info.name},
+            0b000000001: lambda: {"name": info.short_name, "first_name": info.first_name, "last_name": info.last_name},
             0b000000010: lambda: {"phone": info.phone},
             0b000000100: lambda: {"email": info.email},
             0b000001000: lambda: {"address": info.address},
@@ -87,13 +87,13 @@ class NotifyMeForDeliveryView(APIView):
     def post(request, _=None):
         cu_data = request.data
         try:
-            name, phone, email, ppk = escape(cu_data['name']), escape(cu_data['phone']), escape(cu_data['email']), escape(cu_data['ppk'])
+            phone, email, ppk = escape(cu_data['phone']), escape(cu_data['email']), escape(cu_data['ppk'])
         except KeyError:
             return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
-        if name and ppk and (email or phone):
-            create_notify_request(email, name, phone, ppk, CustomerInfo(request))
+        if ppk and (email or phone):
+            create_notify_request(email, phone, ppk, CustomerInfo(request))
             return {'success': True}
-        return Parameter.value_of('message_unable_notify', 'Имя, а также почта или телефон должны быть указаны')
+        return Parameter.value_of('message_unable_notify', 'Почта или телефон должны быть указаны')
 
 
 class ProductToSCartView(APIView):
@@ -159,9 +159,9 @@ class CheckoutSCartView(APIView):
         data = {k: escape(v) for k, v in request.data.items()}
         try:
             d6y_service, \
-                cu_name, \
+                cu_first_name, \
+                cu_last_name, \
                 cu_phone, \
-                cu_email, \
                 cu_country, \
                 cu_city_uuid, \
                 cu_city, \
@@ -172,9 +172,9 @@ class CheckoutSCartView(APIView):
                 cu_apartment, \
                 cu_fullname, \
                 cu_confirm = D6Y(data["delivery"]), \
-                data["cu_name"], \
+                data["cu_first_name"], \
+                data["cu_last_name"], \
                 data["cu_phone"], \
-                data["cu_email"], \
                 data["cu_country"] if "cu_country" in data else "RU", \
                 data["cu_city_uuid"], \
                 data["cu_city"], \
@@ -190,8 +190,9 @@ class CheckoutSCartView(APIView):
         except ValueError:
             return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
         if d6y_service and \
-                cu_name and \
-                (cu_phone or cu_email) and \
+                cu_first_name and \
+                cu_last_name and \
+                cu_phone and \
                 cu_country and \
                 cu_city_uuid and \
                 cu_city and \
@@ -225,9 +226,9 @@ class CheckoutSCartView(APIView):
                     order = Order(delivery_service=d6y_service,
                                   delivery_cost=d6y_cost,
                                   city=city,
-                                  cu_name=cu_name,
+                                  cu_first_name=cu_first_name,
+                                  cu_last_name=cu_last_name,
                                   cu_phone=cu_phone,
-                                  cu_email=cu_email,
                                   cu_country=cu_country,
                                   cu_city_uuid=city.city_uuid,
                                   cu_city=cu_city,
@@ -271,9 +272,9 @@ class CheckoutSCartView(APIView):
                 info = CustomerInfo(request)  # -- update session info --
                 info.clear_scart()
                 info.payment_id = payment_id
-                info.name = cu_name
+                info.first_name = cu_first_name
+                info.last_name = cu_last_name
                 info.phone = cu_phone or info.phone
-                info.email = cu_email or info.email
                 info.address = {
                     "country": cu_country,
                     "city_uuid": cu_city_uuid,

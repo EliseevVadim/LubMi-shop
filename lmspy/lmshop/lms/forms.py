@@ -10,17 +10,12 @@ class ShortCustomerInfoForm(forms.ModelForm):
 
     class Meta:
         model = NotificationRequest
-        fields = ['name', 'phone', 'email']
+        fields = ['phone', 'email']
         labels = {
-            "name": '',
             "phone": '',
             "email": '',
         }
         widgets = {
-            'name': forms.TextInput(attrs={
-                'id': 'scui-name',
-                'placeholder': Parameter.value_of('pholder_indicate_your_name', 'Укажите, как к Вам обращаться')
-            }),
             'phone': forms.TextInput(attrs={
                 'id': 'scui-phone',
                 'placeholder': Parameter.value_of('pholder_enter_your_phone', 'Введите Ваш номер телефона'),
@@ -45,9 +40,9 @@ class CheckoutForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = [
-            'cu_name',
+            'cu_first_name',
+            'cu_last_name',
             'cu_phone',
-            'cu_email',
             'cu_city_uuid',
             'cu_city',
             'delivery_service',
@@ -60,9 +55,9 @@ class CheckoutForm(forms.ModelForm):
             'cu_confirm',
         ]
         labels = {
-            "cu_name": '',
+            "cu_first_name": '',
+            "cu_last_name": '',
             "cu_phone": '',
-            "cu_email": '',
             'cu_city_uuid': '',
             'cu_city': 'Доставка',
             'delivery_service': '',
@@ -75,18 +70,18 @@ class CheckoutForm(forms.ModelForm):
             'cu_confirm': Parameter.value_of('label_i_am_agree_pp', 'Я согласен/на с политикой конфиденциальности'),
         }
         widgets = {
-            'cu_name': forms.TextInput(attrs={
-                'id': 'c6t-cu_name',
-                'placeholder': Parameter.value_of('pholder_indicate_your_name', 'Укажите, как к Вам обращаться')
+            'cu_first_name': forms.TextInput(attrs={
+                'id': 'c6t-cu_first_name',
+                'placeholder': Parameter.value_of('pholder_enter_first_name', 'Введите имя')
+            }),
+            'cu_last_name': forms.TextInput(attrs={
+                'id': 'c6t-cu_last_name',
+                'placeholder': Parameter.value_of('pholder_enter_last_name', 'Введите фамилию')
             }),
             'cu_phone': forms.TextInput(attrs={
                 'id': 'c6t-cu_phone',
                 'placeholder': Parameter.value_of('pholder_enter_your_phone', 'Введите Ваш номер телефона'),
                 'pattern': Parameter.value_of('regex_phone_number', """^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$""")
-            }),
-            'cu_email': forms.EmailInput(attrs={
-                'id': 'c6t-cu_email',
-                'placeholder': Parameter.value_of('pholder_enter_your_email', 'Введите Ваш email')
             }),
             'cu_city_uuid': forms.HiddenInput(attrs={
                 'id': 'c6t-cu_city_uuid'
