@@ -9,6 +9,7 @@ urlpatterns = [
     path('products/<ppk>/', views.ProductDetailView.as_view(), name='product_detail'),
     path('products/<ppk>/like/<int:like>/', views.ProductLikeSetView.as_view(), name='set_product_like'),
     path('products/<ppk>/toggle-like/', views.ProductLikeToggleView.as_view(), name='toggle_product_like'),
+    path('products/product/size/quantity/', views.ProductSizeQuantityView.as_view(), name='product_size_quantity'),
     # -- customer API --
     path('customer/info/<int:flags>/', views.GetCustomerInfoView.as_view(), name='get_customer_info'),
     path('customer/notify-me-product-delivery/', views.NotifyMeForDeliveryView.as_view(), name='notify_me_for_delivery'),

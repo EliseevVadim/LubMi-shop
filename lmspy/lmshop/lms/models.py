@@ -159,8 +159,12 @@ class Product(DbItem):
         return (timezone.now().date() - self.published_at.date()).days < 30 if self.published_at else False
 
     @property
+    def variants_in_stock(self):
+        return {size.id: size.size for size in self.sizes.filter(quantity__gt=0)}
+
+    @property
     def variants(self):
-        return {size.id: size.size for size in self.sizes.filter(quantity__gt=0).all()}
+        return {size.id: size.size for size in self.sizes.all()}
 
 
 class AvailableSize(DbItem):

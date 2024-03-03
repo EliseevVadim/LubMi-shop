@@ -96,7 +96,21 @@ const kill_product_in_scart = (ppk, product_title, size_id, size) => {
 const show_product_details = url => {
     left_sidebar.hide();
     right_sidebar.hide();
-    gp_dialog.show(url);
+    gp_dialog.show(url, null, () => {
+        sel = document.querySelector("#size-selector");
+        if(sel && !sel._on_change) {
+            let fun = null;
+            sel._on_change = sel.addEventListener("change", fun = e => {
+                __api_call__('{% url "api:product_size_quantity" %}', { ppk: document.querySelector("#ppk").value, size: sel.value }, result => {
+                    let in_stock = result.success && result.quantity > 0;
+                    document.querySelector("#gp-dialog .btn-to-scart").style.display = in_stock ? "inline-block" : "none";
+                    document.querySelector("#gp-dialog .btn-notify-me").style.display = !in_stock ? "inline-block" : "none";
+                    document.querySelector("#gp-dialog .not-in-stock").style.display = !in_stock ? "inline-block" : "none";
+                });
+            });
+            fun(null);
+        }
+    });
 };
 
 const do_checkout = () => {

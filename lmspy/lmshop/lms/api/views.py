@@ -56,6 +56,23 @@ class ProductLikeToggleView(APIView):
             return {'ppk': ppk, 'like': 1}
 
 
+class ProductSizeQuantityView(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    @api_response
+    def post(request, _=None):
+        data = request.data
+        try:
+            prod = Product.objects.get(pk=data["ppk"])
+            size = prod.sizes.get(pk=data["size"])
+            return {
+                "quantity": size.quantity
+            }
+        except (Product.DoesNotExist, AvailableSize.DoesNotExist, KeyError):
+            return "Not found"
+
+
 class GetCustomerInfoView(APIView):
     permission_classes = [AllowAny]
 
