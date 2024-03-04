@@ -1,2 +1,2 @@
-<div class="sidebar-closer" onclick="{{side}}_sidebar.hide();" ><h1>{{title}}</h1>{{x_cross}}</div>
-{{separator}}
+<div class="sidebar-closer" onclick="{{side}}_sidebar.hide();" >{% if title %}<h1>{{title}}</h1>{% endif %}{{x_cross}}</div>
+{% if title %}{{separator}}{% endif %}
