@@ -165,7 +165,6 @@ body, aside, .content, .leading {
     .on-both .on-wide {
         display: block;
     }
-
     .on-wide {
         display: none;
     }
@@ -184,6 +183,50 @@ body, aside, .content, .leading {
     padding: var(--DefPadding);
     background: white;
     z-index: var(--ZixLeading);
+
+    & > nav {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+         & > a {
+            visibility: visible;
+            margin-left: 1rem;
+            margin-right: 1rem;
+            text-decoration: none;
+            font-size: var(--F16);
+            color: #222222;
+            line-height: 14.40px;
+            font-variation-settings: "wght" 100;
+            word-wrap: break-word;
+
+            &.logo {
+                margin-right: auto;
+
+                img {
+                    height: calc(var(--LeadingHeight) * 0.95);
+                }
+            }
+        }
+
+        .nav-icons {
+            margin-left: auto;
+            display: inline-flex;
+            flex-flow: row;
+            align-items: center;
+            justify-content: space-between;
+
+            & > * {
+                margin: 0 1rem 0 1rem;
+            }
+
+            img {
+                height: 2.2rem;
+            }
+        }
+    }
 }
 
 #leading-spacer {
@@ -192,45 +235,10 @@ body, aside, .content, .leading {
     margin: 0;
 }
 
-.leading > nav {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.leading > nav > a {
-    visibility: visible;
-    margin-left: 1rem;
-    margin-right: 1rem;
-    text-decoration: none;
-    font-size: var(--F16);
-    color: #222222;
-    line-height: 14.40px;
-    font-variation-settings: "wght" 100;
-    word-wrap: break-word;
-}
-
-.leading > nav > a.logo {
-    margin-right: auto;
-}
-
-.nav-icons {
-    margin-left: auto;
-    display: inline-flex;
-    flex-flow: row;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.nav-icons > * {
-    margin: 0 1rem 0 1rem;
-}
-
+/*
 .leading > nav > a > img, a.logo > img, .nav-icons img {
     height: calc(var(--LeadingHeight) * 0.95);
-}
+}*/
 
 /* Футер ------------------------------------------------------------------------------------------------------------- */
 
