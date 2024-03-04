@@ -306,6 +306,11 @@ footer.page {
             font-variation-settings: "wght" 300;
             line-height: 28.80px;
             word-wrap: break-word;
+
+            &.logo img {
+                min-height: 7.62rem;
+                max-height: 7.62rem;
+            }
         }
 
         .item-header {
@@ -317,10 +322,6 @@ footer.page {
             line-height: 19.60px;
             letter-spacing: 0.56px;
             word-wrap: break-word;
-        }
-
-        .logo img {
-            min-height: 7.62rem;
         }
     }
 
@@ -369,7 +370,6 @@ footer.page {
         }
     }
 }
-
 
 /* Контент ------------------------------------------------------------------------------------------------------------- */
 

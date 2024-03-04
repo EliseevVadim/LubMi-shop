@@ -1,7 +1,7 @@
 {% load custom_tags %}
 {#  Каталог ------------------------------------------------------------------------------------------------------------ #}
 {% if card_type == "catalogue" %}
-<div><span class="product-title">{{product.title}}</span><br/><span class="product-title">({{product.color|default:param_message_color_missed}})</span></div>
+<div><span class="product-title hand" onclick="show_product_details('{% url 'lms:product_details' slug=product.slug %}');">{{product.title}}</span><br/><span class="product-title">({{product.color|default:param_message_color_missed}})</span></div>
 <div class="price-line">{% if product.old_price %}<span class="old-price">{{product.old_price.amount|floatformat:0}}&nbsp;{{param_label_currency}}</span>&nbsp;{% endif %}<span class="actual-price">{{product.actual_price.amount|floatformat:0}}&nbsp;{{param_label_currency}}</span><br/></div>
 {% if not product.in_stock %}<div class="not-in-stock">{{param_label_not_available}}</div><button class="w100" onclick="notify_delivery('{{product.article}}')">{{param_label_notify_delivery}}</button>{% endif %}
 {# Детальная карточка -------------------------------------------------------------------------------------------------- #}
