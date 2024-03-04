@@ -2,5 +2,7 @@
 {% load custom_tags %}
 {% block page_content %}
 {{separator}}
-{{text | markdown}}
+<h1>Доставка и оплата</h1>
+<section class="on-wide">{{text | markdown}}</section>
+<section class="on-narrow mt1">{% include "lms/include/accordion.html" with summary_classes="pt1 pb1 hand" md=True %}</section>
 {% endblock %}
