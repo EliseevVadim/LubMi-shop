@@ -1872,6 +1872,7 @@ dialog #scui-form input[type="email"] {
 /* SearchBox      -----------------------------------------------------------------------------------------------------*/
 
 #sch-dialog {
+
     max-width: 100vw;
     max-height: 100vh;
     position: fixed;
@@ -1883,79 +1884,93 @@ dialog #scui-form input[type="email"] {
     top: 0;
     border: none;
     padding: calc(2.5 * var(--DefPadding));
-}
 
-#sch-dialog.full-screen {
-    margin: 0;
-    height: auto;
-    bottom: 0;
-}
+    &.full-screen {
+        margin: 0;
+        height: auto;
+        bottom: 0;
+    }
 
-#sch-box {
-    position: absolute;
-    margin: 0;
-    padding: 0;
-    width: auto;
-    height: auto;
+    #sch-box {
+        position: absolute;
+        margin: 0;
+        padding: 0;
+        width: auto;
+        height: auto;
 
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
 
-    display: flex;
-    flex-flow: column;
-    align-items: stretch;
-}
+        display: flex;
+        flex-flow: column;
+        align-items: stretch;
 
-#sch-header {
-    flex: 0 0 auto;
-    align-self: center;
-    display: flex;
-    flex-flow: row;
-    place-items: center;
-}
+        #sch-header {
+            flex: 0 0 auto;
+            align-self: center;
+            display: flex;
+            flex-flow: row;
+            place-items: center;
 
-#sch-header span {
-    display: flex;
-    flex-flow: row;
-    place-items: center;
-}
+            span {
+                display: flex;
+                flex-flow: row;
+                place-items: center;
+            }
+        }
 
-#sch-info {
-    flex: 0 0 auto;
-    padding: var(--DefPadding);
-}
+        #sch-info {
+            flex: 0 0 auto;
+            padding: var(--DefPadding);
+        }
 
-#sch-result {
-    flex: 1 1 auto;
-    overflow: auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(var(--CatItemWidth), 1fr));
-    gap: var(--Gap);
-}
+        #sch-result {
+            flex: 1 1 auto;
+            overflow: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(var(--CatItemWidth), 1fr));
+            gap: var(--Gap);
 
-#sch-result > * {
-   display: flex;
-   flex-flow: column;
-   place-items: center;
-}
+            & > * {
+               display: flex;
+               flex-flow: column;
+               place-items: center;
+            }
+            & > * > a {
+               display: flex;
+               flex-flow: column;
+               place-items: center;
+            }
+            & > * > * {
+               max-width: calc(var(--CatItemWidth));
+               min-width: calc(var(--CatItemWidth));
+            }
+            figcaption {
+                display: grid;
+                grid-template: auto / auto;
+                grid-auto-flow: row;
+                row-gap: 0.5rem;
+            }
+        }
 
-#sch-result > * > a {
-   display: flex;
-   flex-flow: column;
-   place-items: center;
-}
+        #sch-footer {
+            flex: 0 0 auto;
+            padding: var(--DefPadding);
+            align-self: center;
+        }
 
-#sch-result > * > * {
-   max-width: calc(var(--CatItemWidth));
-   min-width: calc(var(--CatItemWidth));
-}
-
-#sch-footer {
-    flex: 0 0 auto;
-    padding: var(--DefPadding);
-    align-self: center;
+        #sch-text {
+            font-size: var(--F16);
+            font-weight: 100;
+            line-height: var(--F16);
+            border: none;
+            min-width: min(var(--NarrowPageWidth), 40vw);
+            padding: 0;
+            margin: 0;
+        }
+    }
 }
 
 #sch-dialog:not(.full-screen) #sch-info,
@@ -1963,17 +1978,6 @@ dialog #scui-form input[type="email"] {
 #sch-dialog:not(.full-screen) #sch-footer {
     visibility: collapse;
     padding: 0;
-}
-
-#sch-text {
-    color: #222222;
-    font-size: var(--F16);
-    font-weight: 100;
-    line-height: 16px;
-    border: none;
-    min-width: min(var(--NarrowPageWidth), 40vw);
-    padding: 0;
-    margin: 0;
 }
 
 /* Banner         -----------------------------------------------------------------------------------------------------*/
