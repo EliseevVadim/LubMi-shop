@@ -112,7 +112,7 @@ summary {
 
     &::after {
         margin-left: auto;
-        content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 40 24.7'><path d='M 40,4.7 35.3,0 20,15.27 4.7,0 0,4.7 20,24.7 Z' fill='black'/></svg>");
+        content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='15' viewBox='0 0 40 24.7'><path d='M 40,4.7 35.3,0 20,15.27 4.7,0 0,4.7 20,24.7 Z' fill='black'/></svg>");
     }
 }
 
