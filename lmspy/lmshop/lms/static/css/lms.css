@@ -28,6 +28,21 @@
     --F120: 120px;
 }
 
+@media (max-width: 70rem) {
+    :root {
+        --F11: 11px;
+        --F13: 13px;
+        --F14: 14px;
+        --F16: 16px;
+        --F20: 20px;
+        --F24: 24px;
+        --F30: 30px;
+        --F32: 32px;
+        --F60: 60px;
+        --F120: 120px;
+    }
+}
+
 * {
     outline: 0;
     -webkit-user-select: none;
@@ -116,21 +131,22 @@ body, aside, .content, .leading {
 
 /* Wide / narrow -------------------------------------------------------------------------------------------------------*/
 
-.on-narrow,
-.on-both .on-wide {
-    display: block;
-}
-
-.on-wide {
+.on-narrow {
     display: none;
 }
 
-@media screen and (min-width: 70rem) {
-    .on-narrow {
-        display: none;
-    }
-    .on-wide {
+.on-wide {
+    display: block;
+}
+
+@media (max-width: 70rem) {
+    .on-narrow,
+    .on-both .on-wide {
         display: block;
+    }
+
+    .on-wide {
+        display: none;
     }
 }
 
