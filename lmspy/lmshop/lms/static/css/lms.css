@@ -235,11 +235,6 @@ body, aside, .content, .leading {
     margin: 0;
 }
 
-/*
-.leading > nav > a > img, a.logo > img, .nav-icons img {
-    height: calc(var(--LeadingHeight) * 0.95);
-}*/
-
 /* Футер ------------------------------------------------------------------------------------------------------------- */
 
 footer.page {
@@ -247,20 +242,13 @@ footer.page {
     padding: 7rem var(--DefPadding) var(--DefPadding) var(--DefPadding)
 }
 
-/*.std-footer {
-    padding: var(--DefPadding);
-    display: flex;
-    flex-flow: column;
-}*/
-
 .std-footer {
 
     padding: var(--DefPadding);
     column-gap: 1rem;
     row-gap: 3rem;
     display: grid;
-    grid-template-rows: auto auto;
-    grid-template-columns: auto repeat(4, 9rem);
+    grid-template: auto auto / auto repeat(4, 9rem);
     grid-template-areas:
         "A B B C C"
         "D D D D D";
@@ -367,6 +355,50 @@ footer.page {
             font-weight: 250;
             line-height: 18.20px;
             word-wrap: break-word;
+        }
+    }
+}
+
+@media (max-width: 70rem) {
+    .std-footer {
+        row-gap: 1rem;
+        grid-template: repeat(4, auto) / auto;
+        grid-template-areas:
+            "A"
+            "B"
+            "C"
+            "D";
+
+        .socials {
+            display: none;
+        }
+
+        .std-footer-item-1 {
+            justify-self: start;
+        }
+
+        .std-footer-item-2 {
+            justify-self: start;
+        }
+
+        .std-footer-item-3 {
+            justify-self: start;
+        }
+
+        .std-footer-item-4 {
+            grid-template: repeat(3, auto) / auto;
+            place-items: start;
+            & > *:first-child {
+                justify-self: start;
+            }
+            &> *:last-child {
+                justify-self: start;
+                display: flex;
+                flex-flow: column;
+                &> *:last-child {
+                    margin-left: 0;
+                }
+            }
         }
     }
 }
@@ -865,6 +897,18 @@ h5, h6 {
 
 h1, h2, h3, h4, h5, h6 {
     text-transform: uppercase;
+}
+
+@media (max-width: 70rem) {
+    h1 {
+        &.with-selector {
+            flex-flow: column;
+        }
+        .select {
+            margin-top: 1rem;
+            margin-left: 0;
+        }
+    }
 }
 
 p {
