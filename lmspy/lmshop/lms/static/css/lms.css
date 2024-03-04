@@ -248,6 +248,19 @@ footer.page {
     padding: var(--DefPadding);
     display: flex;
     flex-flow: column;
+    .socials {
+        color: lightgray;
+        background: black;
+        padding: 4px;
+        border-radius: 8px;
+
+        a {
+            display: flex;
+            place-items: center;
+            margin: 0;
+            padding: 0;
+        }
+    }
 }
 
 [class^='std-footer-item'] {
@@ -2003,12 +2016,12 @@ dialog #scui-form input[type="email"] {
     aspect-ratio: 1440 / 881;
     gap: 0;
 
-
+    &.btc {
+        background-position: top center;
+    }
 }
 
-.banner.btc {
-    background-position: top center;
-}
+
 
 .banner-A {
         grid-template-areas:
