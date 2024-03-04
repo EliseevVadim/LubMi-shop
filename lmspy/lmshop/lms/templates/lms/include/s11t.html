@@ -8,7 +8,7 @@
     <div class="total-price">{{param_label_amount_to_be_paid}}: {{price|floatformat:0}} {{param_label_currency}}</div>
 </div>
 {% if button %}
-<button class="w-100 inverted medium" onclick="do_checkout();">{{param_label_checkout}}</button>
+<button class="w100 inverted medium" onclick="do_checkout();">{{param_label_checkout}}</button>
 {% endif %}
 {% else %}
 <p>{{param_message_shopping_cart_empty}}</p>

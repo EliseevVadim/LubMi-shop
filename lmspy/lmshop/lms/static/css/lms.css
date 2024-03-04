@@ -62,11 +62,6 @@ input[type="email"] {
 
 /* Selector ------------------------------------------------------------------------------------------------------------*/
 
-.with-selector {
-    display: flex;
-    flex-flow :row;
-}
-
 .select {
     align-items: center;
     display: flex;
@@ -831,6 +826,11 @@ h1 {
     padding: 0;
     margin: 0.26rem 0 0 0;
 
+    &.with-selector {
+        display: flex;
+        flex-flow :row;
+    }
+
     .select {
         margin-left: auto;
     }
@@ -847,11 +847,13 @@ h2 {
     margin: 4rem 0 0 0;
 }
 
+/*
 h5, h6 {
     opacity: 0.5;
     margin-block-start: 0.1em;
     margin-block-end: 0.5em;
 }
+*/
 
 h1, h2, h3, h4, h5, h6 {
     text-transform: uppercase;
@@ -1117,22 +1119,12 @@ p {
 
 .hand {
     cursor: pointer;
-}
-
-.hand:hover {
-    color: black;
-}
-
-.hand.inverted:hover {
-    color: white;
-}
-
-.like-note {
-    font-size: 0.75rem;
-}
-
-.not-wide {
-    max-width: 25rem;
+    &:hover {
+        color: black;
+    }
+    &.inverted:hover {
+        color: white;
+    }
 }
 
 .bt1 {
@@ -1231,10 +1223,6 @@ p {
     margin: 0;
 }
 
-.overlined {
-    border-top: 1px solid black;
-}
-
 .white {
     color: white;
 }
@@ -1251,7 +1239,7 @@ p {
     color: gray;
 }
 
-.w-100 {
+.w100 {
     width: 100%;
 }
 
@@ -1262,13 +1250,13 @@ input[type="submit"] {
     color: #222222;
     font-size: var(--F16);
     font-weight: 300;
+    font-family: var(--Fonts);
+    font-variation-settings: "wght" 300;
     line-height: 14.40px;
     background: white;
     padding: calc(0.75 * var(--DefPadding)) calc(2 * var(--DefPadding));
     cursor: pointer;
     text-decoration: none;
-    font-family: var(--Fonts);
-    font-variation-settings: "wght" 300;
     border: solid black thin;
     border-radius: 6px;
     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.25);
