@@ -5,5 +5,5 @@
         <option value="{{value}}">{{title}}</option>
         {% endfor %}
     </select>
-    <img onmousedown="document.getElementById('{{selector_id}}').showPicker();" class="hand" src="{% static 'svg/d-ang.svg' %}"/>
+    <img onclick="document.getElementById('{{selector_id}}').showPicker();" class="hand" src="{% static 'svg/d-ang.svg' %}"/>
 </div>
