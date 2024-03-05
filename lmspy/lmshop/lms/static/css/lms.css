@@ -265,8 +265,8 @@ footer.page {
         a {
             display: flex;
             place-items: center;
-            margin: 0;
-            padding: 0;
+            margin: 0 !important;
+            padding: 0 !important;
         }
 
         img {
@@ -279,7 +279,7 @@ footer.page {
     [class^='std-footer-item'] {
         display: flex;
         flex-flow: column;
-        margin-bottom: 1rem;
+        /*margin-bottom: 1rem;*/
 
         & > * {
             text-decoration: none;
@@ -294,6 +294,7 @@ footer.page {
             line-height: var(--F24);
             font-variation-settings: "wght" 300;
             word-wrap: break-word;
+            margin-top: 0.5rem;
 
             &.logo img {
                 min-height: 7.62rem;
@@ -370,6 +371,7 @@ footer.page {
             "D";
 
         [class^='std-footer-item'] {
+            margin-bottom: 1rem;
             a {
                 &.logo {
                     img {
