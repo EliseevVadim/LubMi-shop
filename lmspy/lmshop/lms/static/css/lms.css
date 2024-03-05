@@ -896,20 +896,11 @@ h2 {
     line-height: var(--F24);
     font-weight: 600;
     word-wrap: break-word;
-    text-transform: uppercase;
     padding: 0;
     margin: 4rem 0 0 0;
 }
 
-/*
-h5, h6 {
-    opacity: 0.5;
-    margin-block-start: 0.1em;
-    margin-block-end: 0.5em;
-}
-*/
-
-h1, h2, h3, h4, h5, h6 {
+h* {
     text-transform: uppercase;
 }
 
