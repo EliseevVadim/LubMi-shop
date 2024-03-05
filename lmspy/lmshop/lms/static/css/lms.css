@@ -197,8 +197,8 @@ body, aside, .content, .leading {
             margin-right: 1rem;
             text-decoration: none;
             font-size: var(--F16);
+            line-height: var(--F16);
             color: #222222;
-            line-height: 14.40px;
             font-variation-settings: "wght" 100;
             word-wrap: break-word;
 
@@ -291,8 +291,8 @@ footer.page {
             margin: 0;
             color: #222222;
             font-size: var(--F24);
+            line-height: var(--F24);
             font-variation-settings: "wght" 300;
-            line-height: 28.80px;
             word-wrap: break-word;
 
             &.logo img {
@@ -305,9 +305,9 @@ footer.page {
             opacity: 0.60;
             color: #222222;
             font-size: var(--F14);
+            line-height: var(--F14);
             font-weight: 250;
             text-transform: uppercase;
-            line-height: 19.60px;
             letter-spacing: 0.56px;
             word-wrap: break-word;
         }
@@ -352,8 +352,8 @@ footer.page {
             color: green;
             color: #222222;
             font-size: var(--F14);
+            line-height: var(--F14);
             font-weight: 250;
-            line-height: 18.20px;
             word-wrap: break-word;
         }
     }
@@ -368,6 +368,17 @@ footer.page {
             "B"
             "C"
             "D";
+
+        [class^='std-footer-item'] {
+            a {
+                &.logo {
+                    img {
+                        min-height: 5rem;
+                        max-height: 5rem;
+                    }
+                }
+            }
+        }
 
         .socials {
             display: none;
@@ -473,22 +484,22 @@ figcaption {
 
 .product-title {
     font-size: var(--F24);
+    line-height: var(--F24);
     font-weight: 300;
-    line-height: 23px;
 }
 
 .actual-price {
     font-size: var(--F24);
+    line-height: var(--F24);
     font-weight: 300;
-    line-height: 23px;
 }
 
 .old-price {
     text-decoration: line-through gray;
     opacity: 0.50;
     font-size: var(--F16);
+    line-height: var(--F16);
     font-weight: 300;
-    line-height: 23px;
     word-wrap: break-word;
 }
 
@@ -521,8 +532,8 @@ figcaption {
         padding: 0.5em 1em 0.5em 1em;
         background: #D9D9D9;
         font-size: var(--F13);
+        line-height: var(--F13);
         font-weight: 250; /* regular */
-        line-height: 11.74px;
         word-wrap: break-word;
     }
 
@@ -632,31 +643,31 @@ figcaption {
 
     .product-title {
         font-size: var(--F32);
-        line-height: 32px;
+        line-height: var(--F32);
     }
 
     .product-article {
         opacity: 0.50;
         font-size: var(--F20);
+        line-height: var(--F20);
         font-weight: 300;
-        line-height: 20px;
     }
 
     .actual-price {
         font-size: var(--F32);
-        line-height: 32px;
+        line-height: var(--F32);
     }
 
     .size-label {
         font-size: var(--F24);
-        line-height: 24px;
+        line-height: var(--F24);
         font-weight: 250;
         font-variation-settings: "wght" 100;
     }
 
     .product-notes {
         font-size: var(--F24);
-        line-height: 24px;
+        line-height: var(--F24);
         font-weight: 250;
         font-variation-settings: "wght" 100;
     }
@@ -793,21 +804,21 @@ aside.left {
 
     .product-title {
         font-size: var(--F24);
+        line-height: var(--F24);
         font-weight: 300;
-        line-height: 23px;
     }
 
     .product-article {
         color: rgba(34, 34, 34, 0.50);
         font-size: var(--F16);
+        line-height: var(--F24);
         font-weight: 100;
-        line-height: 23px;
     }
 
     .price-line, .actual-price {
         font-size: var(--F24);
+        line-height: var(--F24);
         font-weight: 300;
-        line-height: 23px;
     }
 
     & > .price-line {
@@ -846,8 +857,8 @@ section[id$="undo-section"] {
     gap: 1rem;
     margin: 0 0 2rem 0;
     font-size: var(--F24);
+    line-height: var(--F24);
     font-weight: 300;
-    line-height: 23px;
 
     [id$="undo-countdown"] {
         justify-self: end;
@@ -859,8 +870,8 @@ section[id$="undo-section"] {
 h1 {
     color: #222222;
     font-size: var(--F32);
+    line-height: var(--F32);
     font-weight: 300;
-    line-height: 32px;
     word-wrap: break-word;
     text-transform: uppercase;
     padding: 0;
@@ -879,8 +890,8 @@ h1 {
 h2 {
     color: #222222;
     font-size: var(--F24);
+    line-height: var(--F24);
     font-weight: 600;
-    line-height: 24px;
     word-wrap: break-word;
     text-transform: uppercase;
     padding: 0;
@@ -914,8 +925,8 @@ h1, h2, h3, h4, h5, h6 {
 p {
     color: #222222;
     font-size: var(--F24);
-    font-weight: 150;
     line-height: var(--F24);
+    font-weight: 150;
     word-wrap: break-word;
     padding: 0;
     margin: 2rem 0 0 0;
@@ -1372,11 +1383,11 @@ p {
 button,
 input[type="submit"] {
     color: #222222;
-    font-size: var(--F16);
-    font-weight: 300;
     font-family: var(--Fonts);
+    font-size: var(--F16);
+    line-height: var(--F16);
+    font-weight: 300;
     font-variation-settings: "wght" 300;
-    line-height: 14.40px;
     background: white;
     padding: calc(0.75 * var(--DefPadding)) calc(2 * var(--DefPadding));
     cursor: pointer;
@@ -1425,16 +1436,16 @@ main.perfumery {
     h1 {
         color: #222222;
         font-size: var(--F120);
+        line-height: var(--F120);
         font-weight: 400;
         text-transform: uppercase;
-        line-height: var(--F120);
         word-wrap: break-word;
         margin: 0 auto;
     }
 
     h2 {
         font-size: var(--F60);
-        font-size: var(--F60);
+        line-height: var(--F60);
         font-weight: 400;
         margin: 0 auto;
     }
@@ -1442,8 +1453,8 @@ main.perfumery {
     p {
         color: #222222;
         font-size: var(--F24);
+        line-height: var(--F24);
         font-weight: 250;
-        line-height: 26px;
         word-wrap: break-word;
         font-variation-settings: "wght" 100;
     }
@@ -1578,16 +1589,16 @@ main.perfumery {
     .hall-of-fame .title {
         color: #222222;
         font-size: var(--F24);
+        line-height: var(--F24);
         font-weight: 300;
-        line-height: 24px;
         word-wrap: break-word;
     }
 
     .hall-of-fame .subtitle {
         color: #222222;
         font-size: var(--F16);
+        line-height: var(--F16);
         font-weight: 250;
-        line-height: 16px;
         word-wrap: break-word;
     }
 }
@@ -1612,8 +1623,8 @@ main.perfumery {
         text-align: center;
         color: #222222;
         font-size: var(--F24);
+        line-height: var(--F24);
         font-weight: 250;
-        line-height: 24px;
         word-wrap: break-word;
         margin: 3rem 0 3rem 0;
     }
@@ -1631,8 +1642,8 @@ main.perfumery {
         text-align: center;
         color: #222222;
         font-size: var(--F16);
+        line-height: var(--F16);
         font-weight: 250;
-        line-height: 14.40px;
         word-wrap: break-word;
         border-bottom: solid thin black;
         text-transform: uppercase;
@@ -1671,8 +1682,8 @@ main.perfumery {
         text-decoration: none;
         color: #222222;
         font-size: var(--F24);
+        line-height: var(--F24);
         font-weight: 300;
-        line-height: 24px;
         word-wrap: break-word;
     }
 
@@ -1707,8 +1718,8 @@ dialog {
     .cancel-dialog {
         color: #222222;
         font-size: var(--F24);
+        line-height: var(--F24);
         font-weight: 250;
-        line-height: 23px;
         word-wrap: break-word;
         cursor: pointer;
         display: inline-flex;
@@ -1807,14 +1818,16 @@ dialog #scui-form input[type="email"] {
 
         table {
             font-size: var(--F16);
+            line-height: var(--F16);
             font-weight: 250;
-            line-height: 23px;
+
             font-variation-settings: "wght" 100;
             align-self: end;
                 td {
                 vertical-align: top;
             }
         }
+
         #c6t-form {
             display: grid;
             grid-template: auto / 1fr 1fr;
@@ -1822,8 +1835,8 @@ dialog #scui-form input[type="email"] {
             column-gap: var(--DefPadding);
             row-gap: calc(2 * var(--DefPadding));
             font-size: var(--F24);
+            line-height: var(--F24);
             font-weight: 250;
-            line-height: 24px;
             font-variation-settings: "wght" 100;
 
             & > *:nth-child(-n+7), & > *:nth-child(12) {
@@ -1846,10 +1859,10 @@ dialog #scui-form input[type="email"] {
             label[for="c6t-cu_fullname"],
             label[for="c6t-cu_city"] {
                 font-size: var(--F32);
+                line-height: var(--F32);
                 font-weight: 300;
                 font-variation-settings: "wght" 300;
                 text-transform: uppercase;
-                line-height: 32px;
                 margin-bottom: 1rem;
             }
 
@@ -1877,8 +1890,8 @@ dialog #scui-form input[type="email"] {
                 max-height: 10rem;
                 z-index: 1000;
                 font-size: var(--F16);
-                font-weight: 250;
                 line-height: var(--F16);
+                font-weight: 250;
                 font-variation-settings: "wght" 200;
 
                 & > p {
@@ -1886,8 +1899,8 @@ dialog #scui-form input[type="email"] {
                     padding: 5px;
                     cursor: pointer;
                     font-size: var(--F16);
+                    line-height: var(--F16);
                     font-weight: 250;
-                    line-height: 23px;
                     font-variation-settings: "wght" 200;
                     &:hover {
                         background: black;
@@ -1945,8 +1958,8 @@ dialog #scui-form input[type="email"] {
     span {
         color: #222222;
         font-size: var(--F24);
+        line-height: var(--F24);
         font-weight: 300;
-        line-height: 24px;
         word-wrap: break-word;
     }
 }
@@ -2076,8 +2089,8 @@ dialog #scui-form input[type="email"] {
 
         #sch-text {
             font-size: var(--F16);
-            font-weight: 100;
             line-height: var(--F16);
+            font-weight: 100;
             border: none;
             min-width: min(var(--NarrowPageWidth), 40vw);
             padding: 0;
@@ -2174,11 +2187,12 @@ dialog #scui-form input[type="email"] {
         grid-area: S;
         color: white;
         font-size: var(--F120);
+        line-height: var(--F120);
         font-family: Geologica;
         font-weight: 400;
         text-transform: uppercase;
-        line-height: var(--F120);
         word-wrap: break-word;
+
         &.c2 {
             color: #222222;
         }
