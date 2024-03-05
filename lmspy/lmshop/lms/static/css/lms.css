@@ -285,7 +285,6 @@ footer.page {
     [class^='std-footer-item'] {
         display: flex;
         flex-flow: column;
-        /*margin-bottom: 1rem;*/
 
         & > * {
             text-decoration: none;
@@ -777,23 +776,19 @@ aside {
     }
 }
 
+@media (max-width: 70rem) {
+    aside {
+        &.right {
+            left: 0;
+            width: auto;
+        }
 
-/*
-aside.right {
-    right: 0;
-    background: white;
+        &.left {
+            right: 0;
+            width: auto;
+        }
+    }
 }
-
-aside.rtnr {
-    right: 0;
-    background: white;
-}
-
-aside.left {
-    left: 0;
-    background:#f00;
-}
-*/
 
 /* Корзина ------------------------------------------------------------------------------------------------------------- */
 
