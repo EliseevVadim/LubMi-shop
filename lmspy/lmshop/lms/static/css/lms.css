@@ -30,14 +30,14 @@
 
 @media (max-width: 70rem) {
     :root {
-        --F11: 11px;
-        --F13: 13px;
-        --F14: 14px;
-        --F16: 16px;
-        --F20: 20px;
+        --F11: 10px;
+        --F13: 11px;
+        --F14: 12px;
+        --F16: 14px;
+        --F20: 15px;
         --F24: 16px;
-        --F30: 30px;
-        --F32: 32px;
+        --F30: 22px;
+        --F32: 24px;
         --F60: 24px;
         --F120: 54px;
     }
@@ -93,29 +93,35 @@ select, select:focus, option {
 
 /* Accordion ----------------------------------------------------------------------------------------------------------- */
 
-details *:not(summary) {
-    font-size: var(--F16);
-    margin: 0 0 0.75em 0;
-}
+details {
+    *:not(summary) {
+        font-size: var(--F16);
+        margin: 0 0 0.75em 0;
+    }
 
-summary {
-    font-size: var(--F24);
-    font-weight: 400;
-    font-variation-settings: "wght" 400;
-    display: flex;
-    flex-flow: row;
+    summary {
+        font-size: var(--F24);
+        font-weight: 400;
+        font-variation-settings: "wght" 400;
+        display: flex;
+        flex-flow: row;
 
-    &::after {
-        margin-left: auto;
-        content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='15' viewBox='0 0 40 24.7'><path d='M 40,4.7 35.3,0 20,15.27 4.7,0 0,4.7 20,24.7 Z' fill='black'/></svg>");
+        &::after {
+            margin-left: auto;
+            content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='15' viewBox='0 0 40 24.7'><path d='M 40,4.7 35.3,0 20,15.27 4.7,0 0,4.7 20,24.7 Z' fill='black'/></svg>");
+        }
+    }
+
+    &[open] summary {
+        &::after {
+            content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='15' viewBox='0 0 40 24.7'><path d='M 40,20 35.3,24.7 20,9.43 4.7,24.7 0,20 20,0 Z' fill='black'/></svg>");
+        }
     }
 }
 
-details[open] summary {
-    &::after {
-        transform: rotate(180deg);
-    }
-}
+
+
+
 
 /* Separator ----------------------------------------------------------------------------------------------------------*/
 
@@ -1073,73 +1079,88 @@ p {
 }
 
 @media (max-width: 70rem) {
+    .grid12 {
+        gap: 1rem;
 
-.grid12 {
-    gap: 1rem;
-
-    &.grid12-abcd {
-        grid-template: repeat(12, auto) / repeat(12, auto);
-        grid-template-areas:
-            "A A A A A A A A A A A A"
-            "A A A A A A A A A A A A"
-            "C C C C C C C C B B B B"
-            "C C C C C C C C B B B B"
-            "C C C C C C C C B B B B"
-            "C C C C C C C C B B B B"
-            "C C C C C C C C B B B B"
-            "C C C C C C C C D D D D"
-            "C C C C C C C C D D D D"
-            "C C C C C C C C D D D D"
-            "C C C C C C C C D D D D"
-            "C C C C C C C C D D D D";
-        .g12-ib {
-            aspect-ratio: 230 / 285;
+        &.grid12-aab {
+            grid-template: repeat(12, auto) / repeat(12, auto);
+            grid-template-areas:
+                "B B B B B B B B B B B B"
+                "B B B B B B B B B B B B"
+                "B B B B B B B B B B B B"
+                "B B B B B B B B B B B B"
+                "B B B B B B B B B B B B"
+                "B B B B B B B B B B B B"
+                "A A A A A A A A A A A A"
+                "A A A A A A A A A A A A"
+                "A A A A A A A A A A A A"
+                "A A A A A A A A A A A A"
+                "A A A A A A A A A A A A"
+                "A A A A A A A A A A A A";
         }
-        .g12-id {
-            aspect-ratio: 230 / 213;
+
+        &.grid12-abcd {
+            grid-template: repeat(12, auto) / repeat(12, auto);
+            grid-template-areas:
+                "A A A A A A A A A A A A"
+                "A A A A A A A A A A A A"
+                "C C C C C C C C B B B B"
+                "C C C C C C C C B B B B"
+                "C C C C C C C C B B B B"
+                "C C C C C C C C B B B B"
+                "C C C C C C C C B B B B"
+                "C C C C C C C C D D D D"
+                "C C C C C C C C D D D D"
+                "C C C C C C C C D D D D"
+                "C C C C C C C C D D D D"
+                "C C C C C C C C D D D D";
+            .g12-ib {
+                aspect-ratio: 230 / 285;
+            }
+            .g12-id {
+                aspect-ratio: 230 / 213;
+            }
+        }
+
+        &.grid12-ab {
+            grid-template-areas:
+                "A A A A A A A A A A A A"
+                "A A A A A A A A A A A A"
+                "A A A A A A A A A A A A"
+                "A A A A A A A A A A A A"
+                "A A A A A A A A A A A A"
+                "A A A A A A A A A A A A"
+                "B B B B B B B B B B B B"
+                "B B B B B B B B B B B B"
+                "B B B B B B B B B B B B"
+                "B B B B B B B B B B B B"
+                "B B B B B B B B B B B B"
+                "B B B B B B B B B B B B";
+            .g12-ia {
+                aspect-ratio: 375 / 468;
+            }
+        }
+
+        &.grid12-abcde {
+            grid-template-areas:
+                "E E E E E E E E E E E E"
+                "E E E E E E E E E E E E"
+                "E E E E E E E E E E E E"
+                "E E E E E E E E E E E E"
+                "B B B B B B B B B B B B"
+                "B B B B B B B B B B B B"
+                "C C C C C C C C C C C C"
+                "C C C C C C C C C C C C"
+                "C C C C C C C C C C C C"
+                "D D D D D D D D D D D D"
+                "D D D D D D D D D D D D"
+                "D D D D D D D D D D D D";
+
+            .g12-ie {
+                aspect-ratio: 375 / 468;
+            }
         }
     }
-
-    &.grid12-ab {
-        grid-template-areas:
-            "A A A A A A A A A A A A"
-            "A A A A A A A A A A A A"
-            "A A A A A A A A A A A A"
-            "A A A A A A A A A A A A"
-            "A A A A A A A A A A A A"
-            "A A A A A A A A A A A A"
-            "B B B B B B B B B B B B"
-            "B B B B B B B B B B B B"
-            "B B B B B B B B B B B B"
-            "B B B B B B B B B B B B"
-            "B B B B B B B B B B B B"
-            "B B B B B B B B B B B B";
-        .g12-ia {
-            aspect-ratio: 375 / 468;
-        }
-    }
-
-    &.grid12-abcde {
-        grid-template-areas:
-            "E E E E E E E E E E E E"
-            "E E E E E E E E E E E E"
-            "E E E E E E E E E E E E"
-            "E E E E E E E E E E E E"
-            "B B B B B B B B B B B B"
-            "B B B B B B B B B B B B"
-            "C C C C C C C C C C C C"
-            "C C C C C C C C C C C C"
-            "C C C C C C C C C C C C"
-            "D D D D D D D D D D D D"
-            "D D D D D D D D D D D D"
-            "D D D D D D D D D D D D";
-
-        .g12-ie {
-            aspect-ratio: 375 / 468;
-        }
-    }
-}
-
 }
 
 /*
@@ -1159,21 +1180,7 @@ p {
         "D D D D D D D D D D D D";
 }
 
-.grid12-aab {
-    grid-template-areas:
-        "B B B B B B B B B B B B"
-        "B B B B B B B B B B B B"
-        "B B B B B B B B B B B B"
-        "B B B B B B B B B B B B"
-        "B B B B B B B B B B B B"
-        "B B B B B B B B B B B B"
-        "A A A A A A A A A A A A"
-        "A A A A A A A A A A A A"
-        "A A A A A A A A A A A A"
-        "A A A A A A A A A A A A"
-        "A A A A A A A A A A A A"
-        "A A A A A A A A A A A A";
-}
+
 
 .grid12-abcd {
     grid-template-areas:
@@ -1507,6 +1514,10 @@ main.perfumery {
             margin: 1rem;
             text-transform: uppercase;
         }
+
+        .in-frame {
+            margin: 0;
+        }
     }
 }
 
@@ -1560,6 +1571,14 @@ main.perfumery {
             margin: 0;
             margin-block-start: 0;
             margin-block-end: 0;
+        }
+    }
+}
+
+@media (max-width: 70rem) {
+    .care-page {
+        & > .grid12 {
+            margin-top: 2.5rem;
         }
     }
 }
@@ -1691,6 +1710,14 @@ main.perfumery {
 
     button {
         margin: 0 7rem;
+    }
+}
+
+@media (max-width: 70rem) {
+    .contacts {
+        button {
+            margin: 0 1rem;
+        }
     }
 }
 
