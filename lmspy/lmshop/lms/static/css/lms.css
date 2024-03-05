@@ -127,10 +127,6 @@ details {
     }
 }
 
-
-
-
-
 /* Separator ----------------------------------------------------------------------------------------------------------*/
 
 svg.separator {
@@ -580,37 +576,10 @@ figcaption {
     }
 }
 
-/*
-.p-card-b {
-    display: grid;
-    gap: calc(0.5 * var(--Gap));
-    grid-template-columns: auto auto;
-    grid-template-rows: auto auto;
-}
-
-.p-card-b .icon-list {
-    grid-column: 1;
-    grid-row: 1;
-}
-
-.p-card-b .product-card {
-    grid-column: 2;
-    grid-row: 1;
-}
-
-.p-card-b .product-description {
-    grid-column: 1 / span 2;
-    grid-row: 2;
-}
-
-*/
-
-
 .p-card-b {
     display: grid;
     gap: var(--Gap);
-    grid-template-columns: auto auto auto;
-    grid-template-rows: auto;
+    grid-template: auto / auto auto auto;
 
     .icon-list {
         grid-column: 1;
@@ -633,6 +602,10 @@ figcaption {
 
         & > * {
             max-width: 40rem;
+        }
+
+        p {
+            margin: 0;
         }
     }
 
@@ -686,9 +659,46 @@ figcaption {
         font-weight: 250;
         font-variation-settings: "wght" 100;
     }
+}
 
-    .p-card-b p {
-        margin: 0;
+@media (max-width: 70rem) {
+    .p-card-a {
+        &.details {
+            min-height: 0;
+            min-width: 0;
+            aspect-ratio: 10 / 16;
+        }
+    }
+
+    .p-card-b {
+        grid-template: auto auto auto / auto;
+
+        .product-card {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .icon-list {
+            display: grid;
+            grid-template: 70px / 70px;
+            grid-auto-flow: column;
+            column-gap: 0.5rem;
+            width: 100%;
+            grid-column: 1;
+            grid-row: 2;
+        }
+
+        .product-description {
+            grid-column: 1;
+            grid-row: 3;
+            row-gap: 1rem;
+            margin: 0 0 2rem 0;
+        }
+
+        .icon {
+            margin: 0;
+            max-width: 70px;
+        }
     }
 }
 
@@ -1353,6 +1363,7 @@ input[type="submit"] {
 button.medium,
 input[type="submit"].medium {
     font-size: var(--F24);
+    line-height: var(--F24);
     font-weight: 300;
     padding: 2rem;
 }
@@ -2300,55 +2311,3 @@ dialog #scui-form input[type="email"] {
         }
     }
 }
-
-/*
-.banner-A {
-        grid-template-areas:
-        "S S S S S S S S S S S S"
-        "S S S S S S S S S S S S"
-        "S S S S S S S S S S S S"
-        "S S S S S S S S S S S S"
-        "S S S S S S S S S S S S"
-        "S S S S S S S S S S S S"
-        "T T T T T T T T T T T T"
-        "T T T T T T T T T T T T"
-        "T T T T T T T T T T T T"
-        "T T T T T T T T T T T T"
-        "T T T T T T T T T T T T"
-        "B B B B B B B B B B B B";
-}
-
-.banner-B {
-        grid-template-areas:
-        "S S S S S S S S S S S S"
-        "S S S S S S S S S S S S"
-        "S S S S S S S S S S S S"
-        "S S S S S S S S S S S S"
-        "S S S S S S S S S S S S"
-        "S S S S S S S S S S S S"
-        "S S S S S S S S S S S S"
-        "S S S S S S S S S S S S"
-        "S S S S S S S S S S S S"
-        "S S S S S S S S S S S S"
-        "B B B B . . . . . . . ."
-        "B B B B . . . . . . . .";
-}
-
-.banner-C {
-        justify-items: center;
-        text-align: center;
-        grid-template-areas:
-        "S S S S S S S S S S S S"
-        "S S S S S S S S S S S S"
-        "S S S S S S S S S S S S"
-        "S S S S S S S S S S S S"
-        "S S S S S S S S S S S S"
-        "S S S S S S S S S S S S"
-        "S S S S S S S S S S S S"
-        "S S S S S S S S S S S S"
-        ". . . . . . . . . . . ."
-        "B B B B B B B B B B B B"
-        "B B B B B B B B B B B B"
-        "W W W W W W W W W W W W";
-}
-*/
