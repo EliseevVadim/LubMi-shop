@@ -19,7 +19,8 @@ c6t_dialog.show = () => {
     const by_selector = sel => document.querySelector(sel);
     fetch('{% url "lms:c6t_form" %}').then(response => response.text()).then(html => {
         c6t_dialog.close();
-        c6t_dialog.body().innerHTML = `<div class="grid-c6t">
+        c6t_dialog.body().innerHTML = `<section class="on-narrow"><h1>Ваш заказ</h1>{{separator}}</section>
+<div class="grid-c6t">
     <section class="c6t-form-container">
     </section>
     <div class="c6t-scart-container items-top-down">
