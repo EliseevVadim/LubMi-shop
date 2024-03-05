@@ -1149,57 +1149,6 @@ p {
     }
 }
 
-/*
-.grid12-abcde {
-    grid-template-areas:
-        "A A A A A A A A A A A A"
-        "A A A A A A A A A A A A"
-        "E E E E E E E E E E E E"
-        "E E E E E E E E E E E E"
-        "B B B B B B B B B B B B"
-        "B B B B B B B B B B B B"
-        "C C C C C C C C C C C C"
-        "C C C C C C C C C C C C"
-        "C C C C C C C C C C C C"
-        "D D D D D D D D D D D D"
-        "D D D D D D D D D D D D"
-        "D D D D D D D D D D D D";
-}
-
-
-
-.grid12-abcd {
-    grid-template-areas:
-        "A A A A A A A A A A A A"
-        "A A A A A A A A A A A A"
-        "A A A A A A A A A A A A"
-        "C C C C C C B B B B B B"
-        "C C C C C C B B B B B B"
-        "C C C C C C B B B B B B"
-        "C C C C C C B B B B B B"
-        "C C C C C C B B B B B B"
-        "C C C C C C B B B B B B"
-        "C C C C C C D D D D D D"
-        "C C C C C C D D D D D D"
-        "C C C C C C D D D D D D";
-}
-
-.grid12-ab {
-    grid-template-areas:
-        "A A A A A A A A A A A A"
-        "A A A A A A A A A A A A"
-        "A A A A A A A A A A A A"
-        "A A A A A A A A A A A A"
-        "A A A A A A A A A A A A"
-        "A A A A A A A A A A A A"
-        "A A A A A A A A A A A A"
-        "A A A A A A A A A A A A"
-        "A A A A A A A A A A A A"
-        "A A A A A A A A A A A A"
-        "A A A A A A A A A A A A"
-        "B B B B B B B B B B B B";
-} */
-
 .picture-content {
     background-size: cover;
     background-position: center center;
@@ -1616,46 +1565,49 @@ main.perfumery {
     display: flex;
     flex-flow: column;
     place-items: center;
+
+    .size-chart {
+        display: flex;
+        flex-flow: column;
+
+        h1 {
+            text-align: center;
+        }
+
+        h3 {
+            text-align: center;
+            color: #222222;
+            font-size: var(--F24);
+            line-height: var(--F24);
+            font-weight: 250;
+            word-wrap: break-word;
+            margin: 3rem 0 3rem 0;
+        }
+
+        table {
+            table-layout: fixed;
+            border-collapse: collapse;
+            margin-left: auto;
+            margin-right: auto;
+            overflow: auto;
+        }
+
+        th,
+        td {
+            padding: 1.5rem 1rem;
+            text-align: center;
+            color: #222222;
+            font-size: var(--F16);
+            line-height: var(--F16);
+            font-weight: 250;
+            word-wrap: break-word;
+            border-bottom: solid thin black;
+            text-transform: uppercase;
+        }
+    }
 }
 
-.size-chart {
-    display: flex;
-    flex-flow: column;
 
-    h1 {
-        text-align: center;
-    }
-
-    h3 {
-        text-align: center;
-        color: #222222;
-        font-size: var(--F24);
-        line-height: var(--F24);
-        font-weight: 250;
-        word-wrap: break-word;
-        margin: 3rem 0 3rem 0;
-    }
-
-    table {
-        table-layout: fixed;
-        border-collapse: collapse;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    th,
-    td {
-        padding: 1.5rem 1rem;
-        text-align: center;
-        color: #222222;
-        font-size: var(--F16);
-        line-height: var(--F16);
-        font-weight: 250;
-        word-wrap: break-word;
-        border-bottom: solid thin black;
-        text-transform: uppercase;
-    }
-}
 
 /* Contacts -----------------------------------------------------------------------------------------------------------*/
 
