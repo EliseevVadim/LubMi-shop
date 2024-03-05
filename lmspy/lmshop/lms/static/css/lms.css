@@ -869,7 +869,6 @@ aside {
     }
 }
 
-
 /* Undo ---------------------------------------------------------------------------------------------------------------- */
 
 section[id$="undo-section"] {
@@ -1383,7 +1382,6 @@ main.perfumery {
 }
 
 .perfumery {
-
     & > * {
         max-width: var(--NarrowPageWidth);
         margin-left: auto;
@@ -1478,7 +1476,6 @@ main.perfumery {
 /* Delivery -----------------------------------------------------------------------------------------------------------*/
 
 .delivery {
-
     & > * {
         max-width: var(--NarrowPageWidth);
         margin-left: auto;
@@ -1494,7 +1491,6 @@ main.perfumery {
 /* Care ---------------------------------------------------------------------------------------------------------------*/
 
 .care-page {
-
     & > * {
         max-width: var(--NarrowPageWidth);
         margin-left: auto;
@@ -1540,7 +1536,6 @@ main.perfumery {
 /* About --------------------------------------------------------------------------------------------------------------*/
 
 .about-page {
-
     & > * {
         max-width: var(--NarrowPageWidth);
         margin-left: auto;
@@ -1748,6 +1743,14 @@ dialog {
     }
 }
 
+@media (max-width: 70rem) {
+    dialog {
+        .dialog-closer {
+            margin-top: 2rem;
+        }
+    }
+}
+
 #gp-dialog,
 #c6t-dialog {
     max-width: 100vw;
@@ -1778,9 +1781,8 @@ dialog #scui-form input[type="email"] {
 /* C6t -----------------------------------------------------------------------------------------------------------------*/
 
 #c6t-dialog {
-
     .dialog-closer {
-        margin: 0 0 2rem 0;
+        margin-bottom: 2rem;
     }
 
     .grid-c6t {
@@ -1907,31 +1909,47 @@ dialog #scui-form input[type="email"] {
     }
 }
 
-/*
-.grid-c6t {
-    display: grid;
-    column-gap: 0;
-    row-gap: 1rem;
-    grid-template-columns: auto;
-    grid-template-rows: repeat(3, auto);
+@media (max-width: 70rem) {
+    #c6t-dialog {
+        .grid-c6t {
+            column-gap: 0;
+            row-gap: 1rem;
+            grid-template: auto auto auto / 1fr;
+            margin-bottom: 2rem;
+
+            input[type="text"] {
+                width: 100%;
+            }
+
+            .c6t-form-container {
+                grid-column: 1;
+                grid-row: 2;
+            }
+
+            .c6t-scart-container{
+                grid-column: 1;
+                grid-row: 1;
+            }
+
+            .c6t-button-container{
+                grid-column: 1;
+                grid-row: 3;
+            }
+
+            .c6t-status.on-wide {
+                display: none;
+            }
+
+            .c6t-status.on-narrow {
+                grid-column: 1 / span 2;
+            }
+
+            .mb3 {
+                margin-bottom: 0 !important;
+            }
+        }
+    }
 }
-
-.grid-c6t .c6t-form-container {
-    grid-column: 1;
-    grid-row: 2;
-}
-
-.grid-c6t .c6t-scart-container{
-    grid-column: 1;
-    grid-row: 1;
-}
-
-.grid-c6t .c6t-button-container{
-    grid-column: 1;
-    grid-row: 3;
-}*/
-
-
 
 /* Popup ---------------------------------------------------------------------------------------------------------------*/
 
@@ -1993,7 +2011,6 @@ dialog #scui-form input[type="email"] {
 /* SearchBox      -----------------------------------------------------------------------------------------------------*/
 
 #sch-dialog {
-
     max-width: 100vw;
     max-height: 100vh;
     position: fixed;
