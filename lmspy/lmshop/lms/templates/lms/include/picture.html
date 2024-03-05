@@ -1,6 +1,8 @@
 {% load static %}
 <figure class="picture {{classes}}">
     <div class="picture-content" style="background-image: url({% static pic_file %});">
-        <p style="visibility: hidden">{%lorem%}</p>
+    {% if text %}
+    <p>{{text}}</p>
+    {% endif %}
     </div>
 </figure>
