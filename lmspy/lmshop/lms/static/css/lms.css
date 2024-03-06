@@ -12,7 +12,7 @@
     --ScartFigWidth: 8rem;
     --HeartSize: 1.7rem;
     --Gap: var(--DefPadding);
-    --NarrowPageWidth: 91.4rem;
+    --NarrowPageWidth: 92rem;
     --HoFSize: 14.785rem;
     --PiconSize: 1.25rem;
 
@@ -28,7 +28,7 @@
     --F120: 120px;
 }
 
-@media (max-width: 70rem) {
+@media (max-width: 90rem) {
     :root {
         --F11: 10px;
         --F13: 11px;
@@ -170,7 +170,7 @@ body, aside, .content, .leading {
     display: block;
 }
 
-@media (max-width: 70rem) {
+@media (max-width: 90rem) {
     .on-narrow,
     .on-both .on-wide {
         display: block;
@@ -369,7 +369,7 @@ footer.page {
     }
 }
 
-@media (max-width: 70rem) {
+@media (max-width: 90rem) {
     .std-footer {
         row-gap: 1rem;
         grid-template: repeat(4, auto) / auto;
@@ -661,7 +661,7 @@ figcaption {
     }
 }
 
-@media (max-width: 70rem) {
+@media (max-width: 90rem) {
     .p-card-a {
         &.details {
             min-height: 0;
@@ -794,7 +794,7 @@ aside {
     }
 }
 
-@media (max-width: 70rem) {
+@media (max-width: 90rem) {
     aside {
         &.right {
             left: 0;
@@ -921,7 +921,7 @@ h* {
     text-transform: uppercase;
 }
 
-@media (max-width: 70rem) {
+@media (max-width: 90rem) {
     h1 {
         &.with-selector {
             flex-flow: column;
@@ -1081,7 +1081,7 @@ p {
     }
 }
 
-@media (max-width: 70rem) {
+@media (max-width: 90rem) {
     .grid12 {
         gap: 1rem;
 
@@ -1455,7 +1455,7 @@ main.perfumery {
     }
 }
 
-@media (max-width: 70rem) {
+@media (max-width: 90rem) {
     .perfumery {
         .picture-content p {
             display: block;
@@ -1525,7 +1525,7 @@ main.perfumery {
     }
 }
 
-@media (max-width: 70rem) {
+@media (max-width: 90rem) {
     .care-page {
         & > .grid12 {
             margin-top: 2.5rem;
@@ -1674,7 +1674,7 @@ main.perfumery {
     }
 }
 
-@media (max-width: 70rem) {
+@media (max-width: 90rem) {
     .contacts {
         button {
             margin: 0 1rem;
@@ -1905,7 +1905,7 @@ dialog #scui-form input[type="email"] {
     }
 }
 
-@media (max-width: 70rem) {
+@media (max-width: 90rem) {
     #c6t-dialog {
         .grid-c6t {
             column-gap: 0;
@@ -2142,7 +2142,7 @@ dialog #scui-form input[type="email"] {
         padding-left: 3rem;
         padding-right: 3rem;
         column-gap: 1rem;
-        grid-template: repeat(11, auto) 7rem / repeat(12, 1fr);
+        grid-template: repeat(11, 1fr) 7rem / repeat(12, 1fr);
         grid-template-areas:
         "S S S S S S S T T T T T"
         "S S S S S S S T T T T T"
@@ -2272,10 +2272,14 @@ dialog #scui-form input[type="email"] {
     }
 }
 
-@media (max-width: 70rem) {
+@media (orientation: portrait) {
     .banner {
         aspect-ratio: 400 / 740;
+    }
+}
 
+@media (max-width: 90rem) {
+    .banner {
         &.banner-A {
             column-gap: 0;
             padding: 2rem;
