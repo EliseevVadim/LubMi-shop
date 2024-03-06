@@ -1754,6 +1754,12 @@ dialog {
     }
 }
 
+@media (max-width: 90rem) {
+    dialog {
+        padding: 0 1.5rem;
+    }
+}
+
 #gp-dialog, #c6t-dialog {
     max-width: 100vw;
     max-height: 100vh;
