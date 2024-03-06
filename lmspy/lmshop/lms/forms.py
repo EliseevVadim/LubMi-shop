@@ -80,7 +80,7 @@ class CheckoutForm(forms.ModelForm):
             }),
             'cu_phone': forms.TextInput(attrs={
                 'id': 'c6t-cu_phone',
-                'placeholder': Parameter.value_of('pholder_enter_your_phone', 'Введите Ваш номер телефона'),
+                'placeholder': Parameter.value_of('pholder_enter_your_phone_2', '+7 (999) 999-99-99'),
                 'pattern': Parameter.value_of('regex_phone_number', """^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$""")
             }),
             'cu_city_uuid': forms.HiddenInput(attrs={
