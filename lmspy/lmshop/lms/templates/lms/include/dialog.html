@@ -25,14 +25,18 @@
 			{{form.as_div}}
 			{%csrf_token%}
 			{% if form.confirmation %}
-			<div class="dialog-footer"><input class="medium inverted" type="submit" value="{{form.confirmation}}"/></div>
+			<div class="dialog-footer">
+				<input class="medium inverted" type="submit" value="{{form.confirmation}}"/>
+			</div>
 			{% endif %}
 			</form>
 		{% endif %}
 	</div>
-	{% if not form and confirmation %}
+	{% if not form %}
 	<div class="dialog-footer">
+		{% if confirmation %}
 		<button class="dialog-confirm-button medium inverted" onclick="">{{confirmation}}</button>
+		{% endif %}
 	</div>
 	{% endif %}
 </dialog>

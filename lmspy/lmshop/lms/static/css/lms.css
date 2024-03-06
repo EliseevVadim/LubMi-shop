@@ -1689,7 +1689,11 @@ dialog {
     border: solid black thin;
     color: black;
     overflow: auto;
-    padding: 3rem;
+    padding: 0 3rem;
+
+    &::-webkit-scrollbar {
+      width: 0;
+    }
 
     .dialog-header {
         display: flex;
@@ -1720,6 +1724,7 @@ dialog {
         display: flex;
         flex-flow: row;
         align-items: center;
+        margin: 3rem 0 0 0;
         span {
             display: inline-flex;
             flex-flow: column;
@@ -1734,7 +1739,7 @@ dialog {
         display: flex;
         flex-flow: column;
         place-items: center;
-        margin-top: 1rem;
+        margin: 1rem 0 2rem 0;
     }
 
     form > div {
@@ -1743,16 +1748,7 @@ dialog {
     }
 }
 
-@media (max-width: 70rem) {
-    dialog {
-        .dialog-closer {
-            margin-top: 2rem;
-        }
-    }
-}
-
-#gp-dialog,
-#c6t-dialog {
+#gp-dialog, #c6t-dialog {
     max-width: 100vw;
     max-height: 100vh;
     box-shadow: 0 0 0 100vw #fff;
