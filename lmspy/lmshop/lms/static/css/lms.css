@@ -1754,7 +1754,7 @@ dialog {
     }
 }
 
-@media (max-width: 90rem) {
+@media (max-width: 50rem) {
     dialog {
         padding: 0 1.5rem;
     }
