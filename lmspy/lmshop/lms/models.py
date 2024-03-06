@@ -265,7 +265,7 @@ class City(DbItem):
 
     @property
     def city_full(self):
-        return f'{self.city}, {self.region_full}'
+        return f'{self.city}{(", " + self.region_full) if self.region_full.lower() != self.city.lower() else ""}'
 
 
 class Order(DbItem):
