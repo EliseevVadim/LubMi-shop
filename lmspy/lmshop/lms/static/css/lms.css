@@ -450,6 +450,12 @@ header.page {
     & > *:not(.separator) {
         margin-bottom: 2.5rem;
     }
+
+    & > * {
+        max-width: calc(var(--CatItemWidth) * 5 + var(--Gap) * 6);
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
 .catalogue {
