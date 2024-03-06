@@ -2067,6 +2067,10 @@ dialog #scui-form input[type="email"] {
             grid-template-columns: repeat(auto-fit, minmax(var(--CatItemWidth), 1fr));
             gap: var(--Gap);
 
+            &::-webkit-scrollbar {
+              width: 0;
+            }
+
             & > * {
                display: flex;
                flex-flow: column;
