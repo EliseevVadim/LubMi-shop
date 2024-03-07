@@ -590,8 +590,11 @@ figcaption {
 
     .icon {
         cursor: pointer;
-        margin-bottom: 0.5rem;
-        margin-right: 0.5rem;
+        max-width: 120px;
+        min-width: 120px;
+        max-height: 120px;
+        min-height: 120px;
+        margin: 0;
     }
 
     .size-block {
@@ -677,6 +680,9 @@ figcaption {
         .icon {
             margin: 0;
             max-width: 70px;
+            min-width: 70px;
+            max-height: 70px;
+            min-height: 70px;
         }
     }
 }
