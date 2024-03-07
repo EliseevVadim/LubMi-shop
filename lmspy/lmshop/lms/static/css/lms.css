@@ -16,39 +16,16 @@
     --HoFSize: 14.785rem;
     --PiconSize: 1.25rem;
 
-    --F11: 11px;
-    --F13: 13px;
-    --F14: 14px;
-    --F16: 16px;
-    --F20: 20px;
-    --F24: 24px;
-    --F30: 30px;
-    --F32: 32px;
-    --F60: 60px;
-    --F120: 120px;
-}
-
-@media (max-width: 90rem) {
-    :root {
-        --F11: 10px;
-        --F13: 11px;
-        --F14: 12px;
-        --F16: 14px;
-        --F20: 15px;
-        --F24: 16px;
-        --F30: 22px;
-        --F32: 24px;
-        --F60: 24px;
-        --F120: 54px;
-    }
-}
-
-@media (max-width: 40rem) {
-    :root {
-        --F32: 22px;
-        --F60: 22px;
-        --F120: 32px;
-    }
+    --F11: clamp(10px, calc(1100vw / 1440), 11px);
+    --F13: clamp(11px, calc(1300vw / 1440), 13px);
+    --F14: clamp(11px, calc(1400vw / 1440), 14px);
+    --F16: clamp(12px, calc(1600vw / 1440), 16px);
+    --F20: clamp(14px, calc(2000vw / 1440), 20px);
+    --F24: clamp(14px, calc(2400vw / 1440), 24px);
+    --F30: clamp(20px, calc(3000vw / 1440), 30px);
+    --F32: clamp(20px, calc(3200vw / 1440), 32px);
+    --F60: clamp(22px, calc(6000vw / 1440), 60px);
+    --F120: clamp(32px, calc(12000vw / 1440), 120px);
 }
 
 * {
@@ -1754,7 +1731,7 @@ dialog {
     }
 }
 
-@media (max-width: 50rem) {
+@media (max-width: 40rem) {
     dialog {
         padding: 0 1.5rem;
     }
@@ -2284,14 +2261,10 @@ dialog #scui-form input[type="email"] {
     }
 }
 
-@media (orientation: portrait) {
-    .banner {
-        aspect-ratio: 400 / 740;
-    }
-}
-
 @media (max-width: 90rem) {
     .banner {
+        aspect-ratio: 400 / 740;
+
         &.banner-A {
             column-gap: 0;
             padding: 2rem;
