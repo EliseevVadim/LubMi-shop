@@ -55,6 +55,7 @@ c6t_dialog.show = () => {
             _d6y_service_1.parentElement.insertAdjacentHTML('beforeEnd', `&nbsp;<span id='c6t-pr-info'></span>`);
             _confirm.parentElement.style.flexFlow = "row-reverse";
             _confirm.parentElement.style.justifyContent = "start";
+            _confirm.parentElement.style.alignContent = "center";
 
             _first_name.value = answer.first_name;
             _last_name.value = answer.last_name;
