@@ -16,39 +16,18 @@
     --HoFSize: 14.785rem;
     --PiconSize: 1.25rem;
 
-    --F11: 11px;
-    --F13: 13px;
-    --F14: 14px;
-    --F16: 16px;
-    --F20: 20px;
-    --F24: 24px;
-    --F30: 30px;
-    --F32: 32px;
-    --F60: 60px;
-    --F120: 120px;
-}
+    --F11: clamp(10px, calc(1100vw / 1440), 11px);
+    --F13: clamp(11px, calc(1300vw / 1440), 13px);
+    --F14: clamp(11px, calc(1400vw / 1440), 14px);
+    --F16: clamp(12px, calc(1600vw / 1440), 16px);
+    --F20: clamp(14px, calc(2000vw / 1440), 20px);
+    --F24: clamp(14px, calc(2400vw / 1440), 24px);
+    --F30: clamp(20px, calc(3000vw / 1440), 30px);
+    --F32: clamp(20px, calc(3200vw / 1440), 32px);
+    --F60: clamp(22px, calc(6000vw / 1440), 60px);
+    --F120: clamp(32px, calc(12000vw / 1440), 120px);
 
-@media (max-width: 90rem) {
-    :root {
-        --F11: 10px;
-        --F13: 11px;
-        --F14: 12px;
-        --F16: 14px;
-        --F20: 15px;
-        --F24: 16px;
-        --F30: 22px;
-        --F32: 24px;
-        --F60: 24px;
-        --F120: 54px;
-    }
-}
-
-@media (max-width: 40rem) {
-    :root {
-        --F32: 22px;
-        --F60: 22px;
-        --F120: 32px;
-    }
+    --S14: clamp(5px, calc(1400vw / 1440), 14px);
 }
 
 * {
@@ -170,7 +149,7 @@ body, aside, .content, .leading {
     display: block;
 }
 
-@media (max-width: 90rem) {
+@media (max-width: 900px) {
     .on-narrow,
     .on-both .on-wide {
         display: block;
@@ -180,7 +159,7 @@ body, aside, .content, .leading {
     }
 }
 
-/* Лидинг -------------------------------------------------------------------------------------------------------------- */
+/* Leading -------------------------------------------------------------------------------------------------------------- */
 
 .leading {
     position: fixed;
@@ -203,8 +182,7 @@ body, aside, .content, .leading {
 
          & > a {
             visibility: visible;
-            margin-left: 1rem;
-            margin-right: 1rem;
+            margin: 0 var(--S14);
             text-decoration: none;
             font-size: var(--F16);
             line-height: var(--F16);
@@ -245,7 +223,7 @@ body, aside, .content, .leading {
     margin: 0;
 }
 
-/* Футер ------------------------------------------------------------------------------------------------------------- */
+/* Footer ------------------------------------------------------------------------------------------------------------- */
 
 footer.page {
     flex: 0 0 var(--FooterHeight);
@@ -369,7 +347,7 @@ footer.page {
     }
 }
 
-@media (max-width: 90rem) {
+@media (max-width: 900px) {
     .std-footer {
         row-gap: 1rem;
         grid-template: repeat(4, auto) / auto;
@@ -425,7 +403,7 @@ footer.page {
     }
 }
 
-/* Контент ------------------------------------------------------------------------------------------------------------- */
+/* Content ------------------------------------------------------------------------------------------------------------- */
 
 header.page {
     background: #cba;
@@ -444,7 +422,7 @@ header.page {
     }
 }
 
-/* Каталог ------------------------------------------------------------------------------------------------------------- */
+/* Catalogue ------------------------------------------------------------------------------------------------------------- */
 
 .catalogue-page {
     & > *:not(.separator) {
@@ -482,7 +460,7 @@ header.page {
     }
 }
 
-/* Карточки ------------------------------------------------------------------------------------------------------------- */
+/* PCards ------------------------------------------------------------------------------------------------------------- */
 
 figure {
     margin: 0;
@@ -667,7 +645,7 @@ figcaption {
     }
 }
 
-@media (max-width: 90rem) {
+@media (max-width: 900px) {
     .p-card-a {
         &.details {
             min-height: 0;
@@ -708,7 +686,7 @@ figcaption {
     }
 }
 
-/* Панели --------------------------------------------------------------------------------------------------------------*/
+/* Panels --------------------------------------------------------------------------------------------------------------*/
 
 aside {
     visibility: hidden;
@@ -800,7 +778,7 @@ aside {
     }
 }
 
-@media (max-width: 90rem) {
+@media (max-width: 900px) {
     aside {
         &.right {
             left: 0;
@@ -814,7 +792,7 @@ aside {
     }
 }
 
-/* Корзина ------------------------------------------------------------------------------------------------------------- */
+/* SCart --------------------------------------------------------------------------------------------------------------- */
 
 .sidebar-item {
     display: grid;
@@ -891,7 +869,7 @@ section[id$="undo-section"] {
     }
 }
 
-/* Элементы оформления ------------------------------------------------------------------------------------------------- */
+/* Formatting ---------------------------------------------------------------------------------------------------------- */
 
 h1 {
     color: #222222;
@@ -927,7 +905,7 @@ h* {
     text-transform: uppercase;
 }
 
-@media (max-width: 90rem) {
+@media (max-width: 900px) {
     h1 {
         &.with-selector {
             flex-flow: column;
@@ -1087,7 +1065,7 @@ p {
     }
 }
 
-@media (max-width: 90rem) {
+@media (max-width: 900px) {
     .grid12 {
         gap: 1rem;
 
@@ -1345,7 +1323,7 @@ p {
     width: 100%;
 }
 
-/* Кнопки --------------------------------------------------------------------------------------------------------------*/
+/* Buttons -------------------------------------------------------------------------------------------------------------*/
 
 button,
 input[type="submit"] {
@@ -1461,7 +1439,7 @@ main.perfumery {
     }
 }
 
-@media (max-width: 90rem) {
+@media (max-width: 900px) {
     .perfumery {
         .picture-content p {
             display: block;
@@ -1531,7 +1509,7 @@ main.perfumery {
     }
 }
 
-@media (max-width: 90rem) {
+@media (max-width: 900px) {
     .care-page {
         & > .grid12 {
             margin-top: 2.5rem;
@@ -1680,7 +1658,7 @@ main.perfumery {
     }
 }
 
-@media (max-width: 90rem) {
+@media (max-width: 900px) {
     .contacts {
         button {
             margin: 0 1rem;
@@ -1688,7 +1666,7 @@ main.perfumery {
     }
 }
 
-/* Диалоги и формы -----------------------------------------------------------------------------------------------------*/
+/* Modals --------------------------------------------------------------------------------------------------------------*/
 
 dialog {
     max-width: 40rem;
@@ -1754,7 +1732,7 @@ dialog {
     }
 }
 
-@media (max-width: 50rem) {
+@media (max-width: 40rem) {
     dialog {
         padding: 0 1.5rem;
     }
@@ -1917,7 +1895,7 @@ dialog #scui-form input[type="email"] {
     }
 }
 
-@media (max-width: 90rem) {
+@media (max-width: 900px) {
     #c6t-dialog {
         .grid-c6t {
             column-gap: 0;
@@ -2130,7 +2108,7 @@ dialog #scui-form input[type="email"] {
     padding: 0;
 }
 
-/* Banner         -----------------------------------------------------------------------------------------------------*/
+/* Banner --------------------------------------------------------------------------------------------------------------*/
 
 .banner {
     display: grid;
@@ -2284,14 +2262,10 @@ dialog #scui-form input[type="email"] {
     }
 }
 
-@media (orientation: portrait) {
+@media (max-width: 900px) {
     .banner {
         aspect-ratio: 400 / 740;
-    }
-}
 
-@media (max-width: 90rem) {
-    .banner {
         &.banner-A {
             column-gap: 0;
             padding: 2rem;
