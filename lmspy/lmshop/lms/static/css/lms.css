@@ -1343,7 +1343,7 @@ input[type="submit"].medium {
     font-size: var(--F24);
     line-height: var(--F24);
     font-weight: 300;
-    padding: 2rem;
+    padding: 2rem 4rem;
 }
 
 button.inverted,
