@@ -1875,10 +1875,10 @@ dialog #scui-form input[type="email"] {
                 &::after {
                     visibility: visible;
                     margin: 0;
-                    content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='15' viewBox='0 0 32 32'><rect x='0.5' y='0.5' width='31' height='31' stroke='black' style='stroke-width:1.5;fill:none;'/></svg>");
+                    content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='17' viewBox='0 0 32 32'><rect x='0.5' y='0.5' width='31' height='31' stroke='black' style='stroke-width:1.5;fill:none;'/></svg>");
                 }
                 &:checked::after {
-                    content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='15' viewBox='0 0 32 32'><rect x='0.5' y='0.5' width='31' height='31' stroke='black' style='stroke-width:1.5;fill:none;'/><path d='M 13.7,22.025 8,16.325 9.425,14.9 13.7,19.175 22.875,10 24.3,11.425 Z'/></svg>");
+                    content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='17' viewBox='0 0 32 32'><rect x='0.5' y='0.5' width='31' height='31' stroke='black' style='stroke-width:1.5;fill:none;'/><path d='M 13.7,22.025 8,16.325 9.425,14.9 13.7,19.175 22.875,10 24.3,11.425 Z'/></svg>");
                 }
             }
 
