@@ -14,3 +14,10 @@ def first_val_in_dict(dictionary: dict):
     for key in dictionary.keys():
         return dictionary[key]
     return None
+
+
+@register.filter
+def first_key_in_dict(dictionary: dict):
+    for key in dictionary.keys():
+        return key
+    return None
