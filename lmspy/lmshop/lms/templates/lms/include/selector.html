@@ -1,9 +1,14 @@
-{% load static %}
-<div class="select">
-    <select id="{{selector_id}}">
-        {% for value,title in variants.items %}
-        <option value="{{value}}">{{title}}</option>
-        {% endfor %}
-    </select>
-    <img onclick="document.getElementById('{{selector_id}}').showPicker();" class="hand" src="{% static 'svg/d-ang.svg' %}"/>
+<div class="custom-select">
+  <button class="select-button">
+    <span class="selected-value">{{variants.keys}}</span>
+    <span class="arrow">{{d_ang}}</span>
+  </button>
+  <ul class="select-dropdown" role="listbox" id="select-dropdown">
+    {% for value, title in variants.items %}
+    <li role="option">
+      <input type="radio" id="{{value}}" name="{{value}}"/>
+      <label for="{{value}}">{{title}}</label>
+    </li>
+    {% endfor %}
+  </ul>
 </div>

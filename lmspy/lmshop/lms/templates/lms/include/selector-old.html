@@ -1,0 +1,9 @@
+{% load static %}
+<div class="select">
+    <select id="{{selector_id}}">
+        {% for value,title in variants.items %}
+        <option value="{{value}}">{{title}}</option>
+        {% endfor %}
+    </select>
+    <img onclick="document.getElementById('{{selector_id}}').showPicker();" class="hand" src="{% static 'svg/d-ang.svg' %}"/>
+</div>
