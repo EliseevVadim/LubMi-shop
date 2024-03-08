@@ -10,7 +10,7 @@
 
 {% block page_content %}
 {{separator}}
-{% include "lms/include/catalogue-type-A.html" with title=param_title_catalogue pages=product_pages kind="pd" variants=order_variants selector_id="order-selector" %}
+{% include "lms/include/catalogue-type-A.html" with title=param_title_catalogue pages=product_pages kind="pd" variants=order_variants selector_unique="order" %}
 {{separator}}
 {% include "lms/include/catalogue-type-A.html" with title=param_title_bestsellers products=bestsellers pages=bestseller_pages kind="bs" %}
 {% endblock %}
@@ -34,7 +34,7 @@
 {% endblock %}
 
 {% block DOM_ready_script %} {{block.super}}
-{% include "lms/include/selector.js" %}
+order_selector.init();
 document.getElementById("order-selector").addEventListener("change", pd_reorder);
 main_banner.init();
 {% endblock %}

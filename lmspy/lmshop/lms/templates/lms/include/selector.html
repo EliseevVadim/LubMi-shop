@@ -1,10 +1,10 @@
 {% load custom_tags %}
-<div class="custom-select">
-  <button class="select-button">
-    <span class="selected-value">{{variants|first_val_in_dict}}</span>
+<div id="{{unique}}-custom-select" class="custom-select">
+  <button id="{{unique}}-select-button" class="select-button" aria-expanded="false">
+    <span id="{{unique}}-selected-value" class="selected-value">{{variants|first_val_in_dict}}</span>
     <span class="arrow">{{d_ang}}</span>
   </button>
-  <ul class="select-dropdown" role="listbox" id="select-dropdown">
+  <ul id="{{unique}}-select-dropdown" class="select-dropdown" role="listbox">
     {% for value, title in variants.items %}
     <li role="option">
       <input type="radio" id="{{value}}" name="{{value}}"/>

@@ -59,6 +59,8 @@ LubMi - {{page_title}}
 {% include "lms/include/business.js" %}
 {% include "lms/include/geoloc.js" %}
 {% include "lms/include/double-text.js" %}
+{% include "lms/include/selector.js" with unique="order" %}
+{% include "lms/include/selector.js" with unique="size" %}
 {% endblock %}
 
 {% block DOM_ready_script %}
