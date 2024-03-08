@@ -56,8 +56,6 @@ input[type="email"] {
         border: none;
         background: white;
         appearance: none;
-        -moz-appearance: none;
-        -webkit-appearance: none;
     }
 
     img {
