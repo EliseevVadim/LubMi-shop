@@ -11,7 +11,7 @@ const {{unique}}_selector = {
         {{unique}}_selector.options_list().forEach((option) => {
             function handler(e) {
                 if (e.type === "click" && e.clientX !== 0 && e.clientY !== 0) {
-                    setTimeout(() => functor(this.children[0].name));
+                    if(functor) setTimeout(() => functor(this.children[0].name));
                     {{unique}}_selector.selected_value().textContent = this.children[1].textContent;
                     {{unique}}_selector.custom_select().classList.remove("active");
                 }
