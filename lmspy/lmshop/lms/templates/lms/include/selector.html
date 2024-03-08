@@ -1,6 +1,7 @@
+{% load custom_tags %}
 <div class="custom-select">
   <button class="select-button">
-    <span class="selected-value">{{variants.keys}}</span>
+    <span class="selected-value">{{variants|first_val_in_dict}}</span>
     <span class="arrow">{{d_ang}}</span>
   </button>
   <ul class="select-dropdown" role="listbox" id="select-dropdown">
