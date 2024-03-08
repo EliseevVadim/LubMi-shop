@@ -8,8 +8,8 @@ let {{kind}}_update = () => {
         }
     });
 };
-let {{kind}}_reorder = (event) => {
-    fetch(`{% url "lms:index" %}?order=${ {{kind}}_order = event.target.value }&kind={{kind}}&page=1`).then(response => response.text()).then(text => {
+let {{kind}}_reorder = (ord) => {
+    fetch(`{% url "lms:index" %}?order=${ {{kind}}_order = ord }&kind={{kind}}&page=1`).then(response => response.text()).then(text => {
         document.getElementById("{{kind}}-list").innerHTML = text;
         {{kind}}_page = 2;
         if({{pages}} > 1) {

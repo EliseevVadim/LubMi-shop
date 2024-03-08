@@ -34,7 +34,6 @@
 {% endblock %}
 
 {% block DOM_ready_script %} {{block.super}}
-order_selector.init();
-document.getElementById("order-selector").addEventListener("change", pd_reorder);
+order_selector.init(pd_reorder);
 main_banner.init();
 {% endblock %}
