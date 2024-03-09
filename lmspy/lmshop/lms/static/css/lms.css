@@ -29,6 +29,7 @@
 
     --S14: clamp(5px, calc(1400vw / 1440), 14px);
     --S350: clamp(230px, calc(35000vw / 1440), 350px);
+    --S110: clamp(70px, calc(11000vw / 1440), 110px);
 }
 
 * {
@@ -98,6 +99,7 @@ input[type="email"] {
         visibility: hidden;
         opacity: 0;
         position: absolute;
+        height: fit-content;
         list-style: none;
         width: 100%;
         background-color: #fff;
@@ -105,7 +107,6 @@ input[type="email"] {
         border-radius: 0;
         padding: 10px;
         margin-top: 10px;
-        max-height: 200px;
         overflow-y: auto;
         transform: scaleY(0);
 
@@ -573,11 +574,11 @@ figcaption {
 }
 
 .old-price {
-    text-decoration: line-through gray 2px;
-    opacity: 0.50;
+    text-decoration: line-through #7f7f7f 2px;
     font-size: var(--F16);
     line-height: var(--F16);
     font-weight: 300;
+    color: #7f7f7f;
     word-wrap: break-word;
 }
 
@@ -669,6 +670,16 @@ figcaption {
         p {
             margin: 0;
         }
+
+        .custom-select {
+            padding: 0.5rem;
+            border: solid thin black;
+            width: var(--S110);
+
+            .select-dropdown {
+                margin-left: -0.5rem;
+            }
+        }
     }
 
     .icon-list {
@@ -691,7 +702,7 @@ figcaption {
         grid-template: auto auto / auto auto;
         width: fit-content;
         column-gap: 1rem;
-        place-items: center;
+        place-items: center start;
 
         .select {
             padding: 0.25rem 0.5rem;

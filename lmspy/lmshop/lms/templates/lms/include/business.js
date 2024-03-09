@@ -97,18 +97,18 @@ const show_product_details = url => {
     left_sidebar.hide();
     right_sidebar.hide();
     gp_dialog.show(url, null, () => {
-        sel = document.querySelector("#size-selector");
-        if(sel && !sel._on_change) {
-            let fun = null;
-            sel._on_change = sel.addEventListener("change", fun = e => {
-                __api_call__('{% url "api:product_size_quantity" %}', { ppk: document.querySelector("#ppk").value, size: sel.value }, result => {
+        if(size_selector) {
+            function fun(sid) {
+                if(sid != "-") __api_call__('{% url "api:product_size_quantity" %}', { ppk: document.querySelector("#selected-ppk").value, size: sid }, result => {
+                    document.querySelector("#selected-size").value = sid;
                     let in_stock = result.success && result.quantity > 0;
                     document.querySelector("#gp-dialog .btn-to-scart").style.display = in_stock ? "inline-block" : "none";
                     document.querySelector("#gp-dialog .btn-notify-me").style.display = !in_stock ? "inline-block" : "none";
                     document.querySelector("#gp-dialog .not-in-stock").style.display = !in_stock ? "inline-block" : "none";
                 });
-            });
-            fun(null);
+            }
+            fun(document.querySelector("#selected-size").value);
+            size_selector.init(fun);
         }
     });
 };

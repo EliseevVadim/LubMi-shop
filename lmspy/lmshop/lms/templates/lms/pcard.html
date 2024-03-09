@@ -1,2 +1,4 @@
+{% load custom_tags %}
 {% include "lms/include/product-card-type-B.html" with card_type="details" %}
-<input type="hidden" id="ppk" value="{{product.article}}"/>
+<input type="hidden" id="selected-ppk" value="{{product.article}}"/>
+<input type="hidden" id="selected-size" value="{{product.variants|first_key_in_dict|default:'-'}}"/>

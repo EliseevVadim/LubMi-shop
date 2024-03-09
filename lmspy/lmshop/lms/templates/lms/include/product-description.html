@@ -9,7 +9,7 @@
 <div class="items-top-down"><div class="product-title">{{product.title}}&nbsp;({{product.color|default:param_message_color_missed}})</div><div class="product-article mt1">{{param_label_article}}:&nbsp;{{product.article}}</div></div>
 <div class="price-line"><span class="actual-price">{{product.actual_price.amount|floatformat:0}}&nbsp;{{param_label_currency}}</span>{% if product.old_price %}&nbsp;<span class="old-price">{{product.old_price.amount|floatformat:0}}&nbsp;{{param_label_currency}}</span>{% endif %}</div>
 <div class="size-block">{% if product.in_stock %}<div class="size-label">{{param_label_size}}:</div><div></div>{% include "lms/include/selector.html" with variants=product.variants unique="size" %}{% endif %}<div class="not-in-stock">{{param_label_not_available}}</div></div>
-{% if product.in_stock %}<button class="w100 inverted medium btn-to-scart" onclick="product_to_scart('{{product.article}}',document.getElementById('size-selector').value,1,right_sidebar.show_scart);gp_dialog.close();">{{param_label_add_to_shopping_cart}}</button>{% endif %}
+{% if product.in_stock %}<button class="w100 inverted medium btn-to-scart" onclick="product_to_scart('{{product.article}}',document.getElementById('selected-size').value,1,right_sidebar.show_scart);gp_dialog.close();">{{param_label_add_to_shopping_cart}}</button>{% endif %}
 <button class="w100 inverted medium btn-notify-me" onclick="notify_delivery('{{product.article}}')">{{param_label_notify_delivery}}</button>
 <div class="product-notes">{{product.description|default:param_message_details_missed|markdown}}</div>
 {# Корзина ------------------------------------------------------------------------------------------------------------- #}
