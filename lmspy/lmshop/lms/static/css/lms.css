@@ -615,6 +615,7 @@ figcaption {
         font-size: var(--F13);
         line-height: var(--F13);
         font-weight: 250;
+        font-variation-settings: "wght" 100;
         word-wrap: break-word;
     }
 
@@ -1503,8 +1504,8 @@ main.perfumery {
         font-size: var(--F24);
         line-height: var(--F24);
         font-weight: 250;
-        word-wrap: break-word;
         font-variation-settings: "wght" 100;
+        word-wrap: break-word;
     }
 
     * p:first-of-type {
@@ -1576,6 +1577,15 @@ main.perfumery {
         color: #2F80ED;
         text-decoration: underline;
     }
+
+    p {
+        color: #222222;
+        font-size: var(--F24);
+        line-height: var(--F24);
+        font-weight: 250;
+        font-variation-settings: "wght" 100;
+        word-wrap: break-word;
+    }
 }
 
 /* Care ---------------------------------------------------------------------------------------------------------------*/
@@ -1612,6 +1622,15 @@ main.perfumery {
             margin-block-start: 0;
             margin-block-end: 0;
         }
+    }
+
+    p {
+        color: #222222;
+        font-size: var(--F24);
+        line-height: var(--F24);
+        font-weight: 250;
+        font-variation-settings: "wght" 100;
+        word-wrap: break-word;
     }
 }
 
@@ -1659,6 +1678,15 @@ main.perfumery {
         font-size: var(--F16);
         line-height: var(--F16);
         font-weight: 250;
+        word-wrap: break-word;
+    }
+
+    p {
+        color: #222222;
+        font-size: var(--F24);
+        line-height: var(--F24);
+        font-weight: 250;
+        font-variation-settings: "wght" 100;
         word-wrap: break-word;
     }
 }
