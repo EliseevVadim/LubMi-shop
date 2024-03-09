@@ -322,7 +322,6 @@ footer.page {
     column-gap: 1rem;
     row-gap: 3rem;
     display: grid;
-    /*grid-template: auto auto / auto repeat(4, 9rem);*/
     grid-template: auto auto / auto repeat(4, var(--S9R));
     grid-template-areas:
         "A B B C C"
