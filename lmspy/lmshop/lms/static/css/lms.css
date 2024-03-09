@@ -559,13 +559,6 @@ figcaption {
     margin-top: 10px;
 }
 
-.catalogue figcaption {
-    display: grid;
-    grid-template: auto / auto;
-    grid-auto-flow: row;
-    row-gap: 0.5rem;
-}
-
 .product-title {
     font-size: var(--F24);
     line-height: var(--F24);
@@ -592,6 +585,23 @@ figcaption {
     margin-top: -2px;
     font-size: var(--F16);
     font-weight: 100;
+}
+
+.catalogue{
+    figcaption {
+        display: grid;
+        grid-template: auto / auto;
+        grid-auto-flow: row;
+        row-gap: 0.5rem;
+    }
+
+    .product-title {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        display: inline-block;
+        max-width: var(--CatItemWidth);
+    }
 }
 
 .p-card-a {
