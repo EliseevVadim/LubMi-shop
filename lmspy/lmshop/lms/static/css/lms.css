@@ -1317,12 +1317,6 @@ p {
 
 .hand {
     cursor: pointer;
-    &:hover {
-        color: black;
-    }
-    &.inverted:hover {
-        color: white;
-    }
 }
 
 .bt1 {

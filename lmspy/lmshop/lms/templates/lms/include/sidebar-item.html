@@ -3,13 +3,8 @@
     {% with product.primary_image as img %}
     {% if img %}
     <figure class="sidebar-fig">
-        {% if card_type == "favorites" %}
         <div class="sidebar-img hand" style="background-image: url('{% thumbnail img.image 200x200 crop quality=90 %}');" onclick="show_product_details('{% url 'lms:product_details' slug=product.slug %}');">
         </div>
-        {% else %}
-        <div class="sidebar-img" style="background-image: url('{% thumbnail img.image 200x200 crop quality=90 %}');">
-        </div>
-        {% endif %}
     </figure>
     {% endif %}
     {% endwith %}
@@ -25,7 +20,7 @@
     </div>
     {% if card_type == "shopping-cart" %}
     <div class="price-line items-left-right">
-        <div>{{product.actual_price.amount|floatformat:0}}&nbsp;{{param_label_currency}}</div>
+        <div class="hand" onclick="show_product_details('{% url 'lms:product_details' slug=product.slug %}');">{{product.actual_price.amount|floatformat:0}}&nbsp;{{param_label_currency}}</div>
         <div class="inline-items-right-left mla">{% if quantity < size.quantity %}
             <div class="hand gray" onclick="product_to_scart('{{product.article}}', {{size.id}}, 1);">&nbsp;{{plus_ring}}</div>{% endif %}
             <div>{{quantity}}</div>{% if quantity > 1 %}
