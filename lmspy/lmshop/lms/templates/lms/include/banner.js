@@ -21,7 +21,7 @@ const {{unique}}_banner = {
         g_1 = `{% include "lms/include/gradient.html" with gradient=g1 %}`
         g_2 = `{% include "lms/include/gradient.html" with gradient=g2 %}`
         const switch_action = (sw_on, sw_off, img, b_text, s_text, grad, ref) => {
-            let p = {{param_value_slideshow_period|default:"10000"}};
+            let p = {{param_value_slideshow_period|default:"30000"}};
             return _ => {
                 function swf() {
                     {{unique}}_banner.self().style['background-image'] = `${grad} url(${img})`;
