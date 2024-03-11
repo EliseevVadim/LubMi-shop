@@ -239,7 +239,7 @@ body, aside, .content, .leading {
     display: block;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 961px) {
     .on-narrow,
     .on-both .on-wide {
         display: block;
@@ -436,7 +436,7 @@ footer.page {
     }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 961px) {
     .std-footer {
         row-gap: 1rem;
         grid-template: repeat(4, auto) / auto;
@@ -759,7 +759,7 @@ figcaption {
     }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 961px) {
     .p-card-a {
         &.details {
             min-height: 0;
@@ -770,6 +770,7 @@ figcaption {
 
     .p-card-b {
         grid-template: auto auto auto / auto;
+        max-width: var(--DetItemWidth);
 
         .product-card {
             grid-column: 1;
@@ -895,7 +896,7 @@ aside {
     }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 961px) {
     aside {
         &.right {
             left: 0;
@@ -1023,7 +1024,7 @@ h* {
     text-transform: uppercase;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 961px) {
     h1 {
         &.with-selector {
             flex-flow: column;
@@ -1183,7 +1184,7 @@ p {
     }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 961px) {
     .grid12 {
         gap: 1rem;
 
@@ -1554,7 +1555,7 @@ main.perfumery {
     }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 961px) {
     .perfumery {
         .picture-content p {
             display: block;
@@ -1642,7 +1643,7 @@ main.perfumery {
     }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 961px) {
     .care-page {
         & > .grid12 {
             margin-top: 2.5rem;
@@ -1800,7 +1801,7 @@ main.perfumery {
     }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 961px) {
     .contacts {
         button {
             margin: 0 1rem;
@@ -2061,7 +2062,7 @@ dialog #scui-form input[type="email"] {
     }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 961px) {
     #c6t-dialog {
         .grid-c6t {
             column-gap: 0;
@@ -2311,10 +2312,10 @@ dialog #scui-form input[type="email"] {
     box-sizing: border-box;
     aspect-ratio: 1440 / 881;
     gap: 0;
-    transition: filter 1.25s ease-in-out;
+    transition: filter 0.5s ease-in-out;
 
     &.decorated {
-        filter: blur(50px) opacity(0);
+        filter: blur(25px) opacity(0);
     }
 
     &.btc {
@@ -2455,7 +2456,7 @@ dialog #scui-form input[type="email"] {
     }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 961px) {
     .banner {
         aspect-ratio: 400 / 740;
 

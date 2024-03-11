@@ -33,7 +33,7 @@ const {{unique}}_banner = {
                 }
                 if({{unique}}_banner.animate) {
                     {{unique}}_banner.self().classList.add("decorated");
-                    setTimeout(() => { swf(); {{unique}}_banner.self().classList.remove("decorated"); }, 1350);
+                    setTimeout(() => { swf(); {{unique}}_banner.self().classList.remove("decorated"); }, 550);
                 } else {
                     {{unique}}_banner.animate = true;
                     swf();
