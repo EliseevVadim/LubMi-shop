@@ -2312,10 +2312,10 @@ dialog #scui-form input[type="email"] {
     box-sizing: border-box;
     aspect-ratio: 1440 / 881;
     gap: 0;
-    transition: filter 0.5s ease-in-out;
+    transition: filter 0.3s ease-out;
 
     &.decorated {
-        filter: blur(25px) opacity(0);
+        filter: brightness(500%) contrast(200%) opacity(0) blur(5px);
     }
 
     &.btc {
