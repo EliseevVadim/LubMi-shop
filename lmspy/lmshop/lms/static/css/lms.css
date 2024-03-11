@@ -495,7 +495,7 @@ footer.page {
 /* Content ------------------------------------------------------------------------------------------------------------- */
 
 header.page {
-    background: #cba;
+    background: white;
 }
 
 .content {
@@ -2291,9 +2291,13 @@ dialog #scui-form input[type="email"] {
     background-repeat: no-repeat;
     padding: 2rem;
     box-sizing: border-box;
-    transition: background 0.25s ease;
     aspect-ratio: 1440 / 881;
     gap: 0;
+    transition: filter 1.25s ease-in-out;
+
+    &.decorated {
+        filter: blur(50px) opacity(0);
+    }
 
     &.btc {
         background-position: top center;

@@ -1,4 +1,6 @@
 const {{unique}}_banner = {
+    animate: false,
+    tmid: null,
     self: () => document.querySelector("#banner-{{unique}}"),
     button: () => document.querySelector("#banner-{{unique}}  .banner-button"),
     slogan: () => document.querySelector("#banner-{{unique}}  .banner-slogan"),
@@ -19,13 +21,28 @@ const {{unique}}_banner = {
         g_1 = `{% include "lms/include/gradient.html" with gradient=g1 %}`
         g_2 = `{% include "lms/include/gradient.html" with gradient=g2 %}`
         const switch_action = (sw_on, sw_off, img, b_text, s_text, grad, ref) => {
+            let p = {{param_value_slideshow_period|default:"10000"}};
             return _ => {
-                {{unique}}_banner.self().style['background-image'] = `${grad} url(${img})`;
-                {{unique}}_banner.button().innerHTML = b_text;
-                {{unique}}_banner.slogan().innerHTML = s_text;
-                {{unique}}_banner.button().onclick = _ => { window.location.href = ref; };
-                sw_on.attributes.fill.nodeValue = "#fff";
-                sw_off.attributes.fill.nodeValue = "#0000";
+                function swf() {
+                    {{unique}}_banner.self().style['background-image'] = `${grad} url(${img})`;
+                    {{unique}}_banner.button().innerHTML = b_text;
+                    {{unique}}_banner.slogan().innerHTML = s_text;
+                    {{unique}}_banner.button().onclick = _ => { window.location.href = ref; };
+                    sw_on.attributes.fill.nodeValue = "#fff";
+                    sw_off.attributes.fill.nodeValue = "#0000";
+                }
+                if({{unique}}_banner.animate) {
+                    {{unique}}_banner.self().classList.add("decorated");
+                    setTimeout(() => { swf(); {{unique}}_banner.self().classList.remove("decorated"); }, 1350);
+                } else {
+                    {{unique}}_banner.animate = true;
+                    swf();
+                }
+                if({{unique}}_banner.tmid) clearTimeout({{unique}}_banner.tmid);
+                {{unique}}_banner.tmid = setTimeout(() => {
+                    {{unique}}_banner.tmid = null;
+                    sw_off.dispatchEvent(new MouseEvent("click"));
+                }, p/2);
             };
         }
         {{unique}}_banner.self().insertAdjacentHTML('beforeEnd', `<div class="banner-switch">${svg_1}${svg_2}</div>`);
@@ -36,7 +53,7 @@ const {{unique}}_banner = {
         sw1.addEventListener('click', sa1);
         sw2.addEventListener('click', sa2);
         {% if show %}
-        sa{{show}}();
+        sa{{show}}(null);
         {% endif %}
     },
 };
