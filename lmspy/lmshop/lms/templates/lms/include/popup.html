@@ -1,4 +1,9 @@
-<div class="popup" id="{{popup_id}}" onclick="popup.hide();">
-  <div><label onclick="popup.hide();">{{x_cross_nof}}</label></div>
-  <span></span>
+<div class="popups">
+  {% for i in "0123456789"|make_list %}
+  <div class="popup" id="popup-{{i}}" onclick="popup.hide({{i}})">
+    <label>{{x_cross_nof}}</label>
+    <span></span>
+  </div>
+  {% endfor %}
 </div>
+

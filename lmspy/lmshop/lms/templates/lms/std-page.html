@@ -25,7 +25,7 @@ LubMi - {{page_title}}
 {% endblock %}
 
 {% block modal_forms %}
-{% include "lms/include/popup.html" with popup_id="popup-message" %}
+{% include "lms/include/popup.html" %}
 {% include "lms/include/dialog.html" with unique="gp" dialog_id="gp-dialog" form=None has_arrow=1 %}
 {% include "lms/include/dialog.html" with unique="psu" dialog_id="psu-dialog" form=None title="Спасибо за покупку!" description="Поздравляем!" confirmation="Перейти в чат техподдержки" %}
 {% include "lms/include/dialog.html" with unique="pca" dialog_id="pca-dialog" form=None title="Заказ отменен" description="Сожалеем" confirmation="Перейти в чат техподдержки" %}
@@ -65,7 +65,7 @@ LubMi - {{page_title}}
 
 {% block DOM_ready_script %}
 glocate();
-popup.hide();
+{#popup.hide();#}
 {% include "lms/include/payment.js" %}
 {% endblock %}
 

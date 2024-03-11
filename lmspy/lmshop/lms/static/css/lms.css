@@ -2105,27 +2105,51 @@ dialog #scui-form input[type="email"] {
 
 /* Popup ---------------------------------------------------------------------------------------------------------------*/
 
-.popup {
-    max-width: 35rem;
+.popups {
+    max-width: min(35rem, 75vw);
     position: fixed;
     top: calc(var(--LeadingHeight) + 4rem);
     right: 2rem;
-    padding: 1rem 1rem 1rem 2rem;
-    background: white;
-    visibility: hidden;
-    cursor: pointer;
+    width: fit-content;
+    background: transparent;
     display: flex;
-    flex-flow: row-reverse;
+    flex-flow: column;
+    align-items: end;
+    gap: 1rem;
     z-index: var(--ZixTop);
-    label {
-        margin-left: 2rem;
-    }
-    span {
-        color: #222222;
-        font-size: var(--F24);
-        line-height: var(--F24);
-        font-weight: 300;
-        word-wrap: break-word;
+    pointer-events: none;
+
+    .popup {
+        max-width: 35rem;
+        padding: 1rem 1rem 1rem 2rem;
+        background: white;
+        pointer-events: auto;
+        cursor: pointer;
+        display: flex;
+        flex-flow: row-reverse;
+        transform: scaleY(0%);
+        overflow: hidden;
+        width: fit-content;
+        height: fit-content;
+        opacity: 0;
+        transition: all 0.5s ease-in-out;
+
+        &.active {
+            transform: scaleY(100%);
+            opacity: 100%;
+        }
+
+        label {
+            margin-left: 2rem;
+        }
+
+        span {
+            color: black;
+            font-size: var(--F24);
+            line-height: var(--F24);
+            font-weight: 300;
+            word-wrap: break-word;
+        }
     }
 }
 
