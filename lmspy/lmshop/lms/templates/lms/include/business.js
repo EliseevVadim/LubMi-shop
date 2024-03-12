@@ -40,6 +40,7 @@ const notify_delivery = ppk => {
         }
         cu_email.oninput(null);
         cu_phone.oninput(null);
+        ndd_dialog.sch = suppress_scrolling();
         ndd_dialog.self().showModal();
     });
 }

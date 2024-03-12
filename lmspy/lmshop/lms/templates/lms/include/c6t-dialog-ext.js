@@ -194,6 +194,7 @@ c6t_dialog.show = () => {
             d6y_changed({currentTarget: by_selector('input[id^="c6t-d6y_service_"]:checked')});
             c6t_dialog.rszo = new ResizeObserver(move_city_list);
             c6t_dialog.rszo.observe(_city);
+            c6t_dialog.sch = suppress_scrolling();
             c6t_dialog.self().showModal();
         });
     });

@@ -1,4 +1,5 @@
 const {{unique}}_dialog = {
+    sch: undefined,
     self: () => document.querySelector("#{{dialog_id}}"),
     visible: () => {{unique}}_dialog.self().style.visibility == "visible",
     body: () => document.querySelector("#{{dialog_id}} .dialog-body"),
@@ -20,6 +21,7 @@ const {{unique}}_dialog = {
                     }
                 }
             }
+            {{unique}}_dialog.sch = suppress_scrolling();
             {{unique}}_dialog.self().showModal();
         });
     },
@@ -29,5 +31,9 @@ const {{unique}}_dialog = {
         {{unique}}_dialog.body().innerHTML = '';
         {% endif %}
         {{unique}}_dialog.self().close();
+        if({{unique}}_dialog.sch !== undefined) {
+            release_scrolling({{unique}}_dialog.sch);
+            {{unique}}_dialog.sch = undefined;
+        }
     }
 };
