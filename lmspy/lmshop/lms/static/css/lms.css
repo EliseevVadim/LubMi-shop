@@ -2312,11 +2312,6 @@ dialog #scui-form input[type="email"] {
     box-sizing: border-box;
     aspect-ratio: 1440 / 881;
     gap: 0;
-    transition: filter 0.3s ease-out;
-
-    &.decorated {
-        filter: brightness(500%) contrast(200%) opacity(0) blur(5px);
-    }
 
     &.btc {
         background-position: top center;
@@ -2360,6 +2355,12 @@ dialog #scui-form input[type="email"] {
     }
 
     &.banner-C {
+        transition: none;
+
+        &.animated {
+            transition: all 0.3s ease-in-out;
+        }
+
         padding: 0;
         justify-items: center;
         text-align: center;
