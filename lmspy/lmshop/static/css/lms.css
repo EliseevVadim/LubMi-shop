@@ -2,7 +2,7 @@
 * Prefixed by https://autoprefixer.github.io
 * PostCSS: v8.4.14,
 * Autoprefixer: v10.4.7
-* Browsers: last 5 version
+* Browsers: last 15 version
 */
 
 :root {
@@ -126,7 +126,7 @@ input[type="email"] {
         list-style: none;
         width: 100%;
         background-color: #fff;
-        border: solid thin black;
+        border: solid thin #222222;
         border-radius: 0;
         padding: 10px;
         margin-top: 10px;
@@ -171,7 +171,7 @@ input[type="email"] {
                     align-items: center;
 
             &:hover {
-                background-color: black;
+                background-color: #222222;
                 color: white;
             }
 
@@ -215,10 +215,11 @@ details {
             -ms-flex-flow: row;
                 flex-flow: row;
 
-        &::marker {
+        &::-webkit-details-marker, &::marker {
             content: none;
+            display: none;
         }
-
+        
         &::after {
             margin-left: auto;
             content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='15' viewBox='0 0 40 24.7'><path d='M 40,4.7 35.3,0 20,15.27 4.7,0 0,4.7 20,24.7 Z' fill='black'/></svg>");
@@ -240,7 +241,7 @@ svg.separator {
     width: 100%;
 
     line {
-        stroke: black;
+        stroke: #222222;
         stroke-width: 1px;
         vector-effect: non-scaling-stroke;
     }
@@ -403,7 +404,7 @@ footer.page {
                 flex-flow: row;
         max-height: 3rem;
         color: lightgray;
-        background: black;
+        background: #222222;
         padding: 4px;
         border-radius: 8px;
 
@@ -990,7 +991,7 @@ figcaption {
 
         .custom-select {
             padding: 0.5rem;
-            border: solid thin black;
+            border: solid thin #222222;
             width: var(--S110);
 
             .select-dropdown {
@@ -1032,7 +1033,7 @@ figcaption {
 
         .select {
             padding: 0.25rem 0.5rem;
-            border: solid thin black;
+            border: solid thin #222222;
         }
     }
 
@@ -1172,7 +1173,7 @@ aside {
         margin-right: 1rem;
         text-decoration: none;
         text-transform: uppercase;
-        color: black;
+        color: #222222;
         margin: calc(var(--DefPadding) / 2) 0;
         font-size: 1.25rem;
         text-align: right;
@@ -1202,7 +1203,7 @@ aside {
 
     .socials {
         color: lightgray;
-        background: black;
+        background: #222222;
         padding: 4px;
         border-radius: 8px;
 
@@ -1843,7 +1844,7 @@ p {
 
     &.inverted {
         color: white;
-        background: black;
+        background: #222222;
         border-radius: var(--PiconSize);
     }
 
@@ -1858,19 +1859,19 @@ p {
 }
 
 .bt1 {
-    border-top: solid thin black;
+    border-top: solid thin #222222;
 }
 
 .bb1 {
-    border-bottom: solid thin black;
+    border-bottom: solid thin #222222;
 }
 
 .bl1 {
-    border-left: solid thin black;
+    border-left: solid thin #222222;
 }
 
 .br1 {
-    border-right: solid thin black;
+    border-right: solid thin #222222;
 }
 
 .pl1 {
@@ -1958,7 +1959,7 @@ p {
 }
 
 .black {
-    color: black;
+    color: #222222;
 }
 
 .red {
@@ -1987,7 +1988,7 @@ input[type="submit"] {
     padding: calc(0.75 * var(--DefPadding)) calc(2 * var(--DefPadding));
     cursor: pointer;
     text-decoration: none;
-    border: solid black thin;
+    border: solid #222222 thin;
     border-radius: 6px;
     -webkit-box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.25);
             box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.25);
@@ -2005,8 +2006,8 @@ input[type="submit"].medium {
 button.inverted,
 input[type="submit"].inverted {
     color: white;
-    background: black;
-    border-color: black;
+    background: #222222;
+    border-color: #222222;
 }
 
 /* Perfumery -----------------------------------------------------------------------------------------------------------*/
@@ -2065,7 +2066,7 @@ main.perfumery {
     }
 
     .in-frame {
-        border: solid thin black;
+        border: solid thin #222222;
         padding: 1.5rem 3rem;
         margin: 1rem 1rem 1rem 0;
     }
@@ -2299,7 +2300,7 @@ main.perfumery {
             line-height: var(--F16);
             font-weight: 250;
             word-wrap: break-word;
-            border-bottom: solid thin black;
+            border-bottom: solid thin #222222;
             text-transform: uppercase;
         }
     }
@@ -2389,8 +2390,8 @@ main.perfumery {
 
 dialog {
     max-width: 40rem;
-    border: solid black thin;
-    color: black;
+    border: solid #222222 thin;
+    color: #222222;
     overflow: auto;
     padding: 0 3rem;
 
@@ -2510,7 +2511,7 @@ dialog #scui-form {
 dialog #scui-form input[type="text"],
 dialog #scui-form input[type="email"] {
     padding: var(--DefPadding);
-    border: solid thin black;
+    border: solid thin #222222;
 }
 
 /* Msg -----------------------------------------------------------------------------------------------------------------*/
@@ -2609,7 +2610,7 @@ dialog #scui-form input[type="email"] {
             input[type="text"],
             input[type="email"] {
                 border: none;
-                border-bottom: solid thin black;
+                border-bottom: solid thin #222222;
                 padding-bottom: 0.75rem;
             }
 
@@ -2702,7 +2703,7 @@ dialog #scui-form input[type="email"] {
                     font-weight: 250;
                     font-variation-settings: "wght" 200;
                     &:hover {
-                        background: black;
+                        background: #222222;
                         color: white;
                     }
                 }
@@ -2830,7 +2831,7 @@ dialog #scui-form input[type="email"] {
         }
 
         span {
-            color: black;
+            color: #222222;
             font-size: var(--F24);
             line-height: var(--F24);
             font-weight: 300;
@@ -3059,16 +3060,6 @@ dialog #scui-form input[type="email"] {
             box-sizing: border-box;
     aspect-ratio: 1440 / 881;
     gap: 0;
-    -webkit-transition: -webkit-filter 0.3s ease-out;
-    transition: -webkit-filter 0.3s ease-out;
-    -o-transition: filter 0.3s ease-out;
-    transition: filter 0.3s ease-out;
-    transition: filter 0.3s ease-out, -webkit-filter 0.3s ease-out;
-
-    &.decorated {
-        -webkit-filter: brightness(500%) contrast(200%) opacity(0) blur(5px);
-                filter: brightness(500%) contrast(200%) opacity(0) blur(5px);
-    }
 
     &.btc {
         background-position: top center;
@@ -3116,6 +3107,16 @@ dialog #scui-form input[type="email"] {
     }
 
     &.banner-C {
+        -webkit-transition: none;
+        -o-transition: none;
+        transition: none;
+
+        &.animated {
+            -webkit-transition: all 0.3s ease-in-out;
+            -o-transition: all 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out;
+        }
+
         padding: 0;
         justify-items: center;
         text-align: center;
