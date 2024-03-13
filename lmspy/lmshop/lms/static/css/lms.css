@@ -1749,7 +1749,7 @@ main.perfumery {
     }
 }
 
-@media (max-width: 40rem) {
+@media (max-width: 50rem) {
     .size-chart-container {
         .size-chart {
             th {
