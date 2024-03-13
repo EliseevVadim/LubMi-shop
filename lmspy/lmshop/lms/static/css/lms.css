@@ -181,6 +181,7 @@ details {
 
         &::marker {
             content: none;
+            display: none;
         }
 
         &::after {
