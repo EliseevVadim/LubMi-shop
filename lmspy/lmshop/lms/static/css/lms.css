@@ -55,12 +55,15 @@ input[type="email"] {
     position: relative;
     max-width: 100%;
     color: #000;
+    display: flex;
+    flex-flow: column;
+    align-items: end;
 
     .select-button {
         font-size: var(--F24);
         font-variation-settings: "wght" 100;
         font-weight: 250;
-        width: 100%;
+        width: fit-content;
         background-color: #fff;
         padding: 0.25rem 0;
         border: none;
@@ -68,8 +71,8 @@ input[type="email"] {
         box-shadow: none;
         cursor: pointer;
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        gap: 1em;
     }
 
     * {
@@ -93,7 +96,7 @@ input[type="email"] {
         .select-dropdown {
             opacity: 1;
             visibility: visible;
-            transform: scaleY(1);
+            transform: scaleY(1) translate(0, 1em);
         }
     }
 
@@ -103,7 +106,7 @@ input[type="email"] {
         position: absolute;
         height: fit-content;
         list-style: none;
-        width: 100%;
+        width: fit-content;
         background-color: #fff;
         border: solid thin #222222;
         border-radius: 0;
@@ -153,6 +156,7 @@ input[type="email"] {
                 font-variation-settings: "wght" 100;
                 font-weight: 250;
                 text-transform: none;
+                white-space: nowrap;
                 width: 100%;
                 padding: 8px 10px;
                 cursor: pointer;
@@ -722,6 +726,11 @@ figcaption {
         column-gap: 1rem;
         place-items: center start;
 
+        .select-button {
+            width: 100%;
+            justify-content: space-between;
+        }
+
         .select {
             padding: 0.25rem 0.5rem;
             border: solid thin #222222;
@@ -1033,6 +1042,7 @@ h* {
         .custom-select {
             margin-top: 1rem;
             margin-left: 0;
+            align-items: start;
         }
     }
 }
