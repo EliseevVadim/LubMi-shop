@@ -2359,7 +2359,7 @@ dialog #scui-form input[type="email"] {
         transition: none;
 
         &.animated {
-            transition: all 0.3s ease-in-out;
+            transition: all 0.5s ease-in-out;
         }
 
         padding: 0;

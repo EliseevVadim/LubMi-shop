@@ -6,28 +6,30 @@ const {{unique}}_banner = {
     slogan: () => document.querySelector("#banner-{{unique}}  .banner-slogan"),
     init: () => {
         if(!{{unique}}_banner.self()) { return; }
-        let pre_1 = document.createElement('link')
-        let pre_2 = document.createElement('link')
-            pre_1.href = '{{img_1}}'
-            pre_2.href = '{{img_2}}'
-            pre_1.rel = 'preload'
-            pre_2.rel = 'preload'
-            pre_1.as = 'image'
-            pre_2.as = 'image'
-        document.head.appendChild(pre_1)
-        document.head.appendChild(pre_2)
+
+        let pre_1 = document.createElement('link');
+        let pre_2 = document.createElement('link');
+        pre_1.href = '{{img_1}}';
+        pre_2.href = '{{img_2}}';
+        pre_1.rel = 'preload';
+        pre_2.rel = 'preload';
+        pre_1.as = 'image';
+        pre_2.as = 'image';
+        document.head.appendChild(pre_1);
+        document.head.appendChild(pre_2);
+
         svg_1 = `<svg width="5mm" height="5mm" viewBox="0 0 7 7"><g><circle id="{{unique}}-switch-1" cx="3" cy="3" r="2.5" fill="#fff" stroke="#fff" stroke-width="0.25px"/></g></svg>`;
         svg_2 = `<svg width="5mm" height="5mm" viewBox="0 0 7 7"><g><circle id="{{unique}}-switch-2" cx="3" cy="3" r="2.5" fill="#0000" stroke="#fff" stroke-width="0.25px"/></g></svg>`;
         g_1 = `{% include "lms/include/gradient.html" with gradient=g1 %}`
         g_2 = `{% include "lms/include/gradient.html" with gradient=g2 %}`
-        const switch_action = (sw_on, sw_off, img1, img2, b_text, s_text, grad, ref) => {
-            let p = {{param_value_slideshow_period|default:"20000"}};
+        const switch_action = (rtl, sw_on, sw_off, img1, img2, b_text, s_text, grad, ref) => {
+            let p = {{param_value_slideshow_period|default:"20"}} * 1000;
             let banner = {{unique}}_banner.self();
             return _ => {
                 function swf() {
                     {{unique}}_banner.current = sw_on;
                     banner.style['background-image'] = `url(${img1}), url(${img2})`;
-                    banner.style['background-position'] = `center top, 100vw top`;
+                    banner.style['background-position'] = rtl ? `center top, -200vw top` : `center top, 100vw top`;
                     banner.style['background-size'] = `cover, cover`;
                     {{unique}}_banner.button().innerHTML = b_text;
                     {{unique}}_banner.slogan().innerHTML = s_text;
@@ -35,17 +37,17 @@ const {{unique}}_banner = {
                     sw_on.attributes.fill.nodeValue = "#fff";
                     sw_off.attributes.fill.nodeValue = "#0000";
                     let b = {{unique}}_banner.self();
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         banner.classList.remove("animated");
                         banner.style['background-image'] = grad ? `${grad}, url(${img1})` : `url(${img1})`;
                         banner.style['background-position'] = `center top`;
                         banner.style['background-size'] = `cover`;
-                    }, 310);
+                    }, 510);
                 }
                 if({{unique}}_banner.current && {{unique}}_banner.current != sw_on) {
                     banner.style['background-image'] = `url(${img1}), url(${img2})`;
-                    banner.style['background-position'] = `-200vw top, center top`;
                     banner.style['background-size'] = `cover, cover`;
+                    banner.style['background-position'] = rtl ? `100vw top, center top` : `-200vw top, center top`;
                     setTimeout(() => {
                         {{unique}}_banner.self().classList.add("animated");
                         swf();
@@ -57,14 +59,14 @@ const {{unique}}_banner = {
                 {{unique}}_banner.tmid = setTimeout(() => {
                     {{unique}}_banner.tmid = null;
                     sw_off.dispatchEvent(new MouseEvent("click"));
-                }, p/2);
+                }, p);
             };
         }
         {{unique}}_banner.self().insertAdjacentHTML('beforeEnd', `<div class="banner-switch">${svg_1}${svg_2}</div>`);
         sw1 = document.querySelector('#{{unique}}-switch-1');
         sw2 = document.querySelector('#{{unique}}-switch-2');
-        sa1 = switch_action(sw1, sw2, '{{img_1}}', '{{img_2}}', '{{button_1}}', '{{slogan_1}}', g_1, '{{ref_1}}');
-        sa2 = switch_action(sw2, sw1, '{{img_2}}', '{{img_1}}', '{{button_2}}', '{{slogan_2}}', g_2, '{{ref_2}}');
+        sa1 = switch_action(false, sw1, sw2, '{{img_1}}', '{{img_2}}', '{{button_1}}', '{{slogan_1}}', g_1, '{{ref_1}}');
+        sa2 = switch_action(true, sw2, sw1, '{{img_2}}', '{{img_1}}', '{{button_2}}', '{{slogan_2}}', g_2, '{{ref_2}}');
         sw1.addEventListener('click', sa1);
         sw2.addEventListener('click', sa2);
         sa{{show}}(null);
