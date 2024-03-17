@@ -183,7 +183,7 @@ details {
         display: flex;
         flex-flow: row;
 
-        &::marker {
+        &::-webkit-details-marker, &::marker {
             content: none;
             display: none;
         }
@@ -2332,7 +2332,7 @@ dialog #scui-form input[type="email"] {
 
 .banner {
     display: grid;
-    grid-template: repeat(12, auto) / repeat(12, auto);
+    grid-template: repeat(12, 1fr) / repeat(12, 1fr);
     background-color: white;
     background-size: cover;
     background-position: center center;
@@ -2367,7 +2367,7 @@ dialog #scui-form input[type="email"] {
     }
 
     &.banner-B {
-        grid-template: repeat(11, auto) 7rem / repeat(12, 1fr);
+        grid-template: repeat(11, 1fr) 7rem / repeat(12, 1fr);
         grid-template-areas:
         "S S S S S S S S S S S S"
         "S S S S S S S S S S S S"
@@ -2393,7 +2393,7 @@ dialog #scui-form input[type="email"] {
         padding: 0;
         justify-items: center;
         text-align: center;
-        grid-template: repeat(10, auto) 7rem 5rem / repeat(12, 1fr);
+        grid-template: repeat(10, 1fr) 7rem 5rem / repeat(12, 1fr);
         grid-template-areas:
         "S S S S S S S S S S S S"
         "S S S S S S S S S S S S"
