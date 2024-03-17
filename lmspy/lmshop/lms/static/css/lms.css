@@ -1914,8 +1914,26 @@ dialog #scui-form input[type="email"] {
 
 /* Msg -----------------------------------------------------------------------------------------------------------------*/
 
-#msg-dialog .dialog-footer {
-    margin-top: 2rem;
+#msg-dialog {
+    .dialog-footer {
+        margin-top: 2rem;
+    }
+}
+
+#psu-dialog,
+#pca-dialog,
+#puk-dialog {
+    button.medium {
+        padding: 1.25rem 4rem;
+    }
+    .modal-message {
+        margin-bottom: 5rem;
+        text-align: center;
+
+        p {
+            margin: 0.5rem 0 0 0;
+        }
+    }
 }
 
 /* C6t -----------------------------------------------------------------------------------------------------------------*/
