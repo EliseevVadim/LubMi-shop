@@ -2380,7 +2380,7 @@ dialog #scui-form input[type="email"] {
         "S S S S S S S S S S S S"
         "S S S S S S S S S S S S"
         "S S S S S S S S S S S S"
-        "B B B B . . . . . . . .";
+        "B B B . . . . . . . . .";
     }
 
     &.banner-C {
@@ -2449,10 +2449,11 @@ dialog #scui-form input[type="email"] {
         margin: 0;
         grid-area: B;
         align-self: end;
-        max-height: 5.11rem;
-        min-height: 5.11rem;
+        max-height: 4.5rem;
+        min-height: 4.5rem;
         font-size: var(--F24);
         font-weight: 300;
+        font-variation-settings: "wght" 500;
         word-wrap: break-word;
         background: white;
         border: 2px white solid;
