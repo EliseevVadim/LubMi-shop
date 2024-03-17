@@ -195,6 +195,7 @@ c6t_dialog.show = () => {
             c6t_dialog.rszo = new ResizeObserver(move_city_list);
             c6t_dialog.rszo.observe(_city);
             c6t_dialog.sch = suppress_scrolling();
+            c6t_dialog.self().onclose = c6t_dialog.release;
             c6t_dialog.self().showModal();
         });
     });
