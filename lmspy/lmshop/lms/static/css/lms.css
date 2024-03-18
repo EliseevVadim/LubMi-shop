@@ -2269,12 +2269,12 @@ dialog #scui-form input[type="email"] {
     position: fixed;
     margin: 0 0 auto 0;
     width: auto;
-    height: fit-content;
+    height: 5rem;
     left: 0;
     right: 0;
     top: 0;
     border: none;
-    padding: calc(2.5 * var(--DefPadding));
+    padding: 0;
 
     &.full-screen {
         margin: 0;
@@ -2285,7 +2285,7 @@ dialog #scui-form input[type="email"] {
     #sch-box {
         position: absolute;
         margin: 0;
-        padding: 0;
+        padding: 0 calc(2 * var(--DefPadding));
         width: auto;
         height: auto;
 
@@ -2314,7 +2314,11 @@ dialog #scui-form input[type="email"] {
 
         #sch-info {
             flex: 0 0 auto;
-            padding: var(--DefPadding);
+            padding: 4rem 0 3rem 0;
+
+            p {
+                margin: 0;
+            }
         }
 
         #sch-result {
@@ -2376,6 +2380,19 @@ dialog #scui-form input[type="email"] {
 #sch-dialog:not(.full-screen) #sch-footer {
     visibility: collapse;
     padding: 0;
+}
+
+@media (max-width: 961px) {
+    #sch-dialog {
+        #sch-box {
+            span.bb1 {
+                margin-right: 3.5rem;
+                #sch-text {
+                    min-width: calc(100vw - 12rem);
+                }
+            }
+        }
+    }
 }
 
 /* Banner --------------------------------------------------------------------------------------------------------------*/
