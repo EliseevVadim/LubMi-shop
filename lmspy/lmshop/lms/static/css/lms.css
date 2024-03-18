@@ -7,7 +7,6 @@
     --ZixLeading: 20;
     --ZixTop: 40;
     --ZixPanels: 50;
-    --CatItemWidth: 19rem;
     --DetItemWidth: 31rem;
     --ScartFigWidth: 8rem;
     --HeartSize: 1.7rem;
@@ -32,6 +31,8 @@
     --S110: clamp(70px, calc(11000vw / 1440), 110px);
     --S9R: clamp(70px, calc(13500vw / 1440), 9rem);
     --S2R: clamp(1rem, calc(2800vw / 1440), 2rem);
+
+    --CatItemWidth: clamp(11rem, calc(26500vw / 1440), 19rem);
 }
 
 * {
