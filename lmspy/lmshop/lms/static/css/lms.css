@@ -816,6 +816,14 @@ figcaption {
             min-height: 70px;
         }
     }
+
+    .catalogue {
+        figcaption {
+            button {
+                box-shadow: none;
+            }
+        }
+    }
 }
 
 /* Panels --------------------------------------------------------------------------------------------------------------*/
@@ -1740,6 +1748,7 @@ main.perfumery {
     .size-chart {
         display: flex;
         flex-flow: column;
+        max-width: 100%;
 
         h1 {
             text-align: center;
@@ -1751,39 +1760,58 @@ main.perfumery {
             font-size: var(--F24);
             line-height: var(--F24);
             font-weight: 250;
+            font-variation-settings: "wght" 100;
             word-wrap: break-word;
             margin: 3rem 0 3rem 0;
-        }
-
-        table {
-            table-layout: fixed;
-            border-collapse: collapse;
-            margin-left: auto;
-            margin-right: auto;
-            overflow: auto;
-        }
-
-        th,
-        td {
-            padding: 1.5rem 1rem;
-            text-align: center;
-            color: #222222;
-            font-size: var(--F16);
-            line-height: var(--F16);
-            font-weight: 250;
-            word-wrap: break-word;
-            border-bottom: solid thin #222222;
             text-transform: uppercase;
         }
-    }
-}
 
-@media (max-width: 50rem) {
-    .size-chart-container {
-        .size-chart {
-            th {
-                writing-mode: tb-rl;
-                transform: rotate(180deg);
+        .szchcnt {
+            display: flex;
+            flex-flow: column;
+            place-items: center;
+            max-width: 100%;
+            width: fit-content;
+            overflow-x: auto;
+
+            &::-webkit-scrollbar {
+                width: 5px;
+                height: 5px;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: #d3d3d3;
+                border-radius: 0px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background: #222222;
+                border-radius: 0px;
+            }
+
+            table {
+                table-layout: fixed;
+                border-collapse: collapse;
+                margin-left: auto;
+                margin-right: auto;
+
+                th,
+                td {
+                    padding: 1.5rem 1rem;
+                    text-align: center;
+                    color: #222222;
+                    font-size: var(--F16);
+                    line-height: var(--F16);
+                    font-weight: 250;
+                    font-variation-settings: "wght" 100;
+                    word-wrap: break-word;
+                    border-bottom: solid thin #222222;
+                    text-transform: uppercase;
+                }
+
+                tr:last-child > td {
+                    border-bottom: none;
+                }
             }
         }
     }
@@ -2305,15 +2333,18 @@ dialog #scui-form input[type="email"] {
                flex-flow: column;
                place-items: center;
             }
+
             & > * > a {
                display: flex;
                flex-flow: column;
                place-items: center;
             }
+
             & > * > * {
                max-width: calc(var(--CatItemWidth));
                min-width: calc(var(--CatItemWidth));
             }
+
             figcaption {
                 display: grid;
                 grid-template: auto / auto;
