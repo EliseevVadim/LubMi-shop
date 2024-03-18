@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.conf import settings
 from django.urls import reverse
 from django.utils.html import format_html
 from .models import *
@@ -96,3 +97,6 @@ class AboutItemAdmin(admin.ModelAdmin):
     list_display = ['label', 'description', 'image', 'kind']
     list_filter = ['kind']
     search_fields = ['label']
+
+
+admin.site.site_url = settings.SITE_URL

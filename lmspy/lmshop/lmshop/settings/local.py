@@ -1,6 +1,7 @@
 from .base import *
-import os
+
 DEBUG = True
+SITE_URL = "http://192.168.0.100:8000/lms/"
 ALLOWED_HOSTS = ['*']
 DATABASES = {
     'default': {
