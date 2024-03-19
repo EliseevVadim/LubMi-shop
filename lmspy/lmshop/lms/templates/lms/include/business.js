@@ -111,6 +111,7 @@ const show_product_details = url => {
             }
             fun(document.querySelector("#selected-size").value);
             size_selector.init(fun);
+            setTimeout(()=>{ document.querySelector("#gp-dialog").scrollTop = 0; }, 10);
         }
     });
 };
