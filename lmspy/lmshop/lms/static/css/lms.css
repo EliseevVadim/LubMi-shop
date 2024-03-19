@@ -1245,11 +1245,12 @@ p {
 
         &.grid12-abcd {
             grid-template: repeat(12, auto) / repeat(12, auto);
+            gap: 0.35rem;
             grid-template-areas:
                 "A A A A A A A A A A A A"
                 "A A A A A A A A A A A A"
-                "C C C C C C C C B B B B"
-                "C C C C C C C C B B B B"
+                ". . . . . . . . . . . ."
+                ". . . . . . . . . . . ."
                 "C C C C C C C C B B B B"
                 "C C C C C C C C B B B B"
                 "C C C C C C C C B B B B"
