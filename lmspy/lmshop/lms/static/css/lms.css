@@ -1486,7 +1486,7 @@ input[type="submit"] {
     font-weight: 300;
     font-variation-settings: "wght" 300;
     background: white;
-    padding: calc(0.75 * var(--DefPadding)) calc(2 * var(--DefPadding));
+    padding: calc(0.7 * var(--DefPadding)) calc(2 * var(--DefPadding));
     cursor: pointer;
     text-decoration: none;
     border: solid #222222 thin;
@@ -1608,6 +1608,16 @@ main.perfumery {
 
         .in-frame {
             margin: 0;
+        }
+
+        section {
+            button.medium {
+                width: 100%;
+                font-size: var(--F32);
+                line-height: var(--F32);
+                font-weight: 400;
+                font-variation-settings: "wght" 400;
+            }
         }
     }
 }
