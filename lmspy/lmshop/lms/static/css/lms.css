@@ -1500,7 +1500,7 @@ input[type="submit"].medium {
     font-size: var(--F24);
     line-height: var(--F24);
     font-weight: 300;
-    padding: 2rem 4rem;
+    padding: 1.5rem 4rem;
 }
 
 button.inverted,
@@ -1858,6 +1858,7 @@ main.perfumery {
     p {
         text-align: center;
         margin-top: 6rem;
+
         & ~ p {
             margin-top: 4rem;
             margin-bottom: 2rem;
@@ -1872,8 +1873,16 @@ main.perfumery {
         font-size: var(--F24);
         line-height: var(--F24);
         font-weight: 300;
+        font-variation-settings: "wght" 500;
         word-wrap: break-word;
+
+        button {
+            img {
+                margin-left: 1rem;
+            }
+        }
     }
+
 
     button {
         margin: 0 7rem;
@@ -2043,7 +2052,6 @@ dialog #scui-form input[type="email"] {
             font-size: var(--F16);
             line-height: var(--F16);
             font-weight: 250;
-
             font-variation-settings: "wght" 100;
             align-self: end;
                 td {
@@ -2257,7 +2265,8 @@ dialog #scui-form input[type="email"] {
     display: grid;
     justify-items: center;
     align-items: begin;
-    gap: 0.1rem;
+    column-gap: 0.2rem;
+    row-gap: 0.75rem;
     grid-template-columns: repeat(auto-fit, minmax(var(--HoFSize), 1fr));
     margin-top: 2rem;
 

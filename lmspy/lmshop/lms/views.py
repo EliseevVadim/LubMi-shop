@@ -523,7 +523,7 @@ class ContactsView(View):
         return render(request, 'lms/contacts-modal.html' if modal else 'lms/contacts-page.html', {
             'page_title': title,
             'page_content': 'contacts-page',
-            'text': f"""#{title}\n\nТелефон клиентской поддержки **{ph},**  \nпн-пт с 11:00 до 21:00\n\n\nТакже Вы можете связаться с нами  \nдругим способом:"""})
+            'text': f"""#{title}\n\nТелефон клиентской поддержки  \n{ph},  \nпн-пт с 11:00 до 21:00\n\n\nТакже Вы можете связаться с нами  \nдругим способом:"""})
 
 
 class SzChartView(View):
