@@ -1012,12 +1012,18 @@ aside {
 
 section[id$="undo-section"] {
     display: none;
-    grid-template: auto auto / 25rem 1fr 2rem;
+    grid-template: auto auto / 1fr 2rem 2rem;
     gap: 1rem;
     margin: 0 0 2rem 0;
     font-size: var(--F24);
     line-height: var(--F24);
     font-weight: 300;
+
+    [id$="undo-message"] {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 
     [id$="undo-countdown"] {
         justify-self: end;
@@ -1871,7 +1877,7 @@ main.perfumery {
         text-decoration: none;
         color: #222222;
         font-size: var(--F24);
-        line-height: var(--F24);
+        line-height: var(--F30);
         font-weight: 300;
         font-variation-settings: "wght" 500;
         word-wrap: break-word;
@@ -1929,6 +1935,7 @@ dialog {
         font-size: var(--F24);
         line-height: var(--F24);
         font-weight: 250;
+        font-variation-settings: "wght" 100;
         word-wrap: break-word;
         cursor: pointer;
         display: inline-flex;
@@ -1966,6 +1973,15 @@ dialog {
 @media (max-width: 40rem) {
     dialog {
         padding: 0 1.5rem;
+    }
+}
+
+@media (max-width: 961px) {
+    dialog {
+        .cancel-dialog {
+            font-size: var(--F30);
+            line-height: var(--F30);
+        }
     }
 }
 
