@@ -1616,7 +1616,7 @@ main.perfumery {
                 font-size: var(--F32);
                 line-height: var(--F32);
                 font-weight: 400;
-                font-variation-settings: "wght" 400;
+                font-variation-settings: "wght" 600;
             }
         }
     }
@@ -1696,6 +1696,16 @@ main.perfumery {
     .care-page {
         & > .grid12 {
             margin-top: 2.5rem;
+        }
+
+        & > .grid12 h1:first-child {
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        & > .grid12 h1:not(:first-child) {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
         }
     }
 }
