@@ -8,7 +8,6 @@
     --ZixTop: 40;
     --ZixPanels: 50;
     --DetItemWidth: 31rem;
-    --ScartFigWidth: 8rem;
     --HeartSize: 1.7rem;
     --Gap: var(--DefPadding);
     --NarrowPageWidth: 92rem;
@@ -33,6 +32,7 @@
     --S2R: clamp(1rem, calc(2800vw / 1440), 2rem);
 
     --CatItemWidth: clamp(11rem, calc(26500vw / 1440), 19rem);
+    --ScartFigWidth: clamp(1rem, calc(11200vw / 400), 8rem); /*8rem;*/
 }
 
 * {
@@ -953,13 +953,15 @@ aside {
     display: grid;
     grid-template: auto auto / var(--ScartFigWidth) repeat(2, auto);
     grid-auto-flow: row;
-    column-gap: calc(2 * var(--DefPadding));
+    column-gap: calc(1.25 * var(--DefPadding));
+    row-gap: 0.25rem;
     margin-bottom: 1.5rem;
 
     .product-description {
         display: grid;
-        grid-template: auto / auto;
+        grid-template: auto auto 1fr / auto;
         grid-auto-flow: row;
+        row-gap: 0.45rem;
     }
 
     .product-title {
