@@ -12,11 +12,9 @@
     --Fonts: "Geologica", sans-serif;
     --ZixContent: 10;
     --ZixLeading: 20;
-    --ZixPanels: 30;
     --ZixTop: 40;
-    --CatItemWidth: 19rem;
+    --ZixPanels: 50;
     --DetItemWidth: 31rem;
-    --ScartFigWidth: 8rem;
     --HeartSize: 1.7rem;
     --Gap: var(--DefPadding);
     --NarrowPageWidth: 92rem;
@@ -39,6 +37,9 @@
     --S110: clamp(70px, calc(11000vw / 1440), 110px);
     --S9R: clamp(70px, calc(13500vw / 1440), 9rem);
     --S2R: clamp(1rem, calc(2800vw / 1440), 2rem);
+
+    --CatItemWidth: clamp(11rem, calc(26500vw / 1440), 19rem);
+    --ScartFigWidth: clamp(1rem, calc(11200vw / 400), 8rem); /*8rem;*/
 }
 
 * {
@@ -62,12 +63,24 @@ input[type="email"] {
     position: relative;
     max-width: 100%;
     color: #000;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: column;
+            flex-flow: column;
+    -webkit-box-align: end;
+        -ms-flex-align: end;
+            align-items: end;
 
     .select-button {
         font-size: var(--F24);
         font-variation-settings: "wght" 100;
         font-weight: 250;
-        width: 100%;
+        width: -webkit-fit-content;
+        width: -moz-fit-content;
+        width: fit-content;
         background-color: #fff;
         padding: 0.25rem 0;
         border: none;
@@ -78,12 +91,10 @@ input[type="email"] {
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
-        -webkit-box-pack: justify;
-            -ms-flex-pack: justify;
-                justify-content: space-between;
         -webkit-box-align: center;
             -ms-flex-align: center;
                 align-items: center;
+        gap: 1em;
     }
 
     * {
@@ -110,9 +121,9 @@ input[type="email"] {
         .select-dropdown {
             opacity: 1;
             visibility: visible;
-            -webkit-transform: scaleY(1);
-                -ms-transform: scaleY(1);
-                    transform: scaleY(1);
+            -webkit-transform: scaleY(1) translate(0, 1em);
+                -ms-transform: scaleY(1) translate(0, 1em);
+                    transform: scaleY(1) translate(0, 1em);
         }
     }
 
@@ -124,7 +135,9 @@ input[type="email"] {
         height: -moz-fit-content;
         height: fit-content;
         list-style: none;
-        width: 100%;
+        width: -webkit-fit-content;
+        width: -moz-fit-content;
+        width: fit-content;
         background-color: #fff;
         border: solid thin #222222;
         border-radius: 0;
@@ -180,6 +193,7 @@ input[type="email"] {
                 font-variation-settings: "wght" 100;
                 font-weight: 250;
                 text-transform: none;
+                white-space: nowrap;
                 width: 100%;
                 padding: 8px 10px;
                 cursor: pointer;
@@ -219,7 +233,7 @@ details {
             content: none;
             display: none;
         }
-        
+
         &::after {
             margin-left: auto;
             content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='15' viewBox='0 0 40 24.7'><path d='M 40,4.7 35.3,0 20,15.27 4.7,0 0,4.7 20,24.7 Z' fill='black'/></svg>");
@@ -554,7 +568,7 @@ footer.page {
         -ms-grid-row: 12;
         -ms-grid-row-span: 1;
         -ms-grid-column: 1;
-        -ms-grid-column-span: 4;
+        -ms-grid-column-span: 3;
     }
 
     &.banner-C > .std-footer-item-2 {
@@ -844,6 +858,9 @@ figcaption {
 .old-price {
     -webkit-text-decoration: line-through #7f7f7f 2px;
             text-decoration: line-through #7f7f7f 2px;
+    text-decoration-thickness: 2px;
+    -webkit-text-decoration-line: line-through;
+    -webkit-text-decoration-color: #7f7f7f;
     font-size: var(--F16);
     line-height: var(--F16);
     font-weight: 300;
@@ -1031,6 +1048,13 @@ figcaption {
                 column-gap: 1rem;
         place-items: center start;
 
+        .select-button {
+            width: 100%;
+            -webkit-box-pack: justify;
+                -ms-flex-pack: justify;
+                    justify-content: space-between;
+        }
+
         .select {
             padding: 0.25rem 0.5rem;
             border: solid thin #222222;
@@ -1125,6 +1149,15 @@ figcaption {
             min-height: 70px;
         }
     }
+
+    .catalogue {
+        figcaption {
+            button {
+                -webkit-box-shadow: none;
+                        box-shadow: none;
+            }
+        }
+    }
 }
 
 /* Panels --------------------------------------------------------------------------------------------------------------*/
@@ -1148,6 +1181,21 @@ aside {
     -webkit-transition: opacity 0.25s ease;
     -o-transition: opacity 0.25s ease;
     transition: opacity 0.25s ease;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+            width: 7px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 25px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 25px;
+    }
 
     div.separator {
         margin: 0.5rem 0 1rem 0 !important;
@@ -1255,22 +1303,24 @@ aside {
 .sidebar-item {
     display: -ms-grid;
     display: grid;
-    -ms-grid-rows: auto auto;
-    -ms-grid-columns: var(--ScartFigWidth) calc(2 * var(--DefPadding)) auto calc(2 * var(--DefPadding)) auto;
+    -ms-grid-rows: auto 0.45rem auto;
+    -ms-grid-columns: var(--ScartFigWidth) calc(1.25 * var(--DefPadding)) auto calc(1.25 * var(--DefPadding)) auto;
         grid-template: auto auto / var(--ScartFigWidth) repeat(2, auto);
     grid-auto-flow: row;
-    -webkit-column-gap: calc(2 * var(--DefPadding));
-       -moz-column-gap: calc(2 * var(--DefPadding));
-            column-gap: calc(2 * var(--DefPadding));
+    -webkit-column-gap: calc(1.25 * var(--DefPadding));
+       -moz-column-gap: calc(1.25 * var(--DefPadding));
+            column-gap: calc(1.25 * var(--DefPadding));
+    row-gap: 0.25rem;
     margin-bottom: 1.5rem;
 
     .product-description {
         display: -ms-grid;
         display: grid;
-        -ms-grid-rows: auto;
+        -ms-grid-rows: auto 0.45rem auto 0.45rem 1fr;
         -ms-grid-columns: auto;
-            grid-template: auto / auto;
+            grid-template: auto auto 1fr / auto;
         grid-auto-flow: row;
+        row-gap: 0.45rem;
     }
 
     .product-title {
@@ -1332,13 +1382,20 @@ aside {
 section[id$="undo-section"] {
     display: none;
     -ms-grid-rows: auto 1rem auto;
-    -ms-grid-columns: 25rem 1rem 1fr 1rem 2rem;
-        grid-template: auto auto / 25rem 1fr 2rem;
+    -ms-grid-columns: 1fr 1rem 2rem 1rem 2rem;
+        grid-template: auto auto / 1fr 2rem 2rem;
     gap: 1rem;
     margin: 0 0 2rem 0;
     font-size: var(--F24);
     line-height: var(--F24);
     font-weight: 300;
+
+    [id$="undo-message"] {
+        overflow: hidden;
+        white-space: nowrap;
+        -o-text-overflow: ellipsis;
+           text-overflow: ellipsis;
+    }
 
     [id$="undo-countdown"] {
         -ms-grid-column-align: end;
@@ -1399,6 +1456,9 @@ h* {
         .custom-select {
             margin-top: 1rem;
             margin-left: 0;
+            -webkit-box-align: start;
+                -ms-flex-align: start;
+                    align-items: start;
         }
     }
 }
@@ -1647,7 +1707,7 @@ p {
         -ms-grid-row: 12;
         -ms-grid-row-span: 1;
         -ms-grid-column: 1;
-        -ms-grid-column-span: 4;
+        -ms-grid-column-span: 3;
     }
 
     &.banner-C > .g12-ib {
@@ -1731,13 +1791,14 @@ p {
         }
 
         &.grid12-abcd {
-            -ms-grid-columns: (auto)[12];
+            -ms-grid-columns: auto 0.35rem auto 0.35rem auto 0.35rem auto 0.35rem auto 0.35rem auto 0.35rem auto 0.35rem auto 0.35rem auto 0.35rem auto 0.35rem auto 0.35rem auto;
                 grid-template: repeat(12, auto) / repeat(12, auto);
+            gap: 0.35rem;
                 grid-template-areas:
                 "A A A A A A A A A A A A"
                 "A A A A A A A A A A A A"
-                "C C C C C C C C B B B B"
-                "C C C C C C C C B B B B"
+                ". . . . . . . . . . . ."
+                ". . . . . . . . . . . ."
                 "C C C C C C C C B B B B"
                 "C C C C C C C C B B B B"
                 "C C C C C C C C B B B B"
@@ -1985,7 +2046,7 @@ input[type="submit"] {
     font-weight: 300;
     font-variation-settings: "wght" 300;
     background: white;
-    padding: calc(0.75 * var(--DefPadding)) calc(2 * var(--DefPadding));
+    padding: calc(0.7 * var(--DefPadding)) calc(2 * var(--DefPadding));
     cursor: pointer;
     text-decoration: none;
     border: solid #222222 thin;
@@ -2000,7 +2061,7 @@ input[type="submit"].medium {
     font-size: var(--F24);
     line-height: var(--F24);
     font-weight: 300;
-    padding: 2rem 4rem;
+    padding: 1.5rem 4rem;
 }
 
 button.inverted,
@@ -2109,6 +2170,16 @@ main.perfumery {
         .in-frame {
             margin: 0;
         }
+
+        section {
+            button.medium {
+                width: 100%;
+                font-size: var(--F32);
+                line-height: var(--F32);
+                font-weight: 400;
+                font-variation-settings: "wght" 600;
+            }
+        }
     }
 }
 
@@ -2196,6 +2267,16 @@ main.perfumery {
         & > .grid12 {
             margin-top: 2.5rem;
         }
+
+        & > .grid12 h1:first-child {
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        & > .grid12 h1:not(:first-child) {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
     }
 }
 
@@ -2268,6 +2349,7 @@ main.perfumery {
         -webkit-box-direction: normal;
             -ms-flex-flow: column;
                 flex-flow: column;
+        max-width: 100%;
 
         h1 {
             text-align: center;
@@ -2279,43 +2361,65 @@ main.perfumery {
             font-size: var(--F24);
             line-height: var(--F24);
             font-weight: 250;
+            font-variation-settings: "wght" 100;
             word-wrap: break-word;
             margin: 3rem 0 3rem 0;
-        }
-
-        table {
-            table-layout: fixed;
-            border-collapse: collapse;
-            margin-left: auto;
-            margin-right: auto;
-            overflow: auto;
-        }
-
-        th,
-        td {
-            padding: 1.5rem 1rem;
-            text-align: center;
-            color: #222222;
-            font-size: var(--F16);
-            line-height: var(--F16);
-            font-weight: 250;
-            word-wrap: break-word;
-            border-bottom: solid thin #222222;
             text-transform: uppercase;
         }
-    }
-}
 
-@media (max-width: 50rem) {
-    .size-chart-container {
-        .size-chart {
-            th {
-                -webkit-writing-mode: tb-rl;
-                    -ms-writing-mode: tb-rl;
-                        writing-mode: tb-rl;
-                -webkit-transform: rotate(180deg);
-                    -ms-transform: rotate(180deg);
-                        transform: rotate(180deg);
+        .szchcnt {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+                -ms-flex-flow: column;
+                    flex-flow: column;
+            place-items: center;
+            max-width: 100%;
+            width: -webkit-fit-content;
+            width: -moz-fit-content;
+            width: fit-content;
+            overflow-x: auto;
+
+            &::-webkit-scrollbar {
+                width: 5px;
+                height: 5px;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: #d3d3d3;
+                border-radius: 0px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background: #222222;
+                border-radius: 0px;
+            }
+
+            table {
+                table-layout: fixed;
+                border-collapse: collapse;
+                margin-left: auto;
+                margin-right: auto;
+
+                th,
+                td {
+                    padding: 1.5rem 1rem;
+                    text-align: center;
+                    color: #222222;
+                    font-size: var(--F16);
+                    line-height: var(--F16);
+                    font-weight: 250;
+                    font-variation-settings: "wght" 100;
+                    word-wrap: break-word;
+                    border-bottom: solid thin #222222;
+                    text-transform: uppercase;
+                }
+
+                tr:last-child > td {
+                    border-bottom: none;
+                }
             }
         }
     }
@@ -2351,6 +2455,7 @@ main.perfumery {
     p {
         text-align: center;
         margin-top: 6rem;
+
         & ~ p {
             margin-top: 4rem;
             margin-bottom: 2rem;
@@ -2368,10 +2473,18 @@ main.perfumery {
         text-decoration: none;
         color: #222222;
         font-size: var(--F24);
-        line-height: var(--F24);
+        line-height: var(--F30);
         font-weight: 300;
+        font-variation-settings: "wght" 500;
         word-wrap: break-word;
+
+        button {
+            img {
+                margin-left: 1rem;
+            }
+        }
     }
+
 
     button {
         margin: 0 7rem;
@@ -2423,6 +2536,7 @@ dialog {
         font-size: var(--F24);
         line-height: var(--F24);
         font-weight: 250;
+        font-variation-settings: "wght" 100;
         word-wrap: break-word;
         cursor: pointer;
         display: -webkit-inline-box;
@@ -2492,6 +2606,15 @@ dialog {
     }
 }
 
+@media (max-width: 961px) {
+    dialog {
+        .cancel-dialog {
+            font-size: var(--F30);
+            line-height: var(--F30);
+        }
+    }
+}
+
 #gp-dialog, #c6t-dialog {
     max-width: 100vw;
     max-height: 100vh;
@@ -2516,8 +2639,26 @@ dialog #scui-form input[type="email"] {
 
 /* Msg -----------------------------------------------------------------------------------------------------------------*/
 
-#msg-dialog .dialog-footer {
-    margin-top: 2rem;
+#msg-dialog {
+    .dialog-footer {
+        margin-top: 2rem;
+    }
+}
+
+#psu-dialog,
+#pca-dialog,
+#puk-dialog {
+    button.medium {
+        padding: 1.25rem 4rem;
+    }
+    .modal-message {
+        margin-bottom: 5rem;
+        text-align: center;
+
+        p {
+            margin: 0.5rem 0 0 0;
+        }
+    }
 }
 
 /* C6t -----------------------------------------------------------------------------------------------------------------*/
@@ -2575,7 +2716,6 @@ dialog #scui-form input[type="email"] {
             font-size: var(--F16);
             line-height: var(--F16);
             font-weight: 250;
-
             font-variation-settings: "wght" 100;
             -ms-flex-item-align: end;
                 -ms-grid-row-align: end;
@@ -2849,7 +2989,10 @@ dialog #scui-form input[type="email"] {
     -webkit-box-align: begin;
         -ms-flex-align: begin;
             align-items: begin;
-    gap: 0.1rem;
+    -webkit-column-gap: 0.2rem;
+       -moz-column-gap: 0.2rem;
+            column-gap: 0.2rem;
+    row-gap: 0.75rem;
     grid-template-columns: repeat(auto-fit, minmax(var(--HoFSize), 1fr));
     margin-top: 2rem;
 
@@ -2890,14 +3033,12 @@ dialog #scui-form input[type="email"] {
     position: fixed;
     margin: 0 0 auto 0;
     width: auto;
-    height: -webkit-fit-content;
-    height: -moz-fit-content;
-    height: fit-content;
+    height: 5rem;
     left: 0;
     right: 0;
     top: 0;
     border: none;
-    padding: calc(2.5 * var(--DefPadding));
+    padding: 0;
 
     &.full-screen {
         margin: 0;
@@ -2908,7 +3049,7 @@ dialog #scui-form input[type="email"] {
     #sch-box {
         position: absolute;
         margin: 0;
-        padding: 0;
+        padding: 0 calc(2 * var(--DefPadding));
         width: auto;
         height: auto;
 
@@ -2962,7 +3103,11 @@ dialog #scui-form input[type="email"] {
             -webkit-box-flex: 0;
                 -ms-flex: 0 0 auto;
                     flex: 0 0 auto;
-            padding: var(--DefPadding);
+            padding: 4rem 0 3rem 0;
+
+            p {
+                margin: 0;
+            }
         }
 
         #sch-result {
@@ -2989,6 +3134,7 @@ dialog #scui-form input[type="email"] {
                        flex-flow: column;
                place-items: center;
             }
+
             & > * > a {
                display: -webkit-box;
                display: -ms-flexbox;
@@ -2999,10 +3145,12 @@ dialog #scui-form input[type="email"] {
                        flex-flow: column;
                place-items: center;
             }
+
             & > * > * {
                max-width: calc(var(--CatItemWidth));
                min-width: calc(var(--CatItemWidth));
             }
+
             figcaption {
                 display: -ms-grid;
                 display: grid;
@@ -3043,14 +3191,27 @@ dialog #scui-form input[type="email"] {
     padding: 0;
 }
 
+@media (max-width: 961px) {
+    #sch-dialog {
+        #sch-box {
+            span.bb1 {
+                margin-right: 3.5rem;
+                #sch-text {
+                    min-width: calc(100vw - 12rem);
+                }
+            }
+        }
+    }
+}
+
 /* Banner --------------------------------------------------------------------------------------------------------------*/
 
 .banner {
     display: -ms-grid;
     display: grid;
-    -ms-grid-rows: auto 0 auto 0 auto 0 auto 0 auto 0 auto 0 auto 0 auto 0 auto 0 auto 0 auto 0 auto;
-    -ms-grid-columns: auto 1rem auto 1rem auto 1rem auto 1rem auto 1rem auto 1rem auto 1rem auto 1rem auto 1rem auto 1rem auto 1rem auto;
-        grid-template: repeat(12, auto) / repeat(12, auto);
+    -ms-grid-rows: 1fr 0 1fr 0 1fr 0 1fr 0 1fr 0 1fr 0 1fr 0 1fr 0 1fr 0 1fr 0 1fr 0 1fr;
+    -ms-grid-columns: 1fr 1rem 1fr 1rem 1fr 1rem 1fr 1rem 1fr 1rem 1fr 1rem 1fr 1rem 1fr 1rem 1fr 1rem 1fr 1rem 1fr 1rem 1fr;
+        grid-template: repeat(12, 1fr) / repeat(12, 1fr);
     background-color: white;
     background-size: cover;
     background-position: center center;
@@ -3090,7 +3251,7 @@ dialog #scui-form input[type="email"] {
 
     &.banner-B {
         -ms-grid-columns: (1fr)[12];
-            grid-template: repeat(11, auto) 7rem / repeat(12, 1fr);
+            grid-template: repeat(11, 1fr) 7rem / repeat(12, 1fr);
             grid-template-areas:
         "S S S S S S S S S S S S"
         "S S S S S S S S S S S S"
@@ -3103,7 +3264,7 @@ dialog #scui-form input[type="email"] {
         "S S S S S S S S S S S S"
         "S S S S S S S S S S S S"
         "S S S S S S S S S S S S"
-        "B B B B . . . . . . . .";
+        "B B B . . . . . . . . .";
     }
 
     &.banner-C {
@@ -3112,16 +3273,16 @@ dialog #scui-form input[type="email"] {
         transition: none;
 
         &.animated {
-            -webkit-transition: all 0.3s ease-in-out;
-            -o-transition: all 0.3s ease-in-out;
-            transition: all 0.3s ease-in-out;
+            -webkit-transition: all 0.5s ease-in-out;
+            -o-transition: all 0.5s ease-in-out;
+            transition: all 0.5s ease-in-out;
         }
 
         padding: 0;
         justify-items: center;
         text-align: center;
         -ms-grid-columns: (1fr)[12];
-            grid-template: repeat(10, auto) 7rem 5rem / repeat(12, 1fr);
+            grid-template: repeat(10, 1fr) 7rem 5rem / repeat(12, 1fr);
             grid-template-areas:
         "S S S S S S S S S S S S"
         "S S S S S S S S S S S S"
@@ -3208,10 +3369,11 @@ dialog #scui-form input[type="email"] {
         grid-area: B;
         -ms-grid-row-align: end;
             align-self: end;
-        max-height: 5.11rem;
-        min-height: 5.11rem;
+        max-height: 4.5rem;
+        min-height: 4.5rem;
         font-size: var(--F24);
         font-weight: 300;
+        font-variation-settings: "wght" 500;
         word-wrap: break-word;
         background: white;
         border: 2px white solid;
@@ -3262,7 +3424,7 @@ dialog #scui-form input[type="email"] {
         -ms-grid-row: 12;
         -ms-grid-row-span: 1;
         -ms-grid-column: 1;
-        -ms-grid-column-span: 4
+        -ms-grid-column-span: 3
     }
 
     &.banner-C > .banner-button {
@@ -3298,9 +3460,9 @@ dialog #scui-form input[type="email"] {
 
         &.grid12-abcd > .std-footer-item-1 {
             -ms-grid-row: 1;
-            -ms-grid-row-span: 2;
+            -ms-grid-row-span: 3;
             -ms-grid-column: 1;
-            -ms-grid-column-span: 12
+            -ms-grid-column-span: 23
         }
 
         &.grid12-ab > .std-footer-item-1 {
@@ -3318,10 +3480,10 @@ dialog #scui-form input[type="email"] {
         }
 
         &.grid12-abcd > .std-footer-item-2 {
-            -ms-grid-row: 3;
+            -ms-grid-row: 9;
             -ms-grid-row-span: 5;
-            -ms-grid-column: 9;
-            -ms-grid-column-span: 4
+            -ms-grid-column: 17;
+            -ms-grid-column-span: 7
         }
 
         &.grid12-ab > .std-footer-item-2 {
@@ -3360,10 +3522,10 @@ dialog #scui-form input[type="email"] {
         }
 
         &.grid12-abcd > .std-footer-item-3 {
-            -ms-grid-row: 3;
-            -ms-grid-row-span: 10;
+            -ms-grid-row: 9;
+            -ms-grid-row-span: 15;
             -ms-grid-column: 1;
-            -ms-grid-column-span: 8
+            -ms-grid-column-span: 15
         }
 
         &.grid12-abcde > .std-footer-item-3 {
@@ -3374,10 +3536,10 @@ dialog #scui-form input[type="email"] {
         }
 
         &.grid12-abcd > .std-footer-item-4 {
-            -ms-grid-row: 8;
-            -ms-grid-row-span: 5;
-            -ms-grid-column: 9;
-            -ms-grid-column-span: 4
+            -ms-grid-row: 15;
+            -ms-grid-row-span: 9;
+            -ms-grid-column: 17;
+            -ms-grid-column-span: 7
         }
 
         &.grid12-abcde > .std-footer-item-4 {
@@ -3396,9 +3558,9 @@ dialog #scui-form input[type="email"] {
 
         &.grid12-abcd > .g12-ia {
             -ms-grid-row: 1;
-            -ms-grid-row-span: 2;
+            -ms-grid-row-span: 3;
             -ms-grid-column: 1;
-            -ms-grid-column-span: 12
+            -ms-grid-column-span: 23
         }
 
         &.grid12-ab > .g12-ia {
@@ -3416,10 +3578,10 @@ dialog #scui-form input[type="email"] {
         }
 
         &.grid12-abcd > .g12-ib {
-            -ms-grid-row: 3;
+            -ms-grid-row: 9;
             -ms-grid-row-span: 5;
-            -ms-grid-column: 9;
-            -ms-grid-column-span: 4
+            -ms-grid-column: 17;
+            -ms-grid-column-span: 7
         }
 
         &.grid12-ab > .g12-ib {
@@ -3458,10 +3620,10 @@ dialog #scui-form input[type="email"] {
         }
 
         &.grid12-abcd > .g12-ic {
-            -ms-grid-row: 3;
-            -ms-grid-row-span: 10;
+            -ms-grid-row: 9;
+            -ms-grid-row-span: 15;
             -ms-grid-column: 1;
-            -ms-grid-column-span: 8
+            -ms-grid-column-span: 15
         }
 
         &.grid12-abcde > .g12-ic {
@@ -3472,10 +3634,10 @@ dialog #scui-form input[type="email"] {
         }
 
         &.grid12-abcd > .g12-id {
-            -ms-grid-row: 8;
-            -ms-grid-row-span: 5;
-            -ms-grid-column: 9;
-            -ms-grid-column-span: 4
+            -ms-grid-row: 15;
+            -ms-grid-row-span: 9;
+            -ms-grid-column: 17;
+            -ms-grid-column-span: 7
         }
 
         &.grid12-abcde > .g12-id {
@@ -3527,10 +3689,10 @@ dialog #scui-form input[type="email"] {
         }
 
         &.grid12-abcd > .banner-button {
-            -ms-grid-row: 3;
+            -ms-grid-row: 9;
             -ms-grid-row-span: 5;
-            -ms-grid-column: 9;
-            -ms-grid-column-span: 4
+            -ms-grid-column: 17;
+            -ms-grid-column-span: 7
         }
 
         &.grid12-ab > .banner-button {
