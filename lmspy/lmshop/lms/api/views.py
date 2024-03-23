@@ -229,13 +229,7 @@ class CheckoutSCartView(APIView):
                 city = City.objects.get(pk=cu_city_uuid)
             except City.DoesNotExist:
                 return "Пункт назначения заказа неверен."
-            d6y_cost, d6y_time, error = {D6Y.CD: Cdek(), D6Y.PR: PostRu()}[d6y_service].delivery_cost(
-                city.code,
-                scart["weight"],
-                city=city.city_full,
-                street=cu_street,
-                building=cu_building,
-                price=price)
+            d6y_cost, d6y_time, error = {D6Y.CD: Cdek(), D6Y.PR: PostRu()}[d6y_service].delivery_cost(city.code, scart["weight"], price=price)
             if error:
                 return error
             try:

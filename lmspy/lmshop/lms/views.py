@@ -597,7 +597,7 @@ class C6tInfoView(View):
                 except (City.DoesNotExist, ValidationError):
                     cit, cost, time, err = None, None, None, "Город не указан"
                 else:
-                    cost, time, err = {D6Y.CD: Cdek(), D6Y.PR: PostRu()}[d6y].delivery_cost(cit.code, scart["weight"], city=cit.city_full, street=street, building=building, price=price)
+                    cost, time, err = {D6Y.CD: Cdek(), D6Y.PR: PostRu()}[d6y].delivery_cost(cit.code, scart["weight"], price=price)
             else:
                 cit, cost, time, err = None, None, None, Parameter.value_of('message_shopping_cart_empty')
             cache.set(signature, (cit, cost, time, err), 300)

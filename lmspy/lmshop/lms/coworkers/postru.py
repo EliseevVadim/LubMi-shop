@@ -1,6 +1,7 @@
 from httpx import TransportError
 from lms.coworkers.apiclient import ApiClient
-from lms.models import Coworker
+from lms.coworkers.dadata import DaData
+from lms.models import Coworker, City
 from lms.utils import D6Y
 
 
@@ -35,43 +36,46 @@ class PostRu(ApiClient):
         accept = {"Accept": "application/json;charset=UTF-8"}
         return super().compose_headers(content_type, headers) | x_user_auth | cont_type | accept
 
-    def index_by_address(self, address):
-        na = self._post_json("clean/address", _json_=[{
-            "id": "1",
-            "original-address": address,
-        }])[0]
-        if not (na["quality-code"] in PostRu.acceptable_quality_codes and na["validation-code"] in PostRu.acceptable_validation_codes):
-            raise ValueError(na)
-        return na["index"]
-
-    def tariff(self, index, price, weight):
+    def tariff(self, postal_code, price, weight):
         tf = self._post_json(
             "tariff",
             _json_={
-                "index-to": index,
+                "delivery-point-index": postal_code,
+                "index-to": postal_code,
                 "declared-value": price,
-                "mail-category": "WITH_DECLARED_VALUE",
-                "mail-type": "PARCEL_CLASS_1",
+                "mail-category": self.setting("mail_category"),
+                "mail-type": self.setting("mail_type"),
                 "mass": weight,
                 "notice-payment-method": "CASHLESS",
                 "payment-method": "CASHLESS",
-                "sms-notice-recipient": 0,
                 "transport-type": "SURFACE",
-                "with-order-of-notice": False,
-                "with-simple-notice": False
             })
         return tf
 
-    def delivery_cost(self, _, weight, **kwargs):
-        city, street, building, price = str(kwargs['city']), str(kwargs['street']), str(kwargs['building']), str(kwargs['price'])
+    def delivery_cost(self, dst_city_code, weight, **kwargs):
+        price = str(kwargs['price'])
         price = int(round(float(price) * 100))
         try:
-            index = self.index_by_address(','.join([city, street, building]))
-        except (KeyError, ValueError, TransportError):
+            city = City.objects.get(code=dst_city_code)
+        except City.DoesNotExist:
             return None, None, "Не удалось подтвердить адрес доставки"
+        dadata = DaData()
+        try:
+            suggestions = dadata.pru_points(DaData.location(lat=float(city.latitude), lon=float(city.longitude), radius_meters=float(5000)))['suggestions']
+            postal_code = next((x['data']['postal_code'] for x in suggestions
+                                if 'data' in x and 'postal_code' in x['data'] and 'is_closed' in x['data'] and 'type_code' in x['data'] and
+                                   x['data']['type_code'].lower() not in ['почтомат', 'ти'] and not x['data']['is_closed']),
+                               None)
+        except (KeyError, ValueError, TransportError):
+            return None, None, "Доступные отделения не найдены"
+        else:
+            if not postal_code:
+                return None, None, "Доступные отделения не найдены"
+
         tariff = {}
         try:
-            tariff = self.tariff(index, price, weight)
-            return tariff["total-rate"] / 100.0, tariff["delivery-time"]["min-days"], None
+            tariff = self.tariff(postal_code, price, weight)
+            delay = tariff["delivery-time"]["min-days"] if "min-days" in tariff["delivery-time"] else tariff["delivery-time"]["max-days"]
+            return tariff["total-rate"] / 100.0, delay, None
         except (KeyError, ValueError, TransportError):
             return None, None, tariff['desc'] if 'desc' in tariff else "Не удалось определить параметры доставки"
