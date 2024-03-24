@@ -61,7 +61,7 @@ class PostRu(ApiClient):
             return None, None, "Не удалось подтвердить адрес доставки"
         dadata = DaData()
         try:
-            suggestions = dadata.pru_points(DaData.location(lat=float(city.latitude), lon=float(city.longitude), radius_meters=float(5000)))['suggestions']
+            suggestions = dadata.pos_ru_points(DaData.location(lat=float(city.latitude), lon=float(city.longitude), radius_meters=float(5000)))['suggestions']
             postal_code = next((x['data']['postal_code'] for x in suggestions
                                 if 'data' in x and 'postal_code' in x['data'] and 'is_closed' in x['data'] and 'type_code' in x['data'] and
                                    x['data']['type_code'].lower() not in ['почтомат', 'ти'] and not x['data']['is_closed']),

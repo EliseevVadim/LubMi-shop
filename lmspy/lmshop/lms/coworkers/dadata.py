@@ -30,5 +30,8 @@ class DaData(ApiClient):
             "radius_meters": (float, DaData._positive_()),      # -- Радиус
         }, **kwargs)
 
-    def pru_points(self, location, **kwargs):
+    def pos_ru_points(self, location, **kwargs):
         return self._post_json("geolocate/postal_unit", **location, **kwargs)
+
+    def suggest_address(self, **kwargs):
+        return self._post_json("suggest/address", **kwargs)

@@ -94,6 +94,32 @@ c6t_dialog.show = () => {
                 }).catch(_=>{});
             };
 
+            const update_streets = (flag = true) => {
+                let ready = c6t_dialog.ready();
+                if(flag && ready && ready.value == 'yes' && _street.value) {
+                    let ds = by_selector('input[id^="c6t-d6y_service_"]:checked').value;
+                    let url = '{% url "lms:c6t_info" kind="streets" data="datastr" %}'.replace(/\/datastr\/$/, `/${ds}/?city_uuid=${_city_uuid.value}&street=${_street.value}&building=${_building.value}`);
+                    fetch(url).then(response => response.text()).then(html => {
+                        c6t_dialog.street_list().innerHTML = html;
+                    }).catch(_ => {});
+                } else {
+                    c6t_dialog.street_list().innerHTML = "";
+                }
+            }
+
+            const update_buildings = (flag = true) => {
+                let ready = c6t_dialog.ready();
+                if(flag && ready && ready.value == 'yes' && _street.value && _building.value) {
+                    let ds = by_selector('input[id^="c6t-d6y_service_"]:checked').value;
+                    let url = '{% url "lms:c6t_info" kind="buildings" data="datastr" %}'.replace(/\/datastr\/$/, `/${ds}/?city_uuid=${_city_uuid.value}&street=${_street.value}&building=${_building.value}`);
+                    fetch(url).then(response => response.text()).then(html => {
+                        c6t_dialog.building_list().innerHTML = html;
+                    }).catch(_ => {});
+                } else {
+                    c6t_dialog.building_list().innerHTML = "";
+                }
+            }
+
             const update_summary = () => {
                 let c6t_status = by_id("c6t-status");
                 if(c6t_status.controller) { c6t_status.controller.abort(); }
@@ -107,11 +133,8 @@ c6t_dialog.show = () => {
                         status.innerHTML = html;
                     });
                     setTimeout(() => {
-                        let ready = c6t_dialog.ready();
-                        if(!ready || ready.value == 'no') {
-                            c6t_dialog.street_list().innerHTML = "";
-                            c6t_dialog.building_list().innerHTML = "";
-                        }
+                        update_streets();
+                        update_buildings();
                     });
                 }).catch(_=>{});
                 fetch(`{% url "lms:c6t_info" kind="delivery" data="cd" %}?city_uuid=${_city_uuid.value}&street=${_street.value}&building=${_building.value}`)
@@ -153,21 +176,13 @@ c6t_dialog.show = () => {
 
             _street.tmo_id = null;
             _street.oninput = _ => {
+                update_buildings();
                 if(_street.tmo_id) { clearTimeout(_street.tmo_id); }
                 _street.tmo_id = setTimeout(() => {
                     update_summary();
-                    let ready = c6t_dialog.ready();
-                    if(ready && ready.value == 'yes' && _street.value) {
-                        let ds = by_selector('input[id^="c6t-d6y_service_"]:checked').value;
-                        let url = '{% url "lms:c6t_info" kind="streets" data="datastr" %}'.replace(/\/datastr\/$/, `/${ds}/?city_uuid=${_city_uuid.value}&street=${_street.value}&building=${_building.value}`);
-                        fetch(url).then(response => response.text()).then(html => {
-                            c6t_dialog.street_list().innerHTML = html;
-                        }).catch(_ => {});
-                    } else {
-                        c6t_dialog.street_list().innerHTML = "";
-                    }
+                    update_streets();
                     _street.tmo_id = null;
-                }, 2000);
+                }, 1000);
             };
             
             _building.tmo_id = null;
@@ -175,18 +190,9 @@ c6t_dialog.show = () => {
                 if(_building.tmo_id) { clearTimeout(_building.tmo_id); }
                 _building.tmo_id = setTimeout(() => {
                     update_summary();
-                    let ready = c6t_dialog.ready();
-                    if(ready && ready.value == 'yes' && _street.value) {
-                        let ds = by_selector('input[id^="c6t-d6y_service_"]:checked').value;
-                        let url = '{% url "lms:c6t_info" kind="buildings" data="datastr" %}'.replace(/\/datastr\/$/, `/${ds}/?city_uuid=${_city_uuid.value}&street=${_street.value}&building=${_building.value}`);
-                        fetch(url).then(response => response.text()).then(html => {
-                            c6t_dialog.building_list().innerHTML = html;
-                        }).catch(_ => {});
-                    } else {
-                        c6t_dialog.building_list().innerHTML = "";
-                    }
+                    update_buildings();
                     _building.tmo_id = null;
-                }, 2000);
+                }, 1000);
             };
 
             _d6y_service_0.onchange = d6y_changed;

@@ -9,9 +9,11 @@ from django.utils.decorators import method_decorator
 from django.views.generic import DetailView
 from django.views import View
 from django.template.defaultfilters import floatformat
+from httpx import TransportError
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
 from .api.business import set_order_completed
 from .coworkers.cdek import Cdek
+from .coworkers.dadata import DaData
 from .coworkers.postru import PostRu
 from .coworkers.yookassa import Yookassa
 from .forms import CheckoutForm
@@ -585,22 +587,48 @@ class C6tInfoView(View):
             return names[abbreviation] if abbreviation in names else ""
 
         def summary(functor):
-            c_uuid, street, building, price, scart_len = request.GET.get('city_uuid'), request.GET.get('street'), request.GET.get('building'), scart['price'], len(scart["records"])
-            signature = f"{c_uuid}:{street}:{building}:{price}:{scart_len}:{d6y}"
+            city_uuid, street, building, price, scart_len = request.GET.get('city_uuid'), request.GET.get('street'), request.GET.get('building'), scart['price'], len(scart["records"])
+            signature = f"{city_uuid}:{street}:{building}:{price}:{scart_len}:{d6y}"
             stored_args = cache.get(signature)
             if stored_args is not None:
                 return functor(*stored_args)
             if len(scart["records"]) > 0:
                 try:
-                    cit = City.objects.get(pk=c_uuid)
+                    city = City.objects.get(pk=city_uuid)
                 except (City.DoesNotExist, ValidationError):
-                    cit, cost, time, err = None, None, None, "Город не указан"
+                    city, cost, time, err = None, None, None, "Город не указан"
                 else:
-                    cost, time, err = {D6Y.CD: Cdek(), D6Y.PR: PostRu()}[d6y].delivery_cost(cit.code, scart["weight"], price=price)
+                    cost, time, err = {D6Y.CD: Cdek(), D6Y.PR: PostRu()}[d6y].delivery_cost(city.code, scart["weight"], price=price)
             else:
-                cit, cost, time, err = None, None, None, Parameter.value_of('message_shopping_cart_empty')
-            cache.set(signature, (cit, cost, time, err), 300)
-            return functor(cit, cost, time, err)
+                city, cost, time, err = None, None, None, Parameter.value_of('message_shopping_cart_empty')
+            cache.set(signature, (city, cost, time, err), 300)
+            return functor(city, cost, time, err)
+
+        def address_suggestions(flag):
+            c_uuid, street, building = request.GET.get('city_uuid'), request.GET.get('street'), request.GET.get('building')
+            try:
+                city = City.objects.get(pk=c_uuid)
+            except (City.DoesNotExist, ValidationError):
+                pass
+            else:
+                dd = DaData()
+                try:
+                    suggestions = (dd.suggest_address(
+                        query=f"{city.region.region}, {city.city}, {street}",
+                        count=5,
+                        from_bound={"value": "street"},
+                        to_bound={"value": "street"}
+                    ) if flag else dd.suggest_address(
+                        query=f"{city.region.region}, {city.city}, {street}, {building}",
+                        count=5,
+                        from_bound={"value": "house"},
+                        to_bound={"value": "house"}
+                    ))["suggestions"]
+                    options = list({x['data']['street'] for x in suggestions if 'data' in x and 'street' in x['data']} if flag else {x['data']['house'] for x in suggestions if 'data' in x and 'house' in x['data']})
+                    return render(request, 'lms/option-list.html', {'options': options})
+                except (KeyError, ValueError, TransportError):
+                    pass
+            return HttpResponse()
 
         match kind:
             case 'cities':
@@ -631,9 +659,9 @@ class C6tInfoView(View):
                     "ready": "yes" if not _error else "no",
                 }))
             case "streets":
-                return render(request, 'lms/option-list.html', {})
+                return address_suggestions(True)
             case "buildings":
-                return render(request, 'lms/option-list.html', {})
+                return address_suggestions(False)
             case _:
                 return render(request, 'lms/c6t-summary.html', {
                     "items": {"Ошибка": "Запрошен неизвестный тип данных"}
