@@ -1518,6 +1518,12 @@ input[type="submit"].inverted {
     border-color: #222222;
 }
 
+button.inverted:disabled,
+button.inverted[disabled] {
+    background: #919191;
+    border-color: #919191;
+}
+
 /* Perfumery -----------------------------------------------------------------------------------------------------------*/
 
 main.perfumery {

@@ -6,12 +6,18 @@ c6t_dialog.building_list = () => document.querySelector("#c6t-dialog #c6t-buildi
 c6t_dialog.cd_info = () => document.querySelector("#c6t-dialog #c6t-cd-info");
 c6t_dialog.pr_info = () => document.querySelector("#c6t-dialog #c6t-pr-info");
 c6t_dialog.ready = () => document.querySelector("#c6t-dialog #c6t-d6y-ready");
+c6t_dialog.button = () => document.querySelector("#c6t-dialog #c6t-submit-button");
+c6t_dialog.iid = undefined;
 c6t_dialog.__on_scart_changed = null;
 c6t_dialog.__close = c6t_dialog.close;
 c6t_dialog.close = () => {
     if(!!c6t_dialog.__on_scart_changed) {
         window.removeEventListener(EventType.SCART_CHANGED, c6t_dialog.__on_scart_changed);
         c6t_dialog.__on_scart_changed = null;
+    }
+    if(!!c6t_dialog.iid) {
+        clearInterval(c6t_dialog.iid);
+        c6t_dialog.iid = undefined;
     }
     c6t_dialog.rszo = null;
     c6t_dialog.__close();
@@ -33,7 +39,7 @@ c6t_dialog.show = () => {
         </section>
     </div>
     <div class="c6t-button-container" style="display: flex; flex-flow: column;">
-        <button class="medium inverted" onclick="_form.onsubmit(null);">{{param_label_checkout}}</button>
+        <button id="c6t-submit-button" class="medium inverted" disabled="true" onclick="_form.onsubmit(null);">{{param_label_checkout}}</button>
     </div>
     <datalist id="c6t-street-list">
     </datalist>
@@ -198,6 +204,24 @@ c6t_dialog.show = () => {
             _d6y_service_0.onchange = d6y_changed;
             _d6y_service_1.onchange = d6y_changed;
 
+            const filled = () => {
+                let ready = c6t_dialog.ready();
+                return ready &&
+                    ready.value == 'yes' &&
+                    _first_name.value &&
+                    _last_name.value &&
+                    _phone.value &&
+                    _city_uuid.value &&
+                    _city.value &&
+                    _street.value &&
+                    _building.value &&
+                    _entrance.value &&
+                    _floor.value &&
+                    _apartment.value &&
+                    _fullname.value &&
+                    _confirm.checked
+            }
+
             _form.onsubmit = e => {
                 if(e) e.preventDefault();
                 let ds = by_selector('input[id^="c6t-d6y_service_"]:checked').value;
@@ -235,6 +259,7 @@ c6t_dialog.show = () => {
             c6t_dialog.rszo = new ResizeObserver(move_city_list);
             c6t_dialog.rszo.observe(_city);
             c6t_dialog.sch = suppress_scrolling();
+            c6t_dialog.iid = setInterval(() => { if(filled()) c6t_dialog.button().removeAttribute("disabled"); else c6t_dialog.button().setAttribute("disabled", "disabled"); }, 500);
             c6t_dialog.self().onclose = c6t_dialog.release;
             c6t_dialog.self().showModal();
         });
