@@ -1,8 +1,11 @@
 c6t_dialog.form_container = () => document.querySelector("#c6t-dialog .c6t-form-container");
 c6t_dialog.sidebar = () => document.querySelector("#c6t-dialog .c6t-sidebar");
 c6t_dialog.city_list = () => document.querySelector("#c6t-dialog .c6t-city-list");
+c6t_dialog.street_list = () => document.querySelector("#c6t-dialog #c6t-street-list");
+c6t_dialog.building_list = () => document.querySelector("#c6t-dialog #c6t-building-list");
 c6t_dialog.cd_info = () => document.querySelector("#c6t-dialog #c6t-cd-info");
 c6t_dialog.pr_info = () => document.querySelector("#c6t-dialog #c6t-pr-info");
+c6t_dialog.ready = () => document.querySelector("#c6t-dialog #c6t-d6y-ready");
 c6t_dialog.__on_scart_changed = null;
 c6t_dialog.__close = c6t_dialog.close;
 c6t_dialog.close = () => {
@@ -32,6 +35,10 @@ c6t_dialog.show = () => {
     <div class="c6t-button-container" style="display: flex; flex-flow: column;">
         <button class="medium inverted" onclick="_form.onsubmit(null);">{{param_label_checkout}}</button>
     </div>
+    <datalist id="c6t-street-list">
+    </datalist>
+    <datalist id="c6t-building-list">
+    </datalist>
 </div>`;
         c6t_dialog.form_container().innerHTML = html;
 
@@ -99,6 +106,13 @@ c6t_dialog.show = () => {
                     statuses.forEach((status, arg1, arg2) => {
                         status.innerHTML = html;
                     });
+                    setTimeout(() => {
+                        let ready = c6t_dialog.ready();
+                        if(!ready || ready.value == 'no') {
+                            c6t_dialog.street_list().innerHTML = "";
+                            c6t_dialog.building_list().innerHTML = "";
+                        }
+                    });
                 }).catch(_=>{});
                 fetch(`{% url "lms:c6t_info" kind="delivery" data="cd" %}?city_uuid=${_city_uuid.value}&street=${_street.value}&building=${_building.value}`)
                 .then(response => response.text()).then(html => {
@@ -142,6 +156,16 @@ c6t_dialog.show = () => {
                 if(_street.tmo_id) { clearTimeout(_street.tmo_id); }
                 _street.tmo_id = setTimeout(() => {
                     update_summary();
+                    let ready = c6t_dialog.ready();
+                    if(ready && ready.value == 'yes' && _street.value) {
+                        let ds = by_selector('input[id^="c6t-d6y_service_"]:checked').value;
+                        let url = '{% url "lms:c6t_info" kind="streets" data="datastr" %}'.replace(/\/datastr\/$/, `/${ds}/?city_uuid=${_city_uuid.value}&street=${_street.value}&building=${_building.value}`);
+                        fetch(url).then(response => response.text()).then(html => {
+                            c6t_dialog.street_list().innerHTML = html;
+                        }).catch(_ => {});
+                    } else {
+                        c6t_dialog.street_list().innerHTML = "";
+                    }
                     _street.tmo_id = null;
                 }, 2000);
             };
@@ -151,6 +175,16 @@ c6t_dialog.show = () => {
                 if(_building.tmo_id) { clearTimeout(_building.tmo_id); }
                 _building.tmo_id = setTimeout(() => {
                     update_summary();
+                    let ready = c6t_dialog.ready();
+                    if(ready && ready.value == 'yes' && _street.value) {
+                        let ds = by_selector('input[id^="c6t-d6y_service_"]:checked').value;
+                        let url = '{% url "lms:c6t_info" kind="buildings" data="datastr" %}'.replace(/\/datastr\/$/, `/${ds}/?city_uuid=${_city_uuid.value}&street=${_street.value}&building=${_building.value}`);
+                        fetch(url).then(response => response.text()).then(html => {
+                            c6t_dialog.building_list().innerHTML = html;
+                        }).catch(_ => {});
+                    } else {
+                        c6t_dialog.building_list().innerHTML = "";
+                    }
                     _building.tmo_id = null;
                 }, 2000);
             };

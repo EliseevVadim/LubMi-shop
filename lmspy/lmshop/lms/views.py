@@ -580,13 +580,12 @@ class C6tInfoView(View):
     def get(request, kind, data, scart, *_, **__):
         d6y = D6Y(data)
 
-        def d6y_name(abbrev):
+        def d6y_name(abbreviation):
             names = {D6Y.CD: 'СДЭК', D6Y.PR: 'Почта России'}
-            return names[abbrev] if abbrev in names else ""
+            return names[abbreviation] if abbreviation in names else ""
 
         def summary(functor):
-            c_uuid, street, building, price, scart_len = \
-                request.GET.get('city_uuid'), request.GET.get('street'), request.GET.get('building'), scart['price'], len(scart["records"])
+            c_uuid, street, building, price, scart_len = request.GET.get('city_uuid'), request.GET.get('street'), request.GET.get('building'), scart['price'], len(scart["records"])
             signature = f"{c_uuid}:{street}:{building}:{price}:{scart_len}:{d6y}"
             stored_args = cache.get(signature)
             if stored_args is not None:
@@ -627,13 +626,18 @@ class C6tInfoView(View):
                         "Город": f'{_city.city_full}'.replace(", ", ",\n"),
                         "Итоговая сумма": f'{floatformat(scart["price"] + Decimal(_d_cost), 2)} {Parameter.value_of("label_currency")}',
                     } if not _error else {
-                        "Проблема": _error
-                    }}))
+                        "Проблема": _error,
+                    },
+                    "ready": "yes" if not _error else "no",
+                }))
+            case "streets":
+                return render(request, 'lms/option-list.html', {})
+            case "buildings":
+                return render(request, 'lms/option-list.html', {})
             case _:
                 return render(request, 'lms/c6t-summary.html', {
-                    "items": {
-                        "Ошибка": "Запрошен неизвестный тип данных"
-                    }})
+                    "items": {"Ошибка": "Запрошен неизвестный тип данных"}
+                })
 
 
 class SearchView(View):

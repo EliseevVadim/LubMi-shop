@@ -100,10 +100,12 @@ class CheckoutForm(forms.ModelForm):
             }),
             'cu_street':  forms.TextInput(attrs={
                 'id': 'c6t-cu_street',
+                'list': "c6t-street-list",
                 'placeholder': Parameter.value_of('pholder_street', 'Улица')
             }),
             'cu_building':  forms.TextInput(attrs={
                 'id': 'c6t-cu_building',
+                'list': "c6t-building-list",
                 'placeholder': Parameter.value_of('pholder_building', 'Дом')
             }),
             'cu_entrance': forms.TextInput(attrs={
