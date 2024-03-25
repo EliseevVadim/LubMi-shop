@@ -1,6 +1,7 @@
 const {{unique}}_dialog = {
     sch: undefined,
     release: () => {
+        {{unique}}_dialog.self().classList.remove("idiotic-design");
         if({{unique}}_dialog.sch !== undefined) {
             release_scrolling({{unique}}_dialog.sch);
             {{unique}}_dialog.sch = undefined;

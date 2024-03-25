@@ -1990,6 +1990,10 @@ dialog {
             font-size: var(--F30);
             line-height: var(--F30);
         }
+
+        &.idiotic-design .cancel-dialog:last-child {
+            visibility: hidden;
+        }
     }
 }
 
