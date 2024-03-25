@@ -220,7 +220,14 @@ c6t_dialog.show = () => {
                     _apartment.value &&
                     _fullname.value &&
                     _confirm.checked
-            }
+            };
+
+            const check_filled = () => {
+                if(filled()) c6t_dialog.button().removeAttribute("disabled");
+                else c6t_dialog.button().setAttribute("disabled", "disabled");
+            };
+
+            _confirm.onchange = check_filled;
 
             _form.onsubmit = e => {
                 if(e) e.preventDefault();
@@ -252,6 +259,7 @@ c6t_dialog.show = () => {
                 c6t_dialog.sidebar().innerHTML = html;
                 update_summary();
             });
+
             window.addEventListener(EventType.SCART_CHANGED, c6t_dialog.__on_scart_changed);
             scart_changed();
             c6t_dialog.choose_city(answer.address.city, answer.address.city_uuid, false);
@@ -259,7 +267,7 @@ c6t_dialog.show = () => {
             c6t_dialog.rszo = new ResizeObserver(move_city_list);
             c6t_dialog.rszo.observe(_city);
             c6t_dialog.sch = suppress_scrolling();
-            c6t_dialog.iid = setInterval(() => { if(filled()) c6t_dialog.button().removeAttribute("disabled"); else c6t_dialog.button().setAttribute("disabled", "disabled"); }, 500);
+            c6t_dialog.iid = setInterval(check_filled, 1000);
             c6t_dialog.self().onclose = c6t_dialog.release;
             c6t_dialog.self().showModal();
         });
