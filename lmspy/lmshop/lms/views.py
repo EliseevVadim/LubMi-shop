@@ -604,7 +604,7 @@ class C6tInfoView(View):
             cache.set(signature, (city, cost, time, err), 300)
             return functor(city, cost, time, err)
 
-        def address_suggestions(flag):
+        def get_suggestions(flag):
             c_uuid, street, building = request.GET.get('city_uuid'), request.GET.get('street'), request.GET.get('building')
             try:
                 city = City.objects.get(pk=c_uuid)
@@ -659,9 +659,9 @@ class C6tInfoView(View):
                     "ready": "yes" if not _error else "no",
                 }))
             case "streets":
-                return address_suggestions(True)
+                return get_suggestions(True)
             case "buildings":
-                return address_suggestions(False)
+                return get_suggestions(False)
             case _:
                 return render(request, 'lms/c6t-summary.html', {
                     "items": {"Ошибка": "Запрошен неизвестный тип данных"}
