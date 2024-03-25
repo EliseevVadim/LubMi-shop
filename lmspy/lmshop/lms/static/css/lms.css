@@ -1004,7 +1004,7 @@ aside {
         min-width: var(--ScartFigWidth);
         max-height: calc(var(--ScartFigWidth) * 1.2);
         min-height: calc(var(--ScartFigWidth) * 1.2);
-        padding: 0.3rem 0;
+        padding: 0;
         & > .sidebar-img {
             height: 100%;
             background-size: cover;
