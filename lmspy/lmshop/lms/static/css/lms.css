@@ -1254,8 +1254,8 @@ p {
                 "A A A A A A A A A A A A"
                 "A A A A A A A A A A A A";
             .g12-ib {
-                margin-left: -2rem;
-                margin-right: -2rem;
+                margin-left: -1rem;
+                margin-right: -1rem;
             }
         }
 
@@ -2307,13 +2307,17 @@ dialog #scui-form input[type="email"] {
 /* HoF -----------------------------------------------------------------------------------------------------------------*/
 
 .hall-of-fame {
-    display: grid;
-    justify-items: center;
-    align-items: begin;
-    column-gap: 0.2rem;
-    row-gap: 0.75rem;
-    grid-template-columns: repeat(auto-fit, minmax(var(--HoFSize), 1fr));
+    display: flex;
+    flex-flow: row;
+    justify-items: start;
+    align-items: center;
+    column-gap: 0.5rem;
     margin-top: 2rem;
+    overflow-x: auto;
+
+    &::-webkit-scrollbar {
+      width: 0;
+    }
 
     * {
         margin: 0;
