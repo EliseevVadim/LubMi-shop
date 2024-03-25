@@ -323,7 +323,7 @@ body, aside, .content, .leading {
 
 footer.page {
     flex: 0 0 var(--FooterHeight);
-    padding: 7rem var(--DefPadding) var(--DefPadding) var(--DefPadding)
+    padding: 7rem var(--DefPadding) var(--DefPadding) var(--DefPadding);
 }
 
 .std-footer {
@@ -443,6 +443,10 @@ footer.page {
 }
 
 @media (max-width: 961px) {
+    footer.page {
+        padding-top: 3rem;
+    }
+
     .std-footer {
         row-gap: 1rem;
         grid-template: repeat(4, auto) / auto;
