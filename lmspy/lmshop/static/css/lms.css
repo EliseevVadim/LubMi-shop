@@ -390,7 +390,7 @@ footer.page {
     -webkit-box-flex: 0;
         -ms-flex: 0 0 var(--FooterHeight);
             flex: 0 0 var(--FooterHeight);
-    padding: 7rem var(--DefPadding) var(--DefPadding) var(--DefPadding)
+    padding: 7rem var(--DefPadding) var(--DefPadding) var(--DefPadding);
 }
 
 .std-footer {
@@ -649,6 +649,10 @@ footer.page {
 }
 
 @media (max-width: 961px) {
+    footer.page {
+        padding-top: 3rem;
+    }
+
     .std-footer {
         row-gap: 1rem;
         -ms-grid-columns: auto;
@@ -715,44 +719,53 @@ footer.page {
             }
         }
     }
+
     .std-footer-item-1 {
         -ms-grid-row: 1;
         -ms-grid-column: 1
     }
+
     .std-footer-item-2 {
         -ms-grid-row: 3;
         -ms-grid-column: 1;
         -ms-grid-column-span: 1
     }
+
     .std-footer-item-3 {
         -ms-grid-row: 5;
         -ms-grid-column: 1;
         -ms-grid-column-span: 1
     }
+
     .std-footer-item-4 {
         -ms-grid-row: 7;
         -ms-grid-column: 1;
         -ms-grid-column-span: 1
     }
+
     .g12-ia {
         -ms-grid-row: 1;
         -ms-grid-column: 1
     }
+
     .g12-ib {
         -ms-grid-row: 3;
         -ms-grid-column: 1;
         -ms-grid-column-span: 1
     }
+
     .g12-ic {
         -ms-grid-row: 5;
         -ms-grid-column: 1;
         -ms-grid-column-span: 1
     }
+
     .g12-id {
         -ms-grid-row: 7;
         -ms-grid-column: 1;
         -ms-grid-column-span: 1
     }
+
     .banner-button {
         -ms-grid-row: 3;
         -ms-grid-column: 1;
@@ -1153,8 +1166,8 @@ figcaption {
     .catalogue {
         figcaption {
             button {
-                -webkit-box-shadow: none;
-                        box-shadow: none;
+                -webkit-box-shadow: 0px 7px 17px rgba(0, 0, 0, 0.25);
+                        box-shadow: 0px 7px 17px rgba(0, 0, 0, 0.25);
             }
         }
     }
@@ -1367,7 +1380,7 @@ aside {
         min-width: var(--ScartFigWidth);
         max-height: calc(var(--ScartFigWidth) * 1.2);
         min-height: calc(var(--ScartFigWidth) * 1.2);
-        padding: 0.3rem 0;
+        padding: 0;
         & > .sidebar-img {
             height: 100%;
             background-size: cover;
@@ -1788,6 +1801,10 @@ p {
                 "A A A A A A A A A A A A"
                 "A A A A A A A A A A A A"
                 "A A A A A A A A A A A A";
+            .g12-ib {
+                margin-left: -1rem;
+                margin-right: -1rem;
+            }
         }
 
         &.grid12-abcd {
@@ -1809,9 +1826,14 @@ p {
                 "C C C C C C C C D D D D";
             .g12-ib {
                 aspect-ratio: 230 / 285;
+                margin-right: -2rem;
+            }
+            .g12-ic {
+                margin-left: -2rem;
             }
             .g12-id {
                 aspect-ratio: 230 / 213;
+                margin-right: -2rem;
             }
         }
 
@@ -1831,6 +1853,8 @@ p {
                 "B B B B B B B B B B B B";
             .g12-ia {
                 aspect-ratio: 375 / 468;
+                margin-left: -2rem;
+                margin-right: -2rem;
             }
         }
 
@@ -1851,6 +1875,8 @@ p {
 
             .g12-ie {
                 aspect-ratio: 375 / 468;
+                margin-left: -2rem;
+                margin-right: -2rem;
             }
         }
     }
@@ -2069,6 +2095,12 @@ input[type="submit"].inverted {
     color: white;
     background: #222222;
     border-color: #222222;
+}
+
+button.inverted:disabled,
+button.inverted[disabled] {
+    background: #919191;
+    border-color: #919191;
 }
 
 /* Perfumery -----------------------------------------------------------------------------------------------------------*/
@@ -2612,6 +2644,10 @@ dialog {
             font-size: var(--F30);
             line-height: var(--F30);
         }
+
+        &.idiotic-design .cancel-dialog:last-child {
+            visibility: hidden;
+        }
     }
 }
 
@@ -2983,18 +3019,26 @@ dialog #scui-form input[type="email"] {
 /* HoF -----------------------------------------------------------------------------------------------------------------*/
 
 .hall-of-fame {
-    display: -ms-grid;
-    display: grid;
-    justify-items: center;
-    -webkit-box-align: begin;
-        -ms-flex-align: begin;
-            align-items: begin;
-    -webkit-column-gap: 0.2rem;
-       -moz-column-gap: 0.2rem;
-            column-gap: 0.2rem;
-    row-gap: 0.75rem;
-    grid-template-columns: repeat(auto-fit, minmax(var(--HoFSize), 1fr));
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: row;
+            flex-flow: row;
+    justify-items: start;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-column-gap: 0.5rem;
+       -moz-column-gap: 0.5rem;
+            column-gap: 0.5rem;
     margin-top: 2rem;
+    overflow-x: auto;
+
+    &::-webkit-scrollbar {
+      width: 0;
+    }
 
     * {
         margin: 0;
@@ -3373,7 +3417,7 @@ dialog #scui-form input[type="email"] {
         min-height: 4.5rem;
         font-size: var(--F24);
         font-weight: 300;
-        font-variation-settings: "wght" 500;
+        font-variation-settings: "wght" 300;
         word-wrap: break-word;
         background: white;
         border: 2px white solid;
@@ -3455,7 +3499,7 @@ dialog #scui-form input[type="email"] {
             -ms-grid-row: 7;
             -ms-grid-row-span: 6;
             -ms-grid-column: 1;
-            -ms-grid-column-span: 12;
+            -ms-grid-column-span: 12
         }
 
         &.grid12-abcd > .std-footer-item-1 {
@@ -3476,7 +3520,7 @@ dialog #scui-form input[type="email"] {
             -ms-grid-row: 1;
             -ms-grid-row-span: 6;
             -ms-grid-column: 1;
-            -ms-grid-column-span: 12;
+            -ms-grid-column-span: 12
         }
 
         &.grid12-abcd > .std-footer-item-2 {
@@ -3553,7 +3597,7 @@ dialog #scui-form input[type="email"] {
             -ms-grid-row: 7;
             -ms-grid-row-span: 6;
             -ms-grid-column: 1;
-            -ms-grid-column-span: 12;
+            -ms-grid-column-span: 12
         }
 
         &.grid12-abcd > .g12-ia {
@@ -3574,7 +3618,7 @@ dialog #scui-form input[type="email"] {
             -ms-grid-row: 1;
             -ms-grid-row-span: 6;
             -ms-grid-column: 1;
-            -ms-grid-column-span: 12;
+            -ms-grid-column-span: 12
         }
 
         &.grid12-abcd > .g12-ib {
@@ -3685,7 +3729,7 @@ dialog #scui-form input[type="email"] {
             -ms-grid-row: 1;
             -ms-grid-row-span: 6;
             -ms-grid-column: 1;
-            -ms-grid-column-span: 12;
+            -ms-grid-column-span: 12
         }
 
         &.grid12-abcd > .banner-button {
