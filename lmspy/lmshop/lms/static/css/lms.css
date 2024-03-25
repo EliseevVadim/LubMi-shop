@@ -1249,6 +1249,10 @@ p {
                 "A A A A A A A A A A A A"
                 "A A A A A A A A A A A A"
                 "A A A A A A A A A A A A";
+            .g12-ib {
+                margin-left: -2rem;
+                margin-right: -2rem;
+            }
         }
 
         &.grid12-abcd {
@@ -1269,9 +1273,14 @@ p {
                 "C C C C C C C C D D D D";
             .g12-ib {
                 aspect-ratio: 230 / 285;
+                margin-right: -2rem;
+            }
+            .g12-ic {
+                margin-left: -2rem;
             }
             .g12-id {
                 aspect-ratio: 230 / 213;
+                margin-right: -2rem;
             }
         }
 
@@ -1291,6 +1300,8 @@ p {
                 "B B B B B B B B B B B B";
             .g12-ia {
                 aspect-ratio: 375 / 468;
+                margin-left: -2rem;
+                margin-right: -2rem;
             }
         }
 
@@ -1311,6 +1322,8 @@ p {
 
             .g12-ie {
                 aspect-ratio: 375 / 468;
+                margin-left: -2rem;
+                margin-right: -2rem;
             }
         }
     }
@@ -2578,7 +2591,7 @@ dialog #scui-form input[type="email"] {
         min-height: 4.5rem;
         font-size: var(--F24);
         font-weight: 300;
-        font-variation-settings: "wght" 500;
+        font-variation-settings: "wght" 300;
         word-wrap: break-word;
         background: white;
         border: 2px white solid;
