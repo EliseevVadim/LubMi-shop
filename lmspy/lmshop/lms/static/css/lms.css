@@ -2331,6 +2331,7 @@ dialog #scui-form input[type="email"] {
     column-gap: 0.5rem;
     margin-top: 2rem;
     overflow-x: auto;
+    overflow-y: hidden;
 
     &::-webkit-scrollbar {
       width: 0;
