@@ -857,9 +857,6 @@ aside {
     right: 0;
     top: 0;
     bottom:0;
-    height: 1fr;
-    max-height: 1fr;
-    min-height: 1fr;
     padding: calc(2 * var(--DefPadding));
     z-index: var(--ZixPanels);
     box-shadow: 0 0 0 100vw #7777;
@@ -951,6 +948,14 @@ aside {
         background: white;
         left: auto;
         width: min(20rem, 66vw);
+    }
+
+    .sidebar-content-right, .sidebar-content-left {
+        &::after {
+            min-height: 2rem;
+            max-height: 2rem;
+            content: " ";
+        }
     }
 }
 
