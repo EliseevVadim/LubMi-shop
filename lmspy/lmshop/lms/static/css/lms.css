@@ -20,6 +20,7 @@
     --F16: clamp(12px, calc(1600vw / 1440), 16px);
     --F20: clamp(14px, calc(2000vw / 1440), 20px);
     --F24: clamp(14px, calc(2400vw / 1440), 24px);
+    --F28: clamp(16px, calc(2800vw / 1440), 28px);
     --F30: clamp(20px, calc(3000vw / 1440), 30px);
     --F32: clamp(20px, calc(3200vw / 1440), 32px);
     --F60: clamp(22px, calc(6000vw / 1440), 60px);
@@ -2702,6 +2703,10 @@ dialog #scui-form input[type="email"] {
                 "S S S S S S S S S S S S"
                 "B B B B B B B B B B B B"
                 "W W W W W W W W W W W W";
+        }
+
+        .banner-button {
+            font-size: var(--F28);
         }
     }
 }
