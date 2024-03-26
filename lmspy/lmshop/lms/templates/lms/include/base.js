@@ -30,7 +30,7 @@ function suppress_scrolling() {
     let sy = window.scrollY;
     window.onscroll = _ => {
         if(window.scrollX != sx || window.scrollY != sy) {
-            window.scroll(sx, sy);
+            setTimeout(() => window.scroll(sx, sy));
         }
     };
     return sch;
