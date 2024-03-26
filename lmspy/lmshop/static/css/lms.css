@@ -27,6 +27,7 @@
     --F16: clamp(12px, calc(1600vw / 1440), 16px);
     --F20: clamp(14px, calc(2000vw / 1440), 20px);
     --F24: clamp(14px, calc(2400vw / 1440), 24px);
+    --F28: clamp(16px, calc(2800vw / 1440), 28px);
     --F30: clamp(20px, calc(3000vw / 1440), 30px);
     --F32: clamp(20px, calc(3200vw / 1440), 32px);
     --F60: clamp(22px, calc(6000vw / 1440), 60px);
@@ -243,6 +244,22 @@ details {
     &[open] summary {
         &::after {
             content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='15' viewBox='0 0 40 24.7'><path d='M 40,20 35.3,24.7 20,9.43 4.7,24.7 0,20 20,0 Z' fill='black'/></svg>");
+        }
+    }
+}
+
+@media (max-width: 961px) {
+    details {
+        summary {
+            &::after {
+                content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 40 24.7'><path d='M 40,4.7 35.3,0 20,15.27 4.7,0 0,4.7 20,24.7 Z' fill='black'/></svg>");
+            }
+        }
+
+        &[open] summary {
+            &::after {
+                content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 40 24.7'><path d='M 40,20 35.3,24.7 20,9.43 4.7,24.7 0,20 20,0 Z' fill='black'/></svg>");
+            }
         }
     }
 }
@@ -1183,9 +1200,6 @@ aside {
     right: 0;
     top: 0;
     bottom:0;
-    height: 1fr;
-    max-height: 1fr;
-    min-height: 1fr;
     padding: calc(2 * var(--DefPadding));
     z-index: var(--ZixPanels);
     -webkit-box-shadow: 0 0 0 100vw #7777;
@@ -1294,6 +1308,14 @@ aside {
         background: white;
         left: auto;
         width: min(20rem, 66vw);
+    }
+
+    .sidebar-content-right, .sidebar-content-left {
+        &::after {
+            min-height: 2rem;
+            max-height: 2rem;
+            content: " ";
+        }
     }
 }
 
@@ -2206,10 +2228,10 @@ main.perfumery {
         section {
             button.medium {
                 width: 100%;
-                font-size: var(--F32);
-                line-height: var(--F32);
+                font-size: var(--F30);
+                line-height: var(--F30);
                 font-weight: 400;
-                font-variation-settings: "wght" 600;
+                font-variation-settings: "wght" 300;
             }
         }
     }
@@ -3035,6 +3057,7 @@ dialog #scui-form input[type="email"] {
             column-gap: 0.5rem;
     margin-top: 2rem;
     overflow-x: auto;
+    overflow-y: hidden;
 
     &::-webkit-scrollbar {
       width: 0;
@@ -3854,6 +3877,10 @@ dialog #scui-form input[type="email"] {
                 "S S S S S S S S S S S S"
                 "B B B B B B B B B B B B"
                 "W W W W W W W W W W W W";
+        }
+
+        .banner-button {
+            font-size: var(--F28);
         }
     }
 }
