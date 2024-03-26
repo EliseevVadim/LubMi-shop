@@ -391,6 +391,10 @@ class NotificationRequest(DbItem):
     def __str__(self):
         return f'Запрос #{self.id} на уведомление о поступлении товара артикул: {self.ppk}, от: {self.name}, телефон: {self.phone or "не указан"}, email: {self.email or "не указан"}'
 
+    class Meta:
+        verbose_name = "Запрос уведомления"
+        verbose_name_plural = "Запросы уведомления"
+
 
 class TelegramBot(DbItem):
     title = models.CharField(max_length=50)                                                     # -- название --

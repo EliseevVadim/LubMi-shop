@@ -99,4 +99,10 @@ class AboutItemAdmin(admin.ModelAdmin):
     search_fields = ['label']
 
 
+@admin.register(NotificationRequest)
+class NotificationRequestAdmin(admin.ModelAdmin):
+    list_display = ['name', 'email', 'phone', 'ppk']
+    list_filter = ['ppk']
+
+
 admin.site.site_url = settings.SITE_URL
