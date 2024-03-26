@@ -202,6 +202,22 @@ details {
     }
 }
 
+@media (max-width: 961px) {
+    details {
+        summary {
+            &::after {
+                content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 40 24.7'><path d='M 40,4.7 35.3,0 20,15.27 4.7,0 0,4.7 20,24.7 Z' fill='black'/></svg>");
+            }
+        }
+
+        &[open] summary {
+            &::after {
+                content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 40 24.7'><path d='M 40,20 35.3,24.7 20,9.43 4.7,24.7 0,20 20,0 Z' fill='black'/></svg>");
+            }
+        }
+    }
+}
+
 /* Separator ----------------------------------------------------------------------------------------------------------*/
 
 svg.separator {
@@ -1644,10 +1660,10 @@ main.perfumery {
         section {
             button.medium {
                 width: 100%;
-                font-size: var(--F32);
-                line-height: var(--F32);
+                font-size: var(--F30);
+                line-height: var(--F30);
                 font-weight: 400;
-                font-variation-settings: "wght" 600;
+                font-variation-settings: "wght" 300;
             }
         }
     }
