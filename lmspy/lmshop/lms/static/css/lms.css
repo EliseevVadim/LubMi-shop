@@ -33,7 +33,7 @@
     --S2R: clamp(1rem, calc(2800vw / 1440), 2rem);
 
     --CatItemWidth: clamp(11rem, calc(26500vw / 1440), 19rem);
-    --ScartFigWidth: clamp(1rem, calc(11200vw / 400), 8rem); /*8rem;*/
+    --ScartFigWidth: clamp(1rem, calc(11200vw / 400), 8rem);
 }
 
 * {
