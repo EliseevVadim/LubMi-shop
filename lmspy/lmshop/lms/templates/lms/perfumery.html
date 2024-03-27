@@ -33,6 +33,6 @@
 {% include "lms/include/banner.html" with type="A" slogan="КАК<br/>ЗАКАЗАТЬ<br/>ПАРФЮМ" s_cls="banner-end" button="Заказать аромат" text=text_09|markdown t_cls="banner-end" gradient="rgba(62, 63, 65, 1), rgba(62, 63, 65, 0), rgba(62, 63, 65, 0)" ref=param_value_link_perfumery %}
 {{separator}} {# -----------------------------------------------------------------------------------------------------  #}
 {{text_05 | markdown}}
-{% include "lms/include/accordion.html" with article_classes="bb1" summary_classes="bt1 pt1 pb1 hand" md=True %}
+{% include "lms/include/accordion.html" with summary_classes="bt1 pt1 pb1 hand" md=True %}
 <section><button class="mt15 medium inverted" onclick="window.location.href='{{param_value_link_perfumery}}';">Заказать аромат</button></section>
 {% endblock %}
