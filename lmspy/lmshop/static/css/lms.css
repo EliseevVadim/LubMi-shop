@@ -218,6 +218,10 @@ details {
         margin: 0 0 0.75em 0;
     }
 
+    &:last-of-type > summary.bt1 {
+        border-bottom: solid thin #222222;
+    }
+
     summary {
         font-size: var(--F24);
         font-weight: 400;
@@ -368,6 +372,7 @@ body, aside, .content, .leading {
 
         .nav-icons {
             margin-left: auto;
+            margin-right: 1rem;
             display: -webkit-inline-box;
             display: -ms-inline-flexbox;
             display: inline-flex;
@@ -381,10 +386,7 @@ body, aside, .content, .leading {
             -webkit-box-pack: justify;
                 -ms-flex-pack: justify;
                     justify-content: space-between;
-
-            & > * {
-                margin: 0 1rem 0 1rem;
-            }
+            gap: var(--S2R);
 
             img {
                 height: 2.2rem;
@@ -3262,9 +3264,10 @@ dialog #scui-form input[type="email"] {
     #sch-dialog {
         #sch-box {
             span.bb1 {
-                margin-right: 3.5rem;
+                margin-right: 3rem;
+                margin-left: 1rem;
                 #sch-text {
-                    min-width: calc(100vw - 12rem);
+                    min-width: calc(100vw - 11rem);
                 }
             }
         }
@@ -3880,7 +3883,7 @@ dialog #scui-form input[type="email"] {
         }
 
         .banner-button {
-            font-size: var(--F28);
+            font-size: var(--F28)
         }
     }
 }
