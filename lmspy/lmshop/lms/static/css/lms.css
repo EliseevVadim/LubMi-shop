@@ -34,6 +34,12 @@
 
     --CatItemWidth: clamp(11rem, calc(26500vw / 1440), 19rem);
     --ScartFigWidth: clamp(1rem, calc(11200vw / 400), 8rem);
+
+    --NBSF1: clamp(1px, calc(5400vw / 376), 54px);
+    --NBSF2: clamp(1px, calc(4500vw / 376), 45px);
+    --NBTF: clamp(1px, calc(1400vw / 376), 14px);
+    --NBBF: clamp(1px, calc(1800vw / 376), 18px);
+    --NBBH: clamp(1px, calc(6400vw / 376), 64px);
 }
 
 * {
@@ -2583,21 +2589,6 @@ dialog #scui-form input[type="email"] {
         "W W W W W W W W W W W W";
     }
 
-    .banner-slogan {
-        grid-area: S;
-        color: white;
-        font-size: var(--F120);
-        line-height: var(--F120);
-        font-family: Geologica;
-        font-weight: 400;
-        text-transform: uppercase;
-        word-wrap: break-word;
-
-        &.c2 {
-            color: #222222;
-        }
-    }
-
     .banner-switch {
         grid-area: W;
         cursor: pointer;
@@ -2616,6 +2607,21 @@ dialog #scui-form input[type="email"] {
 
         & > *:last-child {
             margin-left: 0.3rem;
+        }
+    }
+
+    .banner-slogan {
+        grid-area: S;
+        color: white;
+        font-size: var(--F120);
+        line-height: var(--F120);
+        font-family: Geologica;
+        font-weight: 400;
+        text-transform: uppercase;
+        word-wrap: break-word;
+
+        &.c2 {
+            color: #222222;
         }
     }
 
