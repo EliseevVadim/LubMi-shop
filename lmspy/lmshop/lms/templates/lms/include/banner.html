@@ -2,6 +2,12 @@
     {% if slogan %}
     <div class="banner-slogan {{s_cls}}">{{slogan}}</div>
     {% endif %}
+    {% if w_slogan %}
+    <div class="banner-slogan on-wide {{s_cls}}">{{w_slogan}}</div>
+    {% endif %}
+    {% if n_slogan %}
+    <div class="banner-slogan on-narrow {{s_cls}}">{{n_slogan}}</div>
+    {% endif %}
     {% if button %}
     <button class="banner-button {{b_cls}}" onclick="window.location.href='{{ref}}';">{{button}}</button>
     {% endif %}

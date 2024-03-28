@@ -5,7 +5,7 @@
 {% block page_header %}
 {% static "img/bkg-001.jpg" as img %}
 {% url "lms:catalogue" as ref %}
-{% include "lms/include/banner.html" with unique="main" type="C" slogan='Новая коллекция' bnr_cls="btc" s_cls="banner-end" button="Перейти в каталог" %}
+{% include "lms/include/banner.html" with unique="main" type="C" w_slogan='Новая коллекция' n_slogan='Новая<br/>коллекция' bnr_cls="btc" s_cls="banner-end" button="Перейти в каталог" %}
 {% endblock %}
 
 {% block page_content %}
@@ -28,7 +28,7 @@
 {% url "lms:perfumery" as ref_2 %}
 {% with "Перейти в каталог" as button_1 %}
 {% with "Ознакомиться" as button_2 %}
-{% include "lms/include/banner.js" with unique="main" slogan_1="<br/>Новая коллекция" slogan_2="Коллекция<br/>ароматов" g1="rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)" show=1 %}
+{% include "lms/include/banner.js" with unique="main" w_slogan_1="<br/>Новая коллекция" n_slogan_1="Новая<br/>коллекция" w_slogan_2="Коллекция<br/>ароматов" n_slogan_2="Коллекция<br/>ароматов" g1="rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)" show=1 %}
 {% endwith %}
 {% endwith %}
 {% endblock %}
