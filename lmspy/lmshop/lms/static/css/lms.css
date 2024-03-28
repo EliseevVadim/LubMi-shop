@@ -2689,7 +2689,7 @@ dialog #scui-form input[type="email"] {
                 "S S S S S S S S S S S S"
                 "S S S S S S S S S S S S"
                 "T T T T T T T T T T T T"
-                "B B B B B B B B B B . .";
+                "B B B B B B B B B B B B";
         }
 
         &.banner-B {
@@ -2706,7 +2706,7 @@ dialog #scui-form input[type="email"] {
                 "S S S S S S S S S S S S"
                 "S S S S S S S S S S S S"
                 "S S S S S S S S S S S S"
-                "B B B B B B B B . . . .";
+                "B B B B B B B B B B B B";
             }
 
         &.banner-C {
