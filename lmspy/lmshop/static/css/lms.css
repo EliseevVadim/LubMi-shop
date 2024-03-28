@@ -5,6 +5,7 @@
 * Browsers: last 15 version
 */
 
+
 :root {
     --LeadingHeight: 3rem;
     --FooterHeight: 3rem;
@@ -40,7 +41,13 @@
     --S2R: clamp(1rem, calc(2800vw / 1440), 2rem);
 
     --CatItemWidth: clamp(11rem, calc(26500vw / 1440), 19rem);
-    --ScartFigWidth: clamp(1rem, calc(11200vw / 400), 8rem); /*8rem;*/
+    --ScartFigWidth: clamp(1rem, calc(11200vw / 400), 8rem);
+
+    --NBSF1: clamp(1px, calc(5400vw / 376), 54px);
+    --NBSF2: clamp(1px, calc(4200vw / 376), 42px);
+    --NBTF: clamp(1px, calc(1400vw / 376), 14px);
+    --NBBF: clamp(1px, calc(1800vw / 376), 18px);
+    --NBBH: clamp(1px, calc(6400vw / 376), 60px);
 }
 
 * {
@@ -256,13 +263,15 @@ details {
     details {
         summary {
             &::after {
-                content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 40 24.7'><path d='M 40,4.7 35.3,0 20,15.27 4.7,0 0,4.7 20,24.7 Z' fill='black'/></svg>");
+                opacity: 0.8;
+                content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='15' viewBox='0 0 22.5 12.5'><path d='m 12.1339,12.133905 c -0.4882,0.4881 -1.2796,0.4881 -1.7678,0 l -9.99998,-10 c -0.48816,-0.4882 -0.48816,-1.2796 0,-1.7678 0.48815,-0.48814 1.27961,-0.48814 1.76776,0 l 9.11612,9.1161 9.1161,-9.1161 c 0.4882,-0.48814 1.2796,-0.48814 1.7678,0 0.4881,0.4882 0.4881,1.2796 0,1.7678 z' fill='%222222' /></svg>");
             }
         }
 
         &[open] summary {
             &::after {
-                content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 40 24.7'><path d='M 40,20 35.3,24.7 20,9.43 4.7,24.7 0,20 20,0 Z' fill='black'/></svg>");
+                opacity: 0.8;
+                content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='15' viewBox='0 0 22.5 12.5'><path d='m 12.1339,0.366075 c -0.4882,-0.4881 -1.2796,-0.4881 -1.7678,0 l -9.99998,10 c -0.48816,0.4882 -0.48816,1.2796 0,1.7678 0.48815,0.48814 1.27961,0.48814 1.76776,0 l 9.11612,-9.1161 9.1161,9.1161 c 0.4882,0.48814 1.2796,0.48814 1.7678,0 0.4881,-0.4882 0.4881,-1.2796 0,-1.7678 z' fill='%222222' /></svg>");
             }
         }
     }
@@ -3368,6 +3377,36 @@ dialog #scui-form input[type="email"] {
         "W W W W W W W W W W W W";
     }
 
+    .banner-switch {
+        -ms-grid-row: 12;
+        -ms-grid-column: 1;
+        -ms-grid-column-span: 12;
+        grid-area: W;
+        cursor: pointer;
+        -ms-grid-row-align: center;
+            align-self: center;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+            -ms-flex-flow: row;
+                flex-flow: row;
+
+        & > * {
+            margin: 0;
+            padding: 0;
+        }
+
+        & > *:first-child {
+            margin-right: 0.3rem;
+        }
+
+        & > *:last-child {
+            margin-left: 0.3rem;
+        }
+    }
+
     .banner-slogan {
         -ms-grid-row: 1;
         -ms-grid-row-span: 12;
@@ -3399,36 +3438,6 @@ dialog #scui-form input[type="email"] {
         -ms-grid-row-span: 10;
         -ms-grid-column: 1;
         -ms-grid-column-span: 12
-    }
-
-    .banner-switch {
-        -ms-grid-row: 12;
-        -ms-grid-column: 1;
-        -ms-grid-column-span: 12;
-        grid-area: W;
-        cursor: pointer;
-        -ms-grid-row-align: center;
-            align-self: center;
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-orient: horizontal;
-        -webkit-box-direction: normal;
-            -ms-flex-flow: row;
-                flex-flow: row;
-
-        & > * {
-            margin: 0;
-            padding: 0;
-        }
-
-        & > *:first-child {
-            margin-right: 0.3rem;
-        }
-
-        & > *:last-child {
-            margin-left: 0.3rem;
-        }
     }
 
     .banner-button {
@@ -3574,21 +3583,21 @@ dialog #scui-form input[type="email"] {
             -ms-grid-row: 23;
             -ms-grid-row-span: 1;
             -ms-grid-column: 1;
-            -ms-grid-column-span: 19;
+            -ms-grid-column-span: 23;
         }
 
         &.banner-B > .std-footer-item-2 {
             -ms-grid-row: 12;
             -ms-grid-row-span: 1;
             -ms-grid-column: 1;
-            -ms-grid-column-span: 8;
+            -ms-grid-column-span: 12;
             }
 
         &.banner-C > .std-footer-item-2 {
             -ms-grid-row: 11;
             -ms-grid-row-span: 1;
             -ms-grid-column: 1;
-            -ms-grid-column-span: 12;
+            -ms-grid-column-span: 12
         }
 
         &.grid12-abcd > .std-footer-item-3 {
@@ -3672,21 +3681,21 @@ dialog #scui-form input[type="email"] {
             -ms-grid-row: 23;
             -ms-grid-row-span: 1;
             -ms-grid-column: 1;
-            -ms-grid-column-span: 19;
+            -ms-grid-column-span: 23;
         }
 
         &.banner-B > .g12-ib {
             -ms-grid-row: 12;
             -ms-grid-row-span: 1;
             -ms-grid-column: 1;
-            -ms-grid-column-span: 8;
+            -ms-grid-column-span: 12;
             }
 
         &.banner-C > .g12-ib {
             -ms-grid-row: 11;
             -ms-grid-row-span: 1;
             -ms-grid-column: 1;
-            -ms-grid-column-span: 12;
+            -ms-grid-column-span: 12
         }
 
         &.grid12-abcd > .g12-ic {
@@ -3724,6 +3733,12 @@ dialog #scui-form input[type="email"] {
             -ms-grid-column-span: 12
         }
 
+        .banner-switch {
+            -ms-grid-row: 12;
+            -ms-grid-column: 1;
+            -ms-grid-column-span: 12
+        }
+
         .banner-slogan {
             -ms-grid-row: 1;
             -ms-grid-row-span: 19;
@@ -3742,13 +3757,7 @@ dialog #scui-form input[type="email"] {
             -ms-grid-row: 1;
             -ms-grid-row-span: 10;
             -ms-grid-column: 1;
-            -ms-grid-column-span: 12;
-        }
-
-        .banner-switch {
-            -ms-grid-row: 12;
-            -ms-grid-column: 1;
-            -ms-grid-column-span: 12;
+            -ms-grid-column-span: 12
         }
 
         &.grid12-aab > .banner-button {
@@ -3783,21 +3792,21 @@ dialog #scui-form input[type="email"] {
             -ms-grid-row: 23;
             -ms-grid-row-span: 1;
             -ms-grid-column: 1;
-            -ms-grid-column-span: 19;
+            -ms-grid-column-span: 23;
         }
 
         &.banner-B > .banner-button {
             -ms-grid-row: 12;
             -ms-grid-row-span: 1;
             -ms-grid-column: 1;
-            -ms-grid-column-span: 8;
+            -ms-grid-column-span: 12;
             }
 
         &.banner-C > .banner-button {
             -ms-grid-row: 11;
             -ms-grid-row-span: 1;
             -ms-grid-column: 1;
-            -ms-grid-column-span: 12;
+            -ms-grid-column-span: 12
         }
 
         .banner-text {
@@ -3828,11 +3837,14 @@ dialog #scui-form input[type="email"] {
 @media (max-width: 961px) {
     .banner {
         aspect-ratio: 400 / 740;
+        padding: 2rem 1rem;
 
         &.banner-A {
             -webkit-column-gap: 0;
                -moz-column-gap: 0;
                     column-gap: 0;
+            -ms-grid-columns: 1fr 0 1fr 0 1fr 0 1fr 0 1fr 0 1fr 0 1fr 0 1fr 0 1fr 0 1fr 0 1fr 0 1fr;
+                grid-template: repeat(11, 1fr) 5rem / repeat(12, 1fr);
             padding: 2rem max(2rem, calc(0.5 * (100vw - var(--NarrowPageWidth))));
             row-gap: 1rem;
                 grid-template-areas:
@@ -3847,10 +3859,12 @@ dialog #scui-form input[type="email"] {
                 "S S S S S S S S S S S S"
                 "S S S S S S S S S S S S"
                 "T T T T T T T T T T T T"
-                "B B B B B B B B B B . .";
+                "B B B B B B B B B B B B";
         }
 
         &.banner-B {
+            -ms-grid-columns: (1fr)[12];
+                grid-template: repeat(11, 1fr) 6rem / repeat(12, 1fr);
                 grid-template-areas:
                 "S S S S S S S S S S S S"
                 "S S S S S S S S S S S S"
@@ -3863,11 +3877,13 @@ dialog #scui-form input[type="email"] {
                 "S S S S S S S S S S S S"
                 "S S S S S S S S S S S S"
                 "S S S S S S S S S S S S"
-                "B B B B B B B B . . . .";
+                "B B B B B B B B B B B B";
             }
 
         &.banner-C {
-                    grid-template-areas:
+            -ms-grid-columns: (1fr)[12];
+                grid-template: repeat(10, 1fr) 6rem 5rem / repeat(12, 1fr);
+                grid-template-areas:
                 "S S S S S S S S S S S S"
                 "S S S S S S S S S S S S"
                 "S S S S S S S S S S S S"
@@ -3880,10 +3896,32 @@ dialog #scui-form input[type="email"] {
                 "S S S S S S S S S S S S"
                 "B B B B B B B B B B B B"
                 "W W W W W W W W W W W W";
+
+            .banner-slogan {
+                font-size: var(--NBSF1);
+                line-height: var(--NBSF1);
+                letter-spacing: -2%;
+            }
+        }
+
+        .banner-slogan {
+            font-size: var(--NBSF2);
+            line-height: var(--NBSF2);
+            letter-spacing: -2%;
         }
 
         .banner-button {
-            font-size: var(--F28)
+            max-height: var(--NBBH);
+            min-height: var(--NBBH);
+            font-size: var(--NBBF);
+            aspect-ratio: 280 / 64;
+        }
+
+        .banner-text {
+            p {
+                font-size: var(--NBTF);
+                line-height: var(--NBTF);
+            }
         }
     }
 }
