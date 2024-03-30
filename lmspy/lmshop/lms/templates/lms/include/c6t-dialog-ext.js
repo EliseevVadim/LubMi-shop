@@ -262,6 +262,7 @@ c6t_dialog.show = () => {
 
             window.addEventListener(EventType.SCART_CHANGED, c6t_dialog.__on_scart_changed);
             scart_changed();
+            const mask = IMask(document.querySelector("input.telephone"), {mask: '{+7} (000) 000-00-00'});
             c6t_dialog.choose_city(answer.address.city, answer.address.city_uuid, false);
             d6y_changed({currentTarget: by_selector('input[id^="c6t-d6y_service_"]:checked')});
             c6t_dialog.rszo = new ResizeObserver(move_city_list);

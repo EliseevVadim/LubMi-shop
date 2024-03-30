@@ -80,6 +80,7 @@ class CheckoutForm(forms.ModelForm):
             }),
             'cu_phone': forms.TextInput(attrs={
                 'id': 'c6t-cu_phone',
+                'class': 'telephone',
                 'placeholder': Parameter.value_of('phone_mask', '+7 (999) 999-99-99'),
                 'pattern': Parameter.value_of('regex_phone_number', """^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$""")
             }),
