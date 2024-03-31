@@ -605,7 +605,7 @@ class C6tInfoView(View):
             return functor(city, cost, time, err)
 
         def get_suggestions(flag):
-            c_uuid, street, building = request.GET.get('city_uuid'), request.GET.get('street'), request.GET.get('building')
+            c_uuid, street, building, tid = request.GET.get('city_uuid'), request.GET.get('street'), request.GET.get('building'), request.GET.get('tid')
             try:
                 city = City.objects.get(pk=c_uuid)
             except (City.DoesNotExist, ValidationError):
@@ -613,6 +613,8 @@ class C6tInfoView(View):
             else:
                 dd = DaData()
                 try:
+                    if not street.strip():
+                        raise ValueError(street)
                     suggestions = (dd.suggest_address(
                         query=f"{city.region.region}, {city.city}, {street}",
                         count=5,
@@ -625,7 +627,7 @@ class C6tInfoView(View):
                         to_bound={"value": "house"}
                     ))["suggestions"]
                     options = list({x['data']['street'] for x in suggestions if 'data' in x and 'street' in x['data']} if flag else {x['data']['house'] for x in suggestions if 'data' in x and 'house' in x['data']})
-                    return render(request, 'lms/option-list.html', {'options': options})
+                    return render(request, 'lms/option-list.html', {'options': options, 'tid': tid})
                 except (KeyError, ValueError, TransportError):
                     pass
             return HttpResponse()

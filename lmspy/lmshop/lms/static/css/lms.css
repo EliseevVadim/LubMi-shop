@@ -2192,6 +2192,7 @@ dialog #scui-form input[type="email"] {
                 }
             }
 
+            .drop-down-list,
             .c6t-city-list {
                 position: absolute;
                 border: solid thin gray;
