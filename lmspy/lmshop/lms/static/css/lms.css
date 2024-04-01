@@ -2157,7 +2157,7 @@ dialog #scui-form input[type="email"] {
             label[for="c6t-cu_confirm"] {
                 display: flex;
                 align-items: end;
-                margin: 0 1rem;
+                margin: 0;
             }
 
             label[for="c6t-cu_fullname"],
@@ -2182,27 +2182,27 @@ dialog #scui-form input[type="email"] {
             }
 
             input[type="radio"] {
-                visibility: hidden;
-                &::after {
-                    visibility: visible;
-                    margin: 0 0 0 -10px;
-                    content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='15' viewBox='0 0 26 27'><circle cx='13' cy='13' r='12.5' stroke='black' style='stroke-width:1.5;fill:none;'/></svg>");
-                }
-                &:checked::after {
-                    content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='15' viewBox='0 0 26 27'><circle cx='13' cy='13' r='12.5' stroke='black' style='stroke-width:1.5;fill:none;'/><circle cx='13' cy='13' r='9' fill='black'/></svg>");
-                }
+                display: none;
+            }
+
+            label:has(input[type="radio"])::before {
+                content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='15' viewBox='0 0 26 27'><circle cx='13' cy='13' r='12.5' stroke='black' style='stroke-width:1.5;fill:none;'/></svg>");
+            }
+
+            label:has(input[type="radio"]:checked)::before {
+                content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='15' viewBox='0 0 26 27'><circle cx='13' cy='13' r='12.5' stroke='black' style='stroke-width:1.5;fill:none;'/><circle cx='13' cy='13' r='9' fill='black'/></svg>");
             }
 
             input[type="checkbox"] {
-                visibility: hidden;
-                &::after {
-                    visibility: visible;
-                    margin: 0;
-                    content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='17' viewBox='0 0 32 32'><rect x='0.5' y='0.5' width='31' height='31' stroke='black' style='stroke-width:1.5;fill:none;'/></svg>");
-                }
-                &:checked::after {
-                    content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='17' viewBox='0 0 32 32'><rect x='0.5' y='0.5' width='31' height='31' stroke='black' style='stroke-width:1.5;fill:none;'/><path d='M 13.7,22.025 8,16.325 9.425,14.9 13.7,19.175 22.875,10 24.3,11.425 Z'/></svg>");
-                }
+                display: none;
+            }
+
+            label:has(+ input[type="checkbox"]):before {
+                content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='17' viewBox='0 0 32 32'><rect x='0.5' y='0.5' width='31' height='31' stroke='black' style='stroke-width:1.5;fill:none;'/></svg>");
+            }
+
+            label:has(+ input[type="checkbox"]:checked):before {
+                content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='17' viewBox='0 0 32 32'><rect x='0.5' y='0.5' width='31' height='31' stroke='black' style='stroke-width:1.5;fill:none;'/><path d='M 13.7,22.025 8,16.325 9.425,14.9 13.7,19.175 22.875,10 24.3,11.425 Z'/></svg>");
             }
 
             .drop-down-list,
