@@ -5,7 +5,6 @@
 * Browsers: last 15 version
 */
 
-
 :root {
     --LeadingHeight: 3rem;
     --FooterHeight: 3rem;
@@ -48,6 +47,8 @@
     --NBTF: clamp(1px, calc(1400vw / 376), 14px);
     --NBBF: clamp(1px, calc(1800vw / 376), 18px);
     --NBBH: clamp(1px, calc(6400vw / 376), 60px);
+    --NCPF: clamp(1px, calc(1800vw / 376), 18px);
+    --NCAF: clamp(1px, calc(1800vw / 376), 18px);
 }
 
 * {
@@ -2543,6 +2544,17 @@ main.perfumery {
     .contacts {
         button {
             margin: 0 1rem;
+            font-size: var(--NCPF);
+        }
+
+        p {
+            font-size: var(--NCPF);
+            line-height: calc(var(--NCPF) + 2px);
+        }
+
+        a {
+            font-size: var(--NCAF);
+            line-height: calc(var(--NCAF) + 2px);
         }
     }
 }
@@ -2862,6 +2874,7 @@ dialog #scui-form input[type="email"] {
                 }
             }
 
+            .drop-down-list,
             .c6t-city-list {
                 position: absolute;
                 border: solid thin gray;
