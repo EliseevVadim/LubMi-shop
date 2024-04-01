@@ -1,3 +1,4 @@
+{% include "lms/include/dd.js" with name="Dropdown" class="drop-down-list" %}
 c6t_dialog.form_container = () => document.querySelector("#c6t-dialog .c6t-form-container");
 c6t_dialog.sidebar = () => document.querySelector("#c6t-dialog .c6t-sidebar");
 c6t_dialog.city_list = () => document.querySelector("#c6t-dialog .c6t-city-list");
@@ -20,57 +21,6 @@ c6t_dialog.close = () => {
     c6t_dialog.rszo = null;
     c6t_dialog.__close();
 };
-
-class Dropdown {
-    constructor(input, id, updater) {
-        let move_dropdown = _ => {
-            let dd = document.querySelector(`#${id}`);
-            let pe = input.parentElement;
-            dd.style.transform = `translate(0px, ${pe.clientHeight + 5}px)`;
-            dd.style.width = `${input.clientWidth}px`;
-        };
-
-        input.insertAdjacentHTML("afterEnd", `<div id="${id}" class="drop-down-list"></div>`);
-        input.onfocus = e => this.focus(e);
-        input.onblur = e => this.blur(e);
-        this.rszo = new ResizeObserver(move_dropdown);
-        this.rszo.observe(input);
-        this.input = input;
-        this.self = document.querySelector(`#${id}`);
-        this.self.input = input;
-        this.updater = updater;
-        this.state = 0;
-        this.maybe_show();
-        setTimeout(move_dropdown);
-    }
-
-    move_dropdown() {
-        let dd = document.querySelector(`#${id}`);
-        let pe = input.parentElement;
-        dd.style.transform = `translate(0px, ${pe.clientHeight + 5}px)`;
-        dd.style.width = `${input.clientWidth}px`;
-    }
-
-    maybe_show(show=true) {
-        let visible = show && this.state && this.self.innerHTML.trim();
-        this.self.style.opacity = visible ? "100%" : "0%";
-        setTimeout(_ => { this.self.style.pointerEvents = visible ? "auto" : "none"; }, 300);
-    }
-
-    update(show=true) {
-        this.updater(this.self, () => { this.maybe_show(show); });
-    }
-
-    blur(e) {
-        this.state = 0;
-        this.maybe_show();
-    }
-
-    focus(e) {
-        this.state = 1;
-        this.maybe_show();
-    }
-}
 
 c6t_dialog.show = () => {
     const by_id = id => document.getElementById(id);
@@ -163,14 +113,16 @@ c6t_dialog.show = () => {
                 }).catch(_ => {});
             }
 
-            const update_streets = (flag = true) => {
+            const sb_show_enabler = () => {
                 let ready = c6t_dialog.ready();
-                _street.dd.update(flag && ready && ready.value == 'yes' && _street.value);
+                return ready && ready.value == 'yes';
             }
 
-            const update_buildings = (flag = true) => {
-                let ready = c6t_dialog.ready();
-                _building.dd.update(flag && ready && ready.value == 'yes' && _street.value && _building.value);
+            const update_sb = () => {
+                setTimeout(() => {
+                    _street.dd.update();
+                    _building.dd.update();
+                });
             }
 
             const update_summary = () => {
@@ -185,10 +137,7 @@ c6t_dialog.show = () => {
                     statuses.forEach((status, arg1, arg2) => {
                         status.innerHTML = html;
                     });
-                    setTimeout(() => {
-                        update_streets();
-                        update_buildings();
-                    });
+                    update_sb();
                 }).catch(_=>{});
                 fetch(`{% url "lms:c6t_info" kind="delivery" data="cd" %}?city_uuid=${_city_uuid.value}&street=${_street.value}&building=${_building.value}`)
                 .then(response => response.text()).then(html => {
@@ -224,27 +173,6 @@ c6t_dialog.show = () => {
                 _city.tmo_id = setTimeout(() => {
                     update_cities();
                     _city.tmo_id = null;
-                }, 1000);
-            };
-
-            _street.tmo_id = null;
-            _street.oninput = _ => {
-                update_buildings();
-                if(_street.tmo_id) { clearTimeout(_street.tmo_id); }
-                _street.tmo_id = setTimeout(() => {
-                    update_summary();
-                    update_streets();
-                    _street.tmo_id = null;
-                }, 1000);
-            };
-            
-            _building.tmo_id = null;
-            _building.oninput = _ => {
-                if(_building.tmo_id) { clearTimeout(_building.tmo_id); }
-                _building.tmo_id = setTimeout(() => {
-                    update_summary();
-                    update_buildings();
-                    _building.tmo_id = null;
                 }, 1000);
             };
 
@@ -314,8 +242,8 @@ c6t_dialog.show = () => {
             d6y_changed({currentTarget: by_selector('input[id^="c6t-d6y_service_"]:checked')});
             c6t_dialog.rszo = new ResizeObserver(move_city_list);
             c6t_dialog.rszo.observe(_city);
-            _street.dd = new Dropdown(_street, "c6t-dd-street", streets_updater);
-            _building.dd = new Dropdown(_building, "c6t-dd-building", buildings_updater);
+            _street.dd = new Dropdown(_street, "c6t-dd-street", streets_updater, sb_show_enabler, () => _building.dd.update());
+            _building.dd = new Dropdown(_building, "c6t-dd-building", buildings_updater, sb_show_enabler);
             c6t_dialog.sch = suppress_scrolling();
             c6t_dialog.iid = setInterval(check_filled, 1000);
             c6t_dialog.self().onclose = c6t_dialog.release;

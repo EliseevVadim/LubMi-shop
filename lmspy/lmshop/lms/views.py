@@ -611,10 +611,9 @@ class C6tInfoView(View):
             except (City.DoesNotExist, ValidationError):
                 pass
             else:
-                dd = DaData()
                 try:
-                    if not street.strip():
-                        raise ValueError(street)
+                    if not street.strip() or (not flag and not building.strip()): raise ValueError()
+                    dd = DaData()
                     suggestions = (dd.suggest_address(
                         query=f"{city.region.region}, {city.city}, {street}",
                         count=5,
@@ -622,11 +621,12 @@ class C6tInfoView(View):
                         to_bound={"value": "street"}
                     ) if flag else dd.suggest_address(
                         query=f"{city.region.region}, {city.city}, {street}, {building}",
-                        count=5,
+                        count=10,
                         from_bound={"value": "house"},
                         to_bound={"value": "house"}
                     ))["suggestions"]
-                    options = list({x['data']['street'] for x in suggestions if 'data' in x and 'street' in x['data']} if flag else {x['data']['house'] for x in suggestions if 'data' in x and 'house' in x['data']})
+                    options = list({x['data']['street_with_type'] for x in suggestions if 'data' in x and 'street_with_type' in x['data']} if flag else {x['data']['house'] for x in suggestions if 'data' in x and 'house' in x['data']})
+                    options.sort()
                     return render(request, 'lms/option-list.html', {'options': options, 'tid': tid})
                 except (KeyError, ValueError, TransportError):
                     pass
