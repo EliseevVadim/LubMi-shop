@@ -22,6 +22,7 @@ const notify_delivery = ppk => {
     __api_call__('{% url "api:get_customer_info" flags=6 %}', null, answer => {
         cu_form = document.getElementById('scui-form');
         cu_phone = document.getElementById('scui-phone');
+        const mask = IMask(cu_phone, {mask: '{+7} (000) 000-00-00'});
         cu_email = document.getElementById('scui-email');
         cu_phone.value = answer.phone;
         cu_email.value = answer.email;
