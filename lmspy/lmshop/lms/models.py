@@ -117,7 +117,7 @@ class Product(DbItem):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = text.slugify(self.article, self.title)
+            self.slug = text.slugify(self.article)
         super().save(*args, **kwargs)
 
     class PublishedManager(models.Manager):
