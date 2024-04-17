@@ -18,7 +18,7 @@ from .coworkers.postru import PostRu
 from .coworkers.yookassa import Yookassa
 from .forms import CheckoutForm
 from .models import Parameter, Product, City, AboutItem, Order
-from .utils import D6Y, suffix, clipped_range
+from .utils import D6Y, suffix, clipped_range, deep_unquote
 
 
 class IndexView(View):
@@ -731,7 +731,7 @@ class JsMessageView(View):
     @staticmethod
     def get(request, message, *_, **__):
         return render(request, 'lms/message.html', {
-            "message": message
+            "message": deep_unquote(message)
         })
 
 

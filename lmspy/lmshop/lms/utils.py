@@ -4,6 +4,7 @@ from .coworkers.telegram import Telegram
 from .models import TelegramBot, City
 from functools import lru_cache
 from sys import float_info
+from urllib.parse import unquote
 
 
 class D6Y(StrEnum):
@@ -47,3 +48,8 @@ def clipped_range(a, b):
         return clipped_range(b + 1, a + 1)
     else:
         return []
+
+
+def deep_unquote(s, n=10):
+    r, n = unquote(s), n - 1
+    return r if r == s or n < 1 else deep_unquote(r, n)
