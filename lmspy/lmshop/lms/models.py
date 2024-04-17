@@ -100,14 +100,14 @@ class Product(DbItem):
         max_digits=14,
         decimal_places=2,
         default_currency='RUR',
-        validators=[MinValueValidator(Money(0.01, currency='RUR'))])                                        # цена
+        validators=[MinValueValidator(Money(0.01, currency='RUR'))])                                  # цена
     old_price = MoneyField(
         max_digits=14,
         decimal_places=2,
         default_currency='RUR',
         null=True,
         blank=True,
-        validators=[MinValueValidator(Money(0.01, currency='RUR'))])                                        # старая цена (до акции), null -- нет акции
+        validators=[MinValueValidator(Money(0.01, currency='RUR'))])                                  # старая цена (до акции), null -- нет акции
     sales_quantity = models.BigIntegerField(default=0, validators=[MinValueValidator(0)])                   # количество продаж
     published_at = models.DateTimeField(null=True, blank=True, default=timezone.now)                        # время публикации(опубликован, если published_at < now())
     categories = models.ManyToManyField(Category, related_name="products")                                  # категории

@@ -1,4 +1,6 @@
+import re
 from decimal import Decimal
+from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.exceptions import ValidationError
 from django.core.cache import cache
@@ -687,7 +689,14 @@ class SearchView(View):
         if item in frozenset({'sch-page', 'sch-footer', 'sch-info'}):
             filter_ = request.GET.get('filter')
             page = int(request.GET.get('page'))
-            products = SearchView.ordering[SearchView.order](Product.published.filter(title__icontains=filter_))
+            try:
+                if not re.match(settings.SEARCH_INPUT_RGX, filter_):
+                    raise re.error(filter_)
+                re.compile(filter_)
+                rx = filter_
+            except re.error:
+                rx = "^$"
+            products = SearchView.ordering[SearchView.order](Product.published.filter(title__iregex=rx))
             pgn = Paginator(products, SearchView.page_size)
             context = {
                 'filter': filter_,
