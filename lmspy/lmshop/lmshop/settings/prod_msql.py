@@ -9,10 +9,7 @@ CSRF_TRUSTED_ORIGINS = ['http://192.168.0.100/*']
 MEDIA_ROOT = BASE_DIR.parent.parent / 'public_html' / 'media'
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'lms',
-        'USER': 'lms',
-        'PASSWORD': '12345',
-        'HOST': '127.0.0.1',
-        'PORT': 3306,
-    }}
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'lmshop.sqlite3',
+    }
+}
