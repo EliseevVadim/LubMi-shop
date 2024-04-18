@@ -53,3 +53,11 @@ def clipped_range(a, b):
 def deep_unquote(s, n=10):
     r, n = unquote(s), n - 1
     return r if r == s or n < 1 else deep_unquote(r, n)
+
+
+def untag(s):
+    for subs, repl in {
+        "&nbsp;": " ",
+    }.items():
+        s = s.replace(subs, repl)
+    return s

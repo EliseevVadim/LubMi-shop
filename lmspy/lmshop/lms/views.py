@@ -20,7 +20,7 @@ from .coworkers.postru import PostRu
 from .coworkers.yookassa import Yookassa
 from .forms import CheckoutForm
 from .models import Parameter, Product, City, AboutItem, Order
-from .utils import D6Y, suffix, clipped_range, deep_unquote
+from .utils import D6Y, suffix, clipped_range, deep_unquote, untag
 
 
 class IndexView(View):
@@ -50,7 +50,7 @@ class IndexView(View):
 
         if not page:
             return render(request, self.template_name, {
-                'page_title': Parameter.value_of("title_main_page", "Главная"),
+                'page_title': untag(Parameter.value_of("title_main_page", "Главная")),
                 'page_content': 'catalogue-page',
                 'products': pd_pgn.page(1),
                 'bestsellers': bs_pgn.page(1),
@@ -84,7 +84,7 @@ class CatalogueView(IndexView):
 class CareView(View):
     @staticmethod
     def get(request, *_, **__):
-        title = Parameter.value_of('title_care', 'Уход')
+        title = untag(Parameter.value_of('title_care', 'Уход'))
         return render(request, 'lms/care.html', {
             'page_title': title,
             'page_content': 'care-page',
@@ -104,7 +104,7 @@ class CareView(View):
 class AboutCompanyView(View):
     @staticmethod
     def get(request, *_, **__):
-        title = Parameter.value_of('title_about_company', 'О бренде')
+        title = untag(Parameter.value_of('title_about_company', 'О бренде'))
         return render(request, 'lms/about.html', {
             'page_title': title,
             'page_content': 'about-page',
@@ -165,7 +165,7 @@ class DeliveryView(View):
             товара на условиях возврата или обмена в магазин. В связи с этим магазин не гарантирует оплату данного товара."""
         return render(request, 'lms/delivery.html', {
             'page_title':
-                Parameter.value_of("title_delivery", "Доставка и оплата"),
+                untag(Parameter.value_of("title_delivery", "Доставка и оплата")),
             'page_content':
                 'delivery',
             'text':
@@ -184,7 +184,7 @@ class PerfumeryView(View):
     @staticmethod
     def get(request, *_, **__):
         return render(request, 'lms/perfumery.html', {
-            'page_title': Parameter.value_of("title_perfumery", "Парфюмерия"),
+            'page_title': untag(Parameter.value_of("title_perfumery", "Парфюмерия")),
             'page_content': 'perfumery',
             'text_00':
                 """#Парфюмерия""",
@@ -521,7 +521,7 @@ class ProductView(DetailView):
 class ContactsView(View):
     @staticmethod
     def get(request, *_, **__):
-        title = Parameter.value_of('title_contacts', 'Контакты')
+        title = untag(Parameter.value_of('title_contacts', 'Контакты'))
         modal = Parameter.value_of('value_contacts_modal', 'yes').lower().strip() == 'yes'
         ph = f'<a href="{Parameter.value_of("value_link_contact_call")}">{Parameter.value_of("value_contact_phone")}</a>'
         return render(request, 'lms/contacts-modal.html' if modal else 'lms/contacts-page.html', {
@@ -533,7 +533,7 @@ class ContactsView(View):
 class SzChartView(View):
     @staticmethod
     def get(request, *_, **__):
-        title = Parameter.value_of('title_size_chart', 'Таблица размеров')
+        title = untag(Parameter.value_of('title_size_chart', 'Таблица размеров'))
         modal = Parameter.value_of('value_size_chart_modal', 'yes').lower().strip() == 'yes'
         return render(request, 'lms/sz-chart-modal.html' if modal else 'lms/sz-chart-page.html', {
             'page_title': title,
