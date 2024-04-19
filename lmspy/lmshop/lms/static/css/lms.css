@@ -1954,6 +1954,10 @@ main.perfumery {
         a {
             font-size: var(--NCAF);
             line-height: calc(var(--NCAF) + 2px);
+
+            button {
+                padding: 1.5rem 2.5rem;
+            }
         }
     }
 }
