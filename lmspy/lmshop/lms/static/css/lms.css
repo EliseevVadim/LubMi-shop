@@ -727,16 +727,20 @@ figcaption {
     .icon-list {
         grid-column: 1;
         grid-row: 1;
+        display: flex;
+        flex-flow: column;
         gap: 0.5rem;
+
+        .icon {
+            cursor: pointer;
+            max-width: 120px;
+            min-width: 120px;
+            max-height: 120px;
+            min-height: 120px;
+        }
     }
 
-    .icon {
-        cursor: pointer;
-        max-width: 120px;
-        min-width: 120px;
-        max-height: 120px;
-        min-height: 120px;
-    }
+
 
     .size-block {
         display: grid;
@@ -808,13 +812,19 @@ figcaption {
         }
 
         .icon-list {
-            display: grid;
-            grid-template: 70px / 70px;
-            grid-auto-flow: column;
-            column-gap: 0.5rem;
             width: 100%;
             grid-column: 1;
             grid-row: 2;
+            flex-flow: row;
+            flex-wrap: wrap;
+
+            .icon {
+                margin: 0;
+                max-width: 70px;
+                min-width: 70px;
+                max-height: 70px;
+                min-height: 70px;
+            }
         }
 
         .product-description {
@@ -822,14 +832,6 @@ figcaption {
             grid-row: 3;
             row-gap: 1rem;
             margin: 0 0 2rem 0;
-        }
-
-        .icon {
-            margin: 0;
-            max-width: 70px;
-            min-width: 70px;
-            max-height: 70px;
-            min-height: 70px;
         }
     }
 

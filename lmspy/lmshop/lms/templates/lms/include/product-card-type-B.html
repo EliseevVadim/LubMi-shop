@@ -1,6 +1,6 @@
 {% load thumbnail %}
 <div class="p-card-b">
-    <div class="icon-list items-top-down">
+    <div class="icon-list">
         {% for img in product.images.all %}
         <img class="icon" src="{% thumbnail img.image 120x120 quality=90 crop %}" onclick="document.querySelector('.p-card-b .p-card-a').style['background-image'] = 'url({% thumbnail img.image 512x0 %})';"/>
         {% endfor %}
