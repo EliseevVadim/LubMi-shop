@@ -638,7 +638,7 @@ class C6tInfoView(View):
             case 'cities':
                 text = request.GET.get('city')
                 text = text.lower() if text else None
-                enumerator = lambda: (ct for ct in City.objects.filter(city_lc__contains=text)) if text else []
+                enumerator = lambda: (ct for ct in City.objects.filter(city_lc__startswith=text)) if text else []
                 cities = list(enumerator())
                 return render(request, 'lms/c6t-city-list.html', {
                     "cities": cities,
