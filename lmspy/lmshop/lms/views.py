@@ -687,7 +687,7 @@ class SearchView(View):
     def get(request, item, *_, **__):
         context = {}
         if item in frozenset({'sch-page', 'sch-footer', 'sch-info'}):
-            filter_ = request.GET.get('filter')
+            filter_ = request.GET.get('filter').strip()
             page = int(request.GET.get('page'))
             try:
                 if not re.match(settings.SEARCH_INPUT_RGX, filter_):
