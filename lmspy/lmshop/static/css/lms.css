@@ -226,7 +226,7 @@ details {
         margin: 0 0 0.75em 0;
     }
 
-    &:last-of-type > summary.bt1 {
+    &:last-of-type {
         border-bottom: solid thin #222222;
     }
 
