@@ -96,6 +96,6 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': ['rest_framework.renderers.JSONRenderer', 'rest_framework.renderers.BrowsableAPIRenderer'],
 }
 
-CUSTOMER_INFO_SESSION_ID = 'customer-info-session-id-1.0'
+CUSTOMER_INFO_SESSION_ID = 'customer-info-session-v1'
 
 SEARCH_INPUT_RGX = '^[А-Яа-яЁё0-9 -]+$'
