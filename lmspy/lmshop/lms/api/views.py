@@ -10,7 +10,7 @@ from lms.api.decorators import api_response
 from lms.coworkers.cdek import Cdek
 from lms.coworkers.postru import PostRu
 from lms.models import Product, AvailableSize, Parameter, Order, OrderItem, City
-from lms.api.serializers import ProductSerializer
+from lms.api.serializers import ProductSerializer, ProductDetailSerializer
 from lms.utils import D6Y
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
 from lms.coworkers.yookassa import Yookassa
@@ -24,7 +24,17 @@ class ProductListView(generics.ListAPIView):
 
 class ProductDetailView(generics.RetrieveAPIView):
     queryset = Product.published.all()
-    serializer_class = ProductSerializer
+    serializer_class = ProductDetailSerializer
+
+
+class ProductIsFavoriteView(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    @api_response
+    def get(request, ppk, _=None):
+        info = CustomerInfo(request)
+        return {'favorite': ppk in info.favorites}
 
 
 class ProductLikeSetView(APIView):

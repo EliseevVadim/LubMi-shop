@@ -6,7 +6,8 @@ app_name = 'lms'
 urlpatterns = [
     # -- products API --
     path('products/', views.ProductListView.as_view(), name='product_list'),
-    path('products/<ppk>/', views.ProductDetailView.as_view(), name='product_detail'),
+    path('products/<pk>/', views.ProductDetailView.as_view(), name='product_detail'),
+    path('products/<ppk>/is-favorite/', views.ProductIsFavoriteView.as_view(), name='product_is_favorite'),
     path('products/<ppk>/like/<int:like>/', views.ProductLikeSetView.as_view(), name='set_product_like'),
     path('products/<ppk>/toggle-like/', views.ProductLikeToggleView.as_view(), name='toggle_product_like'),
     path('products/product/size/quantity/', views.ProductSizeQuantityView.as_view(), name='product_size_quantity'),
