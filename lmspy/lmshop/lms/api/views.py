@@ -54,9 +54,10 @@ class ProductListPageView(generics.ListAPIView):
         except (KeyError, ValueError) as e:
             raise Http404(e)
         result = super().get(*args, **kwargs)
-        result.data.append({
-            "total-count": Product.published.count()
-        })
+        result.data = {
+            "total-count": Product.published.count(),
+            "data": result.data,
+        }
         return result
 
     def page(self, q):
