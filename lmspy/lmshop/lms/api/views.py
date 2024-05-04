@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.utils.html import escape
 from django.shortcuts import get_object_or_404, Http404
 from django.db import transaction, IntegrityError
@@ -20,6 +22,46 @@ import logging
 class ProductListView(generics.ListAPIView):
     queryset = Product.published.all()
     serializer_class = ProductSerializer
+
+
+class ProductListPageView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+    default_order = 'novelties-first'
+    ordering = {
+        default_order: ("Порядок: по умолчанию", lambda q: q.order_by('-published_at')),
+        'price-asc': ("Цена: по возрастанию", lambda q: q.order_by('actual_price')),
+        'price-dsc': ("Цена: по убыванию", lambda q: q.order_by('-actual_price')),
+        'title-asc': ("Название: А-Я", lambda q: q.order_by('title')),
+        'title-dsc': ("Название: Я-А", lambda q: q.order_by('-title')),
+    }
+
+    def __init__(self):
+        super().__init__()
+        self.order = ProductListPageView.default_order
+        self.pgs = 10
+        self.pgn = 1
+
+    def validate(self):
+        return self.order in ProductListPageView.ordering and self.pgs > 0 and self.pgn > 0
+
+    def get(self, *args, **kwargs):
+        try:
+            self.order = kwargs['order']
+            self.pgs = abs(int(kwargs['pgs']))
+            self.pgn = abs(int(kwargs['pgn']))
+            if not self.validate():
+                raise Http404()
+        except (KeyError, ValueError) as e:
+            raise Http404(e)
+        return super().get(*args, **kwargs)
+
+    def page(self, q):
+        a = self.pgs * (self.pgn - 1)
+        b = a + self.pgs
+        return q[a:b]
+
+    def get_queryset(self):
+        return self.page(ProductListPageView.ordering[self.order][1](Product.published.all())) if self.validate() else Product.published.all()
 
 
 class ProductDetailView(generics.RetrieveAPIView):

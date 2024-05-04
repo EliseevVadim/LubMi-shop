@@ -20,7 +20,17 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['article', 'title', 'novelty', 'primary_image', 'sizes']
+        fields = [
+            'article',
+            'title',
+            'description',
+            'novelty',
+            'actual_price',
+            'old_price',
+            'in_stock',
+            'primary_image',
+            'sizes',
+        ]
 
 
 class ProductDetailSerializer(serializers.ModelSerializer):
@@ -29,5 +39,15 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['article', 'title', 'novelty', 'images', 'sizes']
+        fields = [
+            'article',
+            'title',
+            'description',
+            'novelty',
+            'actual_price',
+            'old_price',
+            'in_stock',
+            'images',
+            'sizes',
+        ]
 
