@@ -33,6 +33,7 @@ class ProductListPageView(generics.ListAPIView):
         'price-dsc': ("Цена: по убыванию", lambda q: q.order_by('-actual_price')),
         'title-asc': ("Название: А-Я", lambda q: q.order_by('title')),
         'title-dsc': ("Название: Я-А", lambda q: q.order_by('-title')),
+        'bestsellers': ("Бестселлеры", lambda q: q.order_by('-sales_quantity')),
     }
 
     def __init__(self):
