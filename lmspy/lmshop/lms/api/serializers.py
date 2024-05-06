@@ -5,7 +5,7 @@ from lms.models import Product, AvailableSize, Image
 class AvailableSizeSerializer(serializers.ModelSerializer):
     class Meta:
         model = AvailableSize
-        fields = ['size', 'quantity']
+        fields = ['id', 'size', 'quantity']
 
 
 class ImageSerializer(serializers.ModelSerializer):
