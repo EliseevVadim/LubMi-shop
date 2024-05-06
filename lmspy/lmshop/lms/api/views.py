@@ -1,5 +1,4 @@
-from typing import Any
-
+from urllib.request import Request
 from django.utils.html import escape
 from django.shortcuts import get_object_or_404, Http404
 from django.db import transaction, IntegrityError
@@ -171,6 +170,36 @@ class NotifyMeForDeliveryView(APIView):
         return Parameter.value_of('message_unable_notify', 'Почта или телефон должны быть указаны')
 
 
+@with_actual_scart_records_and_price
+def get_current_scart(rq: Request, scart):
+    def product(p: Product):
+        return {
+            'article': p.article,
+            'title': p.title,
+            'description': p.description,
+            'novelty': p.novelty,
+            'actual_price': p.actual_price.amount,
+            'old_price': p.old_price.amount if p.old_price else None,
+            'in_stock': p.in_stock,
+            'primary_image': p.primary_image.image.url,
+        }
+
+    def size(s: AvailableSize):
+        return {
+            'id': s.id,
+            'size': s.size,
+        }
+
+    return {
+        'price': scart['price'],
+        'weight': scart['weight'],
+        'records': [{
+            'product': product(r['product']),
+            'size': size(r['size']),
+            'quantity': r['quantity'],
+        } for r in scart['records']]}
+
+
 class ProductToSCartView(APIView):
     permission_classes = [AllowAny]
 
@@ -198,7 +227,8 @@ class ProductToSCartView(APIView):
         return {
             'product': str(product),
             'size': str(size),
-            'quantity': info.add_to_scart(ppk, size.size, quantity)
+            'quantity': info.add_to_scart(ppk, size.size, quantity),
+            'scart': get_current_scart(request),
         } if info.add_to_scart(ppk, size.size, quantity, True) <= size.quantity or quantity < 0 \
             else Parameter.value_of('message_overkill', 'Извините, достигнут лимит. Это максимально возможное количество товаров в наличии.')
 
@@ -220,8 +250,20 @@ class KillProductInSCartView(APIView):
         return {
             'ppk': data['ppk'],
             'size': data['size'],
-            'quantity': data['quantity']
+            'quantity': data['quantity'],
+            'scart': get_current_scart(request),
         } if data else Parameter.value_of('message_product_not_found_in_shopping_cart', 'Товар с артикулом %s и размером %s не найден в корзине') % (ppk, size)
+
+
+class GetSCartView(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    @api_response
+    def get(request, _=None):
+        return {
+            'scart': get_current_scart(request),
+        }
 
 
 class CheckoutSCartView(APIView):
