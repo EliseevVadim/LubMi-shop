@@ -30,7 +30,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'lms.api.middleware.ACAO',
+    'lms.api.middleware.aca',
+    'lms.api.middleware.sid',
 ]
 
 ROOT_URLCONF = 'lmshop.urls'
