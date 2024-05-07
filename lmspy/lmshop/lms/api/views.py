@@ -271,6 +271,48 @@ class KillProductInSCartView(APIView):
         } if data else Parameter.value_of('message_product_not_found_in_shopping_cart', 'Товар с артикулом %s и размером %s не найден в корзине') % (ppk, size)
 
 
+class EstimateSCartView(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    @api_response
+    def post(request, _=None):
+        data = request.data
+        old_price = Decimal(0)
+        actual_price = Decimal()
+        warns = []
+
+        def warn(typ, text, reason):
+            warns.append({
+                "warn-type": typ,
+                "warn-text": text,
+                "warn-reason": reason,
+            })
+
+        try:
+            for d in data:
+                ppk, size_id, quantity = str(d['ppk']), int(d['size_id']), abs(int(d['quantity']))
+                try:
+                    prd: Product = Product.published.get(pk=ppk)
+                    asz: AvailableSize = prd.sizes.get(pk=size_id)
+                    old_price += quantity * (prd.old_price.amount if prd.old_price else prd.actual_price.amount)
+                    actual_price += quantity * prd.actual_price.amount
+                    if asz.quantity < quantity:
+                        warn("insufficient-product-quantity", "В наличии нет нужного количества товара", {"ppk": ppk, "size_id": size_id, "required": quantity, "available": asz.quantity})
+                except (Product.DoesNotExist, AvailableSize.DoesNotExist):
+                    warn("item-does-not-exist","Товар или размер не найдены",{"ppk": ppk, "size_id": size_id})
+        except (TypeError, KeyError):
+            return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
+        except ValueError:
+            return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
+
+        return {
+            'old_price': old_price,
+            'actual_price': actual_price,
+            'warnings': warns,
+        }
+
+
 class GetSCartView(APIView):
     permission_classes = [AllowAny]
 

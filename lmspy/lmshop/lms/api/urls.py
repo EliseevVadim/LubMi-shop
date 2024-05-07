@@ -21,6 +21,8 @@ urlpatterns = [
     path('customer/remove-product-from-scart/', views.KillProductInSCartView.as_view(), name='kill_product_in_scart'),
     path('customer/checkout/', views.CheckoutSCartView.as_view(), name='c6t'),
     path('customer/set-location/', views.SetLocationView.as_view(), name='set_location'),
+    # -- service API --
+    path('service/estimate-scart/', views.EstimateSCartView.as_view(), name='estimate_scart'),
     # -- Yookassa API --
     path('yookassa/payments/', views.YoPaymentsWebHookView.as_view(), name='yo_payments_webhook'),
 ]
