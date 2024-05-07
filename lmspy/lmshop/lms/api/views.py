@@ -1,4 +1,5 @@
 from urllib.request import Request
+from django.conf import settings
 from django.utils.html import escape
 from django.shortcuts import get_object_or_404, Http404
 from django.db import transaction, IntegrityError
@@ -12,10 +13,11 @@ from lms.coworkers.cdek import Cdek
 from lms.coworkers.postru import PostRu
 from lms.models import Product, AvailableSize, Parameter, Order, OrderItem, City
 from lms.api.serializers import ProductSerializer, ProductDetailSerializer
-from lms.utils import D6Y
+from lms.utils import D6Y, deep_unquote
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
 from lms.coworkers.yookassa import Yookassa
 import logging
+import re
 
 
 class ProductListView(generics.ListAPIView):
@@ -38,6 +40,7 @@ class ProductListPageView(generics.ListAPIView):
     def __init__(self):
         super().__init__()
         self.order = ProductListPageView.default_order
+        self.filter = None
         self.pgs = 10
         self.pgn = 1
 
@@ -47,6 +50,7 @@ class ProductListPageView(generics.ListAPIView):
     def get(self, *args, **kwargs):
         try:
             self.order = kwargs['order']
+            self.filter = deep_unquote(kwargs['filter']) if 'filter' in kwargs else None
             self.pgs = abs(int(kwargs['pgs']))
             self.pgn = abs(int(kwargs['pgn']))
             if not self.validate():
@@ -55,10 +59,22 @@ class ProductListPageView(generics.ListAPIView):
             raise Http404(e)
         result = super().get(*args, **kwargs)
         result.data = {
-            "total-count": Product.published.count(),
-            "data": result.data,
+            'total-count': self.queryset().count(),
+            'data': result.data,
         }
         return result
+
+    def queryset(self):
+        if self.filter:
+            try:
+                if not re.match(settings.SEARCH_INPUT_RGX, self.filter):
+                    raise re.error(self.filter)
+                re.compile(self.filter)
+                rx = self.filter
+            except re.error:
+                rx = '^$'
+            return Product.published.filter(title__iregex=rx)
+        return Product.published.all()
 
     def page(self, q):
         a = self.pgs * (self.pgn - 1)
@@ -66,7 +82,7 @@ class ProductListPageView(generics.ListAPIView):
         return q[a:b]
 
     def get_queryset(self):
-        return self.page(ProductListPageView.ordering[self.order][1](Product.published.all())) if self.validate() else Product.published.all()
+        return self.page(ProductListPageView.ordering[self.order][1](self.queryset())) if self.validate() else self.queryset()
 
 
 class ProductDetailView(generics.RetrieveAPIView):
