@@ -1,5 +1,6 @@
 from urllib.request import Request
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.utils.html import escape
 from django.shortcuts import get_object_or_404, Http404
 from django.db import transaction, IntegrityError
@@ -8,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework import generics
 from lms.api.business import create_notify_request, check_payment_life_cycle_is_completed
-from lms.api.decorators import api_response
+from lms.api.decorators import api_response, with_scart_from_request
 from lms.coworkers.cdek import Cdek
 from lms.coworkers.postru import PostRu
 from lms.models import Product, AvailableSize, Parameter, Order, OrderItem, City
@@ -417,76 +418,53 @@ class CheckoutSCartView(APIView):
         return Parameter.value_of('message_wrong_input', 'Пожалуйста, правильно введите данные')
 
 
-def with_scart_from_request(scart_field_name: str = "scart"):
-    def decorator(func):
-        def proxy(request, *args, **kwargs):
-            data = request.data
-            records = []
-            errors = []
-            actual_price = Decimal(0)
-            old_price = Decimal(0)
-            weight = 0
-
-            def err(typ, text, reason):
-                errors.append({
-                    "error-type": typ,
-                    "error-text": text,
-                    "error-reason": reason,
-                })
-
-            if scart_field_name in data:
-                try:
-                    for sd in data[scart_field_name]:
-                        ppk, size_id, quantity = str(sd['ppk']), int(sd['size_id']), abs(int(sd['quantity']))
-                        try:
-                            product: Product = Product.published.get(pk=ppk)
-                            size: AvailableSize = product.sizes.get(pk=size_id)
-                        except (Product.DoesNotExist, AvailableSize.DoesNotExist):
-                            err("item-does-not-exist", "Товар или размер не найдены", {"ppk": ppk, "size_id": size_id})
-                        else:
-                            old_price += quantity * (product.old_price.amount if product.old_price else product.actual_price.amount)
-                            actual_price += quantity * product.actual_price.amount
-                            weight += quantity * product.weight
-                            records += [{
-                                'product': product,
-                                'size': size,
-                                'quantity': quantity
-                            }]
-                            if size.quantity < quantity:
-                                err("insufficient-product-quantity", "В наличии нет нужного количества товара", {"ppk": ppk, "size_id": size_id, "required": quantity, "available": size.quantity})
-                except (TypeError, KeyError):
-                    return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
-                except ValueError:
-                    return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
-            return func(request,
-                        *args,
-                        **kwargs,
-                        scart={
-                            'records': records,
-                            'price': actual_price,
-                            'old_price': old_price,
-                            'weight': weight},
-                        errors=errors)
-        return proxy
-    return decorator
-
-
-class Service_EstimateSCartView(APIView):
+class Service_EstimateSCart_View(APIView):
     permission_classes = [AllowAny]
 
     @staticmethod
     @api_response
-    @with_scart_from_request()
+    @with_scart_from_request('scart')
     def post(request, scart, errors, _=None):
+
+        def err(typ, text, reason):
+            errors.append({
+                "error-type": typ,
+                "error-text": text,
+                "error-reason": reason,
+            })
+
+        data = request.data
+        cd = {'cost': None, 'days': None, 'error': None}
+        pr = {'cost': None, 'days': None, 'error': None}
+
+        try:
+            city_uuid = str(data['cu_city_uuid'])
+            try:
+                city = City.objects.get(pk=city_uuid)
+            except ValidationError:
+                return Parameter.value_of('message_wrong_uuid', 'Некорректный UUID')
+            except City.DoesNotExist:
+                err("item-does-not-exist", "Пункт назначения не найден", {'cu_city_uuid': city_uuid})
+            else:
+                cd_d6y_cost, cd_d6y_time, cd_error = Cdek().delivery_cost(city.code, scart["weight"], price=scart['price'])
+                pr_d6y_cost, pr_d6y_time, pr_error = PostRu().delivery_cost(city.code, scart["weight"], price=scart['price'])
+                cd = {'cost': cd_d6y_cost, 'days': cd_d6y_time, 'error': cd_error}
+                pr = {'cost': pr_d6y_cost, 'days': pr_d6y_time, 'error': pr_error}
+        except (TypeError, KeyError):
+            return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
+        except ValueError:
+            return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
         return {
             'price': scart['price'],
             'old_price': scart['old_price'],
             'weight': scart['weight'],
+            'cd': cd,
+            'pr': pr,
             'errors': errors,
         }
 
 
-class Service_CityListView(APIView):
+class Service_CityList_View(APIView):
     permission_classes = [AllowAny]
 
     @staticmethod
@@ -511,7 +489,7 @@ class Service_CityListView(APIView):
         }
 
 
-class YoPaymentsWebHookView(APIView):
+class Yookassa_PaymentsWebHook_View(APIView):
     permission_classes = [AllowAny]
 
     @staticmethod
