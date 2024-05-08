@@ -417,45 +417,69 @@ class CheckoutSCartView(APIView):
         return Parameter.value_of('message_wrong_input', 'Пожалуйста, правильно введите данные')
 
 
+def with_scart_from_request(field_name: str = "scart"):
+    def decorator(func):
+        def proxy(request, *args, **kwargs):
+            data = request.data
+            records = []
+            errors = []
+            actual_price = Decimal(0)
+            old_price = Decimal(0)
+            weight = 0
+
+            def err(typ, text, reason):
+                errors.append({
+                    "error-type": typ,
+                    "error-text": text,
+                    "error-reason": reason,
+                })
+
+            if field_name in data:
+                try:
+                    for sd in data[field_name]:
+                        ppk, size_id, quantity = str(sd['ppk']), int(sd['size_id']), abs(int(sd['quantity']))
+                        try:
+                            product: Product = Product.published.get(pk=ppk)
+                            size: AvailableSize = product.sizes.get(pk=size_id)
+                        except (Product.DoesNotExist, AvailableSize.DoesNotExist):
+                            err("item-does-not-exist", "Товар или размер не найдены", {"ppk": ppk, "size_id": size_id})
+                        else:
+                            old_price += quantity * (product.old_price.amount if product.old_price else product.actual_price.amount)
+                            actual_price += quantity * product.actual_price.amount
+                            weight += quantity * product.weight
+                            records += [{
+                                'product': product,
+                                'size': size,
+                                'quantity': quantity
+                            }]
+                            if size.quantity < quantity:
+                                err("insufficient-product-quantity", "В наличии нет нужного количества товара", {"ppk": ppk, "size_id": size_id, "required": quantity, "available": size.quantity})
+                except (TypeError, KeyError):
+                    return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
+                except ValueError:
+                    return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
+            return func(request, *args, **kwargs, scart={
+                'records': records,
+                'price': actual_price,
+                'old_price': old_price,
+                'weight': weight,
+                'errors': errors
+            })
+        return proxy
+    return decorator
+
+
 class Service_EstimateSCartView(APIView):
     permission_classes = [AllowAny]
 
     @staticmethod
     @api_response
-    def post(request, _=None):
-        data = request.data
-        old_price = Decimal(0)
-        actual_price = Decimal()
-        warns = []
-
-        def warn(typ, text, reason):
-            warns.append({
-                "warn-type": typ,
-                "warn-text": text,
-                "warn-reason": reason,
-            })
-
-        try:
-            for d in data:
-                ppk, size_id, quantity = str(d['ppk']), int(d['size_id']), abs(int(d['quantity']))
-                try:
-                    prd: Product = Product.published.get(pk=ppk)
-                    asz: AvailableSize = prd.sizes.get(pk=size_id)
-                    old_price += quantity * (prd.old_price.amount if prd.old_price else prd.actual_price.amount)
-                    actual_price += quantity * prd.actual_price.amount
-                    if asz.quantity < quantity:
-                        warn("insufficient-product-quantity", "В наличии нет нужного количества товара", {"ppk": ppk, "size_id": size_id, "required": quantity, "available": asz.quantity})
-                except (Product.DoesNotExist, AvailableSize.DoesNotExist):
-                    warn("item-does-not-exist","Товар или размер не найдены",{"ppk": ppk, "size_id": size_id})
-        except (TypeError, KeyError):
-            return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
-        except ValueError:
-            return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
-
+    @with_scart_from_request("scart")
+    def post(request, scart, _=None):
         return {
-            'old_price': old_price,
-            'actual_price': actual_price,
-            'warnings': warns,
+            'price': scart["price"],
+            'old_price': scart["old_price"],
+            'errors': scart["errors"],
         }
 
 
