@@ -22,7 +22,8 @@ urlpatterns = [
     path('customer/checkout/', views.CheckoutSCartView.as_view(), name='c6t'),
     path('customer/set-location/', views.SetLocationView.as_view(), name='set_location'),
     # -- service API --
-    path('service/estimate-scart/', views.EstimateSCartView.as_view(), name='estimate_scart'),
+    path('service/estimate-scart/', views.Service_EstimateSCartView.as_view(), name='service_estimate_scart'),
+    path('service/cities/<str:filter>/', views.Service_CityListView.as_view(), name='service_city_list'),
     # -- Yookassa API --
     path('yookassa/payments/', views.YoPaymentsWebHookView.as_view(), name='yo_payments_webhook'),
 ]
