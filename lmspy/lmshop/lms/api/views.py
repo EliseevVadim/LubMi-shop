@@ -417,7 +417,7 @@ class CheckoutSCartView(APIView):
         return Parameter.value_of('message_wrong_input', 'Пожалуйста, правильно введите данные')
 
 
-def with_scart_from_request(field_name: str = "scart"):
+def with_scart_from_request(scart_field_name: str = "scart"):
     def decorator(func):
         def proxy(request, *args, **kwargs):
             data = request.data
@@ -434,9 +434,9 @@ def with_scart_from_request(field_name: str = "scart"):
                     "error-reason": reason,
                 })
 
-            if field_name in data:
+            if scart_field_name in data:
                 try:
-                    for sd in data[field_name]:
+                    for sd in data[scart_field_name]:
                         ppk, size_id, quantity = str(sd['ppk']), int(sd['size_id']), abs(int(sd['quantity']))
                         try:
                             product: Product = Product.published.get(pk=ppk)
@@ -458,13 +458,15 @@ def with_scart_from_request(field_name: str = "scart"):
                     return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
                 except ValueError:
                     return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
-            return func(request, *args, **kwargs, scart={
-                'records': records,
-                'price': actual_price,
-                'old_price': old_price,
-                'weight': weight,
-                'errors': errors
-            })
+            return func(request,
+                        *args,
+                        **kwargs,
+                        scart={
+                            'records': records,
+                            'price': actual_price,
+                            'old_price': old_price,
+                            'weight': weight},
+                        errors=errors)
         return proxy
     return decorator
 
@@ -474,12 +476,13 @@ class Service_EstimateSCartView(APIView):
 
     @staticmethod
     @api_response
-    @with_scart_from_request("scart")
-    def post(request, scart, _=None):
+    @with_scart_from_request()
+    def post(request, scart, errors, _=None):
         return {
-            'price': scart["price"],
-            'old_price': scart["old_price"],
-            'errors': scart["errors"],
+            'price': scart['price'],
+            'old_price': scart['old_price'],
+            'weight': scart['weight'],
+            'errors': errors,
         }
 
 
