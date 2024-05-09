@@ -434,34 +434,31 @@ class Service_EstimateSCart_View(APIView):
             })
 
         data = request.data
-        cd = {'cost': None, 'days': None, 'error': None}
-        pr = {'cost': None, 'days': None, 'error': None}
-
-        try:
-            city_uuid = str(data['cu_city_uuid'])
-            try:
-                city = City.objects.get(pk=city_uuid)
-            except ValidationError:
-                return Parameter.value_of('message_wrong_uuid', 'Некорректный UUID')
-            except City.DoesNotExist:
-                err("item-does-not-exist", "Пункт назначения не найден", {'cu_city_uuid': city_uuid})
-            else:
-                cd_d6y_cost, cd_d6y_time, cd_error = Cdek().delivery_cost(city.code, scart["weight"], price=scart['price'])
-                pr_d6y_cost, pr_d6y_time, pr_error = PostRu().delivery_cost(city.code, scart["weight"], price=scart['price'])
-                cd = {'cost': cd_d6y_cost, 'days': cd_d6y_time, 'error': cd_error}
-                pr = {'cost': pr_d6y_cost, 'days': pr_d6y_time, 'error': pr_error}
-        except (TypeError, KeyError):
-            return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
-        except ValueError:
-            return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
-        return {
+        result = {
             'price': scart['price'],
             'old_price': scart['old_price'],
             'weight': scart['weight'],
-            'cd': cd,
-            'pr': pr,
             'errors': errors,
         }
+        if 'cu_city_uuid' in data:
+            try:
+                city_uuid = str(data['cu_city_uuid'])
+                try:
+                    city = City.objects.get(pk=city_uuid)
+                except ValidationError:
+                    return Parameter.value_of('message_wrong_uuid', 'Некорректный UUID')
+                except City.DoesNotExist:
+                    err("item-does-not-exist", "Пункт назначения не найден", {'cu_city_uuid': city_uuid})
+                else:
+                    cd_d6y_cost, cd_d6y_time, cd_error = Cdek().delivery_cost(city.code, scart["weight"], price=scart['price'])
+                    pr_d6y_cost, pr_d6y_time, pr_error = PostRu().delivery_cost(city.code, scart["weight"], price=scart['price'])
+                    result[D6Y.CD] = {'cost': cd_d6y_cost, 'days': cd_d6y_time, 'error': cd_error}
+                    result[D6Y.PR] = {'cost': pr_d6y_cost, 'days': pr_d6y_time, 'error': pr_error}
+            except (TypeError, KeyError):
+                return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
+            except ValueError:
+                return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
+        return result
 
 
 class Service_Checkout_View(APIView):
