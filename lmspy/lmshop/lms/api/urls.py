@@ -23,6 +23,7 @@ urlpatterns = [
     path('customer/set-location/', views.SetLocationView.as_view(), name='set_location'),
     # -- service API --
     path('service/estimate-scart/', views.Service_EstimateSCart_View.as_view(), name='service_estimate_scart'),
+    path('service/checkout/', views.Service_Checkout_View.as_view(), name='service_checkout'),
     path('service/cities/<str:filter>/', views.Service_CityList_View.as_view(), name='service_city_list'),
     # -- Yookassa API --
     path('yookassa/payments/', views.Yookassa_PaymentsWebHook_View.as_view(), name='yo_payments_webhook'),

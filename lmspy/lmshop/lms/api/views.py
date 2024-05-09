@@ -319,7 +319,7 @@ class CheckoutSCartView(APIView):
                 data["cu_apartment"], \
                 data["cu_fullname"], \
                 data["cu_confirm"]
-        except KeyError:
+        except (TypeError, KeyError):
             return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
         except ValueError:
             return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
@@ -344,7 +344,7 @@ class CheckoutSCartView(APIView):
                 return Parameter.value_of('message_shopping_cart_empty', 'Корзина пуста. Добавьте в корзину хотя бы один товар!')
             try:
                 city = City.objects.get(pk=cu_city_uuid)
-            except City.DoesNotExist:
+            except (ValidationError, City.DoesNotExist):
                 return "Пункт назначения заказа неверен."
             d6y_cost, d6y_time, error = {D6Y.CD: Cdek(), D6Y.PR: PostRu()}[d6y_service].delivery_cost(city.code, scart["weight"], price=price)
             if error:
@@ -462,6 +462,126 @@ class Service_EstimateSCart_View(APIView):
             'pr': pr,
             'errors': errors,
         }
+
+
+class Service_Checkout_View(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    @api_response
+    @with_scart_from_request('scart')
+    def post(request, scart, errors, _=None):
+        for e in errors:
+            return e["error-text"]
+        data = {k: escape(v) for k, v in request.data.items()}
+        try:
+            d6y_service, \
+                cu_first_name, \
+                cu_last_name, \
+                cu_phone, \
+                cu_country, \
+                cu_city_uuid, \
+                cu_city, \
+                cu_street, \
+                cu_building, \
+                cu_entrance, \
+                cu_floor, \
+                cu_apartment, \
+                cu_fullname, \
+                cu_confirm = D6Y(data["delivery"]), \
+                data["cu_first_name"], \
+                data["cu_last_name"], \
+                data["cu_phone"], \
+                data["cu_country"] if "cu_country" in data else "RU", \
+                data["cu_city_uuid"], \
+                data["cu_city"], \
+                data["cu_street"], \
+                data["cu_building"], \
+                data["cu_entrance"], \
+                data["cu_floor"], \
+                data["cu_apartment"], \
+                data["cu_fullname"], \
+                data["cu_confirm"]
+        except (TypeError, KeyError):
+            return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
+        except ValueError:
+            return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
+        if d6y_service and \
+                cu_first_name and \
+                cu_last_name and \
+                cu_phone and \
+                cu_country and \
+                cu_city_uuid and \
+                cu_city and \
+                cu_street and \
+                cu_building and \
+                cu_entrance and \
+                cu_floor and \
+                cu_apartment and \
+                cu_fullname and \
+                cu_confirm:
+            if cu_confirm != "True":
+                return Parameter.value_of('message_you_must_agree_pp', 'Необходимо согласиться с политикой конфиденциальности')
+            records, price = scart["records"], scart["price"]
+            if not records:
+                return Parameter.value_of('message_shopping_cart_empty', 'Корзина пуста. Добавьте в корзину хотя бы один товар!')
+            try:
+                city = City.objects.get(pk=cu_city_uuid)
+            except (ValidationError, City.DoesNotExist):
+                return "Пункт назначения заказа неверен."
+            d6y_cost, d6y_time, error = {D6Y.CD: Cdek(), D6Y.PR: PostRu()}[d6y_service].delivery_cost(city.code, scart["weight"], price=price)
+            if error:
+                return error
+            try:
+                with transaction.atomic():
+                    order = Order(delivery_service=d6y_service,
+                                  delivery_cost=d6y_cost,
+                                  city=city,
+                                  cu_first_name=cu_first_name,
+                                  cu_last_name=cu_last_name,
+                                  cu_phone=cu_phone,
+                                  cu_country=cu_country,
+                                  cu_city_uuid=city.city_uuid,
+                                  cu_city=cu_city,
+                                  cu_city_region=city.region.region,
+                                  cu_city_subregion=city.sub_region,
+                                  cu_street=cu_street,
+                                  cu_building=cu_building,
+                                  cu_entrance=cu_entrance,
+                                  cu_floor=cu_floor,
+                                  cu_apartment=cu_apartment,
+                                  cu_fullname=cu_fullname,
+                                  cu_confirm=True)
+                    for rec in records:
+                        product = rec["product"]
+                        size = rec["size"]
+                        quantity = rec["quantity"]
+                        item = OrderItem(order=order,
+                                         product=product,
+                                         ppk=product.article,
+                                         title=str(product),
+                                         size=size.size,
+                                         quantity=quantity,
+                                         price=product.actual_price,
+                                         weight=product.weight)
+                        item.save()
+                        product.sales_quantity += quantity
+                        product.save()
+                        size.quantity -= quantity  # or IntegrityError on constraint
+                        size.save()
+                    order.save()
+                    payment_id, payment_url, error = Yookassa().create_payment(order, price + Decimal(d6y_cost))
+                    if error:
+                        raise ValueError(error)  # breaks transaction!
+                    order.payment_id = payment_id
+                    order.save()
+            except IntegrityError:
+                return Parameter.value_of("message_overkill_in_shopping_cart", "Указанное количество товара недоступно. Возможно, кто-то уже купил его, пока Вы оформляли заказ.")
+            except ValueError as exc:
+                return exc.args[0]
+            else:
+                return {'redirect': payment_url}
+        return Parameter.value_of('message_wrong_input', 'Пожалуйста, правильно введите данные')
 
 
 class Service_CityList_View(APIView):
