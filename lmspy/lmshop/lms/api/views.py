@@ -11,9 +11,10 @@ from rest_framework import generics
 from lms.api.business import create_notify_request, check_payment_life_cycle_is_completed
 from lms.api.decorators import api_response, with_scart_from_request
 from lms.coworkers.cdek import Cdek
+from lms.coworkers.dadata import DaData
 from lms.coworkers.postru import PostRu
-from lms.models import Product, AvailableSize, Parameter, Order, OrderItem, City
-from lms.api.serializers import ProductSerializer, ProductDetailSerializer
+from lms.models import Product, AvailableSize, Parameter, Order, OrderItem, City, AboutItem
+from lms.api.serializers import ProductSerializer, ProductDetailSerializer, AboutItemSerializer
 from lms.utils import D6Y, deep_unquote
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
 from lms.coworkers.yookassa import Yookassa
@@ -606,6 +607,54 @@ class Service_CityList_View(APIView):
         }
 
 
+class Service_Hints_View(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    @api_response
+    def get(request, city_uuid: str, street: str, building: str = None):
+        city_uuid = deep_unquote(city_uuid)
+        try:
+            city = City.objects.get(pk=city_uuid)
+        except (ValidationError, City.DoesNotExist):
+            return "UUID города указан неправильно"
+        street = deep_unquote(street) if street else None
+        building = deep_unquote(building) if building else None
+        if not street:
+            return "Не указана улица"
+        flag = not building
+        dadata = DaData()
+        suggestions = (dadata.suggest_address(
+            query=f"{city.region.region}, {city.city}, {street}",
+            count=5,
+            from_bound={"value": "street"},
+            to_bound={"value": "street"}
+        ) if flag else dadata.suggest_address(
+            query=f"{city.region.region}, {city.city}, {street}, {building}",
+            count=10,
+            from_bound={"value": "house"},
+            to_bound={"value": "house"}
+        ))["suggestions"]
+        result = list(
+            {x['data']['street_with_type'] for x in suggestions if 'data' in x and 'street_with_type' in x['data']
+             } if flag else {x['data']['house'] for x in suggestions if 'data' in x and 'house' in x['data']})
+        result.sort()
+        return {
+            "streets" if flag else "buildings": result
+        }
+
+
+class Service_AboutItemList_View(generics.ListAPIView):
+    queryset = AboutItem.objects.all()
+    serializer_class = AboutItemSerializer
+
+    @api_response
+    def get(self, *args, **kwargs):
+        return {
+            "items": super().get(*args, **kwargs).data
+        }
+
+
 class Yookassa_PaymentsWebHook_View(APIView):
     permission_classes = [AllowAny]
 
@@ -644,5 +693,3 @@ class SetLocationView(APIView):
             return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
         CustomerInfo(request).location = location
         return location
-
-

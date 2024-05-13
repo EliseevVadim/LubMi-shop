@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from lms.models import Product, AvailableSize, Image
+from lms.models import Product, AvailableSize, Image, AboutItem
 
 
 class AvailableSizeSerializer(serializers.ModelSerializer):
@@ -51,3 +51,13 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             'sizes',
         ]
 
+
+class AboutItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AboutItem
+        fields = [
+            'image',
+            'label',
+            'description',
+            'kind',
+        ]
