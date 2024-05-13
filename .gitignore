@@ -2,6 +2,7 @@ api.md
 *.bak 
 *pro.user
 .idea
+.idea/*
 build-lmshop-*
 lmspy/lmshop/lmshop.sqlite3
 lmspy/lmshop/media/*
