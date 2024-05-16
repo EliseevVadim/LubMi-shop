@@ -670,7 +670,7 @@ class Service_Hints_View(APIView):
         }
 
 
-class Service_PaymentStatus_View(APIView):
+class Yookassa_PaymentStatus_View(APIView):
     permission_classes = [AllowAny]
 
     @staticmethod

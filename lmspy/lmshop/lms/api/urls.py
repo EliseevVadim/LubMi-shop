@@ -29,6 +29,6 @@ urlpatterns = [
     path('service/buildings/<str:city_uuid>/<str:street>/<str:building>/', views.Service_Hints_View.as_view(), name='service_hint_buildings'),
     path('service/about-items/', views.Service_AboutItemList_View.as_view(), name='service_about_items'),
     # -- Yookassa API --
-    path('yookassa/payments/<str:payment_id>/status/', views.Service_PaymentStatus_View.as_view(), name='service_payment_status'),
+    path('yookassa/payments/<str:payment_id>/status/', views.Yookassa_PaymentStatus_View.as_view(), name='yo_payment_status'),
     path('yookassa/payments-hook/', views.Yookassa_PaymentsWebHook_View.as_view(), name='yo_payments_webhook'),
 ]
