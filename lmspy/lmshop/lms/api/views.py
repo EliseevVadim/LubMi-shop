@@ -148,6 +148,27 @@ class ProductSizeQuantityView(APIView):
             return "Not found"
 
 
+class SetLocationView(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    @api_response
+    def post(request, _=None):
+        data = request.data
+        try:
+            location = {
+                "latitude": float(data["latitude"]),
+                "longitude": float(data["longitude"]),
+                "accuracy": float(data["accuracy"]),
+            }
+        except KeyError:
+            return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
+        except ValueError:
+            return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
+        CustomerInfo(request).location = location
+        return location
+
+
 class GetCustomerInfoView(APIView):
     permission_classes = [AllowAny]
 
@@ -419,6 +440,8 @@ class CheckoutSCartView(APIView):
         return Parameter.value_of('message_wrong_input', 'Пожалуйста, правильно введите данные')
 
 
+# -- Service --
+
 class Service_EstimateSCart_View(APIView):
     permission_classes = [AllowAny]
 
@@ -578,7 +601,10 @@ class Service_Checkout_View(APIView):
             except ValueError as exc:
                 return exc.args[0]
             else:
-                return {'redirect': payment_url}
+                return {
+                    'payment_id': order.payment_id,
+                    'redirect': payment_url
+                }
         return Parameter.value_of('message_wrong_input', 'Пожалуйста, правильно введите данные')
 
 
@@ -644,6 +670,20 @@ class Service_Hints_View(APIView):
         }
 
 
+class Service_PaymentStatus_View(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    @api_response
+    def get(request, payment_id: str):
+        payment_id = deep_unquote(payment_id)
+        status, payment = Yookassa().get_payment_status(payment_id)
+        return {
+            'status': status,
+            'payment': payment,
+        }
+
+
 class Service_AboutItemList_View(generics.ListAPIView):
     queryset = AboutItem.objects.all()
     serializer_class = AboutItemSerializer
@@ -672,24 +712,3 @@ class Yookassa_PaymentsWebHook_View(APIView):
         except (KeyError, ValueError):
             logging.warning(f"Ошибка в структуре уведомления: {data}")
         return {}
-
-
-class SetLocationView(APIView):
-    permission_classes = [AllowAny]
-
-    @staticmethod
-    @api_response
-    def post(request, _=None):
-        data = request.data
-        try:
-            location = {
-                "latitude": float(data["latitude"]),
-                "longitude": float(data["longitude"]),
-                "accuracy": float(data["accuracy"]),
-            }
-        except KeyError:
-            return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
-        except ValueError:
-            return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
-        CustomerInfo(request).location = location
-        return location
