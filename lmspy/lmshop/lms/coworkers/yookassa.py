@@ -46,9 +46,9 @@ class Yookassa(ApiClient):
 
     def create_payment(self, order: Order, summ, do_reverse_addr: bool = True):
         order_uuid = str(order.uuid)
-        back_page = f"lms:{self.setting('back_jump_page')}"
+        bj_page = f"lms:{self.setting('back_jump_page')}"
+        bj_addr = f'{self.setting("back_jump_address")}{reverse(bj_page)}' if do_reverse_addr else self.setting("back_jump_address")
         bad_result = None, None, "Проблемы с созданием платежа"
-        bj_addr = f'{self.setting("back_jump_address")}{reverse(back_page)}' if do_reverse_addr else self.setting("back_jump_address")
         try:
             res = self._post_json("payments", {"Idempotence-Key": order_uuid}, amount=Yookassa.amount(value=f"{summ:.2f}", currency="RUB"),
                                   confirmation=Yookassa.confirmation(type="redirect", return_url=bj_addr), capture=True,
