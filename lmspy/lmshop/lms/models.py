@@ -474,6 +474,7 @@ class AboutItem(DbItem):
     label = models.CharField(max_length=50)                                                 # -- название --
     description = models.CharField(max_length=50)                                           # -- описание --
     kind = models.IntegerField(choices=Kind.choices, default=Kind.elector)                  # -- тип --
+    link = models.URLField(max_length=512, default="")                                      # -- ссылка --
 
     class ElectoratesManager(models.Manager):
         def get_queryset(self):

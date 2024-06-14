@@ -94,7 +94,7 @@ class SettingAdmin(admin.ModelAdmin):
 
 @admin.register(AboutItem)
 class AboutItemAdmin(admin.ModelAdmin):
-    list_display = ['label', 'description', 'image', 'kind']
+    list_display = ['label', 'description', 'image', 'kind', 'link']
     list_filter = ['kind']
     search_fields = ['label']
 
