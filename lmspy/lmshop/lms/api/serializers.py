@@ -60,4 +60,5 @@ class AboutItemSerializer(serializers.ModelSerializer):
             'label',
             'description',
             'kind',
+            'link',
         ]
