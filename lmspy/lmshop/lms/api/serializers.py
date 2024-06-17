@@ -43,6 +43,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         fields = [
             'article',
             'title',
+            'color',
             'description',
             'novelty',
             'actual_price',
