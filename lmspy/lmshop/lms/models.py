@@ -169,11 +169,12 @@ class Product(DbItem):
 
 class AvailableSize(DbItem):
     size = models.CharField(max_length=30, validators=[Tunable.validate_size])                  # размер
+    order_value = models.IntegerField(default=0)                                                # поле для сортировки
     quantity = models.BigIntegerField(validators=[MinValueValidator(0)])                        # количество в наличии
     product = models.ForeignKey(Product, related_name="sizes", on_delete=models.CASCADE)        # товар
 
     class Meta:
-        ordering = ["size"]
+        ordering = ['order_value']
         constraints = [
             models.UniqueConstraint(fields=["size", "product_id"], name="unique_size_per_product"),
             models.CheckConstraint(check=models.Q(quantity__gte=0), name="quantity_no_negative")]
