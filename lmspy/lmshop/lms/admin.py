@@ -24,10 +24,10 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(AvailableSize)
 class AvailableSizeAdmin(admin.ModelAdmin):
-    list_display = ['product', 'size', 'quantity']
+    list_display = ['product', 'size', 'order_value', 'quantity']
     list_filter = ['product', 'size']
     search_fields = ['size', 'quantity']
-    ordering = ['product', 'size']
+    ordering = ['product', 'order_value', 'size']
 
 
 @admin.register(Attribute)
