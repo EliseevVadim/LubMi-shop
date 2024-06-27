@@ -379,6 +379,10 @@ class OrderItem(DbItem):
         verbose_name = "Позиция"
         verbose_name_plural = "Позиции"
 
+    @property
+    def color(self):
+        return (self.product.color or "Не указан") if self.product else "Недоступен"
+
     def __str__(self):
         return f'{self.title} ({self.quantity})'
 

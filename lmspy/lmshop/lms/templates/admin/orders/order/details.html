@@ -33,9 +33,9 @@
     <div class="module">
         <h2>Позиции по заказу</h2>
         <table>
-            <tr><th>Артикул: Название</th><th>Размер</th><th>Количество</th><th>Цена</th><th>Вес</th></tr>
+            <tr><th>Артикул: Название</th><th>Цвет</th><th>Размер</th><th>Количество</th><th>Цена</th><th>Вес</th></tr>
             {% for item in order.items.all %}
-            <tr><td>{{item.title}}</td><td>{{item.size}}</td><td>{{item.quantity}}</td><td>{{item.price}}</td><td>{{item.weight}}</td></tr>
+            <tr><td>{{item.title}}</td><td>{{item.color}}</td><td>{{item.size}}</td><td>{{item.quantity}}</td><td>{{item.price}}</td><td>{{item.weight}}</td></tr>
             {% endfor %}
         </table>
     </div>
