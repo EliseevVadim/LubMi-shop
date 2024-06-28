@@ -10,8 +10,8 @@ from lms.models import NotificationRequest, Order, AvailableSize
 from lms.utils import send_message_via_telegram
 
 
-def create_notify_request(email, phone, ppk, info: CustomerInfo):
-    nrq = NotificationRequest(name=info.short_name or "Не указано", phone=phone, email=email, ppk=ppk)
+def create_notify_request(email, phone, ppk, size, info: CustomerInfo):
+    nrq = NotificationRequest(name=info.short_name or "Не указано", phone=phone, email=email, ppk=ppk, size=size)
     nrq.save()
     send_message_via_telegram(str(nrq))
     info.phone = phone or info.phone

@@ -392,9 +392,10 @@ class NotificationRequest(DbItem):
     email = models.EmailField(null=True, max_length=250)
     phone = models.CharField(null=True, max_length=50, validators=[Tunable.validate_phone])
     ppk = models.CharField(null=False, max_length=100)
+    size = models.CharField(null=True, max_length=30)
 
     def __str__(self):
-        return f'Запрос #{self.id} на уведомление о поступлении товара артикул: `{self.ppk}`, от: `{self.name}`, телефон: `{self.phone or "не указан"}`, email: `{self.email or "не указан"}`'
+        return f'Запрос #{self.id} на уведомление о поступлении товара артикул: `{self.ppk}`, размер: `{self.size or "не указан"}` от: `{self.name}`, телефон: `{self.phone or "не указан"}`, email: `{self.email or "не указан"}`'
 
     class Meta:
         verbose_name = "Запрос уведомления"
