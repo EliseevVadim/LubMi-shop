@@ -201,10 +201,11 @@ class NotifyMeForDeliveryView(APIView):
         cu_data = request.data
         try:
             phone, email, ppk = escape(cu_data['phone']), escape(cu_data['email']), escape(cu_data['ppk'])
+            size = escape(cu_data['size']) if 'size' in cu_data else None
         except KeyError:
             return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
         if ppk and (email or phone):
-            create_notify_request(email, phone, ppk, CustomerInfo(request))
+            create_notify_request(email, phone, ppk, size, CustomerInfo(request))
             return {'success': True}
         return Parameter.value_of('message_unable_notify', 'Почта или телефон должны быть указаны')
 
