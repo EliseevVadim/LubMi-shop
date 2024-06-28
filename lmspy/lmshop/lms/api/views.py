@@ -678,6 +678,7 @@ class Yookassa_PaymentStatus_View(APIView):
     def get(request, payment_id: str):
         payment_id = deep_unquote(payment_id)
         status, payment = Yookassa().get_payment_status(payment_id)
+        check_payment_life_cycle_is_completed(payment_id, status, payment)
         return {
             'status': status,
             'payment': payment,
