@@ -15,7 +15,7 @@ class Telegram:
                 try:
                     url = f"https://api.telegram.org/bot{token}/sendMessage"
                     client.headers["Content-Type"] = "application/json"
-                    res = client.post(url, json={'chat_id': cid, 'text': text})
+                    res = client.post(url, json={'chat_id': cid, 'parse_mode': 'Markdown', 'text': text})
                     if res.is_error:
                         print(res.text)
                 except httpx.TransportError as e:
