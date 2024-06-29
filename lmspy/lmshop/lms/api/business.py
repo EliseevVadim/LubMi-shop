@@ -34,7 +34,20 @@ def set_order_paid_by_payment(payment_id, payment):
         order.status = Order.Status.payment_paid
         order.payment_json = json.dumps(payment) if payment else None
         order.save()
-        send_message_via_telegram(f"""Заказ [{order.uuid}]({settings.ADMIN_DOMAIN + reverse('lms:admin_order_details', args=[order.slug])}) оплачен, платеж `{payment_id}` подтвержден""")
+        msg: str = f"""Заказ [{order.uuid}]({settings.ADMIN_DOMAIN + reverse('lms:admin_order_details', args=[order.slug])})
+Статус: `оплачен`
+Заказчик: `{order.cu_fullname}`
+Служба доставки: `{order.DeliveryService[order.delivery_service].label}`
+Адрес доставки: `{order.delivery_address}`
+Платеж: `{payment_id}`
+
+Позиции по заказу:
+{'\n'.join(f'– Артикул, название: `{i.title}`, Цвет: `{i.color}`, Размер: `{i.size}`, Количество: `{i.quantity}`, Цена: `{i.price}`, Вес: `{i.weight}`' for i in order.items.all())}
+
+Стоимость доставки: `{order.delivery_cost}`
+Полная стоимость заказа: `{order.total_price}`
+Детали заказа: [Перейти]({settings.ADMIN_DOMAIN + reverse('lms:admin_order_details', args=[order.slug])})"""
+        send_message_via_telegram(msg)
         logging.info(f"Заказ {order.uuid} оплачен, платеж {payment_id} подтвержден")
 
 
