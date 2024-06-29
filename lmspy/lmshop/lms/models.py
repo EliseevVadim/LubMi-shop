@@ -362,8 +362,7 @@ class Order(DbItem):
     
     @property
     def delivery_address(self):
-        # return f"""Нас. пункт: {self.cu_city}, Улица: {self.cu_street}, Здание: {self.cu_building}, Подъезд: {self.cu_entrance}, Этаж: {self.cu_floor}, Квартира/офис: {self.cu_apartment}"""
-        return "Адрес доставки"
+        return f"""Нас. пункт: {self.cu_city}, Улица: {self.cu_street}, Здание: {self.cu_building}, Подъезд: {self.cu_entrance}, Этаж: {self.cu_floor}, Квартира/офис: {self.cu_apartment}"""
 
     def __str__(self):
         return f'заказ #{self.slug} от {self.cu_first_name}'
