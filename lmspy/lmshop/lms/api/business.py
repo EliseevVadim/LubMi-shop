@@ -34,6 +34,7 @@ def set_order_paid_by_payment(payment_id, payment):
         order.status = Order.Status.payment_paid
         order.payment_json = json.dumps(payment) if payment else None
         order.save()
+        items: str = '\n'.join(f'– Артикул, название: `{i.title}`, Цвет: `{i.color}`, Размер: `{i.size}`, Количество: `{i.quantity}`, Цена: `{i.price}`, Вес: `{i.weight}`' for i in order.items.all())
 #         msg: str = f"""Заказ [{order.uuid}]({settings.ADMIN_DOMAIN + reverse('lms:admin_order_details', args=[order.slug])})
 # Статус: `оплачен`
 # Заказчик: `{order.cu_fullname}`
@@ -55,7 +56,7 @@ def set_order_paid_by_payment(payment_id, payment):
         Платеж: `{payment_id}`
 
         Позиции по заказу:
-        
+        {items}
 
         Стоимость доставки: `{order.delivery_cost}`
         Полная стоимость заказа: `{order.total_price}`
