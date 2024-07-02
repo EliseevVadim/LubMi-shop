@@ -6,6 +6,7 @@ from django.utils import timezone, text
 from django.core.validators import MinValueValidator, RegexValidator
 from djmoney.models.fields import MoneyField
 from djmoney.money import Money
+from lms.defines import D6Y
 
 
 class DbItem(models.Model):
@@ -271,8 +272,8 @@ class City(DbItem):
 
 class Order(DbItem):
     class DeliveryService(models.TextChoices):
-        cd = "cd", "СДЭК"
-        pr = "pr", "Почта России"
+        cd = D6Y.CD, "СДЭК"
+        pr = D6Y.PR, "Почта России"
 
     class Status(models.IntegerChoices):
         pending = 0, "Создан",
