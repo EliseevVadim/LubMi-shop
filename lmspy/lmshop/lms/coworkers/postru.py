@@ -2,7 +2,7 @@ from httpx import TransportError
 from lms.coworkers.apiclient import ApiClient
 from lms.coworkers.dadata import DaData
 from lms.models import Coworker, City
-from lms.utils import D6Y
+from lms.defines import D6Y
 
 
 class PostRu(ApiClient):
