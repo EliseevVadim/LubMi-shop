@@ -159,7 +159,7 @@ class Cdek(ApiClient):
         tariff_code = int(self.setting("tariff_code"))
         src_city_code = int(self.setting("location_from_code"))
         try:
-            tariff = Cdek().tariff(
+            tariff = self.tariff(
                 tariff_code,
                 Cdek.location(code=src_city_code),
                 Cdek.location(code=dst_city_code),
