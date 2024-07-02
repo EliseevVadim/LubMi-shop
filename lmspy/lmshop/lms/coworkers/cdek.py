@@ -6,7 +6,7 @@ from lms.deco import copy_result
 from lms.models import Coworker
 from urllib.parse import quote
 from django.core.cache import cache
-from lms.utils import D6Y
+from lms.defines import D6Y
 
 
 class Cdek(ApiClient):

@@ -20,7 +20,8 @@ from .coworkers.postru import PostRu
 from .coworkers.yookassa import Yookassa
 from .forms import CheckoutForm
 from .models import Parameter, Product, City, AboutItem, Order
-from .utils import D6Y, suffix, clipped_range, deep_unquote, untag
+from .utils import suffix, clipped_range, deep_unquote, untag
+from .defines import D6Y
 
 
 class IndexView(View):
