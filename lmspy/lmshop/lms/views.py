@@ -13,7 +13,7 @@ from django.views import View
 from django.template.defaultfilters import floatformat
 from httpx import TransportError
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
-from .api.business import set_order_completed
+from .api.business import set_order_completed, get_order_delivery_documents_link
 from .coworkers.dadata import DaData
 from .coworkers.yookassa import Yookassa
 from .forms import CheckoutForm
@@ -499,6 +499,12 @@ class AdminCompleteOrderView(DetailView):
     def post(self, ___, slug, *_, **__):
         set_order_completed(slug, by_slug=True)
         return redirect("lms:admin_order_details", slug=slug)
+
+
+@method_decorator(staff_member_required, name="get")
+class Admin_DeliveryDocuments_View(View):
+    def get(self, request, slug):
+        return redirect(get_order_delivery_documents_link(slug))
 
 
 class ProductView(DetailView):

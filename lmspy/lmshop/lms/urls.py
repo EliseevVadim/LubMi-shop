@@ -15,6 +15,7 @@ urlpatterns = [
     # -- admin --
     path('admin/order/<slug:slug>/', AdminOrderView.as_view(), name='admin_order_details'),
     path('admin/order/complete/<slug:slug>/', AdminCompleteOrderView.as_view(), name='admin_complete_order'),
+    path('admin/order/delivery-documents/<slug:slug>/', Admin_DeliveryDocuments_View.as_view(), name='admin_order_delivery_documents'),
     # -- backstage --
     path('backstage/product/<slug:slug>/', ProductView.as_view(), name='product_details'),
     path('backstage/sz-chart/', SzChartView.as_view(), name='sz_chart'),

@@ -73,6 +73,16 @@ class ApiClient:
             ).json()
             return result
 
+    def _put_json(self, func, headers=None, **kwargs):
+        with httpx.Client() as client:
+            result = client.put(
+                self.func_url(func),
+                auth=self.basic_auth,
+                headers=self.compose_headers("application/json;charset=UTF-8", headers),
+                json=kwargs["_json_"] if "_json_" in kwargs else kwargs
+            ).json()
+            return result
+
     def _get(self, func, headers=None, **kwargs):
         with httpx.Client() as client:
             result = client.get(

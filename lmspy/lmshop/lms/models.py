@@ -296,6 +296,8 @@ class Order(DbItem):
         max_digits=14,
         decimal_places=2,
         default_currency='RUR')
+    delivery_order_json = models.TextField(null=True, blank=True)                               # -- данные заказа на доставку --
+    delivery_supplements_json = models.TextField(null=True, blank=True)                         # -- дополнительные данные заказа на доставку --
     cu_first_name = models.CharField(max_length=150)                                            # -- имя --
     cu_last_name = models.CharField(max_length=150)                                             # -- фамилия --
     cu_phone = models.CharField(null=True, max_length=50, validators=[Tunable.validate_phone])  # -- телефон --
@@ -360,6 +362,10 @@ class Order(DbItem):
     @property
     def total_price(self):
         return Money(self.items.aggregate(total=Sum(F("price") * F('quantity')))["total"] + self.delivery_cost.amount, currency="RUR")
+
+    @property
+    def total_weight(self):
+        return self.items.aggregate(total=Sum(F("weight") * F('quantity')))["total"]
     
     @property
     def delivery_address(self):
