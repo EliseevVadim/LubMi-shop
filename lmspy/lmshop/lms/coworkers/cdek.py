@@ -1,9 +1,5 @@
-import json
-
 import httpx
-
 from httpx import TransportError
-
 from lms.api.decorators import sleep_and_retry_on_except
 from lms.coworkers.apiclient import ApiClient
 from lms.deco import copy_result
