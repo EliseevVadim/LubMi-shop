@@ -110,8 +110,26 @@ def get_order_delivery_documents_link(order_id):
     except Order.DoesNotExist:
         raise Http404()
     ds = make_ds(order.delivery_service)
+
     if not order.delivery_order_json:
-        x, error = ds.create_delivery_order(order)
-        print(x)
+        dvo, error = ds.create_delivery_order(order)
+        if not dvo or error:
+            raise Http404()
+        order.delivery_order_json = json.dumps(dvo)
+        order.save()
+    else:
+        dvo = json.loads(order.delivery_order_json)
+
+    if not order.delivery_supplements_json:
+        dvs, error = ds.create_delivery_supplements(dvo)
+        if not dvs or error:
+            raise Http404()
+        order.delivery_supplements_json = json.dumps(dvs)
+        order.save()
+    else:
+        dvs = json.loads(order.delivery_supplements_json)
+
+    print(dvs)
+
     return "https://google.ru"
 

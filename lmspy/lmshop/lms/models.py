@@ -377,6 +377,10 @@ class Order(DbItem):
         return f"""Нас. пункт: {self.cu_city}, Улица: {self.cu_street}, Здание: {self.cu_building}, Подъезд: {self.cu_entrance}, Этаж: {self.cu_floor}, Квартира/офис: {self.cu_apartment}"""
 
     @property
+    def delivery_address_short(self):
+        return f"""{self.cu_city}, ул. {self.cu_street}, д. {self.cu_building}, кв. {self.cu_apartment}"""
+
+    @property
     def width(self):
         return settings.PACKAGE_WIDTH_CM
 

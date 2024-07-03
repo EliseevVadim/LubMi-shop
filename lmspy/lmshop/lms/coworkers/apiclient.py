@@ -119,7 +119,7 @@ class ApiClient:
     @staticmethod
     @functools.lru_cache
     def _no_negative_():
-        return lambda v: v > 0
+        return lambda v: v >= 0
 
     @staticmethod
     @functools.lru_cache

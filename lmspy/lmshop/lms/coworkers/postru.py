@@ -25,6 +25,67 @@ class PostRu(ApiClient):
                            None)
         return postal_code or None
 
+    @property
+    def token(self):
+        return self._access_token
+
+    @property
+    def user_key(self):
+        return self._user_auth_key
+
+    @property
+    def authorization(self):
+        return f"AccessToken {self.token}"
+
+    @property
+    def basic_auth(self):
+        return None
+
+    def compose_headers(self, content_type, headers):
+        x_user_auth = {"X-User-Authorization": f"Basic {self.user_key}"} if self.user_key else {}
+        cont_type = {"Content-type": "application/json;charset=UTF-8"}
+        accept = {"Accept": "application/json;charset=UTF-8"}
+        return super().compose_headers(content_type, headers) | x_user_auth | cont_type | accept
+
+    def tariff(self, postal_code, price, weight):
+        tf = self._post_json(
+            "tariff",
+            _json_={
+                "delivery-point-index": postal_code,
+                "index-to": postal_code,
+                "declared-value": price,
+                "mail-category": self.setting("mail_category"),
+                "mail-type": self.setting("mail_type"),
+                "mass": weight,
+                "notice-payment-method": "CASHLESS",
+                "payment-method": "CASHLESS",
+                "transport-type": "SURFACE",
+            })
+        return tf
+
+    def delivery_cost(self, dst_city_code, weight, **kwargs):
+        price = str(kwargs['price'])
+        price = int(round(float(price) * 100))
+        try:
+            city = City.objects.get(code=dst_city_code)
+        except City.DoesNotExist:
+            return None, None, "Не удалось подтвердить адрес доставки"
+        try:
+            postal_code = self._get_postal_code(float(city.latitude), float(city.longitude))
+        except (KeyError, ValueError, TransportError):
+            return None, None, "Доступные отделения не найдены"
+        else:
+            if not postal_code:
+                return None, None, "Доступные отделения не найдены"
+
+        tariff = {}
+        try:
+            tariff = self.tariff(postal_code, price, weight)
+            delay = tariff["delivery-time"]["min-days"] if "min-days" in tariff["delivery-time"] else tariff["delivery-time"]["max-days"]
+            return tariff["total-rate"] / 100.0, delay, None
+        except (KeyError, ValueError, TransportError):
+            return None, None, tariff['desc'] if 'desc' in tariff else "Не удалось определить параметры доставки"
+
     def _order_as_json(self, r: Order):
         """Can throw KeyError, ValueError, TransportError or return empty result"""
         postal_code = PostRu._get_postal_code(float(r.city.latitude), float(r.city.longitude))
@@ -186,67 +247,6 @@ class PostRu(ApiClient):
             # "wo-mail-rank": True
         }
 
-    @property
-    def token(self):
-        return self._access_token
-
-    @property
-    def user_key(self):
-        return self._user_auth_key
-
-    @property
-    def authorization(self):
-        return f"AccessToken {self.token}"
-
-    @property
-    def basic_auth(self):
-        return None
-
-    def compose_headers(self, content_type, headers):
-        x_user_auth = {"X-User-Authorization": f"Basic {self.user_key}"} if self.user_key else {}
-        cont_type = {"Content-type": "application/json;charset=UTF-8"}
-        accept = {"Accept": "application/json;charset=UTF-8"}
-        return super().compose_headers(content_type, headers) | x_user_auth | cont_type | accept
-
-    def tariff(self, postal_code, price, weight):
-        tf = self._post_json(
-            "tariff",
-            _json_={
-                "delivery-point-index": postal_code,
-                "index-to": postal_code,
-                "declared-value": price,
-                "mail-category": self.setting("mail_category"),
-                "mail-type": self.setting("mail_type"),
-                "mass": weight,
-                "notice-payment-method": "CASHLESS",
-                "payment-method": "CASHLESS",
-                "transport-type": "SURFACE",
-            })
-        return tf
-
-    def delivery_cost(self, dst_city_code, weight, **kwargs):
-        price = str(kwargs['price'])
-        price = int(round(float(price) * 100))
-        try:
-            city = City.objects.get(code=dst_city_code)
-        except City.DoesNotExist:
-            return None, None, "Не удалось подтвердить адрес доставки"
-        try:
-            postal_code = self._get_postal_code(float(city.latitude), float(city.longitude))
-        except (KeyError, ValueError, TransportError):
-            return None, None, "Доступные отделения не найдены"
-        else:
-            if not postal_code:
-                return None, None, "Доступные отделения не найдены"
-
-        tariff = {}
-        try:
-            tariff = self.tariff(postal_code, price, weight)
-            delay = tariff["delivery-time"]["min-days"] if "min-days" in tariff["delivery-time"] else tariff["delivery-time"]["max-days"]
-            return tariff["total-rate"] / 100.0, delay, None
-        except (KeyError, ValueError, TransportError):
-            return None, None, tariff['desc'] if 'desc' in tariff else "Не удалось определить параметры доставки"
-
     def create_delivery_order(self, r: Order):
         try:
             jsn = self._order_as_json(r)
@@ -255,6 +255,18 @@ class PostRu(ApiClient):
             result = self._put_json(
                 "user/backlog",
                 _json_=[jsn])
+            return result, None
+        except (KeyError, ValueError, TransportError):
+            return None, "Не удалось создать заказ на доставку"
+
+    def create_delivery_supplements(self, s):
+        try:
+            jsn = self._order_as_json(r)
+            if not jsn:
+                raise ValueError(jsn)
+            result = self._post_json("orders", _json_=jsn)
+            if 'entity' not in result or 'uuid' not in result['entity']:
+                raise ValueError(result)
             return result, None
         except (KeyError, ValueError, TransportError):
             return None, "Не удалось создать заказ на доставку"
