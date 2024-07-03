@@ -35,9 +35,10 @@ def set_order_paid_by_payment(payment_id, payment):
         order.status = Order.Status.payment_paid
         order.payment_json = json.dumps(payment) if payment else None
         order.save()
-        link: str = settings.ADMIN_DOMAIN + reverse('lms:admin_order_details', args=[order.slug])
+        link1: str = settings.ADMIN_DOMAIN + reverse('lms:admin_order_details', args=[order.slug])
+        link2: str = settings.ADMIN_DOMAIN + reverse('lms:admin_order_delivery_documents', args=[order.slug])
         items: str = '\n'.join(f'– Артикул, название: `{i.title}`, Цвет: `{i.color}`, Размер: `{i.size}`, Количество: `{i.quantity}`, Цена: `{i.price}`, Вес: `{i.weight}`' for i in order.items.all())
-        message: str = f"""Заказ [{order.uuid}]({link})
+        message: str = f"""Заказ [{order.uuid}]({link1})
 Статус: `оплачен`
 Заказчик: `{order.cu_fullname}`
 Служба доставки: `{order.DeliveryService[order.delivery_service].label}`
@@ -47,7 +48,8 @@ def set_order_paid_by_payment(payment_id, payment):
 {items}\n
 Стоимость доставки: `{order.delivery_cost}`
 Полная стоимость заказа: `{order.total_price}`
-Детали заказа: [Перейти]({link})"""
+Детали заказа: [Перейти]({link1})
+Транспортные документы: [Скачать]({link2})"""
         send_message_via_telegram(message)
         logging.info(f"Заказ {order.uuid} оплачен, платеж {payment_id} подтвержден")
 
