@@ -1,3 +1,5 @@
+import json
+
 import httpx
 
 from httpx import TransportError
@@ -145,6 +147,13 @@ class Cdek(ApiClient):
             "number": (str, Cdek._str_255_()),
         }, **kwargs)
 
+    @staticmethod
+    def order(**kwargs):
+        return Cdek._construct_arg_({
+            "order_uuid": (str, Cdek._uuid_()),
+            "cdek_number": (int, None),
+        }, **kwargs)
+
     def cities(self, country_codes: str = "RU", **kwargs):
         return self._get("location/cities", country_codes=country_codes, **kwargs)
 
@@ -230,9 +239,21 @@ class Cdek(ApiClient):
 
     def create_delivery_supplements(self, r):
         try:
-            result = self._post_json("orders", _json_=jsn)
+            result = self._post_json("print/orders", orders=[Cdek.order(order_uuid=r['entity']['uuid'])], copy_count=2)
             if 'entity' not in result or 'uuid' not in result['entity']:
                 raise ValueError(result)
             return result, None
         except (KeyError, ValueError, TransportError):
-            return None, "Не удалось создать заказ на доставку"
+            return None, "Не удалось создать документы к заказу на доставку"
+
+    def get_delivery_documents_file(self, r):
+        try:
+            result = self._get(f"""print/orders/{r['entity']['uuid']}""")
+            if 'entity' not in result or 'url' not in result['entity']:
+                raise ValueError(result)
+            result = self._get_file(result['entity']['url'])
+            if not result.is_success:
+                raise ValueError(result.is_success)
+            return result.content
+        except (KeyError, ValueError, TransportError) as e:
+            return None, "Не удалось получить документы к заказу на доставку"

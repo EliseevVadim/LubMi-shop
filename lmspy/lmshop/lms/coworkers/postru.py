@@ -259,14 +259,11 @@ class PostRu(ApiClient):
         except (KeyError, ValueError, TransportError):
             return None, "Не удалось создать заказ на доставку"
 
-    def create_delivery_supplements(self, s):
+    def create_delivery_supplements(self, r):
         try:
-            jsn = self._order_as_json(r)
-            if not jsn:
-                raise ValueError(jsn)
-            result = self._post_json("orders", _json_=jsn)
+            result = self._post_json("print/orders")
             if 'entity' not in result or 'uuid' not in result['entity']:
                 raise ValueError(result)
             return result, None
         except (KeyError, ValueError, TransportError):
-            return None, "Не удалось создать заказ на доставку"
+            return None, "Не удалось создать документы к заказу на доставку"

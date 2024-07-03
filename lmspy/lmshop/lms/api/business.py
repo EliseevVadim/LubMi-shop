@@ -129,7 +129,8 @@ def get_order_delivery_documents_link(order_id):
     else:
         dvs = json.loads(order.delivery_supplements_json)
 
-    print(dvs)
-
-    return "https://google.ru"
+    file, error = ds.get_delivery_documents_file(dvs)
+    if not file or error:
+        raise Http404()
+    return file
 
