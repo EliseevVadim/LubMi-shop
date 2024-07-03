@@ -129,7 +129,7 @@ def get_order_delivery_documents_link(order_id):
     else:
         dvs = json.loads(order.delivery_supplements_json)
 
-    file, error = ds.get_delivery_documents_file(dvs)
+    file, error = ds.get_delivery_supplements_file(dvs)
     if not file or error:
         raise Http404()
     return file

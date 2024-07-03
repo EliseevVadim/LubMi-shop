@@ -246,7 +246,7 @@ class Cdek(ApiClient):
         except (KeyError, ValueError, TransportError):
             return None, "Не удалось создать документы к заказу на доставку"
 
-    def get_delivery_documents_file(self, r):
+    def get_delivery_supplements_file(self, r):
         try:
             result = self._get(f"""print/orders/{r['entity']['uuid']}""")
             if 'entity' not in result or 'url' not in result['entity']:
