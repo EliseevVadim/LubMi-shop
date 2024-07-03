@@ -1,11 +1,13 @@
 import re
 from decimal import Decimal
+from io import BytesIO
+
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.exceptions import ValidationError
 from django.core.cache import cache
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse, FileResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.decorators import method_decorator
 from django.views.generic import DetailView
@@ -13,7 +15,7 @@ from django.views import View
 from django.template.defaultfilters import floatformat
 from httpx import TransportError
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
-from .api.business import set_order_completed, get_order_delivery_documents_link
+from .api.business import set_order_completed, ensure_order_delivery_supplements_exist
 from .coworkers.dadata import DaData
 from .coworkers.yookassa import Yookassa
 from .forms import CheckoutForm
@@ -504,7 +506,14 @@ class AdminCompleteOrderView(DetailView):
 @method_decorator(staff_member_required, name="get")
 class Admin_DeliveryDocuments_View(View):
     def get(self, request, slug):
-        return redirect(get_order_delivery_documents_link(slug))
+        if error := ensure_order_delivery_supplements_exist(slug):
+            return JsonResponse({"Error": error})
+        order = Order.paid.get(slug=slug)
+        obj = order.delivery_supplements_file
+        response = FileResponse(BytesIO(obj))
+        response['Content-Type'] = 'application/x-binary'
+        response['Content-Disposition'] = f'attachment; filename="{slug}.pdf"'
+        return response
 
 
 class ProductView(DetailView):

@@ -1,6 +1,7 @@
 from decimal import Decimal
 from rest_framework.response import Response
 from lms.models import Product, AvailableSize, Parameter
+import time
 
 
 def api_response(func):
@@ -17,6 +18,24 @@ def api_response(func):
             else result
     return deco
 
+
+def sleep_and_retry_on_except(timeout, result_on_fail, retry=5, validator=lambda _: True):
+    def decorator(function):
+        def wrapper(*args, **kwargs):
+            attempts = 0
+            while attempts < retry:
+                try:
+                    if not validator(value := function(*args, **kwargs)):
+                        raise ValueError(value)
+                except:
+                    print(f'Sleeping for {timeout} seconds')
+                    time.sleep(timeout)
+                    attempts += 1
+                else:
+                    return value
+            return result_on_fail
+        return wrapper
+    return decorator
 
 def with_scart_from_request(scart_field_name):
     def decorator(func):

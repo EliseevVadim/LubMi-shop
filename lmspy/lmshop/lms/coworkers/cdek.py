@@ -3,6 +3,8 @@ import json
 import httpx
 
 from httpx import TransportError
+
+from lms.api.decorators import sleep_and_retry_on_except
 from lms.coworkers.apiclient import ApiClient
 from lms.deco import copy_result
 from lms.models import Coworker, Order, Parameter
@@ -217,7 +219,7 @@ class Cdek(ApiClient):
                 height=r.height,
                 comment=f"Заказ {r.uuid}",
                 items=[Cdek.item(
-                    name=i.title,
+                    name=i.product.title,
                     ware_key=i.ppk[:50],
                     payment=Cdek.money(value=0.0),
                     weight=i.weight,
@@ -225,35 +227,30 @@ class Cdek(ApiClient):
                     amount=i.quantity) for i in r.items.all()])]
         }
 
+    @sleep_and_retry_on_except(1, (None, "Не удалось создать заказ на доставку"))
     def create_delivery_order(self, r: Order):
-        try:
-            jsn = self._order_as_json(r)
-            if not jsn:
-                raise ValueError(jsn)
-            result = self._post_json("orders", _json_=jsn)
-            if 'entity' not in result or 'uuid' not in result['entity']:
-                raise ValueError(result)
-            return result, None
-        except (KeyError, ValueError, TransportError):
-            return None, "Не удалось создать заказ на доставку"
+        jsn = self._order_as_json(r)
+        if not jsn:
+            raise ValueError(jsn)
+        result = self._post_json("orders", _json_=jsn)
+        if 'entity' not in result or 'uuid' not in result['entity']:
+            raise ValueError(result)
+        return result, None
 
+    @sleep_and_retry_on_except(1, (None, "Не удалось создать документы к заказу на доставку"))
     def create_delivery_supplements(self, r):
-        try:
-            result = self._post_json("print/orders", orders=[Cdek.order(order_uuid=r['entity']['uuid'])], copy_count=2)
-            if 'entity' not in result or 'uuid' not in result['entity']:
-                raise ValueError(result)
-            return result, None
-        except (KeyError, ValueError, TransportError):
-            return None, "Не удалось создать документы к заказу на доставку"
+        result = self._post_json("print/orders", orders=[Cdek.order(order_uuid=r['entity']['uuid'])], copy_count=2)
+        if 'entity' not in result or 'uuid' not in result['entity']:
+            raise ValueError(result)
+        return result, None
 
+    @sleep_and_retry_on_except(1, (None, "Не удалось загрузить документы к заказу на доставку"))
     def get_delivery_supplements_file(self, r):
-        try:
-            result = self._get(f"""print/orders/{r['entity']['uuid']}""")
-            if 'entity' not in result or 'url' not in result['entity']:
-                raise ValueError(result)
-            result = self._get_file(result['entity']['url'])
-            if not result.is_success:
-                raise ValueError(result.is_success)
-            return result.content, None
-        except (KeyError, ValueError, TransportError) as e:
-            return None, "Не удалось получить документы к заказу на доставку"
+        result = self._get(f"""print/orders/{r['entity']['uuid']}""")
+        if 'entity' not in result or 'url' not in result['entity']:
+            raise ValueError(result)
+        result = self._get_file(result['entity']['url'])
+        if not result.is_success:
+            raise ValueError(result.is_success)
+        return result.content, None
+

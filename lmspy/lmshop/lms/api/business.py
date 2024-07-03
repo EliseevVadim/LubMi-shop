@@ -104,41 +104,35 @@ def check_payment_life_cycle_is_completed(payment_id, payment_status, payment=No
         (set_order_paid_by_payment if payment_status == Yookassa.PaymentStatus.SUCCEEDED else set_order_canceled_by_payment)(payment_id, payment)
 
 
-def get_order_delivery_documents_link(order_id):
+def ensure_order_delivery_supplements_exist(order_id):
     try:
         order = Order.paid.get(slug=order_id)
     except Order.DoesNotExist:
-        raise Http404()
-
+        return f"Заказ {order_id} не найден"
     if order.status != Order.Status.payment_paid:
-        raise Http404()
-
+        return "Недопустимый статус заказа"
     ds = make_ds(order.delivery_service)
-
     if not order.delivery_order_json:
         dvo, error = ds.create_delivery_order(order)
         if not dvo or error:
-            raise Http404()
+            return error or "Не удалось создать заказ"
         order.delivery_order_json = json.dumps(dvo)
         order.save()
     else:
         dvo = json.loads(order.delivery_order_json)
-
     if not order.delivery_supplements_json:
         dvs, error = ds.create_delivery_supplements(dvo)
         if not dvs or error:
-            raise Http404()
+            return error or "Не удалось создать файл с транспортной документацией"
         order.delivery_supplements_json = json.dumps(dvs)
         order.save()
     else:
         dvs = json.loads(order.delivery_supplements_json)
-
     if not order.delivery_supplements_file:
         file, error = ds.get_delivery_supplements_file(dvs)
         if not file or error:
-            raise Http404()
+            return error or "Не удалось загрузить файл с транспортной документацией"
         order.delivery_supplements_file = file
         order.save()
-
-    return "."
+    return None
 
