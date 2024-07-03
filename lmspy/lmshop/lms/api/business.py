@@ -109,6 +109,10 @@ def get_order_delivery_documents_link(order_id):
         order = Order.paid.get(slug=order_id)
     except Order.DoesNotExist:
         raise Http404()
+
+    if order.status != Order.Status.payment_paid:
+        raise Http404()
+
     ds = make_ds(order.delivery_service)
 
     if not order.delivery_order_json:
@@ -129,8 +133,12 @@ def get_order_delivery_documents_link(order_id):
     else:
         dvs = json.loads(order.delivery_supplements_json)
 
-    file, error = ds.get_delivery_supplements_file(dvs)
-    if not file or error:
-        raise Http404()
-    return file
+    if not order.delivery_supplements_file:
+        file, error = ds.get_delivery_supplements_file(dvs)
+        if not file or error:
+            raise Http404()
+        order.delivery_supplements_file = file
+        order.save()
+
+    return "."
 

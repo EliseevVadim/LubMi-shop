@@ -254,6 +254,6 @@ class Cdek(ApiClient):
             result = self._get_file(result['entity']['url'])
             if not result.is_success:
                 raise ValueError(result.is_success)
-            return result.content
+            return result.content, None
         except (KeyError, ValueError, TransportError) as e:
             return None, "Не удалось получить документы к заказу на доставку"

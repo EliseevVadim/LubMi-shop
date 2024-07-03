@@ -299,6 +299,7 @@ class Order(DbItem):
         default_currency='RUR')
     delivery_order_json = models.TextField(null=True, blank=True)                               # -- данные заказа на доставку --
     delivery_supplements_json = models.TextField(null=True, blank=True)                         # -- дополнительные данные заказа на доставку --
+    delivery_supplements_file = models.BinaryField(null=True, blank=True)                       # -- файл дополнительных данных заказа на доставку --
     cu_first_name = models.CharField(max_length=150)                                            # -- имя --
     cu_last_name = models.CharField(max_length=150)                                             # -- фамилия --
     cu_phone = models.CharField(null=True, max_length=50, validators=[Tunable.validate_phone])  # -- телефон --
@@ -378,7 +379,7 @@ class Order(DbItem):
 
     @property
     def delivery_address_short(self):
-        return f"""{self.cu_city}, ул. {self.cu_street}, д. {self.cu_building}, кв. {self.cu_apartment}"""
+        return f"""{self.cu_city}, {self.cu_street}, д. {self.cu_building}, кв. {self.cu_apartment}"""
 
     @property
     def width(self):
