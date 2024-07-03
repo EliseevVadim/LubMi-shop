@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import QuerySet, F, Sum
 from django.utils import timezone, text
 from django.core.validators import MinValueValidator, RegexValidator
+from django.conf import settings
 from djmoney.models.fields import MoneyField
 from djmoney.money import Money
 from lms.defines import D6Y
@@ -366,10 +367,26 @@ class Order(DbItem):
     @property
     def total_weight(self):
         return self.items.aggregate(total=Sum(F("weight") * F('quantity')))["total"]
+
+    @property
+    def total_units(self):
+        return self.items.aggregate(total=Sum(F('quantity')))["total"]
     
     @property
     def delivery_address(self):
         return f"""Нас. пункт: {self.cu_city}, Улица: {self.cu_street}, Здание: {self.cu_building}, Подъезд: {self.cu_entrance}, Этаж: {self.cu_floor}, Квартира/офис: {self.cu_apartment}"""
+
+    @property
+    def width(self):
+        return settings.PACKAGE_WIDTH_CM
+
+    @property
+    def length(self):
+        return settings.PACKAGE_LENGTH_CM
+
+    @property
+    def height(self):
+        return settings.PACKAGE_UNIT_HEIGHT_CM * self.total_units
 
     def __str__(self):
         return f'заказ #{self.slug} от {self.cu_first_name}'

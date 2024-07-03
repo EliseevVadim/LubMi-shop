@@ -13,7 +13,7 @@
     <ul>
         <li><a href="#" onclick="window.print();">Печатать</a></li>
         {% if order.status == 1 %}
-        <li><a href="{% url 'lms:admin_order_delivery_documents' slug=order.slug %}">Транспортные документы</a></li>
+        <li><a href="{% url 'lms:admin_order_delivery_documents' slug=order.slug %}">Скачать транспортные документы</a></li>
         <li><a href="{% url 'lms:admin_complete_order' slug=order.slug %}">Закрыть заказ</a></li>
         {% endif %}
     </ul>

@@ -23,7 +23,7 @@ class PostRu(ApiClient):
                             if 'data' in x and 'postal_code' in x['data'] and 'is_closed' in x['data'] and 'type_code' in x['data'] and
                             x['data']['type_code'].lower() not in ['почтомат', 'ти'] and not x['data']['is_closed']),
                            None)
-        return postal_code
+        return postal_code or None
 
     def _order_as_json(self, r: Order):
         """Can throw KeyError, ValueError, TransportError or return empty result"""
@@ -53,7 +53,7 @@ class PostRu(ApiClient):
             # "area-to": "string",
             # "branch-name": "string",
             # "building-to": r.cu_building,
-            "comment": f"Заказ {r.uuid}",
+            "comment": f"Заказ {str(r.uuid)}",
             "completeness-checking": False,
             "compulsory-payment": 0,
             # "corpus-to": "string",
@@ -152,7 +152,7 @@ class PostRu(ApiClient):
             # "notice-payment-method": "CASHLESS",
             # "num-address-type-to": "string",
             # "office-to": "string",
-            "order-num": r.uuid,
+            "order-num": str(r.uuid),
             # "payment": 0,
             # "payment-method": "CASHLESS",
             "place-to": r.cu_city,
@@ -247,14 +247,14 @@ class PostRu(ApiClient):
         except (KeyError, ValueError, TransportError):
             return None, None, tariff['desc'] if 'desc' in tariff else "Не удалось определить параметры доставки"
 
-    def create_order(self, r: Order):
+    def create_delivery_order(self, r: Order):
         try:
-            rjs = self._order_as_json(r)
-            if not rjs:
-                raise ValueError(rjs)
+            jsn = self._order_as_json(r)
+            if not jsn:
+                raise ValueError(jsn)
             result = self._put_json(
                 "user/backlog",
-                _json_=rjs)
-            return result
+                _json_=[jsn])
+            return result, None
         except (KeyError, ValueError, TransportError):
-            return None, "Не удалось создать заказ"
+            return None, "Не удалось создать заказ на доставку"
