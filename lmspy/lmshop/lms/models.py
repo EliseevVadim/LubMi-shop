@@ -382,6 +382,10 @@ class Order(DbItem):
         return f"""{self.cu_city}, {self.cu_street}, д. {self.cu_building}, кв. {self.cu_apartment}"""
 
     @property
+    def delivery_address_in_city(self):
+        return f"""{self.cu_street}, д. {self.cu_building}, кв. {self.cu_apartment}"""
+
+    @property
     def width(self):
         return settings.PACKAGE_WIDTH_CM
 

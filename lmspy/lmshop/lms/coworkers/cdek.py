@@ -208,7 +208,7 @@ class Cdek(ApiClient):
             "to_location": Cdek.location(
                 country_code="RU",
                 code=r.city.code,
-                address=r.delivery_address_short),
+                address=r.delivery_address_in_city),
             "packages": [Cdek.package(
                 number=str(r.uuid)[:23],
                 weight=r.total_weight,
