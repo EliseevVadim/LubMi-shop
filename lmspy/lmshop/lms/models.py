@@ -4,8 +4,10 @@ from django.db import models
 from django.db.models import QuerySet, F, Sum
 from django.utils import timezone, text
 from django.core.validators import MinValueValidator, RegexValidator
+from django.conf import settings
 from djmoney.models.fields import MoneyField
 from djmoney.money import Money
+from lms.defines import D6Y
 
 
 class DbItem(models.Model):
@@ -271,8 +273,8 @@ class City(DbItem):
 
 class Order(DbItem):
     class DeliveryService(models.TextChoices):
-        cd = "cd", "СДЭК"
-        pr = "pr", "Почта России"
+        cd = D6Y.CD, "СДЭК"
+        pr = D6Y.PR, "Почта России"
 
     class Status(models.IntegerChoices):
         pending = 0, "Создан",
@@ -295,6 +297,8 @@ class Order(DbItem):
         max_digits=14,
         decimal_places=2,
         default_currency='RUR')
+    delivery_order_json = models.TextField(null=True, blank=True)                               # -- данные заказа на доставку --
+    delivery_supplements_json = models.TextField(null=True, blank=True)                         # -- дополнительные данные заказа на доставку --
     cu_first_name = models.CharField(max_length=150)                                            # -- имя --
     cu_last_name = models.CharField(max_length=150)                                             # -- фамилия --
     cu_phone = models.CharField(null=True, max_length=50, validators=[Tunable.validate_phone])  # -- телефон --
@@ -359,10 +363,30 @@ class Order(DbItem):
     @property
     def total_price(self):
         return Money(self.items.aggregate(total=Sum(F("price") * F('quantity')))["total"] + self.delivery_cost.amount, currency="RUR")
+
+    @property
+    def total_weight(self):
+        return self.items.aggregate(total=Sum(F("weight") * F('quantity')))["total"]
+
+    @property
+    def total_units(self):
+        return self.items.aggregate(total=Sum(F('quantity')))["total"]
     
     @property
     def delivery_address(self):
         return f"""Нас. пункт: {self.cu_city}, Улица: {self.cu_street}, Здание: {self.cu_building}, Подъезд: {self.cu_entrance}, Этаж: {self.cu_floor}, Квартира/офис: {self.cu_apartment}"""
+
+    @property
+    def width(self):
+        return settings.PACKAGE_WIDTH_CM
+
+    @property
+    def length(self):
+        return settings.PACKAGE_LENGTH_CM
+
+    @property
+    def height(self):
+        return settings.PACKAGE_UNIT_HEIGHT_CM * self.total_units
 
     def __str__(self):
         return f'заказ #{self.slug} от {self.cu_first_name}'

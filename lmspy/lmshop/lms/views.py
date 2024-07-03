@@ -13,14 +13,12 @@ from django.views import View
 from django.template.defaultfilters import floatformat
 from httpx import TransportError
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
-from .api.business import set_order_completed
-from .coworkers.cdek import Cdek
+from .api.business import set_order_completed, get_order_delivery_documents_link
 from .coworkers.dadata import DaData
-from .coworkers.postru import PostRu
 from .coworkers.yookassa import Yookassa
 from .forms import CheckoutForm
 from .models import Parameter, Product, City, AboutItem, Order
-from .utils import suffix, clipped_range, deep_unquote, untag
+from .utils import suffix, clipped_range, deep_unquote, untag, make_ds
 from .defines import D6Y
 
 
@@ -503,6 +501,12 @@ class AdminCompleteOrderView(DetailView):
         return redirect("lms:admin_order_details", slug=slug)
 
 
+@method_decorator(staff_member_required, name="get")
+class Admin_DeliveryDocuments_View(View):
+    def get(self, request, slug):
+        return redirect(get_order_delivery_documents_link(slug))
+
+
 class ProductView(DetailView):
     model = Product
     template_name = 'lms/pcard.html'
@@ -601,7 +605,7 @@ class C6tInfoView(View):
                 except (City.DoesNotExist, ValidationError):
                     city, cost, time, err = None, None, None, "Город не указан"
                 else:
-                    cost, time, err = {D6Y.CD: Cdek(), D6Y.PR: PostRu()}[d6y].delivery_cost(city.code, scart["weight"], price=price)
+                    cost, time, err = make_ds(d6y).delivery_cost(city.code, scart["weight"], price=price)
             else:
                 city, cost, time, err = None, None, None, Parameter.value_of('message_shopping_cart_empty')
             cache.set(signature, (city, cost, time, err), 300)

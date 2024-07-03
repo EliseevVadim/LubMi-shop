@@ -1,5 +1,9 @@
 from math import radians, sin, acos, cos
+
+from .coworkers.cdek import Cdek
+from .coworkers.postru import PostRu
 from .coworkers.telegram import Telegram
+from .defines import D6Y
 from .models import TelegramBot, City
 from functools import lru_cache
 from sys import float_info
@@ -55,3 +59,11 @@ def untag(s):
     }.items():
         s = s.replace(subs, repl)
     return s
+
+
+def make_ds(selector):
+    builders = {
+        D6Y.CD: lambda: Cdek(),
+        D6Y.PR: lambda: PostRu()
+    }
+    return builders[selector]()

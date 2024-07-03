@@ -1,13 +1,14 @@
 import json
 import logging
 
+from django.http import Http404
 from django.urls import reverse
 from django.utils import timezone
 from django.conf import settings
 from customerinfo.customerinfo import CustomerInfo
 from lms.coworkers.yookassa import Yookassa
 from lms.models import NotificationRequest, Order, AvailableSize
-from lms.utils import send_message_via_telegram
+from lms.utils import send_message_via_telegram, make_ds
 
 
 def create_notify_request(email, phone, ppk, size, info: CustomerInfo):
@@ -101,3 +102,16 @@ def unbind_order_products(order: Order):
 def check_payment_life_cycle_is_completed(payment_id, payment_status, payment=None):
     if payment_status in Yookassa.final_payment_statuses:
         (set_order_paid_by_payment if payment_status == Yookassa.PaymentStatus.SUCCEEDED else set_order_canceled_by_payment)(payment_id, payment)
+
+
+def get_order_delivery_documents_link(order_id):
+    try:
+        order = Order.paid.get(slug=order_id)
+    except Order.DoesNotExist:
+        raise Http404()
+    ds = make_ds(order.delivery_service)
+    if not order.delivery_order_json:
+        x, error = ds.create_delivery_order(order)
+        print(x)
+    return "https://google.ru"
+

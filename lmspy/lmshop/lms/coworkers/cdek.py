@@ -3,7 +3,7 @@ import httpx
 from httpx import TransportError
 from lms.coworkers.apiclient import ApiClient
 from lms.deco import copy_result
-from lms.models import Coworker
+from lms.models import Coworker, Order
 from urllib.parse import quote
 from django.core.cache import cache
 from lms.defines import D6Y
@@ -159,7 +159,7 @@ class Cdek(ApiClient):
         tariff_code = int(self.setting("tariff_code"))
         src_city_code = int(self.setting("location_from_code"))
         try:
-            tariff = Cdek().tariff(
+            tariff = self.tariff(
                 tariff_code,
                 Cdek.location(code=src_city_code),
                 Cdek.location(code=dst_city_code),
@@ -168,4 +168,7 @@ class Cdek(ApiClient):
             return (float(tariff["delivery_sum"]), tariff["period_min"], None) if "delivery_sum" in tariff and "period_min" in tariff else (0.0, 0, Cdek.extract_error(tariff))
         except (KeyError, ValueError, TransportError):
             return 0.0, 0, "Не удалось определить параметры доставки"
+
+    def create_delivery_order(self, r: Order):
+        return None, "Не удалось создать заказ"
 
