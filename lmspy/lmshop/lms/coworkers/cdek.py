@@ -241,7 +241,7 @@ class Cdek(ApiClient):
         return result, None
 
     @sleep_and_retry_on_except(1, (None, "Не удалось загрузить документы к заказу на доставку"))
-    def get_delivery_supplements_file(self, r):
+    def get_delivery_supplements_file(self, _, r):
         result = self._get(f"""print/orders/{r['entity']['uuid']}""")
         if 'entity' not in result or 'url' not in result['entity']:
             raise ValueError(result)

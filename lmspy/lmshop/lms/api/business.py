@@ -111,6 +111,7 @@ def ensure_order_delivery_supplements_exist(order_id):
         order = Order.paid.get(slug=order_id)
     except Order.DoesNotExist:
         return f"Заказ {order_id} не найден"
+
     if order.status != Order.Status.payment_paid:
         return "Недопустимый статус заказа"
     ds = make_ds(order.delivery_service)
@@ -122,6 +123,7 @@ def ensure_order_delivery_supplements_exist(order_id):
         order.save()
     else:
         dvo = json.loads(order.delivery_order_json)
+
     if not order.delivery_supplements_json:
         dvs, error = ds.create_delivery_supplements(dvo)
         if not dvs or error:
@@ -130,8 +132,9 @@ def ensure_order_delivery_supplements_exist(order_id):
         order.save()
     else:
         dvs = json.loads(order.delivery_supplements_json)
+
     if not order.delivery_supplements_file:
-        file, error = ds.get_delivery_supplements_file(dvs)
+        file, error = ds.get_delivery_supplements_file(dvo, dvs)
         if not file or error:
             return error or "Не удалось загрузить файл с транспортной документацией"
         order.delivery_supplements_file = file

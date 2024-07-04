@@ -507,10 +507,9 @@ class AdminCompleteOrderView(DetailView):
 class Admin_DeliveryDocuments_View(View):
     def get(self, request, slug):
         if error := ensure_order_delivery_supplements_exist(slug):
-            return JsonResponse({"Error": error})
+            return JsonResponse({"Ошибка": error})
         order = Order.paid.get(slug=slug)
-        obj = order.delivery_supplements_file
-        response = FileResponse(BytesIO(obj))
+        response = FileResponse(BytesIO(order.delivery_supplements_file))
         response['Content-Type'] = 'application/x-binary'
         response['Content-Disposition'] = f'attachment; filename="{slug}.pdf"'
         return response

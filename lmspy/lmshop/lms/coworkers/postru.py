@@ -1,4 +1,6 @@
 from httpx import TransportError
+
+from lms.api.decorators import sleep_and_retry_on_except
 from lms.coworkers.apiclient import ApiClient
 from lms.coworkers.dadata import DaData
 from lms.models import Coworker, City, Order
@@ -86,7 +88,7 @@ class PostRu(ApiClient):
         except (KeyError, ValueError, TransportError):
             return None, None, tariff['desc'] if 'desc' in tariff else "Не удалось определить параметры доставки"
 
-    def _order_as_json(self, r: Order):
+    def _order_as_json(self, r: Order, mail_type=None):
         """Can throw KeyError, ValueError, TransportError or return empty result"""
         postal_code = PostRu._get_postal_code(float(r.city.latitude), float(r.city.longitude))
         return postal_code and {
@@ -199,14 +201,14 @@ class PostRu(ApiClient):
             "house-to": r.cu_building,
             "index-to": int(postal_code),
             # "inner-num": "string",
-            # "insr-value": 0,
+            "insr-value": int(r.total_price.amount * 100),
             # "inventory": True,
             # "letter-to": "string",
             # "location-to": "string",
             # "manual-address-input": True,
             "mail-category": self.setting("mail_category"),
             "mail-direct": 643,
-            "mail-type": self.setting("mail_type"),
+            "mail-type": mail_type if mail_type is not None else self.setting("mail_type"),
             "mass": r.total_weight,
             # "middle-name": "string",
             # "no-return": True,
@@ -247,23 +249,32 @@ class PostRu(ApiClient):
             # "wo-mail-rank": True
         }
 
+    @sleep_and_retry_on_except(1, (None, "Не удалось создать заказ на доставку"))
     def create_delivery_order(self, r: Order):
-        try:
-            jsn = self._order_as_json(r)
-            if not jsn:
-                raise ValueError(jsn)
-            result = self._put_json(
-                "user/backlog",
-                _json_=[jsn])
-            return result, None
-        except (KeyError, ValueError, TransportError):
-            return None, "Не удалось создать заказ на доставку"
+        jsn = self._order_as_json(r, "ONLINE_PARCEL")
+        if not jsn:
+            raise ValueError(jsn)
+        result = self._put_json("user/backlog", _json_=[jsn])
+        if "result-ids" not in result or not result["result-ids"]:
+            raise ValueError(result)
+        return result, None
 
+    @sleep_and_retry_on_except(1, (None, "Не удалось создать документы к заказу на доставку"))
     def create_delivery_supplements(self, r):
-        try:
-            result = self._post_json("print/orders")
-            if 'entity' not in result or 'uuid' not in result['entity']:
-                raise ValueError(result)
-            return result, None
-        except (KeyError, ValueError, TransportError):
-            return None, "Не удалось создать документы к заказу на доставку"
+        s = self._get(f"backlog/{r["result-ids"][0]}")
+        result = self._post_json("user/shipment", _json_=[r["result-ids"][0]])
+        if "result-ids" not in result or not result["result-ids"]:
+            raise ValueError(result)
+        print(self._post_json(f"batch/{result['batches'][0]['batch-name']}/checkin"))
+        return result, None
+
+    @sleep_and_retry_on_except(1, (None, "Не удалось загрузить документы к заказу на доставку"))
+    def get_delivery_supplements_file(self, r, _):
+
+        url = self.func_url(f"forms/{r["result-ids"][0]}/forms")
+        result = self._get_file(url)
+        if not result.is_success:
+            j = result.json()
+            print(j)
+            raise ValueError(result.is_success)
+        return result.content, None
