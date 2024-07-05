@@ -1,6 +1,6 @@
 import httpx
 from httpx import TransportError
-from lms.api.decorators import sleep_and_retry_on_except
+from lms.api.decorators import sleep_and_retry_on_except, sleep_after
 from lms.coworkers.apiclient import ApiClient
 from lms.deco import copy_result
 from lms.models import Coworker, Order, Parameter
@@ -141,6 +141,12 @@ class Cdek(ApiClient):
     def recipient(**kwargs):
         return Cdek._construct_arg_({
             "name": (str, Cdek._str_255_()),
+            "passport_series": (str, Cdek. _max_len_(4)),  # -- Серия паспорта    string(4)    нет
+            "passport_number": (str, Cdek. _max_len_(30)),  # -- Номер паспорта    string(30)    нет
+            "passport_date_of_issue": (str, Cdek._max_len_(10)),  # -- Дата выдачи паспорта    date(yyyy - MM - dd)    нет
+            "passport_organization": (str, Cdek. _str_255_()),  # -- Орган выдачи паспорта    string(255)    нет
+            "tin": (str, Cdek._max_len_(12)),  # -- ИНН Может содержать 10, либо 12 символов                 string(12)    нет
+            "passport_date_of_birth": (str, Cdek._max_len_(10)),  # -- Дата рождения    date(yyyy - MM - dd)    нет
             "phones": (list, None),
             "number": (str, Cdek._str_255_()),
         }, **kwargs)
@@ -220,9 +226,11 @@ class Cdek(ApiClient):
                     payment=Cdek.money(value=0.0),
                     weight=i.weight,
                     cost=float(i.price.amount),
-                    amount=i.quantity) for i in r.items.all()])]
+                    amount=i.quantity) for i in r.items.all()])],
+            "print": "waybill",
         }
 
+    @sleep_after()
     @sleep_and_retry_on_except(1, (None, "Не удалось создать заказ на доставку"))
     def create_delivery_order(self, r: Order):
         jsn = self._order_as_json(r)
@@ -233,6 +241,7 @@ class Cdek(ApiClient):
             raise ValueError(result)
         return result, None
 
+    @sleep_after()
     @sleep_and_retry_on_except(1, (None, "Не удалось создать документы к заказу на доставку"))
     def create_delivery_supplements(self, r):
         result = self._post_json("print/orders", orders=[Cdek.order(order_uuid=r['entity']['uuid'])], copy_count=2)
@@ -240,11 +249,16 @@ class Cdek(ApiClient):
             raise ValueError(result)
         return result, None
 
+    @sleep_after()
     @sleep_and_retry_on_except(1, (None, "Не удалось загрузить документы к заказу на доставку"))
     def get_delivery_supplements_file(self, _, r):
+        @sleep_after()
+        def wait():
+            return None
         result = self._get(f"""print/orders/{r['entity']['uuid']}""")
         if 'entity' not in result or 'url' not in result['entity']:
             raise ValueError(result)
+        wait()
         result = self._get_file(result['entity']['url'])
         if not result.is_success:
             raise ValueError(result.is_success)

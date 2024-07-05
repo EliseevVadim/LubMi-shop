@@ -37,6 +37,19 @@ def sleep_and_retry_on_except(timeout, result_on_fail, retry=5, validator=lambda
         return wrapper
     return decorator
 
+
+def sleep_after(delay=3):
+    def decorator(function):
+        def wrapper(*args, **kwargs):
+            try:
+                value = function(*args, **kwargs)
+            finally:
+                time.sleep(delay)
+            return value
+        return wrapper
+    return decorator
+
+
 def with_scart_from_request(scart_field_name):
     def decorator(func):
         def proxy(request, *args, **kwargs):
