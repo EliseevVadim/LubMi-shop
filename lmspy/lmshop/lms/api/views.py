@@ -672,6 +672,21 @@ class Service_Hints_View(APIView):
         }
 
 
+class Service_PokePrWithAStick_View(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    @api_response
+    def get(request, region: str, city: str, street: str, building: str = None):
+        region = deep_unquote(region)
+        city = deep_unquote(city)
+        street = deep_unquote(street)
+        building = deep_unquote(building)
+        return {
+            "address-is-valid": PostRu().poke_with_a_stick(region, city, street, building)
+        }
+
+
 class Yookassa_PaymentStatus_View(APIView):
     permission_classes = [AllowAny]
 
