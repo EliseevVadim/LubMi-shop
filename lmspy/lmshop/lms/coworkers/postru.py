@@ -92,6 +92,13 @@ class PostRu(ApiClient):
         result = self._post_json("clean/address", _json_=[{"id": "0", "original-address": address}])[0]
         return result["index"] if "index" in result else None
 
+    def poke_with_a_stick(self, region, city, street, building):
+        try:
+            result = self._post_json("clean/address", _json_=[{"id": "0", "original-address": f"{region}, {city}, {street}, {building}"}])[0]
+            return bool("index" in result and result["index"])
+        except (KeyError, ValueError, TransportError):
+            return False
+
     def _order_as_json(self, r: Order, mail_type=None):
         """Can throw KeyError, ValueError, TransportError or return empty result"""
         index = self.index_by_address(r.delivery_address_short)
