@@ -1,6 +1,6 @@
 from httpx import TransportError
 
-from lms.api.decorators import sleep_and_retry_on_except
+from lms.api.decorators import sleep_and_retry_on_except, sleep_after
 from lms.coworkers.apiclient import ApiClient
 from lms.coworkers.dadata import DaData
 from lms.models import Coworker, City, Order
@@ -88,10 +88,14 @@ class PostRu(ApiClient):
         except (KeyError, ValueError, TransportError):
             return None, None, tariff['desc'] if 'desc' in tariff else "Не удалось определить параметры доставки"
 
+    def index_by_address(self, address: str):
+        result = self._post_json("clean/address", _json_=[{"id": "0", "original-address": address}])[0]
+        return result["index"] if "index" in result else None
+
     def _order_as_json(self, r: Order, mail_type=None):
         """Can throw KeyError, ValueError, TransportError or return empty result"""
-        postal_code = PostRu._get_postal_code(float(r.city.latitude), float(r.city.longitude))
-        return postal_code and {
+        index = self.index_by_address(r.delivery_address_short)
+        return index and {
             # "add-to-mmo": True,
             # "address-from": {
             #     "address-type": "DEFAULT",
@@ -118,7 +122,7 @@ class PostRu(ApiClient):
             # "building-to": r.cu_building,
             "comment": f"Заказ {str(r.uuid)}",
             "completeness-checking": False,
-            "compulsory-payment": 0,
+            # "compulsory-payment": 0,
             # "corpus-to": "string",
             "courier": False,
             # "customs-declaration": {
@@ -176,30 +180,30 @@ class PostRu(ApiClient):
             # "goods": {
             #     "items": [
             #         {
-            #             "code": "string",
-            #             "country-code": 0,
-            #             "customs-declaration-number": "string",
-            #             "description": "string",
-            #             "excise": 0,
+            #             # "code": "string",
+            #             # "country-code": 0,
+            #             # "customs-declaration-number": "string",
+            #             "description": i.product.title,
+            #             # "excise": 0,
             #             "goods-type": "GOODS",
-            #             "insr-value": 0,
-            #             "item-number": "string",
-            #             "lineattr": 0,
-            #             "payattr": 0,
-            #             "quantity": 0,
-            #             "supplier-inn": "string",
-            #             "supplier-name": "string",
-            #             "supplier-phone": "string",
-            #             "value": 0,
-            #             "vat-rate": 0,
-            #             "weight": 0
+            #             "insr-value": int(i.price.amount * 100),
+            #             "item-number": i.product.article,
+            #             # "lineattr": 0,
+            #             # "payattr": 0,
+            #             "quantity": i.quantity,
+            #             # "supplier-inn": "string",
+            #             # "supplier-name": "string",
+            #             # "supplier-phone": "string",
+            #             "value": int(i.price.amount * 100),
+            #             # "vat-rate": 0,
+            #             "weight": i.weight,
             #         }
-            #     ]
+            #         for i in r.items.all()]
             # },
             # "group-name": "string",
             # "hotel-to": "string",
             "house-to": r.cu_building,
-            "index-to": int(postal_code),
+            "index-to": int(index),
             # "inner-num": "string",
             "insr-value": int(r.total_price.amount * 100),
             # "inventory": True,
@@ -218,13 +222,13 @@ class PostRu(ApiClient):
             "order-num": str(r.uuid),
             # "payment": 0,
             # "payment-method": "CASHLESS",
-            "place-to": r.cu_city,
-            "postoffice-code": postal_code,
+            "place-to": r.city.city,
+            "postoffice-code": self.setting("postoffice-code", "350020"),
             # "pre-postal-preparation": True,
             # "prepaid-amount": 0,
             "recipient-name": r.cu_fullname,
             "region-to": r.cu_city_region,
-            "room-to": "string",
+            # "room-to": "string",
             # "sender-comment": "string",
             # "sender-name": "string",
             # "shelf-life-days": 0,
@@ -233,7 +237,7 @@ class PostRu(ApiClient):
             # "str-index-to": "",
             "street-to": r.cu_street,
             "surname": r.cu_last_name,
-            # "tel-address": 0,
+            # "tel-address": 79180082891,
             # "tel-address-from": 0,
             # "time-slot-id": 0,
             # "transport-mode": "STANDARD",
@@ -249,9 +253,10 @@ class PostRu(ApiClient):
             # "wo-mail-rank": True
         }
 
+    @sleep_after()
     @sleep_and_retry_on_except(1, (None, "Не удалось создать заказ на доставку"))
     def create_delivery_order(self, r: Order):
-        jsn = self._order_as_json(r, "ONLINE_PARCEL")
+        jsn = self._order_as_json(r)
         if not jsn:
             raise ValueError(jsn)
         result = self._put_json("user/backlog", _json_=[jsn])
@@ -259,22 +264,24 @@ class PostRu(ApiClient):
             raise ValueError(result)
         return result, None
 
+    @sleep_after()
     @sleep_and_retry_on_except(1, (None, "Не удалось создать документы к заказу на доставку"))
     def create_delivery_supplements(self, r):
-        s = self._get(f"backlog/{r["result-ids"][0]}")
+        @sleep_after()
+        def wait():
+            return None
         result = self._post_json("user/shipment", _json_=[r["result-ids"][0]])
         if "result-ids" not in result or not result["result-ids"]:
             raise ValueError(result)
-        print(self._post_json(f"batch/{result['batches'][0]['batch-name']}/checkin"))
+        wait()
+        self._post_json(f"batch/{result['batches'][0]['batch-name']}/checkin")
         return result, None
 
+    @sleep_after()
     @sleep_and_retry_on_except(1, (None, "Не удалось загрузить документы к заказу на доставку"))
     def get_delivery_supplements_file(self, r, _):
-
-        url = self.func_url(f"forms/{r["result-ids"][0]}/forms")
+        url = self.func_url(f"forms/{r["result-ids"][0]}/f7pdf")
         result = self._get_file(url)
         if not result.is_success:
-            j = result.json()
-            print(j)
             raise ValueError(result.is_success)
         return result.content, None

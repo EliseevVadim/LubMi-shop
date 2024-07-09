@@ -35,8 +35,8 @@ class ApiClient:
     def client_secret(self):
         return self._client_secret
 
-    def setting(self, name):
-        return Coworker.setting(self.key, name)
+    def setting(self, name, default=None):
+        return Coworker.setting(self.key, name, default)
 
     @property
     def authorization(self):
