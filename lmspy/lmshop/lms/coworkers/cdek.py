@@ -1,9 +1,9 @@
 import httpx
-
 from httpx import TransportError
+from lms.api.decorators import sleep_and_retry_on_except, sleep_after
 from lms.coworkers.apiclient import ApiClient
 from lms.deco import copy_result
-from lms.models import Coworker, Order
+from lms.models import Coworker, Order, Parameter
 from urllib.parse import quote
 from django.core.cache import cache
 from lms.defines import D6Y
@@ -95,7 +95,7 @@ class Cdek(ApiClient):
     @staticmethod
     def package(**kwargs):
         return Cdek._construct_arg_({
-            "number": (str, Cdek._str_255_()),      # -- Номер упаковки, string(255)
+            "number": (str, Cdek._max_len_(30)),    # -- Номер упаковки, string(255)
             "weight": (int, Cdek._positive_()),     # -- Общий вес (в граммах), integer
             "length": (int, Cdek._positive_()),     # -- Габариты упаковки. Длина (в сантиметрах), integer
             "width": (int, Cdek._positive_()),      # -- Габариты упаковки. Ширина (в сантиметрах), integer
@@ -108,7 +108,7 @@ class Cdek(ApiClient):
     def item(**kwargs):
         return Cdek._construct_arg_({
             "name": (str, Cdek._str_255_()),                # -- Наименование товара (может также содержать описание товара: размер, цвет), string(255)
-            "ware_key": (str, Cdek. _max_len_(20)),	        # -- Идентификатор/артикул товара, string(20)
+            "ware_key": (str, Cdek. _max_len_(50)),	        # -- Идентификатор/артикул товара, string(20)
             "payment": (dict, None),	                    # -- Оплата за товар при получении (за единицу товара в указанной валюте, значение >=0) — наложенный платеж, в случае предоплаты значение = 0, money
             "cost": (float, Cdek._no_negative_()),	        # -- Объявленная стоимость товара (за единицу товара в указанной валюте, значение >=0). С данного значения рассчитывается страховка, float
             "weight": (int, Cdek._positive_()),	            # -- Вес (за единицу товара, в граммах), integer
@@ -125,9 +125,37 @@ class Cdek(ApiClient):
     @staticmethod
     def money(**kwargs):
         return Cdek._construct_arg_({
-            "value": (float, Cdek._no_negative_()),	            # -- Сумма в валюте, float
-            "vat_sum": (float, Cdek._no_negative_()),	        # -- Сумма НДС, float
+            "value": (float, Cdek._no_negative_()),	                  # -- Сумма в валюте, float
+            "vat_sum": (float, Cdek._no_negative_()),	              # -- Сумма НДС, float
             "vat_rate": (int, Cdek._one_of_(0, 10, 12, 20)),    # -- Ставка НДС (значение - 0, 10, 12, 20, null - нет НДС)
+        }, **kwargs)
+
+    @staticmethod
+    def phone(**kwargs):
+        return Cdek._construct_arg_({
+            "number": (str, Cdek._str_255_()),      # -- номер
+            "additional": (str, Cdek._str_255_()),  # -- некая фигня
+        }, **kwargs)
+
+    @staticmethod
+    def recipient(**kwargs):
+        return Cdek._construct_arg_({
+            "name": (str, Cdek._str_255_()),
+            "passport_series": (str, Cdek. _max_len_(4)),  # -- Серия паспорта    string(4)    нет
+            "passport_number": (str, Cdek. _max_len_(30)),  # -- Номер паспорта    string(30)    нет
+            "passport_date_of_issue": (str, Cdek._max_len_(10)),  # -- Дата выдачи паспорта    date(yyyy - MM - dd)    нет
+            "passport_organization": (str, Cdek. _str_255_()),  # -- Орган выдачи паспорта    string(255)    нет
+            "tin": (str, Cdek._max_len_(12)),  # -- ИНН Может содержать 10, либо 12 символов                 string(12)    нет
+            "passport_date_of_birth": (str, Cdek._max_len_(10)),  # -- Дата рождения    date(yyyy - MM - dd)    нет
+            "phones": (list, None),
+            "number": (str, Cdek._str_255_()),
+        }, **kwargs)
+
+    @staticmethod
+    def order(**kwargs):
+        return Cdek._construct_arg_({
+            "order_uuid": (str, Cdek._uuid_()),
+            "cdek_number": (int, None),
         }, **kwargs)
 
     def cities(self, country_codes: str = "RU", **kwargs):
@@ -169,6 +197,70 @@ class Cdek(ApiClient):
         except (KeyError, ValueError, TransportError):
             return 0.0, 0, "Не удалось определить параметры доставки"
 
+    def _order_as_json(self, r: Order):
+        return {
+            "type": 1,
+            "number": str(r.uuid),
+            "tariff_code": int(self.setting("tariff_code")),
+            "comment": str(r.uuid),
+            "recipient": Cdek.recipient(
+                name=r.cu_fullname,
+                phones=[Cdek.phone(number=r.cu_phone)]),
+            "from_location": Cdek.location(
+                code=int(self.setting("location_from_code")),
+                address=Parameter.value_of("value_return_address_cd")),
+            "to_location": Cdek.location(
+                country_code="RU",
+                code=r.city.code,
+                address=r.delivery_address_in_city),
+            "packages": [Cdek.package(
+                number=str(r.uuid)[:23],
+                weight=r.total_weight,
+                length=r.length,
+                width=r.width,
+                height=r.height,
+                comment=f"Заказ {r.uuid}",
+                items=[Cdek.item(
+                    name=i.product.title,
+                    ware_key=i.ppk[:50],
+                    payment=Cdek.money(value=0.0),
+                    weight=i.weight,
+                    cost=float(i.price.amount),
+                    amount=i.quantity) for i in r.items.all()])],
+            "print": "waybill",
+        }
+
+    @sleep_after()
+    @sleep_and_retry_on_except(1, (None, "Не удалось создать заказ на доставку"))
     def create_delivery_order(self, r: Order):
-        return None, "Не удалось создать заказ"
+        jsn = self._order_as_json(r)
+        if not jsn:
+            raise ValueError(jsn)
+        result = self._post_json("orders", _json_=jsn)
+        if 'entity' not in result or 'uuid' not in result['entity']:
+            raise ValueError(result)
+        return result, None
+
+    @sleep_after()
+    @sleep_and_retry_on_except(1, (None, "Не удалось создать документы к заказу на доставку"))
+    def create_delivery_supplements(self, r):
+        result = self._post_json("print/orders", orders=[Cdek.order(order_uuid=r['entity']['uuid'])], copy_count=2)
+        if 'entity' not in result or 'uuid' not in result['entity']:
+            raise ValueError(result)
+        return result, None
+
+    @sleep_after()
+    @sleep_and_retry_on_except(1, (None, "Не удалось загрузить документы к заказу на доставку"))
+    def get_delivery_supplements_file(self, _, r):
+        @sleep_after()
+        def wait():
+            return None
+        result = self._get(f"""print/orders/{r['entity']['uuid']}""")
+        if 'entity' not in result or 'url' not in result['entity']:
+            raise ValueError(result)
+        wait()
+        result = self._get_file(result['entity']['url'])
+        if not result.is_success:
+            raise ValueError(result.is_success)
+        return result.content, None
 

@@ -35,8 +35,8 @@ class ApiClient:
     def client_secret(self):
         return self._client_secret
 
-    def setting(self, name):
-        return Coworker.setting(self.key, name)
+    def setting(self, name, default=None):
+        return Coworker.setting(self.key, name, default)
 
     @property
     def authorization(self):
@@ -93,6 +93,16 @@ class ApiClient:
             ).json()
             return result
 
+    def _get_file(self, url, headers=None, **kwargs):
+        with httpx.Client() as client:
+            result = client.get(
+                url,
+                auth=self.basic_auth,
+                headers=self.compose_headers("application/x-www-form-urlencoded", headers),
+                params=ApiClient._quoted(kwargs)
+            )
+            return result
+
     @staticmethod
     # @functools.lru_cache
     def _construct_arg_(decl: dict[str, tuple], **kwargs):
@@ -119,7 +129,7 @@ class ApiClient:
     @staticmethod
     @functools.lru_cache
     def _no_negative_():
-        return lambda v: v > 0
+        return lambda v: v >= 0
 
     @staticmethod
     @functools.lru_cache

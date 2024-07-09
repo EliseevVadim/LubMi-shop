@@ -1,4 +1,6 @@
 from httpx import TransportError
+
+from lms.api.decorators import sleep_and_retry_on_except, sleep_after
 from lms.coworkers.apiclient import ApiClient
 from lms.coworkers.dadata import DaData
 from lms.models import Coworker, City, Order
@@ -24,167 +26,6 @@ class PostRu(ApiClient):
                             x['data']['type_code'].lower() not in ['почтомат', 'ти'] and not x['data']['is_closed']),
                            None)
         return postal_code or None
-
-    def _order_as_json(self, r: Order):
-        """Can throw KeyError, ValueError, TransportError or return empty result"""
-        postal_code = PostRu._get_postal_code(float(r.city.latitude), float(r.city.longitude))
-        return postal_code and {
-            # "add-to-mmo": True,
-            # "address-from": {
-            #     "address-type": "DEFAULT",
-            #     "area": "string",
-            #     "building": "string",
-            #     "corpus": "string",
-            #     "hotel": "string",
-            #     "house": "string",
-            #     "index": "string",
-            #     "letter": "string",
-            #     "location": "string",
-            #     "num-address-type": "string",
-            #     "office": "string",
-            #     "place": "string",
-            #     "region": "string",
-            #     "room": "string",
-            #     "slash": "string",
-            #     "street": "string",
-            #     "vladenie": "string"
-            # },
-            "address-type-to": "DEFAULT",
-            # "area-to": "string",
-            # "branch-name": "string",
-            # "building-to": r.cu_building,
-            "comment": f"Заказ {str(r.uuid)}",
-            "completeness-checking": False,
-            "compulsory-payment": 0,
-            # "corpus-to": "string",
-            "courier": False,
-            # "customs-declaration": {
-            #     "certificate-number": "string",
-            #     "currency": "string",
-            #     "customs-code": "string",
-            #     "ioss-code": "string",
-            #     "customs-entries": [
-            #         {
-            #             "amount": 0,
-            #             "country-code": 0,
-            #             "description": "string",
-            #             "tnved-code": "string",
-            #             "trademark": "string",
-            #             "value": 0,
-            #             "weight": 0
-            #         }
-            #     ],
-            #     "entries-type": "GIFT",
-            #     "invoice-number": "string",
-            #     "license-number": "string",
-            #     "with-certificate": True,
-            #     "with-invoice": True,
-            #     "with-license": True
-            # },
-            "delivery-to-door": False,
-            "delivery-with-cod": False,
-            # "dimension": {
-            #     "height": 0,
-            #     "length": 0,
-            #     "width": 0
-            # },
-            # "dimension-type": "S",
-            # "easy-return": True,
-            # "ecom-data": {
-            #     "delivery-point-index": "string",
-            #     "identity-methods": [
-            #         "WITHOUT_IDENTIFICATION"
-            #     ],
-            #     "services": [
-            #         "WITHOUT_SERVICE"
-            #     ]
-            # },
-            # "farma": True,
-            # "envelope-type": "C4",
-            # "fiscal-data": {
-            #     "customer-email": "string",
-            #     "customer-inn": "string",
-            #     "customer-name": "string",
-            #     "customer-phone": 0,
-            #     "payment-amount": 0
-            # },
-            "fragile": False,
-            "given-name": r.cu_fullname,
-            # "goods": {
-            #     "items": [
-            #         {
-            #             "code": "string",
-            #             "country-code": 0,
-            #             "customs-declaration-number": "string",
-            #             "description": "string",
-            #             "excise": 0,
-            #             "goods-type": "GOODS",
-            #             "insr-value": 0,
-            #             "item-number": "string",
-            #             "lineattr": 0,
-            #             "payattr": 0,
-            #             "quantity": 0,
-            #             "supplier-inn": "string",
-            #             "supplier-name": "string",
-            #             "supplier-phone": "string",
-            #             "value": 0,
-            #             "vat-rate": 0,
-            #             "weight": 0
-            #         }
-            #     ]
-            # },
-            # "group-name": "string",
-            # "hotel-to": "string",
-            "house-to": r.cu_building,
-            "index-to": int(postal_code),
-            # "inner-num": "string",
-            # "insr-value": 0,
-            # "inventory": True,
-            # "letter-to": "string",
-            # "location-to": "string",
-            # "manual-address-input": True,
-            "mail-category": self.setting("mail_category"),
-            "mail-direct": 643,
-            "mail-type": self.setting("mail_type"),
-            "mass": r.total_weight,
-            # "middle-name": "string",
-            # "no-return": True,
-            # "notice-payment-method": "CASHLESS",
-            # "num-address-type-to": "string",
-            # "office-to": "string",
-            "order-num": str(r.uuid),
-            # "payment": 0,
-            # "payment-method": "CASHLESS",
-            "place-to": r.cu_city,
-            "postoffice-code": postal_code,
-            # "pre-postal-preparation": True,
-            # "prepaid-amount": 0,
-            "recipient-name": r.cu_fullname,
-            "region-to": r.cu_city_region,
-            "room-to": "string",
-            # "sender-comment": "string",
-            # "sender-name": "string",
-            # "shelf-life-days": 0,
-            # "slash-to": "string",
-            # "sms-notice-recipient": 0,
-            # "str-index-to": "",
-            "street-to": r.cu_street,
-            "surname": r.cu_last_name,
-            # "tel-address": 0,
-            # "tel-address-from": 0,
-            # "time-slot-id": 0,
-            # "transport-mode": "STANDARD",
-            # "transport-type": "SURFACE",
-            # "vladenie-to": "string",
-            # "vsd": True,
-            # "with-documents": True,
-            # "with-electronic-notice": True,
-            # "with-goods": True,
-            # "with-order-of-notice": True,
-            # "with-packaging": True,
-            # "with-simple-notice": True,
-            # "wo-mail-rank": True
-        }
 
     @property
     def token(self):
@@ -247,14 +88,200 @@ class PostRu(ApiClient):
         except (KeyError, ValueError, TransportError):
             return None, None, tariff['desc'] if 'desc' in tariff else "Не удалось определить параметры доставки"
 
+    def index_by_address(self, address: str):
+        result = self._post_json("clean/address", _json_=[{"id": "0", "original-address": address}])[0]
+        return result["index"] if "index" in result else None
+
+    def _order_as_json(self, r: Order, mail_type=None):
+        """Can throw KeyError, ValueError, TransportError or return empty result"""
+        index = self.index_by_address(r.delivery_address_short)
+        return index and {
+            # "add-to-mmo": True,
+            # "address-from": {
+            #     "address-type": "DEFAULT",
+            #     "area": "string",
+            #     "building": "string",
+            #     "corpus": "string",
+            #     "hotel": "string",
+            #     "house": "string",
+            #     "index": "string",
+            #     "letter": "string",
+            #     "location": "string",
+            #     "num-address-type": "string",
+            #     "office": "string",
+            #     "place": "string",
+            #     "region": "string",
+            #     "room": "string",
+            #     "slash": "string",
+            #     "street": "string",
+            #     "vladenie": "string"
+            # },
+            "address-type-to": "DEFAULT",
+            # "area-to": "string",
+            # "branch-name": "string",
+            # "building-to": r.cu_building,
+            "comment": f"Заказ {str(r.uuid)}",
+            "completeness-checking": False,
+            # "compulsory-payment": 0,
+            # "corpus-to": "string",
+            "courier": False,
+            # "customs-declaration": {
+            #     "certificate-number": "string",
+            #     "currency": "string",
+            #     "customs-code": "string",
+            #     "ioss-code": "string",
+            #     "customs-entries": [
+            #         {
+            #             "amount": 0,
+            #             "country-code": 0,
+            #             "description": "string",
+            #             "tnved-code": "string",
+            #             "trademark": "string",
+            #             "value": 0,
+            #             "weight": 0
+            #         }
+            #     ],
+            #     "entries-type": "GIFT",
+            #     "invoice-number": "string",
+            #     "license-number": "string",
+            #     "with-certificate": True,
+            #     "with-invoice": True,
+            #     "with-license": True
+            # },
+            "delivery-to-door": False,
+            "delivery-with-cod": False,
+            # "dimension": {
+            #     "height": 0,
+            #     "length": 0,
+            #     "width": 0
+            # },
+            # "dimension-type": "S",
+            # "easy-return": True,
+            # "ecom-data": {
+            #     "delivery-point-index": "string",
+            #     "identity-methods": [
+            #         "WITHOUT_IDENTIFICATION"
+            #     ],
+            #     "services": [
+            #         "WITHOUT_SERVICE"
+            #     ]
+            # },
+            # "farma": True,
+            # "envelope-type": "C4",
+            # "fiscal-data": {
+            #     "customer-email": "string",
+            #     "customer-inn": "string",
+            #     "customer-name": "string",
+            #     "customer-phone": 0,
+            #     "payment-amount": 0
+            # },
+            "fragile": False,
+            "given-name": r.cu_fullname,
+            # "goods": {
+            #     "items": [
+            #         {
+            #             # "code": "string",
+            #             # "country-code": 0,
+            #             # "customs-declaration-number": "string",
+            #             "description": i.product.title,
+            #             # "excise": 0,
+            #             "goods-type": "GOODS",
+            #             "insr-value": int(i.price.amount * 100),
+            #             "item-number": i.product.article,
+            #             # "lineattr": 0,
+            #             # "payattr": 0,
+            #             "quantity": i.quantity,
+            #             # "supplier-inn": "string",
+            #             # "supplier-name": "string",
+            #             # "supplier-phone": "string",
+            #             "value": int(i.price.amount * 100),
+            #             # "vat-rate": 0,
+            #             "weight": i.weight,
+            #         }
+            #         for i in r.items.all()]
+            # },
+            # "group-name": "string",
+            # "hotel-to": "string",
+            "house-to": r.cu_building,
+            "index-to": int(index),
+            # "inner-num": "string",
+            "insr-value": int(r.total_price.amount * 100),
+            # "inventory": True,
+            # "letter-to": "string",
+            # "location-to": "string",
+            # "manual-address-input": True,
+            "mail-category": self.setting("mail_category"),
+            "mail-direct": 643,
+            "mail-type": mail_type if mail_type is not None else self.setting("mail_type"),
+            "mass": r.total_weight,
+            # "middle-name": "string",
+            # "no-return": True,
+            # "notice-payment-method": "CASHLESS",
+            # "num-address-type-to": "string",
+            # "office-to": "string",
+            "order-num": str(r.uuid),
+            # "payment": 0,
+            # "payment-method": "CASHLESS",
+            "place-to": r.city.city,
+            "postoffice-code": self.setting("postoffice-code", "350020"),
+            # "pre-postal-preparation": True,
+            # "prepaid-amount": 0,
+            "recipient-name": r.cu_fullname,
+            "region-to": r.cu_city_region,
+            # "room-to": "string",
+            # "sender-comment": "string",
+            # "sender-name": "string",
+            # "shelf-life-days": 0,
+            # "slash-to": "string",
+            # "sms-notice-recipient": 0,
+            # "str-index-to": "",
+            "street-to": r.cu_street,
+            "surname": r.cu_last_name,
+            # "tel-address": 79180082891,
+            # "tel-address-from": 0,
+            # "time-slot-id": 0,
+            # "transport-mode": "STANDARD",
+            # "transport-type": "SURFACE",
+            # "vladenie-to": "string",
+            # "vsd": True,
+            # "with-documents": True,
+            # "with-electronic-notice": True,
+            # "with-goods": True,
+            # "with-order-of-notice": True,
+            # "with-packaging": True,
+            # "with-simple-notice": True,
+            # "wo-mail-rank": True
+        }
+
+    @sleep_after()
+    @sleep_and_retry_on_except(1, (None, "Не удалось создать заказ на доставку"))
     def create_delivery_order(self, r: Order):
-        try:
-            jsn = self._order_as_json(r)
-            if not jsn:
-                raise ValueError(jsn)
-            result = self._put_json(
-                "user/backlog",
-                _json_=[jsn])
-            return result, None
-        except (KeyError, ValueError, TransportError):
-            return None, "Не удалось создать заказ на доставку"
+        jsn = self._order_as_json(r)
+        if not jsn:
+            raise ValueError(jsn)
+        result = self._put_json("user/backlog", _json_=[jsn])
+        if "result-ids" not in result or not result["result-ids"]:
+            raise ValueError(result)
+        return result, None
+
+    @sleep_after()
+    @sleep_and_retry_on_except(1, (None, "Не удалось создать документы к заказу на доставку"))
+    def create_delivery_supplements(self, r):
+        @sleep_after()
+        def wait():
+            return None
+        result = self._post_json("user/shipment", _json_=[r["result-ids"][0]])
+        if "result-ids" not in result or not result["result-ids"]:
+            raise ValueError(result)
+        wait()
+        self._post_json(f"batch/{result['batches'][0]['batch-name']}/checkin")
+        return result, None
+
+    @sleep_after()
+    @sleep_and_retry_on_except(1, (None, "Не удалось загрузить документы к заказу на доставку"))
+    def get_delivery_supplements_file(self, r, _):
+        url = self.func_url(f"forms/{r["result-ids"][0]}/f7pdf")
+        result = self._get_file(url)
+        if not result.is_success:
+            raise ValueError(result.is_success)
+        return result.content, None
