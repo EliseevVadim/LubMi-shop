@@ -287,7 +287,7 @@ class PostRu(ApiClient):
     @sleep_after()
     @sleep_and_retry_on_except(1, (None, "Не удалось загрузить документы к заказу на доставку"))
     def get_delivery_supplements_file(self, r, _):
-        url = self.func_url(f"forms/{r["result-ids"][0]}/f7pdf")
+        url = self.func_url(f"forms/{r['result-ids'][0]}/f7pdf")
         result = self._get_file(url)
         if not result.is_success:
             raise ValueError(result.is_success)
