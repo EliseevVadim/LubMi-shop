@@ -212,7 +212,7 @@ class PostRu(ApiClient):
             "house-to": r.cu_building,
             "index-to": int(index),
             # "inner-num": "string",
-            "insr-value": int(r.total_price.amount * 100),
+            "insr-value": int(r.total_price_without_delivery.amount * 100),
             # "inventory": True,
             # "letter-to": "string",
             # "location-to": "string",
