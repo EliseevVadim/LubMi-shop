@@ -366,6 +366,10 @@ class Order(DbItem):
         return Money(self.items.aggregate(total=Sum(F("price") * F('quantity')))["total"] + self.delivery_cost.amount, currency="RUR")
 
     @property
+    def total_price_without_delivery(self):
+        return Money(self.items.aggregate(total=Sum(F("price") * F('quantity')))["total"], currency="RUR")
+
+    @property
     def total_weight(self):
         return self.items.aggregate(total=Sum(F("weight") * F('quantity')))["total"]
 
