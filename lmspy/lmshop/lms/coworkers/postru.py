@@ -80,7 +80,7 @@ class PostRu(ApiClient):
             if not postal_code:
                 return None, None, "Доступные отделения не найдены"
 
-        tariff = {}
+        tariff = dict()
         try:
             tariff = self.tariff(postal_code, price, weight)
             delay = tariff["delivery-time"]["min-days"] if "min-days" in tariff["delivery-time"] else tariff["delivery-time"]["max-days"]
