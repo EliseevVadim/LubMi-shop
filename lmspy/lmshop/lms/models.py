@@ -38,6 +38,13 @@ class Parameter(DbItem):
         except Parameter.DoesNotExist:
             return default
 
+    @staticmethod
+    def construct_from_value_of(key, constructor, default):
+        try:
+            return constructor(Parameter.objects.get(pk=key).value)
+        except (ValueError, Parameter.DoesNotExist):
+            return default
+
 
 class Tunable:
     @staticmethod
@@ -391,15 +398,15 @@ class Order(DbItem):
 
     @property
     def width(self):
-        return settings.PACKAGE_WIDTH_CM
+        return Parameter.construct_from_value_of("value_package_width", int, settings.PACKAGE_WIDTH_CM)
 
     @property
     def length(self):
-        return settings.PACKAGE_LENGTH_CM
+        return Parameter.construct_from_value_of("value_package_length", int, settings.PACKAGE_LENGTH_CM)
 
     @property
     def height(self):
-        return settings.PACKAGE_UNIT_HEIGHT_CM * self.total_units
+        return Parameter.construct_from_value_of("value_package_unit_height", int, settings.PACKAGE_UNIT_HEIGHT_CM) * self.total_units
 
     def __str__(self):
         return f'заказ #{self.slug} от {self.cu_first_name}'
