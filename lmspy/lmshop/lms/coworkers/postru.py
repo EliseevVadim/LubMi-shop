@@ -84,7 +84,7 @@ class PostRu(ApiClient):
         try:
             tariff = self.tariff(postal_code, price, weight)
             delay = tariff["delivery-time"]["min-days"] if "min-days" in tariff["delivery-time"] else tariff["delivery-time"]["max-days"]
-            return tariff["total-rate"] / 100.0, delay, None
+            return (tariff["total-rate"] + tariff["total-vat"]) / 100.0, delay, None
         except (KeyError, ValueError, TransportError):
             return None, None, tariff['desc'] if 'desc' in tariff else "Не удалось определить параметры доставки"
 
