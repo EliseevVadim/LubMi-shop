@@ -25,7 +25,7 @@ from .defines import D6Y
 
 
 class IndexView(View):
-    page_size = int(Parameter.value_of("value_catalogue_page_size", 12))
+    page_size = Parameter.construct_from_value_of("value_catalogue_page_size", int, 12)
     default_order = 'novelties-first'
     ordering = {
         default_order: ("Порядок: по умолчанию", lambda q: q.order_by('-published_at')),
@@ -686,7 +686,7 @@ class C6tInfoView(View):
 
 
 class SearchView(View):
-    page_size = int(Parameter.value_of("value_search_page_size", 12))
+    page_size = Parameter.construct_from_value_of("value_search_page_size", int, 12)
     order = Parameter.value_of("value_search_order", 'title-asc')
     ordering = {
         'novelties-first': lambda q: q.order_by('-published_at'),
