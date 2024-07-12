@@ -79,7 +79,6 @@ class PostRu(ApiClient):
         else:
             if not postal_code:
                 return None, None, "Доступные отделения не найдены"
-
         tariff = dict()
         try:
             tariff = self.tariff(postal_code, price, weight)
@@ -263,8 +262,7 @@ class PostRu(ApiClient):
     @sleep_after()
     @sleep_and_retry_on_except(1, (None, "Не удалось создать заказ на доставку"))
     def create_delivery_order(self, r: Order):
-        jsn = self._order_as_json(r)
-        if not jsn:
+        if not (jsn := self._order_as_json(r)):
             raise ValueError(jsn)
         result = self._put_json("user/backlog", _json_=[jsn])
         if "result-ids" not in result or not result["result-ids"]:
