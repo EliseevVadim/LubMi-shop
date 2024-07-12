@@ -1,3 +1,4 @@
+from django.conf import settings
 from decimal import Decimal
 from rest_framework.response import Response
 from lms.models import Product, AvailableSize, Parameter
@@ -38,7 +39,7 @@ def sleep_and_retry_on_except(timeout, result_on_fail, retry=5, validator=lambda
     return decorator
 
 
-def sleep_after(delay=3):
+def sleep_after(delay=settings.SLEEP_AFTER):
     def decorator(function):
         def wrapper(*args, **kwargs):
             try:
