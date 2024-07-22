@@ -494,6 +494,10 @@ class Service_Checkout_View(APIView):
     @api_response
     @with_scart_from_request('scart')
     def post(request, scart, errors, _=None):
+        def optional(key, def_val=None):
+            nonlocal data
+            return data[key] if key in data else def_val
+
         for e in errors:
             return e["error-text"]
         data = {k: escape(v) for k, v in request.data.items()}
@@ -515,14 +519,14 @@ class Service_Checkout_View(APIView):
                 data["cu_first_name"], \
                 data["cu_last_name"], \
                 data["cu_phone"], \
-                data["cu_country"] if "cu_country" in data else "RU", \
+                optional("cu_country", "RU"), \
                 data["cu_city_uuid"], \
                 data["cu_city"], \
                 data["cu_street"], \
                 data["cu_building"], \
-                data["cu_entrance"], \
-                data["cu_floor"], \
-                data["cu_apartment"], \
+                optional("cu_entrance"), \
+                optional("cu_floor"), \
+                optional("cu_apartment"), \
                 data["cu_fullname"], \
                 data["cu_confirm"]
         except (TypeError, KeyError):
@@ -538,9 +542,6 @@ class Service_Checkout_View(APIView):
                 cu_city and \
                 cu_street and \
                 cu_building and \
-                cu_entrance and \
-                cu_floor and \
-                cu_apartment and \
                 cu_fullname and \
                 cu_confirm:
             if cu_confirm != "True":
