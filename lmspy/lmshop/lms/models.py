@@ -383,18 +383,40 @@ class Order(DbItem):
     @property
     def total_units(self):
         return self.items.aggregate(total=Sum(F('quantity')))["total"]
-    
+
     @property
     def delivery_address(self):
-        return f"""Нас. пункт: {self.cu_city}, Улица: {self.cu_street}, Здание: {self.cu_building}, Подъезд: {self.cu_entrance}, Этаж: {self.cu_floor}, Квартира/офис: {self.cu_apartment}"""
+        def o(prefix, value):
+            nonlocal items
+            items += [f'{prefix}: {value}'] if value else []
+        items = []
+        o('Нас. пункт', self.cu_city),
+        o('Улица', self.cu_street),
+        o('Здание', self.cu_building),
+        o('Подъезд', self.cu_entrance),
+        o('Этаж', self.cu_floor),
+        o('Квартира/офис', self.cu_apartment)
+        return ", ".join(items)
 
     @property
     def delivery_address_short(self):
-        return f"""{self.cu_city}, {self.cu_street}, д. {self.cu_building}, кв. {self.cu_apartment}"""
+        def o(prefix, value):
+            nonlocal items
+            items += [f'{prefix}. {value}'] if value else []
+        items = [f'{self.cu_city}', f'{self.cu_street}']
+        o('д', self.cu_building)
+        o('кв', self.cu_apartment)
+        return ", ".join(items)
 
     @property
     def delivery_address_in_city(self):
-        return f"""{self.cu_street}, д. {self.cu_building}, кв. {self.cu_apartment}"""
+        def o(prefix, value):
+            nonlocal items
+            items += [f'{prefix}. {value}'] if value else []
+        items = [f'{self.cu_street}']
+        o('д', self.cu_building)
+        o('кв', self.cu_apartment)
+        return ", ".join(items)
 
     @property
     def width(self):
