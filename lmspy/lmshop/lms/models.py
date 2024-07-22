@@ -314,13 +314,13 @@ class Order(DbItem):
     cu_country = models.CharField(max_length=2, default='RU')                                   # -- код страны --
     cu_city_uuid = models.UUIDField(null=True)                                                  # -- город --
     cu_city = models.CharField(max_length=100)                                                  # -- город --
-    cu_city_region = models.CharField(null=True, max_length=100)                                # -- город --
-    cu_city_subregion = models.CharField(null=True, max_length=100)                             # -- город --
+    cu_city_region = models.CharField(null=True, max_length=100)                                # -- регион --
+    cu_city_subregion = models.CharField(null=True, max_length=100)                             # -- район --
     cu_street = models.CharField(max_length=200)                                                # -- улица --
     cu_building = models.CharField(max_length=50)                                               # -- здание --
-    cu_entrance = models.CharField(max_length=50)                                               # -- подъезд --
-    cu_floor = models.CharField(max_length=50)                                                  # -- этаж --
-    cu_apartment = models.CharField(max_length=50)                                              # -- квартира/офис --
+    cu_entrance = models.CharField(null=True, max_length=50)                                    # -- подъезд --
+    cu_floor = models.CharField(null=True, max_length=50)                                       # -- этаж --
+    cu_apartment = models.CharField(null=True, max_length=50)                                   # -- квартира/офис --
     cu_fullname = models.CharField(max_length=250)                                              # -- полное имя заказчика --
     cu_confirm = models.BooleanField(default=False)                                             # -- поставил галочку про конфиденциальность? --
     items: QuerySet                                                                             # -- компоненты, Just for IDE syntax analyzer --
