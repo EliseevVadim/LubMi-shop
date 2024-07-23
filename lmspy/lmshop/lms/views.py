@@ -20,7 +20,7 @@ from .coworkers.dadata import DaData
 from .coworkers.yookassa import Yookassa
 from .forms import CheckoutForm
 from .models import Parameter, Product, City, AboutItem, Order
-from .utils import suffix, clipped_range, deep_unquote, untag, make_ds
+from .utils import suffix, clipped_range, deep_unquote, untag, ds_factory
 from .defines import D6Y
 
 
@@ -613,7 +613,7 @@ class C6tInfoView(View):
                 except (City.DoesNotExist, ValidationError):
                     city, cost, time, err = None, None, None, "Город не указан"
                 else:
-                    cost, time, err = make_ds(d6y).delivery_cost(city.code, scart["weight"], price=price)
+                    cost, time, err = ds_factory(d6y).delivery_cost(city.code, scart["weight"], price=price)
             else:
                 city, cost, time, err = None, None, None, Parameter.value_of('message_shopping_cart_empty')
             cache.set(signature, (city, cost, time, err), 300)

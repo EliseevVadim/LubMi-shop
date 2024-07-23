@@ -15,7 +15,7 @@ from lms.coworkers.dadata import DaData
 from lms.coworkers.postru import PostRu
 from lms.models import Product, AvailableSize, Parameter, Order, OrderItem, City, AboutItem
 from lms.api.serializers import ProductSerializer, ProductDetailSerializer, AboutItemSerializer
-from lms.utils import deep_unquote, make_ds
+from lms.utils import deep_unquote, ds_factory
 from lms.defines import D6Y
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
 from lms.coworkers.yookassa import Yookassa
@@ -370,7 +370,7 @@ class CheckoutSCartView(APIView):
                 city = City.objects.get(pk=cu_city_uuid)
             except (ValidationError, City.DoesNotExist):
                 return "Пункт назначения заказа неверен."
-            d6y_cost, d6y_time, error = make_ds(d6y_service).delivery_cost(city.code, scart["weight"], price=price)
+            d6y_cost, d6y_time, error = ds_factory(d6y_service).delivery_cost(city.code, scart["weight"], price=price)
             if error:
                 return error
             try:
@@ -553,7 +553,7 @@ class Service_Checkout_View(APIView):
                 city = City.objects.get(pk=cu_city_uuid)
             except (ValidationError, City.DoesNotExist):
                 return "Пункт назначения заказа неверен."
-            d6y_cost, d6y_time, error = make_ds(d6y_service).delivery_cost(city.code, scart["weight"], price=price)
+            d6y_cost, d6y_time, error = ds_factory(d6y_service).delivery_cost(city.code, scart["weight"], price=price)
             if error:
                 return error
             try:

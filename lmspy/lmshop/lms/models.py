@@ -280,7 +280,8 @@ class City(DbItem):
 
 class Order(DbItem):
     class DeliveryService(models.TextChoices):
-        cd = D6Y.CD, "СДЭК"
+        cd = D6Y.CD, "СДЭК (до двери)"
+        cp = D6Y.CP, "СДЭК (ПВЗ)"
         pr = D6Y.PR, "Почта России"
 
     class Status(models.IntegerChoices):
