@@ -1,10 +1,17 @@
-from lms.coworkers.apiclient import ApiClient
+from lms.coworkers.abstractapiclient import AbstractApiClient
 from lms.models import Coworker
 
 
-class DaData(ApiClient):
+class DaData(AbstractApiClient):
     def __init__(self):
-        super().__init__("dd", Coworker.setting("dd", "api_address"), None, Coworker.setting("dd", "access_token"))
+        super().__init__(
+            self.setting("api_address"),
+            None,
+            self.setting("access_token"))
+
+    @property
+    def key(self):
+        return 'dd'
 
     @property
     def authorization(self):

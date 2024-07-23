@@ -15,7 +15,7 @@ from lms.coworkers.dadata import DaData
 from lms.coworkers.postru import PostRu
 from lms.models import Product, AvailableSize, Parameter, Order, OrderItem, City, AboutItem
 from lms.api.serializers import ProductSerializer, ProductDetailSerializer, AboutItemSerializer
-from lms.utils import deep_unquote, make_ds
+from lms.utils import deep_unquote, ds_factory
 from lms.defines import D6Y
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
 from lms.coworkers.yookassa import Yookassa
@@ -370,7 +370,7 @@ class CheckoutSCartView(APIView):
                 city = City.objects.get(pk=cu_city_uuid)
             except (ValidationError, City.DoesNotExist):
                 return "Пункт назначения заказа неверен."
-            d6y_cost, d6y_time, error = make_ds(d6y_service).delivery_cost(city.code, scart["weight"], price=price)
+            d6y_cost, d6y_time, error = ds_factory(d6y_service).delivery_cost(city.code, scart["weight"], price=price)
             if error:
                 return error
             try:
@@ -476,10 +476,9 @@ class Service_EstimateSCart_View(APIView):
                 except City.DoesNotExist:
                     err("item-does-not-exist", "Пункт назначения не найден", {'cu_city_uuid': city_uuid})
                 else:
-                    cd_d6y_cost, cd_d6y_time, cd_error = Cdek().delivery_cost(city.code, scart["weight"], price=scart['price'])
-                    pr_d6y_cost, pr_d6y_time, pr_error = PostRu().delivery_cost(city.code, scart["weight"], price=scart['price'])
-                    result[D6Y.CD] = {'cost': cd_d6y_cost, 'days': cd_d6y_time, 'error': cd_error}
-                    result[D6Y.PR] = {'cost': pr_d6y_cost, 'days': pr_d6y_time, 'error': pr_error}
+                    for ds in D6Y:
+                        d6y_cost, d6y_time, error = ds_factory(ds).delivery_cost(city.code, scart["weight"], price=scart['price'])
+                        result[ds] = {'cost': d6y_cost, 'days': d6y_time, 'error': error}
             except (TypeError, KeyError):
                 return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
             except ValueError:
@@ -494,11 +493,16 @@ class Service_Checkout_View(APIView):
     @api_response
     @with_scart_from_request('scart')
     def post(request, scart, errors, _=None):
+        def optional(key, def_val=None):
+            nonlocal data
+            return data[key] if key in data else def_val
+
         for e in errors:
             return e["error-text"]
         data = {k: escape(v) for k, v in request.data.items()}
         try:
             d6y_service, \
+                d6y_point, \
                 cu_first_name, \
                 cu_last_name, \
                 cu_phone, \
@@ -512,17 +516,18 @@ class Service_Checkout_View(APIView):
                 cu_apartment, \
                 cu_fullname, \
                 cu_confirm = D6Y(data["delivery"]), \
+                optional("delivery_point"), \
                 data["cu_first_name"], \
                 data["cu_last_name"], \
                 data["cu_phone"], \
-                data["cu_country"] if "cu_country" in data else "RU", \
+                optional("cu_country", "RU"), \
                 data["cu_city_uuid"], \
                 data["cu_city"], \
-                data["cu_street"], \
-                data["cu_building"], \
-                data["cu_entrance"], \
-                data["cu_floor"], \
-                data["cu_apartment"], \
+                optional("cu_street"), \
+                optional("cu_building"), \
+                optional("cu_entrance"), \
+                optional("cu_floor"), \
+                optional("cu_apartment"), \
                 data["cu_fullname"], \
                 data["cu_confirm"]
         except (TypeError, KeyError):
@@ -530,17 +535,13 @@ class Service_Checkout_View(APIView):
         except ValueError:
             return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
         if d6y_service and \
+                ((d6y_service == D6Y.CP and d6y_point) or (d6y_service != D6Y.CP and cu_street and cu_building)) and \
                 cu_first_name and \
                 cu_last_name and \
                 cu_phone and \
                 cu_country and \
                 cu_city_uuid and \
                 cu_city and \
-                cu_street and \
-                cu_building and \
-                cu_entrance and \
-                cu_floor and \
-                cu_apartment and \
                 cu_fullname and \
                 cu_confirm:
             if cu_confirm != "True":
@@ -552,12 +553,13 @@ class Service_Checkout_View(APIView):
                 city = City.objects.get(pk=cu_city_uuid)
             except (ValidationError, City.DoesNotExist):
                 return "Пункт назначения заказа неверен."
-            d6y_cost, d6y_time, error = make_ds(d6y_service).delivery_cost(city.code, scart["weight"], price=price)
+            d6y_cost, d6y_time, error = ds_factory(d6y_service).delivery_cost(city.code, scart["weight"], price=price)
             if error:
                 return error
             try:
                 with transaction.atomic():
                     order = Order(delivery_service=d6y_service,
+                                  delivery_point=d6y_point,
                                   delivery_cost=d6y_cost,
                                   city=city,
                                   cu_first_name=cu_first_name,
@@ -608,6 +610,20 @@ class Service_Checkout_View(APIView):
                     'redirect': payment_url
                 }
         return Parameter.value_of('message_wrong_input', 'Пожалуйста, правильно введите данные')
+
+
+class Service_DeliveryPoints_View(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    @api_response
+    def get(request, city_uuid: str):
+        city_uuid = deep_unquote(city_uuid)
+        try:
+            city = City.objects.get(pk=city_uuid)
+            return {'delivery-points': Cdek().points(city_code=city.code, type='PVZ')}
+        except Exception as e:
+            raise Http404 from e
 
 
 class Service_CityList_View(APIView):

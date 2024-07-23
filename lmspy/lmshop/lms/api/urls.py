@@ -24,6 +24,7 @@ urlpatterns = [
     # -- service API --
     path('service/estimate-scart/', views.Service_EstimateSCart_View.as_view(), name='service_estimate_scart'),
     path('service/checkout/', views.Service_Checkout_View.as_view(), name='service_checkout'),
+    path('service/cities/<str:city_uuid>/delivery-points/', views.Service_DeliveryPoints_View.as_view(), name='service_dp_list'),
     path('service/cities/<str:filter>/', views.Service_CityList_View.as_view(), name='service_city_list'),
     path('service/streets/<str:city_uuid>/<str:street>/', views.Service_Hints_View.as_view(), name='service_hint_streets'),
     path('service/buildings/<str:city_uuid>/<str:street>/<str:building>/', views.Service_Hints_View.as_view(), name='service_hint_buildings'),

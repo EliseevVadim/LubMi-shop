@@ -280,7 +280,8 @@ class City(DbItem):
 
 class Order(DbItem):
     class DeliveryService(models.TextChoices):
-        cd = D6Y.CD, "СДЭК"
+        cd = D6Y.CD, "СДЭК (до двери)"
+        cp = D6Y.CP, "СДЭК (ПВЗ)"
         pr = D6Y.PR, "Почта России"
 
     class Status(models.IntegerChoices):
@@ -307,6 +308,7 @@ class Order(DbItem):
     delivery_order_json = models.TextField(null=True, blank=True)                               # -- данные заказа на доставку --
     delivery_supplements_json = models.TextField(null=True, blank=True)                         # -- дополнительные данные заказа на доставку --
     delivery_supplements_file = models.BinaryField(null=True, blank=True)                       # -- файл дополнительных данных заказа на доставку --
+    delivery_point = models.CharField(null=True, max_length=15)                                 # -- код ПВЗ СДЭК
     cu_first_name = models.CharField(max_length=150)                                            # -- имя --
     cu_last_name = models.CharField(max_length=150)                                             # -- фамилия --
     cu_phone = models.CharField(null=True, max_length=50, validators=[Tunable.validate_phone])  # -- телефон --
@@ -314,13 +316,13 @@ class Order(DbItem):
     cu_country = models.CharField(max_length=2, default='RU')                                   # -- код страны --
     cu_city_uuid = models.UUIDField(null=True)                                                  # -- город --
     cu_city = models.CharField(max_length=100)                                                  # -- город --
-    cu_city_region = models.CharField(null=True, max_length=100)                                # -- город --
-    cu_city_subregion = models.CharField(null=True, max_length=100)                             # -- город --
-    cu_street = models.CharField(max_length=200)                                                # -- улица --
-    cu_building = models.CharField(max_length=50)                                               # -- здание --
-    cu_entrance = models.CharField(max_length=50)                                               # -- подъезд --
-    cu_floor = models.CharField(max_length=50)                                                  # -- этаж --
-    cu_apartment = models.CharField(max_length=50)                                              # -- квартира/офис --
+    cu_city_region = models.CharField(null=True, max_length=100)                                # -- регион --
+    cu_city_subregion = models.CharField(null=True, max_length=100)                             # -- район --
+    cu_street = models.CharField(null=True, max_length=200)                                     # -- улица --
+    cu_building = models.CharField(null=True, max_length=50)                                    # -- здание --
+    cu_entrance = models.CharField(null=True, max_length=50)                                    # -- подъезд --
+    cu_floor = models.CharField(null=True, max_length=50)                                       # -- этаж --
+    cu_apartment = models.CharField(null=True, max_length=50)                                   # -- квартира/офис --
     cu_fullname = models.CharField(max_length=250)                                              # -- полное имя заказчика --
     cu_confirm = models.BooleanField(default=False)                                             # -- поставил галочку про конфиденциальность? --
     items: QuerySet                                                                             # -- компоненты, Just for IDE syntax analyzer --
@@ -383,18 +385,40 @@ class Order(DbItem):
     @property
     def total_units(self):
         return self.items.aggregate(total=Sum(F('quantity')))["total"]
-    
+
     @property
     def delivery_address(self):
-        return f"""Нас. пункт: {self.cu_city}, Улица: {self.cu_street}, Здание: {self.cu_building}, Подъезд: {self.cu_entrance}, Этаж: {self.cu_floor}, Квартира/офис: {self.cu_apartment}"""
+        def o(prefix, value):
+            nonlocal items
+            items += [f'{prefix}: {value}'] if value else []
+        items = []
+        o('Нас. пункт', self.cu_city),
+        o('Улица', self.cu_street),
+        o('Здание', self.cu_building),
+        o('Подъезд', self.cu_entrance),
+        o('Этаж', self.cu_floor),
+        o('Квартира/офис', self.cu_apartment)
+        return ", ".join(items)
 
     @property
     def delivery_address_short(self):
-        return f"""{self.cu_city}, {self.cu_street}, д. {self.cu_building}, кв. {self.cu_apartment}"""
+        def o(prefix, value):
+            nonlocal items
+            items += [f'{prefix}. {value}'] if value else []
+        items = [f'{self.cu_city}', f'{self.cu_street}']
+        o('д', self.cu_building)
+        o('кв', self.cu_apartment)
+        return ", ".join(items)
 
     @property
     def delivery_address_in_city(self):
-        return f"""{self.cu_street}, д. {self.cu_building}, кв. {self.cu_apartment}"""
+        def o(prefix, value):
+            nonlocal items
+            items += [f'{prefix}. {value}'] if value else []
+        items = [f'{self.cu_street}']
+        o('д', self.cu_building)
+        o('кв', self.cu_apartment)
+        return ", ".join(items)
 
     @property
     def width(self):

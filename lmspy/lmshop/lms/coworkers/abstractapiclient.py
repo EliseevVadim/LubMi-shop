@@ -6,22 +6,21 @@ from lms.models import Coworker
 from urllib.parse import quote
 
 
-class ApiClient:
-    def __init__(self, key, address, client_id, client_secret):
-        self._key = key
+class AbstractApiClient:
+    def __init__(self, address, client_id, client_secret):
         self._address = address
         self._client_id = client_id
         self._client_secret = client_secret
 
     uuid_re = re.compile("^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$")
 
+    @property
+    def key(self):
+        return None
+
     @staticmethod
     def _quoted(kwargs):
         return {quote(str(k)): quote(str(v)) for k, v in kwargs.items()}
-
-    @property
-    def key(self):
-        return self._key
 
     @property
     def address(self):
@@ -59,7 +58,7 @@ class ApiClient:
                 self.func_url(func),
                 auth=self.basic_auth,
                 headers=self.compose_headers("application/x-www-form-urlencoded", headers),
-                data=ApiClient._quoted(kwargs)
+                data=AbstractApiClient._quoted(kwargs)
             ).json()
             return result
 
@@ -89,7 +88,7 @@ class ApiClient:
                 self.func_url(func),
                 auth=self.basic_auth,
                 headers=self.compose_headers("application/x-www-form-urlencoded", headers),
-                params=ApiClient._quoted(kwargs)
+                params=AbstractApiClient._quoted(kwargs)
             ).json()
             return result
 
@@ -99,7 +98,7 @@ class ApiClient:
                 url,
                 auth=self.basic_auth,
                 headers=self.compose_headers("application/x-www-form-urlencoded", headers),
-                params=ApiClient._quoted(kwargs)
+                params=AbstractApiClient._quoted(kwargs)
             )
             return result
 
@@ -134,17 +133,17 @@ class ApiClient:
     @staticmethod
     @functools.lru_cache
     def _country_code_():
-        return ApiClient._max_len_(2)
+        return AbstractApiClient._max_len_(2)
 
     @staticmethod
     @functools.lru_cache
     def _str_255_():
-        return ApiClient._max_len_(255)
+        return AbstractApiClient._max_len_(255)
 
     @staticmethod
     @functools.lru_cache
     def _uuid_():
-        return lambda v: bool(ApiClient.uuid_re.match(v))
+        return lambda v: bool(AbstractApiClient.uuid_re.match(v))
 
     @staticmethod
     @functools.lru_cache

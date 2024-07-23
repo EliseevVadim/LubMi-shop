@@ -25,7 +25,7 @@
         {% endif %}
         <tr><td>Заказчик:</td><td>{{order.cu_fullname}}</td></tr>
         <tr><td>Служба доставки:</td><td>{{order.get_delivery_service_display}}</td></tr>
-        <tr><td>Адрес доставки:</td><td>Нас. пункт: {{order.cu_city}}{%if order.cu_region%}, {{order.cu_region}}{%endif%}{%if order.cu_subregion%}, {{order.cu_subregion}}{%endif%},<br/>улица: {{order.cu_street}}, здание: {{order.cu_building}}, подъезд: {{order.cu_entrance}}, этаж: {{order.cu_floor}}, квартира/офис: {{order.cu_apartment}}</td></tr>
+        <tr><td>Адрес доставки:</td><td>{{order.delivery_address}}</td></tr>
         {% if order.delivery_service == "cd" %}
         <tr><td>Код города СДЭК:</td><td>{{order.city.code}}</td></tr>
         {% endif %}

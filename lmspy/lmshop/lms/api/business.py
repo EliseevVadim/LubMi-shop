@@ -8,7 +8,7 @@ from django.conf import settings
 from customerinfo.customerinfo import CustomerInfo
 from lms.coworkers.yookassa import Yookassa
 from lms.models import NotificationRequest, Order, AvailableSize
-from lms.utils import send_message_via_telegram, make_ds
+from lms.utils import send_message_via_telegram, ds_factory
 
 
 def create_notify_request(email, phone, ppk, size, info: CustomerInfo):
@@ -114,7 +114,7 @@ def ensure_order_delivery_supplements_exist(order_id):
 
     if order.status != Order.Status.payment_paid:
         return "Недопустимый статус заказа"
-    ds = make_ds(order.delivery_service)
+    ds = ds_factory(order.delivery_service)
     if not order.delivery_order_json:
         dvo, error = ds.create_delivery_order(order)
         if not dvo or error:
