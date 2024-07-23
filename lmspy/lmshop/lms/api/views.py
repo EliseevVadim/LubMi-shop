@@ -502,6 +502,7 @@ class Service_Checkout_View(APIView):
         data = {k: escape(v) for k, v in request.data.items()}
         try:
             d6y_service, \
+                d6y_point, \
                 cu_first_name, \
                 cu_last_name, \
                 cu_phone, \
@@ -515,14 +516,15 @@ class Service_Checkout_View(APIView):
                 cu_apartment, \
                 cu_fullname, \
                 cu_confirm = D6Y(data["delivery"]), \
+                optional("delivery_point"), \
                 data["cu_first_name"], \
                 data["cu_last_name"], \
                 data["cu_phone"], \
                 optional("cu_country", "RU"), \
                 data["cu_city_uuid"], \
                 data["cu_city"], \
-                data["cu_street"], \
-                data["cu_building"], \
+                optional("cu_street"), \
+                optional("cu_building"), \
                 optional("cu_entrance"), \
                 optional("cu_floor"), \
                 optional("cu_apartment"), \
@@ -533,14 +535,13 @@ class Service_Checkout_View(APIView):
         except ValueError:
             return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
         if d6y_service and \
+                ((d6y_service == D6Y.CP and d6y_point) or (d6y_service != D6Y.CP and cu_street and cu_building)) and \
                 cu_first_name and \
                 cu_last_name and \
                 cu_phone and \
                 cu_country and \
                 cu_city_uuid and \
                 cu_city and \
-                cu_street and \
-                cu_building and \
                 cu_fullname and \
                 cu_confirm:
             if cu_confirm != "True":
@@ -558,6 +559,7 @@ class Service_Checkout_View(APIView):
             try:
                 with transaction.atomic():
                     order = Order(delivery_service=d6y_service,
+                                  delivery_point=d6y_point,
                                   delivery_cost=d6y_cost,
                                   city=city,
                                   cu_first_name=cu_first_name,
