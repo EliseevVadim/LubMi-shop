@@ -611,6 +611,20 @@ class Service_Checkout_View(APIView):
         return Parameter.value_of('message_wrong_input', 'Пожалуйста, правильно введите данные')
 
 
+class Service_DeliveryPoints_View(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    @api_response
+    def get(request, city_uuid: str):
+        city_uuid = deep_unquote(city_uuid)
+        try:
+            city = City.objects.get(pk=city_uuid)
+            return {'delivery-points': Cdek().points(city_code=city.code, type='PVZ')}
+        except Exception as e:
+            raise Http404 from e
+
+
 class Service_CityList_View(APIView):
     permission_classes = [AllowAny]
 

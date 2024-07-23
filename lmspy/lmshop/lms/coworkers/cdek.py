@@ -166,8 +166,8 @@ class Cdek(AbstractApiClient):
     def regions(self, country_codes: str = "RU", **kwargs):
         return self._get("location/regions", country_codes=country_codes, **kwargs)
 
-    def points(self, country_codes: str = "RU", **kwargs):
-        return self._get("deliverypoints", country_codes=country_codes, **kwargs)
+    def points(self, **kwargs):
+        return self._get("deliverypoints", **kwargs)
 
     def tariff(self,
                tariff_code,         # -- Код тарифа, integer --
