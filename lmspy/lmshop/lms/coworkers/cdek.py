@@ -1,7 +1,7 @@
 import httpx
 from httpx import TransportError
 from lms.api.decorators import sleep_and_retry_on_except, sleep_after
-from lms.coworkers.apiclient import ApiClient
+from lms.coworkers.abstractapiclient import AbstractApiClient
 from lms.deco import copy_result
 from lms.models import Coworker, Order, Parameter
 from urllib.parse import quote
@@ -9,13 +9,15 @@ from django.core.cache import cache
 from lms.defines import D6Y
 
 
-class Cdek(ApiClient):
+class Cdek(AbstractApiClient):
     def __init__(self):
-        super().__init__(
-            D6Y.CD,
-            Coworker.setting(D6Y.CD, "api_address"),
-            Coworker.setting(D6Y.CD, "client_id"),
-            Coworker.setting(D6Y.CD, "client_secret"))
+        super().__init__(self.setting("api_address"),
+                         self.setting("client_id"),
+                         self.setting("client_secret"))
+
+    @property
+    def key(self):
+        return D6Y.CD
 
     @property
     @copy_result

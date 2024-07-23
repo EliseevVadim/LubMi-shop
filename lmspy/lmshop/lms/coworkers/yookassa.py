@@ -1,11 +1,11 @@
 from enum import StrEnum
 from httpx import TransportError
-from lms.coworkers.apiclient import ApiClient
+from lms.coworkers.abstractapiclient import AbstractApiClient
 from lms.models import Coworker, Order
 from django.urls import reverse
 
 
-class Yookassa(ApiClient):
+class Yookassa(AbstractApiClient):
     class PaymentStatus(StrEnum):
         PENDING = "pending"
         WAITING_FOR_CAPTURE = "waiting_for_capture"
@@ -19,10 +19,13 @@ class Yookassa(ApiClient):
 
     def __init__(self):
         super().__init__(
-            "yo",
-            Coworker.setting("yo", "api_address"),
-            Coworker.setting("yo", "account_id"),
-            Coworker.setting("yo", "secret_key"))
+            self.setting("api_address"),
+            self.setting("account_id"),
+            self.setting("secret_key"))
+
+    @property
+    def key(self):
+        return 'yo'
 
     @staticmethod
     def amount(**kwargs):

@@ -1,20 +1,24 @@
 from httpx import TransportError
 
 from lms.api.decorators import sleep_and_retry_on_except, sleep_after
-from lms.coworkers.apiclient import ApiClient
+from lms.coworkers.abstractapiclient import AbstractApiClient
 from lms.coworkers.dadata import DaData
 from lms.models import Coworker, City, Order
 from lms.defines import D6Y
 
 
-class PostRu(ApiClient):
+class PostRu(AbstractApiClient):
     acceptable_quality_codes = frozenset({'GOOD', 'POSTAL_BOX', 'ON_DEMAND', 'UNDEF_05'})
     acceptable_validation_codes = frozenset({'VALIDATED', 'OVERRIDDEN' 'CONFIRMED_MANUALLY'})
 
     def __init__(self):
-        super().__init__(D6Y.PR, Coworker.setting(D6Y.PR, "api_address"), "", "")
+        super().__init__(self.setting("api_address"), "", "")
         self._access_token = self.setting("access_token")
         self._user_auth_key = self.setting("user_auth_key")
+
+    @property
+    def key(self):
+        return D6Y.PR
 
     @staticmethod
     def _get_postal_code(lat, lon, rad=5000.0):
