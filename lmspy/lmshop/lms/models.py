@@ -308,6 +308,7 @@ class Order(DbItem):
     delivery_order_json = models.TextField(null=True, blank=True)                               # -- данные заказа на доставку --
     delivery_supplements_json = models.TextField(null=True, blank=True)                         # -- дополнительные данные заказа на доставку --
     delivery_supplements_file = models.BinaryField(null=True, blank=True)                       # -- файл дополнительных данных заказа на доставку --
+    delivery_point = models.CharField(null=True, max_length=15)                                 # -- код ПВЗ СДЭК
     cu_first_name = models.CharField(max_length=150)                                            # -- имя --
     cu_last_name = models.CharField(max_length=150)                                             # -- фамилия --
     cu_phone = models.CharField(null=True, max_length=50, validators=[Tunable.validate_phone])  # -- телефон --
@@ -317,8 +318,8 @@ class Order(DbItem):
     cu_city = models.CharField(max_length=100)                                                  # -- город --
     cu_city_region = models.CharField(null=True, max_length=100)                                # -- регион --
     cu_city_subregion = models.CharField(null=True, max_length=100)                             # -- район --
-    cu_street = models.CharField(max_length=200)                                                # -- улица --
-    cu_building = models.CharField(max_length=50)                                               # -- здание --
+    cu_street = models.CharField(null=True, max_length=200)                                     # -- улица --
+    cu_building = models.CharField(null=True, max_length=50)                                    # -- здание --
     cu_entrance = models.CharField(null=True, max_length=50)                                    # -- подъезд --
     cu_floor = models.CharField(null=True, max_length=50)                                       # -- этаж --
     cu_apartment = models.CharField(null=True, max_length=50)                                   # -- квартира/офис --
