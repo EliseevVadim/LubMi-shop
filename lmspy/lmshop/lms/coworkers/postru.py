@@ -3,7 +3,7 @@ from httpx import TransportError
 from lms.api.decorators import sleep_and_retry_on_except, sleep_after
 from lms.coworkers.abstractapiclient import AbstractApiClient
 from lms.coworkers.dadata import DaData
-from lms.models import Coworker, City, Order
+from lms.models import City, Order
 from lms.defines import D6Y
 
 
