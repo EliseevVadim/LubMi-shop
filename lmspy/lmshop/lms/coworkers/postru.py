@@ -274,7 +274,7 @@ class PostRu(AbstractApiClient):
             # "with-packaging": True,
             # "with-simple-notice": True,
             # "wo-mail-rank": True
-        }
+        } | ({"ecom-data": {"delivery-point-index": r.delivery_point}} if r.delivery_point else {})
 
     @sleep_after()
     @sleep_and_retry_on_except(1, (None, "Не удалось создать заказ на доставку"))
