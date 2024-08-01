@@ -698,8 +698,25 @@ class Service_PokePrWithAStick_View(APIView):
         city = deep_unquote(city)
         street = deep_unquote(street)
         building = deep_unquote(building)
+        pr = ds_factory(D6Y.PR)
         return {
-            "address-is-valid": PostRu().poke_with_a_stick(region, city, street, building)
+            "address-is-valid": pr.poke_with_a_stick(region, city, street, building)
+        }
+
+
+class Service_PrPostOffices_View(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    @api_response
+    def get(request, region: str, city: str, street: str, building: str = None):
+        region = deep_unquote(region)
+        city = deep_unquote(city)
+        street = deep_unquote(street)
+        building = deep_unquote(building)
+        pr = ds_factory(D6Y.PR)
+        return {
+            "post-offices": pr.post_offices(region, city, street, building)
         }
 
 

@@ -308,7 +308,7 @@ class Order(DbItem):
     delivery_order_json = models.TextField(null=True, blank=True)                               # -- данные заказа на доставку --
     delivery_supplements_json = models.TextField(null=True, blank=True)                         # -- дополнительные данные заказа на доставку --
     delivery_supplements_file = models.BinaryField(null=True, blank=True)                       # -- файл дополнительных данных заказа на доставку --
-    delivery_point = models.CharField(null=True, max_length=15)                                 # -- код ПВЗ СДЭК
+    delivery_point = models.CharField(null=True, max_length=15)                                 # -- код ПВЗ СДЭК или отделения Почты России
     cu_first_name = models.CharField(max_length=150)                                            # -- имя --
     cu_last_name = models.CharField(max_length=150)                                             # -- фамилия --
     cu_phone = models.CharField(null=True, max_length=50, validators=[Tunable.validate_phone])  # -- телефон --
