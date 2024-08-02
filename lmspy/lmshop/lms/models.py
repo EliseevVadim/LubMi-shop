@@ -390,7 +390,7 @@ class Order(DbItem):
     def delivery_address(self):
         def o(prefix, value):
             nonlocal items
-            items += [f'{prefix}: {value}'] if value else []
+            items += [f'{prefix}: {value}'] if value and value != str(None) else []
         items = []
         o('Нас. пункт', self.cu_city),
         o('Улица', self.cu_street),
@@ -398,13 +398,14 @@ class Order(DbItem):
         o('Подъезд', self.cu_entrance),
         o('Этаж', self.cu_floor),
         o('Квартира/офис', self.cu_apartment)
+        o('Пункт выдачи', self.delivery_point)
         return ", ".join(items)
 
     @property
     def delivery_address_short(self):
         def o(prefix, value):
             nonlocal items
-            items += [f'{prefix}. {value}'] if value else []
+            items += [f'{prefix}. {value}'] if value and value != str(None) else []
         items = [f'{self.cu_city}', f'{self.cu_street}']
         o('д', self.cu_building)
         o('кв', self.cu_apartment)
@@ -414,7 +415,7 @@ class Order(DbItem):
     def delivery_address_in_city(self):
         def o(prefix, value):
             nonlocal items
-            items += [f'{prefix}. {value}'] if value else []
+            items += [f'{prefix}. {value}'] if value and value != str(None) else []
         items = [f'{self.cu_street}']
         o('д', self.cu_building)
         o('кв', self.cu_apartment)
