@@ -47,24 +47,11 @@ class PostRu(AbstractApiClient):
     def basic_auth(self):
         return None
 
-    def func_url(self, func: str):
-        return func if func.lower().startswith('http://') or func.lower().startswith('https://') else super().func_url(func)
-
-    def _post_office_func(self, func: str):
-        url: str = self.address
-        url = url.replace("1.0","postoffice/1.0")
-        return f"{url}/{func}"
-
     def compose_headers(self, content_type, headers):
         x_user_auth = {"X-User-Authorization": f"Basic {self.user_key}"} if self.user_key else {}
         cont_type = {"Content-type": "application/json;charset=UTF-8"}
         accept = {"Accept": "application/json;charset=UTF-8"}
         return super().compose_headers(content_type, headers) | x_user_auth | cont_type | accept
-
-    @on_except_return([])
-    def post_offices(self, region: str, city: str, street: str, building: str):
-        result = self._get(self._post_office_func("by-address"), address=", ".join([region, city, street, building]), top=10)
-        return [self._get(self._post_office_func(code)) for code in result["postoffices"]]
 
     def tariff(self, postal_code, price, weight):
         tf = self._post_json(
@@ -274,7 +261,7 @@ class PostRu(AbstractApiClient):
             # "with-packaging": True,
             # "with-simple-notice": True,
             # "wo-mail-rank": True
-        } | ({"ecom-data": {"delivery-point-index": r.delivery_point}} if r.delivery_point else {})
+        }
 
     @sleep_after()
     @sleep_and_retry_on_except(1, (None, "Не удалось создать заказ на доставку"))
