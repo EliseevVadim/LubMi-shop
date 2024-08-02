@@ -29,7 +29,6 @@ urlpatterns = [
     path('service/streets/<str:city_uuid>/<str:street>/', views.Service_Hints_View.as_view(), name='service_hint_streets'),
     path('service/buildings/<str:city_uuid>/<str:street>/<str:building>/', views.Service_Hints_View.as_view(), name='service_hint_buildings'),
     path('service/pr/poke-with-a-stick/<str:region>/<str:city>/<str:street>/<str:building>/', views.Service_PokePrWithAStick_View.as_view(), name='service_poke_pr'),
-    path('service/pr/post-offices/<str:region>/<str:city>/<str:street>/<str:building>/', views.Service_PrPostOffices_View.as_view(), name='service_pr_post_offices'),
     path('service/about-items/', views.Service_AboutItemList_View.as_view(), name='service_about_items'),
     # -- Yookassa API --
     path('yookassa/payments/<str:payment_id>/status/', views.Yookassa_PaymentStatus_View.as_view(), name='yo_payment_status'),
