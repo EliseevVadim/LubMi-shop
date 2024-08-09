@@ -1,22 +1,31 @@
 from enum import StrEnum
-from typing import List
-
-from httpx import TransportError
-
 from lms.api.decorators import on_exception_returns
 from lms.coworkers.abstractapiclient import AbstractApiClient
 from lms.models import Order
-from django.urls import reverse
 from hashlib import sha256
 
 
 class TBank(AbstractApiClient):
     class PaymentStatus(StrEnum):
-        PENDING = "pending"
-        WAITING_FOR_CAPTURE = "waiting_for_capture"
-        SUCCEEDED = "succeeded"
-        CANCELED = "canceled"
-        UNKNOWN = "unknown"
+        NEW = "NEW"                             # MAPI получил запрос Init. После этого, он создает новый платеж в статусе NEW и возвращает обратно его идентификатор в параметре PaymentId и ссылку на платежную форму в параметре PaymentURL
+        FORM_SHOWED = "FORM_SHOWED"             # Мерчант перенаправил клиента на страницу платежной формы PaymentURL и страница загрузилась у клиента в браузере
+        AUTHORIZING = "AUTHORIZING"             # Платеж обрабатывается MAPI и платежной системой
+        TDS_CHECKING = "3DS_CHECKING"           # Платеж проходит проверку 3D-Secure
+        TDS_CHECKED = "3DS_CHECKED"             # Платеж успешно прошел проверку 3D-Secure
+        AUTHORIZED = "AUTHORIZED"               # Платеж авторизован, деньги заблокированы на карте клиента
+        CONFIRMING = "CONFIRMING"               # Подтверждение платежа обрабатывается MAPI и платежной системой
+        CONFIRMED = "CONFIRMED"                 # Платеж подтвержден, деньги списаны с карты клиента
+        REVERSING = "REVERSING"                 # Мерчант запросил отмену авторизованного, но еще не подтвержденного платежа. Возврат обрабатывается MAPI и платежной системой
+        PARTIAL_REVERSED = "PARTIAL_REVERSED"   # Частичный возврат по авторизованному платежу завершился успешно
+        REVERSED = "REVERSED"                   # Полный возврат по авторизованному платежу завершился успешно
+        REFUNDING = "REFUNDING"                 # Мерчант запросил отмену подтвержденного платежа. Возврат обрабатывается MAPI и платежной системой
+        PARTIAL_REFUNDED = "PARTIAL_REFUNDED"   # Частичный возврат по подтвержденному платежу завершился успешно
+        REFUNDED = "REFUNDED"                   # Полный возврат по подтвержденному платежу завершился успешно
+        CANCELED = "CANCELED"                   # Мерчант отменил платеж
+        DEADLINE_EXPIRED = "DEADLINE_EXPIRED"   # 1. Клиент не завершил платеж в срок жизни ссылки на платежную форму PaymentURL. Этот срок Мерчант настраивает в Личном кабинете, либо передает в параметре RedirectDueDate при вызове метода Init 2. Платеж не прошел проверку 3D-Secure в срок
+        REJECTED = "REJECTED"                   # Банк отклонил платеж
+        AUTH_FAIL = "AUTH_FAIL"                 # Платеж завершился ошибкой или не прошел проверку 3D-Secure
+        UNKNOWN = "UNKNOWN"                     # Не удалось проверить статус платежа
 
     final_payment_statuses = frozenset((PaymentStatus.SUCCEEDED, PaymentStatus.CANCELED))
     transient_payment_statuses = frozenset((PaymentStatus.PENDING, PaymentStatus.UNKNOWN))
@@ -25,32 +34,20 @@ class TBank(AbstractApiClient):
     def __init__(self):
         super().__init__(
             self.setting("api_address"),
-            self.setting("account_id"),
-            self.setting("secret_key"))
+            self.setting("terminal_key"),
+            self.setting("terminal_secret"))
 
     @property
     def key(self):
         return 'tb'
 
-    @staticmethod
-    def amount(**kwargs):
-        return TBank._construct_arg_({
-            "value": (str, None),  # -- Сумма
-            "currency": (str, TBank._max_len_(3)),  # -- Валюта
-        }, **kwargs)
+    @property
+    def access_token(self):
+        return self.setting("access_token")
 
-    @staticmethod
-    def confirmation(**kwargs):
-        return TBank._construct_arg_({
-            "type": (str, TBank._one_of_("redirect")),  # -- Тип
-            "return_url": (str, None),  # -- Адрес
-        }, **kwargs)
-
-    @staticmethod
-    def metadata(**kwargs):
-        return TBank._construct_arg_({
-            "order_uuid": (str, TBank._uuid_()),  # -- UUID ордера
-        }, **kwargs)
+    @property
+    def authorization(self):
+        return f"Bearer {self.access_token}"
 
     @staticmethod
     def _signature(data: dict, password: str, types):
@@ -63,17 +60,28 @@ class TBank(AbstractApiClient):
         data["Token"] = self._signature(data, password, types)
         return data
 
-    @on_exception_returns((None, None, "Проблемы с созданием платежа"))
-    def create_payment(self, order: Order, summ, do_reverse_addr: bool = True):
+    def _prepare_json(self, json):
+        return self._sign(json, self.client_secret)
+
+    @on_exception_returns((None, None, 'Проблемы с созданием платежа'))
+    def create_payment(self, order: Order, summ, *args):
         order_uuid = str(order.uuid)
-        bj_page = f"lms:{self.setting('back_jump_page')}"
-        bj_addr = f'{self.setting("back_jump_address")}{reverse(bj_page)}' if do_reverse_addr else self.setting("back_jump_address")
-        res = self._post_json("payments", {"Idempotence-Key": order_uuid}, amount=self.amount(value=f"{summ:.2f}", currency="RUB"),
-                              confirmation=self.confirmation(type="redirect", return_url=bj_addr), capture=True,
-                              description=f"Заказ #{order_uuid}", metadata=self.metadata(order_uuid=order_uuid))
-        return (res["id"], res["confirmation"]["confirmation_url"], None) if res["status"] == self.PaymentStatus.PENDING else bad_result
+        res = self._post_json('Init', {},
+                              TerminalKey=self.client_id,
+                              Amount=int(summ * 100),
+                              OrderId=order_uuid,
+                              Description=f'Заказ #{order_uuid}',
+                              PayType='O',
+                              DATA={'OperationInitiatorType': 0})
+        if res['Success']:
+            return res['PaymentId'], res['PaymentURL'], None
+        raise ValueError(res)
 
     @on_exception_returns((PaymentStatus.UNKNOWN, None))
     def get_payment_status(self, payment_id):
-        payment = self._get(f"payments/{payment_id}")
-        return self.PaymentStatus(payment["status"]), payment
+        info = self._post_json('GetState', {},
+                               TerminalKey=self.client_id,
+                               PaymentId=payment_id)
+        if info['Success']:
+            return info['Status'], info
+        raise ValueError(info)

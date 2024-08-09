@@ -62,13 +62,16 @@ class AbstractApiClient:
             ).json()
             return result
 
+    def _prepare_json(self, json):
+        return json
+
     def _post_json(self, func, headers=None, **kwargs):
         with httpx.Client() as client:
             result = client.post(
                 self.func_url(func),
                 auth=self.basic_auth,
                 headers=self.compose_headers("application/json;charset=UTF-8", headers),
-                json=kwargs["_json_"] if "_json_" in kwargs else kwargs
+                json=self._prepare_json(kwargs["_json_"] if "_json_" in kwargs else kwargs)
             ).json()
             return result
 
@@ -78,7 +81,7 @@ class AbstractApiClient:
                 self.func_url(func),
                 auth=self.basic_auth,
                 headers=self.compose_headers("application/json;charset=UTF-8", headers),
-                json=kwargs["_json_"] if "_json_" in kwargs else kwargs
+                json=self._prepare_json(kwargs["_json_"] if "_json_" in kwargs else kwargs)
             ).json()
             return result
 
