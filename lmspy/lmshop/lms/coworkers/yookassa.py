@@ -1,7 +1,9 @@
 from enum import StrEnum
 from httpx import TransportError
+
+from lms.api.decorators import on_exception_returns
 from lms.coworkers.abstractapiclient import AbstractApiClient
-from lms.models import Coworker, Order
+from lms.models import Order
 from django.urls import reverse
 
 
@@ -47,28 +49,17 @@ class Yookassa(AbstractApiClient):
             "order_uuid": (str, Yookassa._uuid_()),  # -- UUID ордера
         }, **kwargs)
 
+    @on_exception_returns((None, None, "Проблемы с созданием платежа"))
     def create_payment(self, order: Order, summ, do_reverse_addr: bool = True):
         order_uuid = str(order.uuid)
         bj_page = f"lms:{self.setting('back_jump_page')}"
         bj_addr = f'{self.setting("back_jump_address")}{reverse(bj_page)}' if do_reverse_addr else self.setting("back_jump_address")
-        bad_result = None, None, "Проблемы с созданием платежа"
-        try:
-            res = self._post_json("payments", {"Idempotence-Key": order_uuid}, amount=Yookassa.amount(value=f"{summ:.2f}", currency="RUB"),
-                                  confirmation=Yookassa.confirmation(type="redirect", return_url=bj_addr), capture=True,
-                                  description=f"Заказ #{order_uuid}", metadata=Yookassa.metadata(order_uuid=order_uuid))
-        except TransportError:
-            return bad_result
-        try:
-            return (res["id"], res["confirmation"]["confirmation_url"], None) if res["status"] == Yookassa.PaymentStatus.PENDING else bad_result
-        except KeyError:
-            return bad_result
+        res = self._post_json("payments", {"Idempotence-Key": order_uuid}, amount=Yookassa.amount(value=f"{summ:.2f}", currency="RUB"),
+                              confirmation=Yookassa.confirmation(type="redirect", return_url=bj_addr), capture=True,
+                              description=f"Заказ #{order_uuid}", metadata=Yookassa.metadata(order_uuid=order_uuid))
+        return (res["id"], res["confirmation"]["confirmation_url"], None) if res["status"] == Yookassa.PaymentStatus.PENDING else bad_result
 
+    @on_exception_returns((PaymentStatus.UNKNOWN, None))
     def get_payment_status(self, payment_id):
-        try:
-            payment = self._get(f"payments/{payment_id}")
-        except TransportError:
-            return Yookassa.PaymentStatus.UNKNOWN, None
-        try:
-            return Yookassa.PaymentStatus(payment["status"]), payment
-        except (KeyError, ValueError):
-            return Yookassa.PaymentStatus.UNKNOWN, None
+        payment = self._get(f"payments/{payment_id}")
+        return Yookassa.PaymentStatus(payment["status"]), payment

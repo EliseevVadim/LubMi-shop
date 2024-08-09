@@ -33,4 +33,7 @@ urlpatterns = [
     # -- Yookassa API --
     path('yookassa/payments/<str:payment_id>/status/', views.Yookassa_PaymentStatus_View.as_view(), name='yo_payment_status'),
     path('yookassa/payments-hook/', views.Yookassa_PaymentsWebHook_View.as_view(), name='yo_payments_webhook'),
+    # -- TBank API --
+    path('t-bank/payments/<str:payment_id>/status/', views.TBank_PaymentStatus_View.as_view(), name='tb_payment_status'),
+    path('t-bank/payments-hook/', views.TBank_PaymentsWebHook_View.as_view(), name='tb_payments_webhook'),
 ]
