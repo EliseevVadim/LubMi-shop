@@ -1,6 +1,6 @@
 from httpx import TransportError
 
-from lms.api.decorators import sleep_and_retry_on_except, sleep_after, on_except_return
+from lms.api.decorators import on_exception_sleep_and_retry, sleep_after, on_exception_returns
 from lms.coworkers.abstractapiclient import AbstractApiClient
 from lms.coworkers.dadata import DaData
 from lms.models import City, Order
@@ -264,7 +264,7 @@ class PostRu(AbstractApiClient):
         }
 
     @sleep_after()
-    @sleep_and_retry_on_except(1, (None, "Не удалось создать заказ на доставку"))
+    @on_exception_sleep_and_retry(1, (None, "Не удалось создать заказ на доставку"))
     def create_delivery_order(self, r: Order):
         if not (jsn := self._order_as_json(r)):
             raise ValueError(jsn)
@@ -274,7 +274,7 @@ class PostRu(AbstractApiClient):
         return result, None
 
     @sleep_after()
-    @sleep_and_retry_on_except(1, (None, "Не удалось создать документы к заказу на доставку"))
+    @on_exception_sleep_and_retry(1, (None, "Не удалось создать документы к заказу на доставку"))
     def create_delivery_supplements(self, r):
         @sleep_after()
         def wait():
@@ -287,7 +287,7 @@ class PostRu(AbstractApiClient):
         return result, None
 
     @sleep_after()
-    @sleep_and_retry_on_except(1, (None, "Не удалось загрузить документы к заказу на доставку"))
+    @on_exception_sleep_and_retry(1, (None, "Не удалось загрузить документы к заказу на доставку"))
     def get_delivery_supplements_file(self, r, _):
         url = self.func_url(f"forms/{r['result-ids'][0]}/f7pdf")
         result = self._get_file(url)

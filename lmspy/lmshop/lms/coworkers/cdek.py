@@ -1,6 +1,6 @@
 import httpx
 from httpx import TransportError
-from lms.api.decorators import sleep_and_retry_on_except, sleep_after
+from lms.api.decorators import on_exception_sleep_and_retry, sleep_after
 from lms.coworkers.abstractapiclient import AbstractApiClient
 from lms.deco import copy_result
 from lms.models import Coworker, Order, Parameter
@@ -233,7 +233,7 @@ class Cdek(AbstractApiClient):
         }
 
     @sleep_after()
-    @sleep_and_retry_on_except(1, (None, "Не удалось создать заказ на доставку"))
+    @on_exception_sleep_and_retry(1, (None, "Не удалось создать заказ на доставку"))
     def create_delivery_order(self, r: Order):
         jsn = self._order_as_json(r)
         if not jsn:
@@ -244,7 +244,7 @@ class Cdek(AbstractApiClient):
         return result, None
 
     @sleep_after()
-    @sleep_and_retry_on_except(1, (None, "Не удалось создать документы к заказу на доставку"))
+    @on_exception_sleep_and_retry(1, (None, "Не удалось создать документы к заказу на доставку"))
     def create_delivery_supplements(self, r):
         result = self._post_json("print/orders", orders=[Cdek.order(order_uuid=r['entity']['uuid'])], copy_count=2)
         if 'entity' not in result or 'uuid' not in result['entity']:
@@ -252,7 +252,7 @@ class Cdek(AbstractApiClient):
         return result, None
 
     @sleep_after()
-    @sleep_and_retry_on_except(1, (None, "Не удалось загрузить документы к заказу на доставку"))
+    @on_exception_sleep_and_retry(1, (None, "Не удалось загрузить документы к заказу на доставку"))
     def get_delivery_supplements_file(self, _, r):
         @sleep_after()
         def wait():

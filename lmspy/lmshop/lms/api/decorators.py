@@ -20,7 +20,7 @@ def api_response(func):
     return deco
 
 
-def on_except_return(value):
+def on_exception_returns(value):
     def decorator(function):
         def wrapper(*args, **kwargs):
             try:
@@ -31,7 +31,7 @@ def on_except_return(value):
     return decorator
 
 
-def sleep_and_retry_on_except(timeout, result_on_fail, retry=5, validator=lambda _: True):
+def on_exception_sleep_and_retry(timeout, result_on_fail, retry=5, validator=lambda _: True):
     def decorator(function):
         def wrapper(*args, **kwargs):
             attempts = 0
