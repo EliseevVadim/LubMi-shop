@@ -27,9 +27,7 @@ class TBank(AbstractApiClient):
         AUTH_FAIL = "AUTH_FAIL"                 # Платеж завершился ошибкой или не прошел проверку 3D-Secure
         UNKNOWN = "UNKNOWN"                     # Не удалось проверить статус платежа
 
-    final_payment_statuses = frozenset((PaymentStatus.SUCCEEDED, PaymentStatus.CANCELED))
-    transient_payment_statuses = frozenset((PaymentStatus.PENDING, PaymentStatus.UNKNOWN))
-    payment_statuses_are_notification_subjects = final_payment_statuses | {PaymentStatus.UNKNOWN}
+    final_payment_statuses = frozenset((PaymentStatus.CONFIRMED, PaymentStatus.CANCELED, PaymentStatus.DEADLINE_EXPIRED, PaymentStatus.REJECTED, PaymentStatus.AUTH_FAIL))
 
     def __init__(self):
         super().__init__(

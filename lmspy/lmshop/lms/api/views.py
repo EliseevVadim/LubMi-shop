@@ -8,11 +8,11 @@ from decimal import Decimal
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework import generics
-from lms.api.business import create_notify_request, check_payment_life_cycle_is_completed
+from lms.api.business import create_notify_request, check_yo_payment_life_cycle_is_completed, check_tb_payment_life_cycle_is_completed
 from lms.api.decorators import api_response, with_scart_from_request
 from lms.coworkers.cdek import Cdek
 from lms.coworkers.dadata import DaData
-from lms.coworkers.postru import PostRu
+from lms.coworkers.tbank import TBank
 from lms.models import Product, AvailableSize, Parameter, Order, OrderItem, City, AboutItem
 from lms.api.serializers import ProductSerializer, ProductDetailSerializer, AboutItemSerializer
 from lms.utils import deep_unquote, ds_factory
@@ -595,7 +595,7 @@ class Service_Checkout_View(APIView):
                         size.quantity -= quantity  # or IntegrityError on constraint
                         size.save()
                     order.save()
-                    payment_id, payment_url, error = Yookassa().create_payment(order, price + Decimal(d6y_cost), False)
+                    payment_id, payment_url, error = TBank().create_payment(order, price + Decimal(d6y_cost), False)
                     if error:
                         raise ValueError(error)  # breaks transaction!
                     order.payment_id = payment_id
@@ -704,21 +704,6 @@ class Service_PokePrWithAStick_View(APIView):
         }
 
 
-class Yookassa_PaymentStatus_View(APIView):
-    permission_classes = [AllowAny]
-
-    @staticmethod
-    @api_response
-    def get(request, payment_id: str):
-        payment_id = deep_unquote(payment_id)
-        status, payment = Yookassa().get_payment_status(payment_id)
-        check_payment_life_cycle_is_completed(payment_id, status, payment)
-        return {
-            'status': status,
-            'payment': payment,
-        }
-
-
 class Service_AboutItemList_View(generics.ListAPIView):
     queryset = AboutItem.objects.all()
     serializer_class = AboutItemSerializer
@@ -727,6 +712,21 @@ class Service_AboutItemList_View(generics.ListAPIView):
     def get(self, *args, **kwargs):
         return {
             "items": super().get(*args, **kwargs).data
+        }
+
+
+class Yookassa_PaymentStatus_View(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    @api_response
+    def get(request, payment_id: str):
+        payment_id = deep_unquote(payment_id)
+        status, payment = Yookassa().get_payment_status(payment_id)
+        check_yo_payment_life_cycle_is_completed(payment_id, status, payment)
+        return {
+            'status': status,
+            'payment': payment,
         }
 
 
@@ -743,7 +743,39 @@ class Yookassa_PaymentsWebHook_View(APIView):
                 payment = data["object"]
                 payment_id = payment["id"]
                 payment_status = Yookassa.PaymentStatus(payment["status"])
-                check_payment_life_cycle_is_completed(payment_id, payment_status, payment)
+                check_yo_payment_life_cycle_is_completed(payment_id, payment_status, payment)
         except (KeyError, ValueError):
             logging.warning(f"Ошибка в структуре уведомления: {data}")
         return {}
+
+
+class TBank_PaymentStatus_View(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    @api_response
+    def get(request, payment_id: str):
+        payment_id = deep_unquote(payment_id)
+        status, payment = TBank().get_payment_status(payment_id)
+        check_tb_payment_life_cycle_is_completed(payment_id, status, payment)
+        return {
+            'status': status,
+            'payment': payment,
+        }
+
+
+class TBank_PaymentsWebHook_View(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    def post(request, _=None):  # Проверялось только локально!
+        data = request.data
+        logging.info(f'Получено уведомление: {data}')
+        try:
+            payment_id = data['PaymentId']
+            payment_status = TBank.PaymentStatus(data['Status'])
+            check_tb_payment_life_cycle_is_completed(payment_id, payment_status, data)
+        except (KeyError, ValueError):
+            logging.warning(f"Ошибка в структуре уведомления: {data}")
+        return "OK"
+
