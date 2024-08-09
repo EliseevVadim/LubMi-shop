@@ -1,6 +1,5 @@
 from enum import StrEnum
 from uuid import UUID
-
 from lms.api.decorators import on_exception_returns
 from lms.coworkers.abstractapiclient import AbstractApiClient
 from lms.models import Order
@@ -64,11 +63,11 @@ class TBank(AbstractApiClient):
         return self._sign(json, self.client_secret)
 
     @staticmethod
-    def ep2ip(ep: str):
+    def ep2ip(ep: str) -> str:
         return str(UUID(int=int(ep)))
 
     @staticmethod
-    def ip2ep(ip: str):
+    def ip2ep(ip: str) -> str:
         return str(UUID(ip).int)
 
     @on_exception_returns((None, None, 'Проблемы с созданием платежа'))
