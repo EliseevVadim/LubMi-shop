@@ -1,4 +1,6 @@
 from enum import StrEnum
+from uuid import UUID
+
 from lms.api.decorators import on_exception_returns
 from lms.coworkers.abstractapiclient import AbstractApiClient
 from lms.models import Order
@@ -61,6 +63,14 @@ class TBank(AbstractApiClient):
     def _prepare_json(self, json):
         return self._sign(json, self.client_secret)
 
+    @staticmethod
+    def ep2ip(ep: str):
+        return str(UUID(int=int(ep)))
+
+    @staticmethod
+    def ip2ep(ip: str):
+        return str(UUID(ip).int)
+
     @on_exception_returns((None, None, 'Проблемы с созданием платежа'))
     def create_payment(self, order: Order, summ, *args):
         order_uuid = str(order.uuid)
@@ -72,14 +82,14 @@ class TBank(AbstractApiClient):
                               PayType='O',
                               DATA={'OperationInitiatorType': 0})
         if res['Success']:
-            return res['PaymentId'], res['PaymentURL'], None
+            return self.ep2ip(res['PaymentId']), res['PaymentURL'], None
         raise ValueError(res)
 
     @on_exception_returns((PaymentStatus.UNKNOWN, None))
     def get_payment_status(self, payment_id):
         info = self._post_json('GetState', {},
                                TerminalKey=self.client_id,
-                               PaymentId=payment_id)
+                               PaymentId=self.ip2ep(payment_id))
         if info['Success']:
             return info['Status'], info
         raise ValueError(info)
