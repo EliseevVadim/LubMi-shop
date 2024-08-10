@@ -1,6 +1,7 @@
 from urllib.request import Request
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.http import HttpResponse
 from django.utils.html import escape
 from django.shortcuts import get_object_or_404, Http404
 from django.db import transaction, IntegrityError
@@ -8,7 +9,7 @@ from decimal import Decimal
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework import generics
-from lms.api.business import create_notify_request, check_yo_payment_life_cycle_is_completed, check_tb_payment_life_cycle_is_completed
+from lms.api.business import create_notify_request, yo__check_payment_life_cycle_is_completed, tb__check_payment_life_cycle_is_completed
 from lms.api.decorators import api_response, with_scart_from_request
 from lms.coworkers.cdek import Cdek
 from lms.coworkers.dadata import DaData
@@ -723,7 +724,7 @@ class Yookassa_PaymentStatus_View(APIView):
     def get(request, payment_id: str):
         payment_id = deep_unquote(payment_id)
         status, payment = Yookassa().get_payment_status(payment_id)
-        check_yo_payment_life_cycle_is_completed(payment_id, status, payment)
+        yo__check_payment_life_cycle_is_completed(payment_id, status, payment)
         return {
             'status': status,
             'payment': payment,
@@ -743,7 +744,7 @@ class Yookassa_PaymentsWebHook_View(APIView):
                 payment = data["object"]
                 payment_id = payment["id"]
                 payment_status = Yookassa.PaymentStatus(payment["status"])
-                check_yo_payment_life_cycle_is_completed(payment_id, payment_status, payment)
+                yo__check_payment_life_cycle_is_completed(payment_id, payment_status, payment)
         except (KeyError, ValueError):
             logging.warning(f"Ошибка в структуре уведомления: {data}")
         return {}
@@ -757,7 +758,7 @@ class TBank_PaymentStatus_View(APIView):
     def get(request, payment_id: str):
         payment_id = deep_unquote(payment_id)
         status, payment = TBank().get_payment_status(payment_id)
-        check_tb_payment_life_cycle_is_completed(payment_id, status, payment)
+        tb__check_payment_life_cycle_is_completed(payment_id, status, payment)
         return {
             'status': status,
             'payment': payment,
@@ -772,10 +773,10 @@ class TBank_PaymentsWebHook_View(APIView):
         data = request.data
         logging.info(f'Получено уведомление: {data}')
         try:
-            payment_id = TBank.ep2ip(data['PaymentId'])
+            payment_id = TBank.pid2uuid(data['PaymentId'])
             payment_status = TBank.PaymentStatus(data['Status'])
-            check_tb_payment_life_cycle_is_completed(payment_id, payment_status, data)
+            tb__check_payment_life_cycle_is_completed(payment_id, payment_status, data)
         except (KeyError, ValueError):
             logging.warning(f"Ошибка в структуре уведомления: {data}")
-        return "OK"
+        return HttpResponse("OK")
 
