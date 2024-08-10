@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework import generics
 from lms.api.business import create_notify_request, yo__check_payment_life_cycle_is_completed, tb__check_payment_life_cycle_is_completed
-from lms.api.decorators import api_response, with_scart_from_request
+from lms.api.decorators import api_response, with_scart_from_request, on_exception_returns
 from lms.coworkers.cdek import Cdek
 from lms.coworkers.dadata import DaData
 from lms.coworkers.tbank import TBank
@@ -769,14 +769,12 @@ class TBank_PaymentsWebHook_View(APIView):
     permission_classes = [AllowAny]
 
     @staticmethod
+    @on_exception_returns(HttpResponse(content="", status=404))
     def post(request, _=None):  # Проверялось только локально!
         data = request.data
         logging.info(f'Получено уведомление: {data}')
-        try:
-            payment_id = TBank.pid2uuid(data['PaymentId'])
-            payment_status = TBank.PaymentStatus(data['Status'])
-            tb__check_payment_life_cycle_is_completed(payment_id, payment_status, data)
-        except (KeyError, ValueError):
-            logging.warning(f"Ошибка в структуре уведомления: {data}")
+        payment_id = TBank.pid2uuid(data['PaymentId'])
+        payment_status = TBank.PaymentStatus(data['Status'])
+        tb__check_payment_life_cycle_is_completed(payment_id, payment_status, data)
         return HttpResponse("OK")
 
