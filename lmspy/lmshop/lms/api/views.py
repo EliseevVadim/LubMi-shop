@@ -777,5 +777,5 @@ class TBank_PaymentsWebHook_View(APIView):
         payment_id = TBank.pid2uuid(data['PaymentId'])
         payment_status = TBank.PaymentStatus(data['Status'])
         tb__check_payment_life_cycle_is_completed(payment_id, payment_status, data)
-        return HttpResponse("OK")
+        return HttpResponse('OK')
 
