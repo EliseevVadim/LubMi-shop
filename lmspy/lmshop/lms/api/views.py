@@ -1,6 +1,7 @@
 from urllib.request import Request
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.http import HttpResponse
 from django.utils.html import escape
 from django.shortcuts import get_object_or_404, Http404
 from django.db import transaction, IntegrityError
@@ -777,5 +778,5 @@ class TBank_PaymentsWebHook_View(APIView):
             tb__check_payment_life_cycle_is_completed(payment_id, payment_status, data)
         except (KeyError, ValueError):
             logging.warning(f"Ошибка в структуре уведомления: {data}")
-        return "OK"
+        return HttpResponse("OK")
 
