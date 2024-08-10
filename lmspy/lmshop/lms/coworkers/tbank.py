@@ -1,3 +1,4 @@
+import logging
 from enum import StrEnum
 from uuid import UUID
 from lms.api.decorators import on_exception_returns
@@ -29,6 +30,7 @@ class TBank(AbstractApiClient):
         UNKNOWN = "UNKNOWN"                     # Не удалось проверить статус платежа
 
     final_payment_statuses = frozenset((PaymentStatus.CONFIRMED, PaymentStatus.CANCELED, PaymentStatus.DEADLINE_EXPIRED, PaymentStatus.REJECTED, PaymentStatus.AUTH_FAIL))
+    sign_types = frozenset({bool, int, float, str})
 
     def __init__(self):
         super().__init__(
@@ -41,6 +43,14 @@ class TBank(AbstractApiClient):
         return 'tb'
 
     @property
+    def terminal_key(self):
+        return self.client_id
+
+    @property
+    def terminal_password(self):
+        return self.client_secret
+
+    @property
     def access_token(self):
         return self.setting("access_token")
 
@@ -49,18 +59,23 @@ class TBank(AbstractApiClient):
         return f"Bearer {self.access_token}"
 
     @staticmethod
-    def _signature(data: dict, password: str, types):
-        condition = lambda k, v: type(k) is str and type(v) in types
+    def _signature(data: dict, password: str):
+        condition = lambda k, v: type(k) is str and k != 'Token' and type(v) in TBank.sign_types
         convert = lambda v: v if type(v) is not bool else ('false', 'true')[v]
         values = {'Password': password} | {k: convert(v) for k, v in data.items() if condition(k, v)}
         return sha256(bytearray("".join(f"{values[k]}" for k in sorted(values.keys())), 'utf-8')).hexdigest()
 
-    def _sign(self, data: dict, password: str, types=frozenset({bool, int, float, str})):
-        data["Token"] = self._signature(data, password, types)
+    def _sign(self, data: dict, password: str):
+        data['Token'] = self._signature(data, password)
         return data
 
     def _prepare_json(self, json):
-        return self._sign(json, self.client_secret)
+        return self._sign(json, self.terminal_password)
+
+    def check(self, data: dict):
+        if self._signature(data, self.terminal_password) != data['Token']:
+            logging.warning(f'Проверка подписи провалена: {data}')
+            raise ValueError(data)
 
     @staticmethod
     def pid2uuid(pid: str) -> str:
@@ -74,7 +89,7 @@ class TBank(AbstractApiClient):
     def create_payment(self, order: Order, summ, *args):
         order_uuid = str(order.uuid)
         res = self._post_json('Init', {},
-                              TerminalKey=self.client_id,
+                              TerminalKey=self.terminal_key,
                               Amount=int(summ * 100),
                               OrderId=order_uuid,
                               Description=f'Заказ #{order_uuid}',
@@ -87,7 +102,7 @@ class TBank(AbstractApiClient):
     @on_exception_returns((PaymentStatus.UNKNOWN, None))
     def get_payment_status(self, payment_id):
         info = self._post_json('GetState', {},
-                               TerminalKey=self.client_id,
+                               TerminalKey=self.terminal_key,
                                PaymentId=self.uuid2pid(payment_id))
         if info['Success']:
             return info['Status'], info
