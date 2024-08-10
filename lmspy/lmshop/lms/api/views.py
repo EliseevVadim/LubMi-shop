@@ -773,7 +773,7 @@ class TBank_PaymentsWebHook_View(APIView):
     def post(request, _=None):  # Проверялось только локально!
         data = request.data
         logging.info(f'Получено уведомление: {data}')
-        TBank().check(data)
+        TBank().check_signature(data)
         payment_id = TBank.pid2uuid(data['PaymentId'])
         payment_status = TBank.PaymentStatus(data['Status'])
         tb__check_payment_life_cycle_is_completed(payment_id, payment_status, data)
