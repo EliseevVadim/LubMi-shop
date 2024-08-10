@@ -30,7 +30,8 @@ class TBank(AbstractApiClient):
         UNKNOWN = "UNKNOWN"                     # Не удалось проверить статус платежа
 
     final_payment_statuses = frozenset((PaymentStatus.CONFIRMED, PaymentStatus.CANCELED, PaymentStatus.DEADLINE_EXPIRED, PaymentStatus.REJECTED, PaymentStatus.AUTH_FAIL))
-    sign_types = frozenset({bool, int, float, str})
+    considerable_types = frozenset({bool, int, float, str})
+    token_key = 'Token'
 
     def __init__(self):
         super().__init__(
@@ -60,20 +61,20 @@ class TBank(AbstractApiClient):
 
     @staticmethod
     def _signature(data: dict, password: str):
-        condition = lambda k, v: type(k) is str and k != 'Token' and type(v) in TBank.sign_types
+        filter = lambda k, v: type(k) is str and k != TBank.token_key and type(v) in TBank.considerable_types
         convert = lambda v: v if type(v) is not bool else ('false', 'true')[v]
-        values = {'Password': password} | {k: convert(v) for k, v in data.items() if condition(k, v)}
+        values = {'Password': password} | {k: convert(v) for k, v in data.items() if filter(k, v)}
         return sha256(bytearray("".join(f"{values[k]}" for k in sorted(values.keys())), 'utf-8')).hexdigest()
 
     def _sign(self, data: dict, password: str):
-        data['Token'] = self._signature(data, password)
+        data[self.token_key] = self._signature(data, password)
         return data
 
     def _prepare_json(self, json):
         return self._sign(json, self.terminal_password)
 
-    def check(self, data: dict):
-        if self._signature(data, self.terminal_password) != data['Token']:
+    def check_signature(self, data: dict):
+        if self._signature(data, self.terminal_password) != data[self.token_key]:
             logging.warning(f'Проверка подписи провалена: {data}')
             raise ValueError(data)
 
@@ -82,8 +83,8 @@ class TBank(AbstractApiClient):
         return str(UUID(int=int(pid)))
 
     @staticmethod
-    def uuid2pid(ip: str) -> str:
-        return str(UUID(ip).int)
+    def uuid2pid(uuid: str) -> str:
+        return str(UUID(uuid).int)
 
     @on_exception_returns((None, None, 'Проблемы с созданием платежа'))
     def create_payment(self, order: Order, summ, *args):
