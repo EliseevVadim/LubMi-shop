@@ -1,7 +1,7 @@
 from django.templatetags.static import static
 from django.utils.safestring import mark_safe
 from customerinfo.customerinfo import CustomerInfo
-from lms.api.business import check_yo_payment_life_cycle_is_completed
+from lms.api.business import yo__check_payment_life_cycle_is_completed
 from lms.coworkers.yookassa import Yookassa
 from lms.forms import ShortCustomerInfoForm
 from lms.models import Parameter
@@ -20,7 +20,7 @@ def payment_processor(request):
         yo = Yookassa()
         payment_status, payment = yo.get_payment_status(payment_id)
         try:
-            check_yo_payment_life_cycle_is_completed(payment_id, payment_status, payment)
+            yo__check_payment_life_cycle_is_completed(payment_id, payment_status, payment)
             return {
                 "payment_id": payment_id,
                 "payment_status": payment_status.value,
