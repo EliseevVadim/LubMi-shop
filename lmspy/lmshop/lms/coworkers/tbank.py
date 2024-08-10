@@ -63,11 +63,11 @@ class TBank(AbstractApiClient):
         return self._sign(json, self.client_secret)
 
     @staticmethod
-    def ep2ip(ep: str) -> str:
-        return str(UUID(int=int(ep)))
+    def pid2uuid(pid: str) -> str:
+        return str(UUID(int=int(pid)))
 
     @staticmethod
-    def ip2ep(ip: str) -> str:
+    def uuid2pid(ip: str) -> str:
         return str(UUID(ip).int)
 
     @on_exception_returns((None, None, 'Проблемы с созданием платежа'))
@@ -81,14 +81,14 @@ class TBank(AbstractApiClient):
                               PayType='O',
                               DATA={'OperationInitiatorType': 0})
         if res['Success']:
-            return self.ep2ip(res['PaymentId']), res['PaymentURL'], None
+            return self.pid2uuid(res['PaymentId']), res['PaymentURL'], None
         raise ValueError(res)
 
     @on_exception_returns((PaymentStatus.UNKNOWN, None))
     def get_payment_status(self, payment_id):
         info = self._post_json('GetState', {},
                                TerminalKey=self.client_id,
-                               PaymentId=self.ip2ep(payment_id))
+                               PaymentId=self.uuid2pid(payment_id))
         if info['Success']:
             return info['Status'], info
         raise ValueError(info)

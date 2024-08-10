@@ -772,7 +772,7 @@ class TBank_PaymentsWebHook_View(APIView):
         data = request.data
         logging.info(f'Получено уведомление: {data}')
         try:
-            payment_id = TBank.ep2ip(data['PaymentId'])
+            payment_id = TBank.pid2uuid(data['PaymentId'])
             payment_status = TBank.PaymentStatus(data['Status'])
             tb__check_payment_life_cycle_is_completed(payment_id, payment_status, data)
         except (KeyError, ValueError):
