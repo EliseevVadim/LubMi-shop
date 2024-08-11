@@ -1,7 +1,6 @@
 from urllib.request import Request
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.http import HttpResponse
 from django.utils.html import escape
 from django.shortcuts import get_object_or_404, Http404
 from django.db import transaction, IntegrityError
@@ -769,7 +768,7 @@ class TBank_PaymentsWebHook_View(APIView):
     permission_classes = [AllowAny]
 
     @staticmethod
-    @on_exception_returns(HttpResponse(content='', status=404))
+    @on_exception_returns(TBank.notification_response_bad)
     def post(request, _=None):  # Проверялось только локально!
         data = request.data
         logging.info(f'Получено уведомление: {data}')
@@ -777,5 +776,5 @@ class TBank_PaymentsWebHook_View(APIView):
         payment_id = TBank.pid2uuid(data['PaymentId'])
         payment_status = TBank.PaymentStatus(data['Status'])
         tb__check_payment_life_cycle_is_completed(payment_id, payment_status, data)
-        return HttpResponse('OK')
+        return TBank.notification_response_good
 
