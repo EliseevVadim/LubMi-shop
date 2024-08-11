@@ -1,6 +1,7 @@
 import logging
 from enum import StrEnum
 from uuid import UUID
+from django.http import HttpResponse
 from lms.api.decorators import on_exception_returns
 from lms.coworkers.abstractapiclient import AbstractApiClient
 from lms.models import Order
@@ -32,6 +33,8 @@ class TBank(AbstractApiClient):
     final_payment_statuses = frozenset((PaymentStatus.CONFIRMED, PaymentStatus.CANCELED, PaymentStatus.DEADLINE_EXPIRED, PaymentStatus.REJECTED, PaymentStatus.AUTH_FAIL))
     considerable_types = frozenset({bool, int, float, str})
     token_key = 'Token'
+    notification_response_good = HttpResponse('OK')
+    notification_response_bad = HttpResponse(content='', status=404)
 
     def __init__(self):
         super().__init__(
