@@ -91,6 +91,7 @@ class TBank(AbstractApiClient):
 
     @on_exception_returns((None, None, 'Проблемы с созданием платежа'))
     def create_payment(self, order: Order, summ, *args):
+        opt = lambda k, v: {k: v} if v is not None else {}
         order_uuid = str(order.uuid)
         res = self._post_json('Init', {},
                               TerminalKey=self.terminal_key,
@@ -98,6 +99,7 @@ class TBank(AbstractApiClient):
                               OrderId=order_uuid,
                               Description=f'Заказ #{order_uuid}',
                               PayType='O',
+                              **(opt("NotificationURL", self.setting("notification-url")) | opt("SuccessURL", self.setting("success-url")) | opt("FailURL", self.setting("fail-url"))),
                               DATA={'OperationInitiatorType': 0})
         if res['Success']:
             return self.pid2uuid(res['PaymentId']), res['PaymentURL'], None
