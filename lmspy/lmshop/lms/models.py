@@ -460,6 +460,10 @@ class OrderItem(DbItem):
     def price_cents(self):
         return int(self.price.amount * 100)
 
+    @property
+    def amount_cents(self):
+        return self.price_cents * self.quantity
+
     def __str__(self):
         return f'{self.title} ({self.quantity})'
 

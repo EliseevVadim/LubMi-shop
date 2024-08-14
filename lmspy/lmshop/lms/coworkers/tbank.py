@@ -105,7 +105,7 @@ class TBank(AbstractApiClient):
                                   "Taxation": self.setting("taxation", "usn_income"),
                                   "Items": [{
                                       "Name": item.title,
-                                      "Price": item.price.amount,
+                                      "Price": item.price_cents,
                                       "Quantity": "",
                                       "Amount": "",
                                       "PaymentMethod": "",
