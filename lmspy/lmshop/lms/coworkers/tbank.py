@@ -99,8 +99,20 @@ class TBank(AbstractApiClient):
                               OrderId=order_uuid,
                               Description=f'Заказ #{order_uuid}',
                               PayType='O',
+                              DATA={'OperationInitiatorType': 0},
                               **(opt("NotificationURL", self.setting("notification-url")) | opt("SuccessURL", self.setting("success-url")) | opt("FailURL", self.setting("fail-url"))),
-                              DATA={'OperationInitiatorType': 0})
+                              Receipt={
+                                  "Taxation": self.setting("taxation", "usn_income"),
+                                  "Items": [{
+                                      "Name": item.title,
+                                      "Price": item.price.amount,
+                                      "Quantity": "",
+                                      "Amount": "",
+                                      "PaymentMethod": "",
+                                      "PaymentObject": "",
+                                      "Tax": "",
+                                  } for item in order.items.all()]
+                              } | opt("Email", order.cu_email) | opt("Phone", order.cu_phone))
         if res['Success']:
             return self.pid2uuid(res['PaymentId']), res['PaymentURL'], None
         raise ValueError(res)

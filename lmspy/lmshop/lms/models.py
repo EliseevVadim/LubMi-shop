@@ -456,6 +456,10 @@ class OrderItem(DbItem):
     def color(self):
         return (self.product.color or "Не указан") if self.product else "Недоступен"
 
+    @property
+    def price_cents(self):
+        return int(self.price.amount * 100)
+
     def __str__(self):
         return f'{self.title} ({self.quantity})'
 
