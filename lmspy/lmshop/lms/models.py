@@ -422,6 +422,10 @@ class Order(DbItem):
         return ", ".join(items)
 
     @property
+    def delivery_cost_cents(self):
+        return int(self.delivery_cost.amount * 100)
+
+    @property
     def width(self):
         return Parameter.construct_from_value_of("value_package_width", int, settings.PACKAGE_WIDTH_CM)
 
@@ -455,6 +459,14 @@ class OrderItem(DbItem):
     @property
     def color(self):
         return (self.product.color or "Не указан") if self.product else "Недоступен"
+
+    @property
+    def price_cents(self):
+        return int(self.price.amount * 100)
+
+    @property
+    def amount_cents(self):
+        return self.price_cents * self.quantity
 
     def __str__(self):
         return f'{self.title} ({self.quantity})'
