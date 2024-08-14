@@ -422,6 +422,10 @@ class Order(DbItem):
         return ", ".join(items)
 
     @property
+    def delivery_cost_cents(self):
+        return int(self.delivery_cost.amount * 100)
+
+    @property
     def width(self):
         return Parameter.construct_from_value_of("value_package_width", int, settings.PACKAGE_WIDTH_CM)
 

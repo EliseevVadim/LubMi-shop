@@ -99,20 +99,28 @@ class TBank(AbstractApiClient):
                               OrderId=order_uuid,
                               Description=f'Заказ #{order_uuid}',
                               PayType='O',
-                              DATA={'OperationInitiatorType': 0},
                               **(opt("NotificationURL", self.setting("notification-url")) | opt("SuccessURL", self.setting("success-url")) | opt("FailURL", self.setting("fail-url"))),
-                              Receipt={
+                              DATA={'OperationInitiatorType': 0},
+                              Receipt=opt("Email", order.cu_email) | opt("Phone", order.cu_phone) | {
                                   "Taxation": self.setting("taxation", "usn_income"),
                                   "Items": [{
                                       "Name": item.title,
                                       "Price": item.price_cents,
-                                      "Quantity": "",
-                                      "Amount": "",
-                                      "PaymentMethod": "",
-                                      "PaymentObject": "",
-                                      "Tax": "",
-                                  } for item in order.items.all()]
-                              } | opt("Email", order.cu_email) | opt("Phone", order.cu_phone))
+                                      "Quantity": item.quantity,
+                                      "Amount": item.amount_cents,
+                                      "PaymentMethod": self.setting("payment-method", "full_prepayment"),
+                                      "PaymentObject": self.setting("goods-payment-object", "commodity"),
+                                      "Tax": self.setting("goods-tax", "none"),
+                                  } for item in order.items.all()] + [{
+                                      "Name": "Доставка",
+                                      "Price": order.delivery_cost_cents,
+                                      "Quantity": 1,
+                                      "Amount": order.delivery_cost_cents,
+                                      "PaymentMethod": self.setting("payment-method", "full_prepayment"),
+                                      "PaymentObject": self.setting("service-payment-object", "service"),
+                                      "Tax": self.setting("service-tax", "none"),
+                                  }]
+                              })
         if res['Success']:
             return self.pid2uuid(res['PaymentId']), res['PaymentURL'], None
         raise ValueError(res)
