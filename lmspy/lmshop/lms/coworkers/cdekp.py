@@ -35,3 +35,11 @@ class CdekP(Cdek):
                     amount=i.quantity) for i in r.items.all()])],
             "print": "waybill",
         }
+
+    @staticmethod
+    def validate_destination(arg):
+        match arg:
+            case {"street": street, "building": building, "delivery_point": d6y_point} if street is None and building is None and d6y_point is not None:
+                return True
+            case _:
+                return False

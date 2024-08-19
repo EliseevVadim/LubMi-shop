@@ -266,3 +266,11 @@ class Cdek(AbstractApiClient):
             raise ValueError(result.is_success)
         return result.content, None
 
+    @staticmethod
+    def validate_destination(arg):
+        match arg:
+            case {"street": street, "building": building, "delivery_point": d6y_point} if street is not None and building is not None and d6y_point is None:
+                return True
+            case _:
+                return False
+

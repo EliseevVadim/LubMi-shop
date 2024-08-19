@@ -534,8 +534,14 @@ class Service_Checkout_View(APIView):
             return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
         except ValueError:
             return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
-        if d6y_service and \
-                ((d6y_service == D6Y.CP and d6y_point) or (d6y_service != D6Y.CP and cu_street and cu_building)) and \
+        if (ds_instance := ds_factory(d6y_service) if d6y_service else None) is not None and \
+                ds_instance.validate_destination({
+                    "street": cu_street,
+                    "building": cu_building,
+                    "entrance": cu_entrance,
+                    "floor": cu_floor,
+                    "apartment": cu_apartment,
+                    "delivery_point": d6y_point}) and \
                 cu_first_name and \
                 cu_last_name and \
                 cu_phone and \
@@ -553,7 +559,7 @@ class Service_Checkout_View(APIView):
                 city = City.objects.get(pk=cu_city_uuid)
             except (ValidationError, City.DoesNotExist):
                 return "Пункт назначения заказа неверен."
-            d6y_cost, d6y_time, error = ds_factory(d6y_service).delivery_cost(city.code, scart["weight"], price=price)
+            d6y_cost, d6y_time, error = ds_instance.delivery_cost(city.code, scart["weight"], price=price)
             if error:
                 return error
             try:
