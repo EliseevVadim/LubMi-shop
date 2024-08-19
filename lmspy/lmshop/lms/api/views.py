@@ -534,7 +534,7 @@ class Service_Checkout_View(APIView):
             return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
         except ValueError:
             return Parameter.value_of('message_data_retrieving_error', 'Произошла ошибка при извлечении данных, мы работаем над этим...')
-        if (ds_instance := ds_factory(d6y_service) if d6y_service else None) is not None and \
+        if (ds_instance := ds_factory(d6y_service) if d6y_service in D6Y else None) is not None and \
                 ds_instance.validate_destination({
                     "street": cu_street,
                     "building": cu_building,

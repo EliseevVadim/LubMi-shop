@@ -39,7 +39,7 @@ class CdekP(Cdek):
     @staticmethod
     def validate_destination(arg):
         match arg:
-            case {"street": street, "building": building, "delivery_point": d6y_point} if street is None and building is None and d6y_point is not None:
+            case {"delivery_point": d6y_point, **wtf} if d6y_point is not None and set(wtf.values()) == {None}:
                 return True
             case _:
                 return False
