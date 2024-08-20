@@ -8,12 +8,25 @@ from .models import TelegramBot, City
 from functools import lru_cache
 from sys import float_info
 from urllib.parse import unquote
+from django.conf import settings
 
 
 def send_message_via_telegram(message: str):
     for bot in TelegramBot.objects.all():
         tg = Telegram(bot.token, frozenset(chat.cid for chat in bot.chats.all() if chat.active))
         tg.send(message)
+
+
+if settings.LOG_TG:
+    def log_tg(*args):
+        try:
+            for a in args:
+                send_message_via_telegram(f'{a}')
+        except:
+            pass
+else:
+    def log_tg(*_):
+        pass
 
 
 @lru_cache
