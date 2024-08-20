@@ -20,7 +20,7 @@ def send_message_via_telegram(message: str, markdown=True):
 
 
 if settings.LOG_TG:
-    @sleep_after(0.5)
+    @sleep_after(1)
     def log_tg(*args):
         try:
             send_message_via_telegram("\n".join(f'{a}' for a in args), False)
