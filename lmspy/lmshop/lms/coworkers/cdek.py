@@ -250,10 +250,7 @@ class Cdek(AbstractApiClient):
     @sleep_after()
     @on_exception_sleep_and_retry(1, (None, "Не удалось создать документы к заказу на доставку"))
     def create_delivery_supplements(self, r, logger):
-        logger("Запрос на создание транспортных документов:", {
-            'orders': [Cdek.order(order_uuid=r['entity']['uuid'])],
-            'copy_count': 2
-        })
+        logger("Запрос на создание транспортных документов для:", r['entity']['uuid'])
         result = self._post_json("print/orders", orders=[Cdek.order(order_uuid=r['entity']['uuid'])], copy_count=2)
         logger("Результат:", result)
         if 'entity' not in result or 'uuid' not in result['entity']:

@@ -1,4 +1,6 @@
 from math import radians, sin, acos, cos
+
+from .api.decorators import sleep_after
 from .coworkers.cdek import Cdek
 from .coworkers.cdekp import CdekP
 from .coworkers.postru import PostRu
@@ -11,17 +13,17 @@ from urllib.parse import unquote
 from django.conf import settings
 
 
-def send_message_via_telegram(message: str):
+def send_message_via_telegram(message: str, markdown=True):
     for bot in TelegramBot.objects.all():
         tg = Telegram(bot.token, frozenset(chat.cid for chat in bot.chats.all() if chat.active))
-        tg.send(message)
+        tg.send(message, markdown)
 
 
 if settings.LOG_TG:
+    @sleep_after(0.5)
     def log_tg(*args):
         try:
-            for a in args:
-                send_message_via_telegram(f'{a}')
+            send_message_via_telegram("\n".join(f'{a}' for a in args), False)
         except:
             pass
 else:

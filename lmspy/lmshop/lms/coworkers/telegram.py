@@ -7,13 +7,13 @@ class Telegram:
         self._token = token
         self._cids = cids
 
-    def send(self, message: str):
+    def send(self, message: str, markdown=True):
         def send_msg(token, cid, text):
             with httpx.Client() as client:
                 try:
                     url = f"https://api.telegram.org/bot{token}/sendMessage"
                     client.headers["Content-Type"] = "application/json"
-                    res = client.post(url, json={'chat_id': cid, 'parse_mode': 'Markdown', 'text': text})
+                    res = client.post(url, json={'chat_id': cid, 'text': text} | ({'parse_mode': 'Markdown'} if markdown else {}))
                     if res.is_error:
                         print(res.text)
                 except httpx.TransportError as e:
