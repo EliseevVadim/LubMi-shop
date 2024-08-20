@@ -496,7 +496,6 @@ class Service_Checkout_View(APIView):
         def optional(key, def_val=None):
             nonlocal data
             return data[key] if key in data else def_val
-
         for e in errors:
             return e["error-text"]
         data = {k: escape(v) for k, v in request.data.items()}
