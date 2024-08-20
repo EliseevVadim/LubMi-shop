@@ -29,7 +29,7 @@ def ensure_order_delivery_supplements_exist(order_id):
         return "Недопустимый статус заказа"
     ds = ds_factory(order.delivery_service)
     if not order.delivery_order_json:
-        dvo, error = ds.create_delivery_order(order, logger=log_tg)
+        dvo, error = ds.create_delivery_order(order, logger=log_tg)  # TODO kill logger
         if not dvo or error:
             return error or "Не удалось создать заказ"
         order.delivery_order_json = json.dumps(dvo)
@@ -38,7 +38,7 @@ def ensure_order_delivery_supplements_exist(order_id):
         dvo = json.loads(order.delivery_order_json)
 
     if not order.delivery_supplements_json:
-        dvs, error = ds.create_delivery_supplements(dvo, logger=log_tg)
+        dvs, error = ds.create_delivery_supplements(dvo, logger=log_tg)  # TODO kill logger
         if not dvs or error:
             return error or "Не удалось создать файл с транспортной документацией"
         order.delivery_supplements_json = json.dumps(dvs)
@@ -47,7 +47,7 @@ def ensure_order_delivery_supplements_exist(order_id):
         dvs = json.loads(order.delivery_supplements_json)
 
     if not order.delivery_supplements_file:
-        file, error = ds.get_delivery_supplements_file(dvo, dvs, logger=log_tg)
+        file, error = ds.get_delivery_supplements_file(dvo, dvs, logger=log_tg)  # TODO kill logger
         if not file or error:
             return error or "Не удалось загрузить файл с транспортной документацией"
         order.delivery_supplements_file = file

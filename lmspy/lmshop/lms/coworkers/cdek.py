@@ -234,7 +234,7 @@ class Cdek(AbstractApiClient):
 
     @sleep_after()
     @on_exception_sleep_and_retry(1, (None, "Не удалось создать заказ на доставку"))
-    def create_delivery_order(self, r: Order, logger):
+    def create_delivery_order(self, r: Order, logger):  # TODO kill logger
         jsn = self._order_as_json(r)
         if not jsn:
             raise ValueError(jsn)
@@ -249,7 +249,7 @@ class Cdek(AbstractApiClient):
 
     @sleep_after()
     @on_exception_sleep_and_retry(1, (None, "Не удалось создать документы к заказу на доставку"))
-    def create_delivery_supplements(self, r, logger):
+    def create_delivery_supplements(self, r, logger):  # TODO kill logger
         logger("Запрос на создание транспортных документов для:", r['entity']['uuid'])
         result = self._post_json("print/orders", orders=[Cdek.order(order_uuid=r['entity']['uuid'])], copy_count=2)
         logger("Результат:", result)
@@ -261,7 +261,7 @@ class Cdek(AbstractApiClient):
 
     @sleep_after()
     @on_exception_sleep_and_retry(1, (None, "Не удалось загрузить документы к заказу на доставку"))
-    def get_delivery_supplements_file(self, _, r, logger):
+    def get_delivery_supplements_file(self, _, r, logger):  # TODO kill logger
         @sleep_after()
         def wait():
             return None

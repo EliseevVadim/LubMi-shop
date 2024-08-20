@@ -265,7 +265,7 @@ class PostRu(AbstractApiClient):
 
     @sleep_after()
     @on_exception_sleep_and_retry(1, (None, "Не удалось создать заказ на доставку"))
-    def create_delivery_order(self, r: Order, **_):
+    def create_delivery_order(self, r: Order, **_):  # TODO kill **_
         if not (jsn := self._order_as_json(r)):
             raise ValueError(jsn)
         result = self._put_json("user/backlog", _json_=[jsn])
@@ -275,7 +275,7 @@ class PostRu(AbstractApiClient):
 
     @sleep_after()
     @on_exception_sleep_and_retry(1, (None, "Не удалось создать документы к заказу на доставку"))
-    def create_delivery_supplements(self, r, **_):
+    def create_delivery_supplements(self, r, **_):  # TODO kill **_
         @sleep_after()
         def wait():
             return None
@@ -288,7 +288,7 @@ class PostRu(AbstractApiClient):
 
     @sleep_after()
     @on_exception_sleep_and_retry(1, (None, "Не удалось загрузить документы к заказу на доставку"))
-    def get_delivery_supplements_file(self, r, _, **__):
+    def get_delivery_supplements_file(self, r, _, **__):  # TODO kill **__
         url = self.func_url(f"forms/{r['result-ids'][0]}/f7pdf")
         result = self._get_file(url)
         if not result.is_success:
