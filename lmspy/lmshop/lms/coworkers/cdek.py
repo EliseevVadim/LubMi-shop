@@ -142,13 +142,13 @@ class Cdek(AbstractApiClient):
     @staticmethod
     def recipient(**kwargs):
         return Cdek._construct_arg_({
-            "name": (str, Cdek._str_255_()),
-            "passport_series": (str, Cdek. _max_len_(4)),  # -- Серия паспорта    string(4)    нет
-            "passport_number": (str, Cdek. _max_len_(30)),  # -- Номер паспорта    string(30)    нет
-            "passport_date_of_issue": (str, Cdek._max_len_(10)),  # -- Дата выдачи паспорта    date(yyyy - MM - dd)    нет
-            "passport_organization": (str, Cdek. _str_255_()),  # -- Орган выдачи паспорта    string(255)    нет
-            "tin": (str, Cdek._max_len_(12)),  # -- ИНН Может содержать 10, либо 12 символов                 string(12)    нет
-            "passport_date_of_birth": (str, Cdek._max_len_(10)),  # -- Дата рождения    date(yyyy - MM - dd)    нет
+            "name": (str, Cdek._str_255_()),                        # -- ФИО --
+            "passport_series": (str, Cdek. _max_len_(4)),           # -- Серия паспорта    string(4)    нет
+            "passport_number": (str, Cdek. _max_len_(30)),          # -- Номер паспорта    string(30)    нет
+            "passport_date_of_issue": (str, Cdek._max_len_(10)),    # -- Дата выдачи паспорта    date(yyyy - MM - dd)    нет
+            "passport_organization": (str, Cdek. _str_255_()),      # -- Орган выдачи паспорта    string(255)    нет
+            "tin": (str, Cdek._max_len_(12)),                       # -- ИНН Может содержать 10, либо 12 символов                 string(12)    нет
+            "passport_date_of_birth": (str, Cdek._max_len_(10)),    # -- Дата рождения    date(yyyy - MM - dd)    нет
             "phones": (list, None),
             "number": (str, Cdek._str_255_()),
         }, **kwargs)
