@@ -1,5 +1,6 @@
 import json
 import logging
+from threading import Thread
 from django.urls import reverse
 from django.utils import timezone
 from django.conf import settings
@@ -16,6 +17,42 @@ def create_notify_request(email, phone, ppk, size, info: CustomerInfo):
     send_message_via_telegram(str(nrq))
     info.phone = phone or info.phone
     info.email = email or info.email
+
+
+def ensure_order_delivery_supplements_exist(order_id):
+    try:
+        order = Order.paid.get(slug=order_id)
+    except Order.DoesNotExist:
+        return f"Заказ {order_id} не найден"
+
+    if order.status != Order.Status.payment_paid:
+        return "Недопустимый статус заказа"
+    ds = ds_factory(order.delivery_service)
+    if not order.delivery_order_json:
+        dvo, error = ds.create_delivery_order(order)
+        if not dvo or error:
+            return error or "Не удалось создать заказ"
+        order.delivery_order_json = json.dumps(dvo)
+        order.save()
+    else:
+        dvo = json.loads(order.delivery_order_json)
+
+    if not order.delivery_supplements_json:
+        dvs, error = ds.create_delivery_supplements(dvo)
+        if not dvs or error:
+            return error or "Не удалось создать файл с транспортной документацией"
+        order.delivery_supplements_json = json.dumps(dvs)
+        order.save()
+    else:
+        dvs = json.loads(order.delivery_supplements_json)
+
+    if not order.delivery_supplements_file:
+        file, error = ds.get_delivery_supplements_file(dvo, dvs)
+        if not file or error:
+            return error or "Не удалось загрузить файл с транспортной документацией"
+        order.delivery_supplements_file = file
+        order.save()
+    return None
 
 
 def set_order_paid_by_payment(payment_id, payment):
@@ -51,6 +88,9 @@ def set_order_paid_by_payment(payment_id, payment):
 Транспортные документы: [Скачать]({link2})"""
         send_message_via_telegram(message)
         logging.info(f"Заказ {order.uuid} оплачен, платеж {payment_id} подтвержден")
+        if settings.D6Y_SUPPLEMENTS_IMMEDIATELY:
+            th = Thread(target=ensure_order_delivery_supplements_exist, args=(order.slug,), daemon=True)
+            th.start()
 
 
 def set_order_canceled_by_payment(payment_id, payment):
@@ -110,38 +150,4 @@ def tb__check_payment_life_cycle_is_completed(payment_id, payment_status, paymen
         (set_order_paid_by_payment if payment_status == TBank.PaymentStatus.CONFIRMED else set_order_canceled_by_payment)(payment_id, payment)
 
 
-def ensure_order_delivery_supplements_exist(order_id):
-    try:
-        order = Order.paid.get(slug=order_id)
-    except Order.DoesNotExist:
-        return f"Заказ {order_id} не найден"
-
-    if order.status != Order.Status.payment_paid:
-        return "Недопустимый статус заказа"
-    ds = ds_factory(order.delivery_service)
-    if not order.delivery_order_json:
-        dvo, error = ds.create_delivery_order(order)
-        if not dvo or error:
-            return error or "Не удалось создать заказ"
-        order.delivery_order_json = json.dumps(dvo)
-        order.save()
-    else:
-        dvo = json.loads(order.delivery_order_json)
-
-    if not order.delivery_supplements_json:
-        dvs, error = ds.create_delivery_supplements(dvo)
-        if not dvs or error:
-            return error or "Не удалось создать файл с транспортной документацией"
-        order.delivery_supplements_json = json.dumps(dvs)
-        order.save()
-    else:
-        dvs = json.loads(order.delivery_supplements_json)
-
-    if not order.delivery_supplements_file:
-        file, error = ds.get_delivery_supplements_file(dvo, dvs)
-        if not file or error:
-            return error or "Не удалось загрузить файл с транспортной документацией"
-        order.delivery_supplements_file = file
-        order.save()
-    return None
 
