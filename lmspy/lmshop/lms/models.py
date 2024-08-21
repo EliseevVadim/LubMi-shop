@@ -7,7 +7,7 @@ from django.core.validators import MinValueValidator, RegexValidator
 from django.conf import settings
 from djmoney.models.fields import MoneyField
 from djmoney.money import Money
-from lms.defines import D6Y
+from lms.d6y import D6Y
 
 
 class DbItem(models.Model):

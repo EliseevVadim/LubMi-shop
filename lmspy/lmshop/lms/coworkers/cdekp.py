@@ -1,5 +1,5 @@
 from lms.coworkers.cdek import Cdek
-from lms.defines import D6Y
+from lms.d6y import D6Y
 from lms.models import Order, Parameter
 
 

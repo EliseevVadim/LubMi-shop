@@ -4,7 +4,7 @@ from lms.api.decorators import on_exception_sleep_and_retry, sleep_after, on_exc
 from lms.coworkers.abstractapiclient import AbstractApiClient
 from lms.coworkers.dadata import DaData
 from lms.models import City, Order
-from lms.defines import D6Y
+from lms.d6y import D6Y
 
 
 class PostRu(AbstractApiClient):
