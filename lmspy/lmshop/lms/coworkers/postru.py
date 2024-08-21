@@ -1,5 +1,5 @@
+from decimal import Decimal
 from httpx import TransportError
-
 from lms.api.decorators import on_exception_sleep_and_retry, sleep_after, on_exception_returns
 from lms.coworkers.abstractapiclient import AbstractApiClient
 from lms.coworkers.dadata import DaData
@@ -71,7 +71,7 @@ class PostRu(AbstractApiClient):
 
     def delivery_cost(self, dst_city_code, weight, **kwargs):
         price = str(kwargs['price'])
-        price = int(round(float(price) * 100))
+        price = int(round(Decimal(price) * 100))
         try:
             city = City.objects.get(code=dst_city_code)
         except City.DoesNotExist:
@@ -87,7 +87,7 @@ class PostRu(AbstractApiClient):
         try:
             tariff = self.tariff(postal_code, price, weight)
             delay = tariff["delivery-time"]["min-days"] if "min-days" in tariff["delivery-time"] else tariff["delivery-time"]["max-days"]
-            return (tariff["total-rate"] + tariff["total-vat"]) / 100.0, delay, None
+            return Decimal(tariff["total-rate"] + tariff["total-vat"]) / 100, delay, None
         except (KeyError, ValueError, TransportError):
             return None, None, tariff['desc'] if 'desc' in tariff else "Не удалось определить параметры доставки"
 
