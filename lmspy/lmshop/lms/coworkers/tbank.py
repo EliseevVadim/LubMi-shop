@@ -6,29 +6,30 @@ from lms.api.decorators import on_exception_returns
 from lms.coworkers.abstractapiclient import AbstractApiClient
 from lms.models import Order
 from hashlib import sha256
+from lms.utils import log_tg
 
 
 class TBank(AbstractApiClient):
     class PaymentStatus(StrEnum):
-        NEW = "NEW"                             # MAPI получил запрос Init. После этого, он создает новый платеж в статусе NEW и возвращает обратно его идентификатор в параметре PaymentId и ссылку на платежную форму в параметре PaymentURL
-        FORM_SHOWED = "FORM_SHOWED"             # Мерчант перенаправил клиента на страницу платежной формы PaymentURL и страница загрузилась у клиента в браузере
-        AUTHORIZING = "AUTHORIZING"             # Платеж обрабатывается MAPI и платежной системой
-        TDS_CHECKING = "3DS_CHECKING"           # Платеж проходит проверку 3D-Secure
-        TDS_CHECKED = "3DS_CHECKED"             # Платеж успешно прошел проверку 3D-Secure
-        AUTHORIZED = "AUTHORIZED"               # Платеж авторизован, деньги заблокированы на карте клиента
-        CONFIRMING = "CONFIRMING"               # Подтверждение платежа обрабатывается MAPI и платежной системой
-        CONFIRMED = "CONFIRMED"                 # Платеж подтвержден, деньги списаны с карты клиента
-        REVERSING = "REVERSING"                 # Мерчант запросил отмену авторизованного, но еще не подтвержденного платежа. Возврат обрабатывается MAPI и платежной системой
-        PARTIAL_REVERSED = "PARTIAL_REVERSED"   # Частичный возврат по авторизованному платежу завершился успешно
-        REVERSED = "REVERSED"                   # Полный возврат по авторизованному платежу завершился успешно
-        REFUNDING = "REFUNDING"                 # Мерчант запросил отмену подтвержденного платежа. Возврат обрабатывается MAPI и платежной системой
-        PARTIAL_REFUNDED = "PARTIAL_REFUNDED"   # Частичный возврат по подтвержденному платежу завершился успешно
-        REFUNDED = "REFUNDED"                   # Полный возврат по подтвержденному платежу завершился успешно
-        CANCELED = "CANCELED"                   # Мерчант отменил платеж
-        DEADLINE_EXPIRED = "DEADLINE_EXPIRED"   # 1. Клиент не завершил платеж в срок жизни ссылки на платежную форму PaymentURL. Этот срок Мерчант настраивает в Личном кабинете, либо передает в параметре RedirectDueDate при вызове метода Init 2. Платеж не прошел проверку 3D-Secure в срок
-        REJECTED = "REJECTED"                   # Банк отклонил платеж
-        AUTH_FAIL = "AUTH_FAIL"                 # Платеж завершился ошибкой или не прошел проверку 3D-Secure
-        UNKNOWN = "UNKNOWN"                     # Не удалось проверить статус платежа
+        NEW = "NEW"  # MAPI получил запрос Init. После этого, он создает новый платеж в статусе NEW и возвращает обратно его идентификатор в параметре PaymentId и ссылку на платежную форму в параметре PaymentURL
+        FORM_SHOWED = "FORM_SHOWED"  # Мерчант перенаправил клиента на страницу платежной формы PaymentURL и страница загрузилась у клиента в браузере
+        AUTHORIZING = "AUTHORIZING"  # Платеж обрабатывается MAPI и платежной системой
+        TDS_CHECKING = "3DS_CHECKING"  # Платеж проходит проверку 3D-Secure
+        TDS_CHECKED = "3DS_CHECKED"  # Платеж успешно прошел проверку 3D-Secure
+        AUTHORIZED = "AUTHORIZED"  # Платеж авторизован, деньги заблокированы на карте клиента
+        CONFIRMING = "CONFIRMING"  # Подтверждение платежа обрабатывается MAPI и платежной системой
+        CONFIRMED = "CONFIRMED"  # Платеж подтвержден, деньги списаны с карты клиента
+        REVERSING = "REVERSING"  # Мерчант запросил отмену авторизованного, но еще не подтвержденного платежа. Возврат обрабатывается MAPI и платежной системой
+        PARTIAL_REVERSED = "PARTIAL_REVERSED"  # Частичный возврат по авторизованному платежу завершился успешно
+        REVERSED = "REVERSED"  # Полный возврат по авторизованному платежу завершился успешно
+        REFUNDING = "REFUNDING"  # Мерчант запросил отмену подтвержденного платежа. Возврат обрабатывается MAPI и платежной системой
+        PARTIAL_REFUNDED = "PARTIAL_REFUNDED"  # Частичный возврат по подтвержденному платежу завершился успешно
+        REFUNDED = "REFUNDED"  # Полный возврат по подтвержденному платежу завершился успешно
+        CANCELED = "CANCELED"  # Мерчант отменил платеж
+        DEADLINE_EXPIRED = "DEADLINE_EXPIRED"  # 1. Клиент не завершил платеж в срок жизни ссылки на платежную форму PaymentURL. Этот срок Мерчант настраивает в Личном кабинете, либо передает в параметре RedirectDueDate при вызове метода Init 2. Платеж не прошел проверку 3D-Secure в срок
+        REJECTED = "REJECTED"  # Банк отклонил платеж
+        AUTH_FAIL = "AUTH_FAIL"  # Платеж завершился ошибкой или не прошел проверку 3D-Secure
+        UNKNOWN = "UNKNOWN"  # Не удалось проверить статус платежа
 
     final_payment_statuses = frozenset((PaymentStatus.CONFIRMED, PaymentStatus.CANCELED, PaymentStatus.DEADLINE_EXPIRED, PaymentStatus.REJECTED, PaymentStatus.AUTH_FAIL))
     considerable_types = frozenset({bool, int, float, str})
@@ -93,38 +94,42 @@ class TBank(AbstractApiClient):
     def create_payment(self, order: Order, summ, *args):
         opt = lambda **kwargs: {k: v for k, v in kwargs.items() if v is not None}
         order_uuid = str(order.uuid)
-        res = self._post_json('Init', {},
-                              TerminalKey=self.terminal_key,
-                              Amount=int(summ * 100),
-                              OrderId=order_uuid,
-                              Description=f'Заказ #{order_uuid}',
-                              PayType='O',
-                              **opt(NotificationURL=self.setting('notification-url'),
-                                    SuccessURL=self.setting('success-url'),
-                                    FailURL=self.setting('fail-url')),
-                              DATA={
-                                  'OperationInitiatorType': int(self.setting('operation-initiator-type', '0'))},
-                              Receipt=opt(Email=order.cu_email, Phone=order.cu_phone) | {
-                                  'Taxation': self.setting('taxation', 'usn_income'),
-                                  'Items': [{
-                                      'Name': item.title,
-                                      'Price': item.price_cents,
-                                      'Quantity': item.quantity,
-                                      'Amount': item.amount_cents,
-                                      'PaymentMethod': self.setting('payment-method', 'full_prepayment'),
-                                      'PaymentObject': self.setting('goods-payment-object', 'commodity'),
-                                      'Tax': self.setting('goods-tax', 'none'),
-                                  } for item in order.items.all()] + [{
-                                      'Name': 'Доставка',
-                                      'Price': order.delivery_cost_cents,
-                                      'Quantity': 1,
-                                      'Amount': order.delivery_cost_cents,
-                                      'PaymentMethod': self.setting('payment-method', 'full_prepayment'),
-                                      'PaymentObject': self.setting('service-payment-object', 'service'),
-                                      'Tax': self.setting('service-tax', 'none')}]})
-        if res['Success']:
-            return self.pid2uuid(res['PaymentId']), res['PaymentURL'], None
-        raise ValueError(res)
+        log_tg("Запрос на создание платежа для заказа", order_uuid)
+        result = self._post_json('Init', {},
+                                 TerminalKey=self.terminal_key,
+                                 Amount=int(summ * 100),
+                                 OrderId=order_uuid,
+                                 Description=f'Заказ #{order_uuid}',
+                                 PayType='O',
+                                 **opt(NotificationURL=self.setting('notification-url'),
+                                       SuccessURL=self.setting('success-url'),
+                                       FailURL=self.setting('fail-url')),
+                                 DATA={
+                                     'OperationInitiatorType': int(self.setting('operation-initiator-type', '0'))},
+                                 Receipt=opt(Email=order.cu_email, Phone=order.cu_phone) | {
+                                     'Taxation': self.setting('taxation', 'usn_income'),
+                                     'Items': [{
+                                         'Name': item.title,
+                                         'Price': item.price_cents,
+                                         'Quantity': item.quantity,
+                                         'Amount': item.amount_cents,
+                                         'PaymentMethod': self.setting('payment-method', 'full_prepayment'),
+                                         'PaymentObject': self.setting('goods-payment-object', 'commodity'),
+                                         'Tax': self.setting('goods-tax', 'none'),
+                                     } for item in order.items.all()] + [{
+                                         'Name': 'Доставка',
+                                         'Price': order.delivery_cost_cents,
+                                         'Quantity': 1,
+                                         'Amount': order.delivery_cost_cents,
+                                         'PaymentMethod': self.setting('payment-method', 'full_prepayment'),
+                                         'PaymentObject': self.setting('service-payment-object', 'service'),
+                                         'Tax': self.setting('service-tax', 'none')}]})
+        log_tg("Результат:", result)
+        if result['Success']:
+            log_tg("Запрос успешен")
+            return self.pid2uuid(result['PaymentId']), result['PaymentURL'], None
+        log_tg("Запрос провален")
+        raise ValueError(result)
 
     @on_exception_returns((PaymentStatus.UNKNOWN, None))
     def get_payment_status(self, payment_id):
