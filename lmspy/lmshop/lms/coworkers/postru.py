@@ -265,34 +265,46 @@ class PostRu(AbstractApiClient):
 
     @sleep_after()
     @on_exception_sleep_and_retry(1, (None, "Не удалось создать заказ на доставку"))
-    def create_delivery_order(self, r: Order, **_):  # TODO kill **_
+    def create_delivery_order(self, r: Order, logger):  # TODO kill logger
         if not (jsn := self._order_as_json(r)):
             raise ValueError(jsn)
+        logger("Запрос на создание заказа на доставку:", jsn)
         result = self._put_json("user/backlog", _json_=[jsn])
+        logger("Результат:", result)
         if "result-ids" not in result or not result["result-ids"]:
+            logger("Запрос провален")
             raise ValueError(result)
+        logger("Запрос успешен")
         return result, None
 
     @sleep_after()
     @on_exception_sleep_and_retry(1, (None, "Не удалось создать документы к заказу на доставку"))
-    def create_delivery_supplements(self, r, **_):  # TODO kill **_
+    def create_delivery_supplements(self, r, logger):  # TODO kill logger
         @sleep_after()
         def wait():
             return None
+        logger("Запрос на создание партии:", [r["result-ids"][0]])
         result = self._post_json("user/shipment", _json_=[r["result-ids"][0]])
+        logger("Результат:", result)
         if "result-ids" not in result or not result["result-ids"]:
+            logger("Запрос провален")
             raise ValueError(result)
+        logger("Запрос успешен")
         wait()
         self._post_json(f"batch/{result['batches'][0]['batch-name']}/checkin")
         return result, None
 
     @sleep_after()
     @on_exception_sleep_and_retry(1, (None, "Не удалось загрузить документы к заказу на доставку"))
-    def get_delivery_supplements_file(self, r, _, **__):  # TODO kill **__
+    def get_delivery_supplements_file(self, r, _, logger):  # TODO kill logger
         url = self.func_url(f"forms/{r['result-ids'][0]}/f7pdf")
+        logger("Запрос на закачку транспортных документов:", f"forms/{r['result-ids'][0]}/f7pdf")
         result = self._get_file(url)
+        logger("Результат:", result)
         if not result.is_success:
+            logger("Запрос провален")
             raise ValueError(result.is_success)
+        logger("Запрос успешен")
         return result.content, None
 
     @staticmethod
