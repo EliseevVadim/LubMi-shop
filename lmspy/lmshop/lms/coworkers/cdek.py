@@ -1,3 +1,4 @@
+from decimal import Decimal
 import httpx
 from httpx import TransportError
 from lms.api.decorators import on_exception_sleep_and_retry, sleep_after
@@ -195,7 +196,7 @@ class Cdek(AbstractApiClient):
                 Cdek.location(code=dst_city_code),
                 [Cdek.package(weight=weight)],
                 [])
-            return (float(tariff["delivery_sum"]), tariff["period_min"], None) if "delivery_sum" in tariff and "period_min" in tariff else (0.0, 0, Cdek.extract_error(tariff))
+            return (Decimal(tariff["delivery_sum"]), tariff["period_min"], None) if "delivery_sum" in tariff and "period_min" in tariff else (None, None, Cdek.extract_error(tariff))
         except (KeyError, ValueError, TransportError):
             return 0.0, 0, "Не удалось определить параметры доставки"
 
