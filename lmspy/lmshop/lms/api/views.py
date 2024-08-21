@@ -15,7 +15,8 @@ from lms.coworkers.dadata import DaData
 from lms.coworkers.tbank import TBank
 from lms.models import Product, AvailableSize, Parameter, Order, OrderItem, City, AboutItem
 from lms.api.serializers import ProductSerializer, ProductDetailSerializer, AboutItemSerializer
-from lms.utils import deep_unquote, ds_factory
+from lms.utils import deep_unquote
+from lms.d6y_factory import ds_factory
 from lms.d6y import D6Y
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
 from lms.coworkers.yookassa import Yookassa

@@ -8,7 +8,8 @@ from customerinfo.customerinfo import CustomerInfo
 from lms.coworkers.tbank import TBank
 from lms.coworkers.yookassa import Yookassa
 from lms.models import NotificationRequest, Order, AvailableSize
-from lms.utils import send_message_via_telegram, ds_factory, log_tg
+from lms.utils import send_message_via_telegram, log_tg
+from lms.d6y_factory import ds_factory
 
 
 def create_notify_request(email, phone, ppk, size, info: CustomerInfo):
