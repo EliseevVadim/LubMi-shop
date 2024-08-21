@@ -142,13 +142,13 @@ class Cdek(AbstractApiClient):
     @staticmethod
     def recipient(**kwargs):
         return Cdek._construct_arg_({
-            "name": (str, Cdek._str_255_()),
-            "passport_series": (str, Cdek. _max_len_(4)),  # -- Серия паспорта    string(4)    нет
-            "passport_number": (str, Cdek. _max_len_(30)),  # -- Номер паспорта    string(30)    нет
-            "passport_date_of_issue": (str, Cdek._max_len_(10)),  # -- Дата выдачи паспорта    date(yyyy - MM - dd)    нет
-            "passport_organization": (str, Cdek. _str_255_()),  # -- Орган выдачи паспорта    string(255)    нет
-            "tin": (str, Cdek._max_len_(12)),  # -- ИНН Может содержать 10, либо 12 символов                 string(12)    нет
-            "passport_date_of_birth": (str, Cdek._max_len_(10)),  # -- Дата рождения    date(yyyy - MM - dd)    нет
+            "name": (str, Cdek._str_255_()),                        # -- ФИО --
+            "passport_series": (str, Cdek. _max_len_(4)),           # -- Серия паспорта    string(4)    нет
+            "passport_number": (str, Cdek. _max_len_(30)),          # -- Номер паспорта    string(30)    нет
+            "passport_date_of_issue": (str, Cdek._max_len_(10)),    # -- Дата выдачи паспорта    date(yyyy - MM - dd)    нет
+            "passport_organization": (str, Cdek. _str_255_()),      # -- Орган выдачи паспорта    string(255)    нет
+            "tin": (str, Cdek._max_len_(12)),                       # -- ИНН Может содержать 10, либо 12 символов                 string(12)    нет
+            "passport_date_of_birth": (str, Cdek._max_len_(10)),    # -- Дата рождения    date(yyyy - MM - dd)    нет
             "phones": (list, None),
             "number": (str, Cdek._str_255_()),
         }, **kwargs)
@@ -234,7 +234,7 @@ class Cdek(AbstractApiClient):
 
     @sleep_after()
     @on_exception_sleep_and_retry(1, (None, "Не удалось создать заказ на доставку"))
-    def create_delivery_order(self, r: Order, logger):
+    def create_delivery_order(self, r: Order, logger):  # TODO kill logger
         jsn = self._order_as_json(r)
         if not jsn:
             raise ValueError(jsn)
@@ -249,7 +249,7 @@ class Cdek(AbstractApiClient):
 
     @sleep_after()
     @on_exception_sleep_and_retry(1, (None, "Не удалось создать документы к заказу на доставку"))
-    def create_delivery_supplements(self, r, logger):
+    def create_delivery_supplements(self, r, logger):  # TODO kill logger
         logger("Запрос на создание транспортных документов для:", r['entity']['uuid'])
         result = self._post_json("print/orders", orders=[Cdek.order(order_uuid=r['entity']['uuid'])], copy_count=2)
         logger("Результат:", result)
@@ -261,7 +261,7 @@ class Cdek(AbstractApiClient):
 
     @sleep_after()
     @on_exception_sleep_and_retry(1, (None, "Не удалось загрузить документы к заказу на доставку"))
-    def get_delivery_supplements_file(self, _, r, logger):
+    def get_delivery_supplements_file(self, _, r, logger):  # TODO kill logger
         @sleep_after()
         def wait():
             return None
