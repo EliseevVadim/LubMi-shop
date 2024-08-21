@@ -198,7 +198,7 @@ class Cdek(AbstractApiClient):
                 [])
             return (Decimal(tariff["delivery_sum"]), tariff["period_min"], None) if "delivery_sum" in tariff and "period_min" in tariff else (None, None, Cdek.extract_error(tariff))
         except (KeyError, ValueError, TransportError):
-            return 0.0, 0, "Не удалось определить параметры доставки"
+            return None, None, "Не удалось определить параметры доставки"
 
     def _order_as_json(self, r: Order):
         return {
