@@ -8,6 +8,7 @@ from lms.models import Coworker, Order, Parameter
 from urllib.parse import quote
 from django.core.cache import cache
 from lms.d6y import D6Y
+from lms.utils import log_tg
 
 
 class Cdek(AbstractApiClient):
@@ -235,52 +236,52 @@ class Cdek(AbstractApiClient):
 
     @sleep_after()
     @on_exception_sleep_and_retry(1, (None, "Не удалось создать заказ на доставку"))
-    def create_delivery_order(self, r: Order, logger):  # TODO kill logger
+    def create_delivery_order(self, r: Order):
         jsn = self._order_as_json(r)
         if not jsn:
             raise ValueError(jsn)
-        logger("Запрос на создание заказа на доставку:", jsn)
+        log_tg("Запрос на создание заказа на доставку:", jsn)
         result = self._post_json("orders", _json_=jsn)
-        logger("Результат:", result)
+        log_tg("Результат:", result)
         if 'entity' not in result or 'uuid' not in result['entity']:
-            logger("Запрос провален")
+            log_tg("Запрос провален")
             raise ValueError(result)
-        logger("Запрос успешен")
+        log_tg("Запрос успешен")
         return result, None
 
     @sleep_after()
     @on_exception_sleep_and_retry(1, (None, "Не удалось создать документы к заказу на доставку"))
-    def create_delivery_supplements(self, r, logger):  # TODO kill logger
-        logger("Запрос на создание транспортных документов для:", r['entity']['uuid'])
+    def create_delivery_supplements(self, r):
+        log_tg("Запрос на создание транспортных документов для:", r['entity']['uuid'])
         result = self._post_json("print/orders", orders=[Cdek.order(order_uuid=r['entity']['uuid'])], copy_count=2)
-        logger("Результат:", result)
+        log_tg("Результат:", result)
         if 'entity' not in result or 'uuid' not in result['entity']:
-            logger("Запрос провален")
+            log_tg("Запрос провален")
             raise ValueError(result)
-        logger("Запрос успешен")
+        log_tg("Запрос успешен")
         return result, None
 
     @sleep_after()
     @on_exception_sleep_and_retry(1, (None, "Не удалось загрузить документы к заказу на доставку"))
-    def get_delivery_supplements_file(self, _, r, logger):  # TODO kill logger
+    def get_delivery_supplements_file(self, _, r):
         @sleep_after()
         def wait():
             return None
-        logger("Запрос на URL транспортных документов:", f"""print/orders/{r['entity']['uuid']}""")
+        log_tg("Запрос на URL транспортных документов:", f"""print/orders/{r['entity']['uuid']}""")
         result = self._get(f"""print/orders/{r['entity']['uuid']}""")
-        logger("Результат:", result)
+        log_tg("Результат:", result)
         if 'entity' not in result or 'url' not in result['entity']:
-            logger("Запрос провален")
+            log_tg("Запрос провален")
             raise ValueError(result)
-        logger("Запрос успешен")
+        log_tg("Запрос успешен")
         wait()
-        logger("Запрос на закачку транспортных документов:", result['entity']['url'])
+        log_tg("Запрос на закачку транспортных документов:", result['entity']['url'])
         result = self._get_file(result['entity']['url'])
-        logger("Результат:", result)
+        log_tg("Результат:", result)
         if not result.is_success:
-            logger("Запрос провален")
+            log_tg("Запрос провален")
             raise ValueError(result.is_success)
-        logger("Запрос успешен")
+        log_tg("Запрос успешен")
         return result.content, None
 
     @staticmethod
