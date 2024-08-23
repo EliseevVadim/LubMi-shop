@@ -151,6 +151,7 @@ class Cdek(AbstractApiClient):
             "passport_organization": (str, Cdek. _str_255_()),      # -- Орган выдачи паспорта    string(255)    нет
             "tin": (str, Cdek._max_len_(12)),                       # -- ИНН Может содержать 10, либо 12 символов                 string(12)    нет
             "passport_date_of_birth": (str, Cdek._max_len_(10)),    # -- Дата рождения    date(yyyy - MM - dd)    нет
+            "email": (str, Cdek._str_255_()),                       # -- Email --
             "phones": (list, None),
             "number": (str, Cdek._str_255_()),
         }, **kwargs)
