@@ -8,7 +8,7 @@ import djmoney.models.fields
 import djmoney.money
 import lms.models
 import uuid
-from lms.defines import D6Y
+from lms.d6y import D6Y
 
 
 class Migration(migrations.Migration):

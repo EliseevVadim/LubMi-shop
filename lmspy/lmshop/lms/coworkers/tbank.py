@@ -36,6 +36,7 @@ class TBank(AbstractApiClient):
     token_key = 'Token'
     notification_response_good = HttpResponse('OK')
     notification_response_bad = HttpResponse(content='', status=404)
+    max_desc_len = 140
 
     def __init__(self):
         super().__init__(
@@ -99,7 +100,7 @@ class TBank(AbstractApiClient):
                                  TerminalKey=self.terminal_key,
                                  Amount=int(summ * 100),
                                  OrderId=order_uuid,
-                                 Description=f'Заказ #{order_uuid}',
+                                 Description=self.setting('payment-description', 'Заказ в онлайн-магазине одежды LubMi')[:self.max_desc_len],
                                  PayType='O',
                                  **opt(NotificationURL=self.setting('notification-url'),
                                        SuccessURL=self.setting('success-url'),

@@ -20,8 +20,9 @@ from .coworkers.dadata import DaData
 from .coworkers.yookassa import Yookassa
 from .forms import CheckoutForm
 from .models import Parameter, Product, City, AboutItem, Order
-from .utils import suffix, clipped_range, deep_unquote, untag, ds_factory
-from .defines import D6Y
+from .utils import suffix, clipped_range, deep_unquote, untag
+from .d6y_factory import ds_factory
+from .d6y import D6Y
 
 
 class IndexView(View):

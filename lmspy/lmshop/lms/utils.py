@@ -1,11 +1,6 @@
 from math import radians, sin, acos, cos
-
 from .api.decorators import sleep_after
-from .coworkers.cdek import Cdek
-from .coworkers.cdekp import CdekP
-from .coworkers.postru import PostRu
 from .coworkers.telegram import Telegram
-from .defines import D6Y
 from .models import TelegramBot, City
 from functools import lru_cache
 from sys import float_info
@@ -76,10 +71,3 @@ def untag(s):
     return s
 
 
-def ds_factory(selector):
-    builders = {
-        D6Y.CD: lambda: Cdek(),
-        D6Y.CP: lambda: CdekP(),
-        D6Y.PR: lambda: PostRu()
-    }
-    return builders[selector]()
