@@ -497,15 +497,19 @@ class Service_Checkout_View(APIView):
         def optional(key, def_val=None):
             nonlocal data
             return data[key] if key in data else def_val
+
         for e in errors:
             return e["error-text"]
+
         data = {k: escape(v) for k, v in request.data.items()}
+
         try:
             d6y_service, \
                 d6y_point, \
                 cu_first_name, \
                 cu_last_name, \
                 cu_phone, \
+                cu_email, \
                 cu_country, \
                 cu_city_uuid, \
                 cu_city, \
@@ -520,6 +524,7 @@ class Service_Checkout_View(APIView):
                 data["cu_first_name"], \
                 data["cu_last_name"], \
                 data["cu_phone"], \
+                optional("cu_email"), \
                 optional("cu_country", "RU"), \
                 data["cu_city_uuid"], \
                 data["cu_city"], \
@@ -571,6 +576,7 @@ class Service_Checkout_View(APIView):
                                   cu_first_name=cu_first_name,
                                   cu_last_name=cu_last_name,
                                   cu_phone=cu_phone,
+                                  cu_email=cu_email,
                                   cu_country=cu_country,
                                   cu_city_uuid=city.city_uuid,
                                   cu_city=cu_city,

@@ -9,6 +9,7 @@ class CdekP(Cdek):
         return D6Y.CP
 
     def _order_as_json(self, r: Order):
+        opt = lambda **kwargs: {k: v for k, v in kwargs.items() if v is not None}
         return {
             "type": 1,
             "number": str(r.uuid),
@@ -16,7 +17,8 @@ class CdekP(Cdek):
             "comment": str(r.uuid),
             "recipient": Cdek.recipient(
                 name=r.cu_fullname,
-                phones=[Cdek.phone(number=r.cu_phone)]),
+                phones=[Cdek.phone(number=r.cu_phone)],
+                **opt(email=r.cu_email)),
             "shipment_point": self.setting("shipment_point"),
             "delivery_point": r.delivery_point,
             "packages": [Cdek.package(

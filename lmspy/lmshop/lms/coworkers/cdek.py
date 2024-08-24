@@ -151,7 +151,8 @@ class Cdek(AbstractApiClient):
             "passport_organization": (str, Cdek. _str_255_()),      # -- Орган выдачи паспорта    string(255)    нет
             "tin": (str, Cdek._max_len_(12)),                       # -- ИНН Может содержать 10, либо 12 символов                 string(12)    нет
             "passport_date_of_birth": (str, Cdek._max_len_(10)),    # -- Дата рождения    date(yyyy - MM - dd)    нет
-            "phones": (list, None),
+            "email": (str, Cdek._str_255_()),                       # -- Email --
+            "phones": (list, None),                                 # -- Телефоны --
             "number": (str, Cdek._str_255_()),
         }, **kwargs)
 
@@ -202,6 +203,7 @@ class Cdek(AbstractApiClient):
             return None, None, "Не удалось определить параметры доставки"
 
     def _order_as_json(self, r: Order):
+        opt = lambda **kwargs: {k: v for k, v in kwargs.items() if v is not None}
         return {
             "type": 1,
             "number": str(r.uuid),
@@ -209,7 +211,8 @@ class Cdek(AbstractApiClient):
             "comment": str(r.uuid),
             "recipient": Cdek.recipient(
                 name=r.cu_fullname,
-                phones=[Cdek.phone(number=r.cu_phone)]),
+                phones=[Cdek.phone(number=r.cu_phone)],
+                **opt(email=r.cu_email)),
             "from_location": Cdek.location(
                 code=int(self.setting("location_from_code")),
                 address=Parameter.value_of("value_return_address_cd")),
