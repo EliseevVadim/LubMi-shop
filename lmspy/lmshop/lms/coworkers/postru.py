@@ -6,6 +6,7 @@ from lms.coworkers.dadata import DaData
 from lms.models import City, Order
 from lms.d6y import D6Y
 from lms.utils import log_tg
+from django.conf import settings
 
 
 class PostRu(AbstractApiClient):
@@ -160,7 +161,7 @@ class PostRu(AbstractApiClient):
             #     "with-license": True
             # },
             "delivery-to-door": False,
-            "delivery-with-cod": False,
+            "delivery-with-cod": settings.PREFERENCES.D6yPaymentUponReceipt,
             # "dimension": {
             #     "height": 0,
             #     "length": 0,
