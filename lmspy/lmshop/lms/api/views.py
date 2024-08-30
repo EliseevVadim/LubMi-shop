@@ -608,7 +608,7 @@ class Service_Checkout_View(APIView):
                         size.quantity -= quantity  # or IntegrityError on constraint
                         size.save()
                     order.save()
-                    payment_id, payment_url, error = TBank().create_payment(order, price + Decimal(d6y_cost), False)
+                    payment_id, payment_url, error = TBank().create_payment(order)
                     if error:
                         raise ValueError(error)  # breaks transaction!
                     order.payment_id = payment_id
