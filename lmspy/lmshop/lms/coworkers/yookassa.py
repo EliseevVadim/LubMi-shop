@@ -50,14 +50,17 @@ class Yookassa(AbstractApiClient):
         }, **kwargs)
 
     @on_exception_returns((None, None, "Проблемы с созданием платежа"))
-    def create_payment(self, order: Order, summ, do_reverse_addr: bool = True):
+    def create_payment(self, order: Order, do_reverse_addr: bool = True):
         order_uuid = str(order.uuid)
         bj_page = f"lms:{self.setting('back_jump_page')}"
         bj_addr = f'{self.setting("back_jump_address")}{reverse(bj_page)}' if do_reverse_addr else self.setting("back_jump_address")
-        res = self._post_json("payments", {"Idempotence-Key": order_uuid}, amount=Yookassa.amount(value=f"{summ:.2f}", currency="RUB"),
-                              confirmation=Yookassa.confirmation(type="redirect", return_url=bj_addr), capture=True,
-                              description=f"Заказ #{order_uuid}", metadata=Yookassa.metadata(order_uuid=order_uuid))
-        return (res["id"], res["confirmation"]["confirmation_url"], None) if res["status"] == Yookassa.PaymentStatus.PENDING else bad_result
+        res = self._post_json("payments", {"Idempotence-Key": order_uuid},
+                              amount=self.amount(value=f"{order.total_price.amount:.2f}", currency="RUB"),
+                              confirmation=self.confirmation(type="redirect", return_url=bj_addr),
+                              capture=True,
+                              description=f"Заказ #{order_uuid}",
+                              metadata=self.metadata(order_uuid=order_uuid))
+        return (res["id"], res["confirmation"]["confirmation_url"], None) if res["status"] == self.PaymentStatus.PENDING else (None, None, "Не удалось создать платеж")
 
     @on_exception_returns((PaymentStatus.UNKNOWN, None))
     def get_payment_status(self, payment_id):
