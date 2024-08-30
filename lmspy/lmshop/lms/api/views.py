@@ -466,6 +466,7 @@ class Service_EstimateSCart_View(APIView):
             'old_price': scart['old_price'],
             'weight': scart['weight'],
             'errors': errors,
+            'add-delivery-cost-to-total-price': not settings.PREFERENCES.D6yPaymentUponReceipt
         }
         if 'cu_city_uuid' in data:
             try:
