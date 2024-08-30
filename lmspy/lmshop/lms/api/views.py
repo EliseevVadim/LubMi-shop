@@ -735,7 +735,7 @@ class Yookassa_PaymentStatus_View(APIView):
     def get(request, payment_id: str):
         payment_id = deep_unquote(payment_id)
         status, payment = Yookassa().get_payment_status(payment_id)
-        if settings.SET_ORDER_STATUS_ON_PAYMENT_STATUS_CHECK:
+        if settings.PREFERENCES.SetOrderStatusOnPaymentStatusCheck:
             yo__check_payment_life_cycle_is_completed(payment_id, status, payment)
         return {
             'status': status,
@@ -770,7 +770,7 @@ class TBank_PaymentStatus_View(APIView):
     def get(request, payment_id: str):
         payment_id = deep_unquote(payment_id)
         status, payment = TBank().get_payment_status(payment_id)
-        if settings.SET_ORDER_STATUS_ON_PAYMENT_STATUS_CHECK:
+        if settings.PREFERENCES.SetOrderStatusOnPaymentStatusCheck:
             tb__check_payment_life_cycle_is_completed(payment_id, status, payment)
         return {
             'status': status,

@@ -1,4 +1,5 @@
 from pathlib import Path
+from dataclasses import dataclass
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -122,8 +123,14 @@ PACKAGE_UNIT_HEIGHT_CM = 5
 
 SLEEP_AFTER = 3
 
-SET_ORDER_STATUS_ON_PAYMENT_STATUS_CHECK = False
-
 LOG_TG = False
 
-D6Y_SUPPLEMENTS_IMMEDIATELY = True
+
+@dataclass(frozen=True)
+class Preferences:
+    D6yRequestSupplementsImmediately: bool = True
+    D6yPaymentUponReceipt: bool = True
+    SetOrderStatusOnPaymentStatusCheck: bool = False
+
+
+PREFERENCES = Preferences()
