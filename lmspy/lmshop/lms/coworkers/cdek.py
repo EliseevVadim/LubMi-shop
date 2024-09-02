@@ -7,6 +7,7 @@ from lms.deco import copy_result
 from lms.models import Coworker, Order, Parameter
 from urllib.parse import quote
 from django.core.cache import cache
+from django.conf import settings
 from lms.d6y import D6Y
 from lms.utils import log_tg
 
@@ -235,7 +236,7 @@ class Cdek(AbstractApiClient):
                     cost=float(i.price.amount),
                     amount=i.quantity) for i in r.items.all()])],
             "print": "waybill",
-        }
+        } | opt(delivery_recipient_cost=Cdek.money(value=float(r.delivery_cost.amount)) if settings.PREFERENCES.D6yPaymentUponReceipt else None)
 
     @sleep_after()
     @on_exception_sleep_and_retry(1, (None, "Не удалось создать заказ на доставку"))

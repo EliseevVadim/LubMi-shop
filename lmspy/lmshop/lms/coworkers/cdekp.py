@@ -1,7 +1,7 @@
 from lms.coworkers.cdek import Cdek
 from lms.d6y import D6Y
 from lms.models import Order, Parameter
-
+from django.conf import settings
 
 class CdekP(Cdek):
     @property
@@ -36,7 +36,7 @@ class CdekP(Cdek):
                     cost=float(i.price.amount),
                     amount=i.quantity) for i in r.items.all()])],
             "print": "waybill",
-        }
+        } | opt(delivery_recipient_cost=Cdek.money(value=float(r.delivery_cost.amount)) if settings.PREFERENCES.D6yPaymentUponReceipt else None)
 
     @staticmethod
     def validate_destination(arg):
