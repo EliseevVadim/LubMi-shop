@@ -129,7 +129,7 @@ LOG_TG = False
 @dataclass(frozen=True)
 class Preferences:
     D6yRequestSupplementsImmediately: bool = True
-    D6yPaymentUponReceipt: bool = True
+    CashOnD6y: bool = True
     SetOrderStatusOnPaymentStatusCheck: bool = False
 
 

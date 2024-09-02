@@ -380,7 +380,7 @@ class Order(DbItem):
 
     @property
     def total_price(self):
-        return self.total_price_without_delivery if settings.PREFERENCES.D6yPaymentUponReceipt else self.total_price_with_delivery
+        return self.total_price_without_delivery if settings.PREFERENCES.CashOnD6y else self.total_price_with_delivery
 
     @property
     def total_weight(self):

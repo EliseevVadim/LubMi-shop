@@ -125,7 +125,7 @@ class TBank(AbstractApiClient):
                                          'Amount': order.delivery_cost_cents,
                                          'PaymentMethod': self.setting('payment-method', 'full_prepayment'),
                                          'PaymentObject': self.setting('service-payment-object', 'service'),
-                                         'Tax': self.setting('service-tax', 'none')}] if not settings.PREFERENCES.D6yPaymentUponReceipt else [])})
+                                         'Tax': self.setting('service-tax', 'none')}] if not settings.PREFERENCES.CashOnD6y else [])})
         log_tg("Результат:", result)
         if result['Success']:
             log_tg("Запрос успешен")
