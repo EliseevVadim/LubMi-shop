@@ -89,7 +89,7 @@ def set_order_paid_by_payment(payment_id, payment):
 Транспортные документы: [Скачать]({link2})"""
         send_message_via_telegram(message)
         logging.info(f"Заказ {order.uuid} оплачен, платеж {payment_id} подтвержден")
-        if settings.D6Y_SUPPLEMENTS_IMMEDIATELY:
+        if settings.PREFERENCES.D6yRequestSupplementsImmediately:
             th = Thread(target=ensure_order_delivery_supplements_exist, args=(order.slug,), daemon=True)
             th.start()
 

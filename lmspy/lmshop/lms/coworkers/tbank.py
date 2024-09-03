@@ -2,6 +2,7 @@ import logging
 from enum import StrEnum
 from uuid import UUID
 from django.http import HttpResponse
+from django.conf import settings
 from lms.api.decorators import on_exception_returns
 from lms.coworkers.abstractapiclient import AbstractApiClient
 from lms.models import Order
@@ -92,13 +93,13 @@ class TBank(AbstractApiClient):
         return str(UUID(uuid).int)
 
     @on_exception_returns((None, None, 'Проблемы с созданием платежа'))
-    def create_payment(self, order: Order, summ, *args):
+    def create_payment(self, order: Order):
         opt = lambda **kwargs: {k: v for k, v in kwargs.items() if v is not None}
         order_uuid = str(order.uuid)
         log_tg("Запрос на создание платежа для заказа", order_uuid)
         result = self._post_json('Init', {},
                                  TerminalKey=self.terminal_key,
-                                 Amount=int(summ * 100),
+                                 Amount=int(order.total_price.amount * 100),
                                  OrderId=order_uuid,
                                  Description=self.setting('payment-description', 'Заказ в онлайн-магазине одежды LubMi')[:self.max_desc_len],
                                  PayType='O',
@@ -117,14 +118,14 @@ class TBank(AbstractApiClient):
                                          'PaymentMethod': self.setting('payment-method', 'full_prepayment'),
                                          'PaymentObject': self.setting('goods-payment-object', 'commodity'),
                                          'Tax': self.setting('goods-tax', 'none'),
-                                     } for item in order.items.all()] + [{
+                                     } for item in order.items.all()] + ([{
                                          'Name': 'Доставка',
                                          'Price': order.delivery_cost_cents,
                                          'Quantity': 1,
                                          'Amount': order.delivery_cost_cents,
                                          'PaymentMethod': self.setting('payment-method', 'full_prepayment'),
                                          'PaymentObject': self.setting('service-payment-object', 'service'),
-                                         'Tax': self.setting('service-tax', 'none')}]})
+                                         'Tax': self.setting('service-tax', 'none')}] if not settings.PREFERENCES.CashOnD6y else [])})
         log_tg("Результат:", result)
         if result['Success']:
             log_tg("Запрос успешен")

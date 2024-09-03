@@ -371,12 +371,16 @@ class Order(DbItem):
         super().save(*args, **kwargs)
 
     @property
-    def total_price(self):
+    def total_price_with_delivery(self):
         return Money(self.items.aggregate(total=Sum(F("price") * F('quantity')))["total"] + self.delivery_cost.amount, currency="RUR")
 
     @property
     def total_price_without_delivery(self):
         return Money(self.items.aggregate(total=Sum(F("price") * F('quantity')))["total"], currency="RUR")
+
+    @property
+    def total_price(self):
+        return self.total_price_without_delivery if settings.PREFERENCES.CashOnD6y else self.total_price_with_delivery
 
     @property
     def total_weight(self):

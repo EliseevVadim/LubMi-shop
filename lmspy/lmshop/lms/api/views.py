@@ -412,7 +412,7 @@ class CheckoutSCartView(APIView):
                         size.quantity -= quantity  # or IntegrityError on constraint
                         size.save()
                     order.save()
-                    payment_id, payment_url, error = Yookassa().create_payment(order, price + Decimal(d6y_cost))
+                    payment_id, payment_url, error = Yookassa().create_payment(order)
                     if error:
                         raise ValueError(error)  # breaks transaction!
                     order.payment_id = payment_id
@@ -466,6 +466,7 @@ class Service_EstimateSCart_View(APIView):
             'old_price': scart['old_price'],
             'weight': scart['weight'],
             'errors': errors,
+            'total-price-includes-delivery-cost': not settings.PREFERENCES.CashOnD6y
         }
         if 'cu_city_uuid' in data:
             try:
@@ -607,7 +608,7 @@ class Service_Checkout_View(APIView):
                         size.quantity -= quantity  # or IntegrityError on constraint
                         size.save()
                     order.save()
-                    payment_id, payment_url, error = TBank().create_payment(order, price + Decimal(d6y_cost), False)
+                    payment_id, payment_url, error = TBank().create_payment(order)
                     if error:
                         raise ValueError(error)  # breaks transaction!
                     order.payment_id = payment_id
@@ -735,7 +736,7 @@ class Yookassa_PaymentStatus_View(APIView):
     def get(request, payment_id: str):
         payment_id = deep_unquote(payment_id)
         status, payment = Yookassa().get_payment_status(payment_id)
-        if settings.SET_ORDER_STATUS_ON_PAYMENT_STATUS_CHECK:
+        if settings.PREFERENCES.SetOrderStatusOnPaymentStatusCheck:
             yo__check_payment_life_cycle_is_completed(payment_id, status, payment)
         return {
             'status': status,
@@ -770,7 +771,7 @@ class TBank_PaymentStatus_View(APIView):
     def get(request, payment_id: str):
         payment_id = deep_unquote(payment_id)
         status, payment = TBank().get_payment_status(payment_id)
-        if settings.SET_ORDER_STATUS_ON_PAYMENT_STATUS_CHECK:
+        if settings.PREFERENCES.SetOrderStatusOnPaymentStatusCheck:
             tb__check_payment_life_cycle_is_completed(payment_id, status, payment)
         return {
             'status': status,
