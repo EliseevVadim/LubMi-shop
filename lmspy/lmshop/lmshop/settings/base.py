@@ -123,14 +123,13 @@ PACKAGE_UNIT_HEIGHT_CM = 5
 
 SLEEP_AFTER = 3
 
-LOG_TG = True
-
 
 @dataclass(frozen=True)
 class Preferences:
     D6yRequestSupplementsImmediately: bool = True
     CashOnD6y: bool = True
     SetOrderStatusOnPaymentStatusCheck: bool = False
+    LogTg: bool = True
 
 
 PREFERENCES = Preferences()
