@@ -123,7 +123,7 @@ PACKAGE_UNIT_HEIGHT_CM = 5
 
 SLEEP_AFTER = 3
 
-LOG_TG = False
+LOG_TG = True
 
 
 @dataclass(frozen=True)
