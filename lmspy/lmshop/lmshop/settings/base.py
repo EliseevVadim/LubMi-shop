@@ -130,7 +130,7 @@ SLEEP_AFTER = 3
 class Preferences:
     D6yRequestSupplementsImmediately: bool = True
     SetOrderStatusOnPaymentStatusCheck: bool = False
-    CODModeEnabled: bool | None = False
+    CODModeEnabled: bool | None = None
     LogTg: bool = False
 
     @staticmethod
