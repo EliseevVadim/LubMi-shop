@@ -161,7 +161,7 @@ class PostRu(AbstractApiClient):
             #     "with-license": True
             # },
             "delivery-to-door": False,
-            "delivery-with-cod": settings.PREFERENCES.CashOnD6y,
+            "delivery-with-cod": settings.PREFERENCES.CoD(self.key),
             # "dimension": {
             #     "height": 0,
             #     "length": 0,

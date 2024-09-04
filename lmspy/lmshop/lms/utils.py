@@ -14,7 +14,7 @@ def send_message_via_telegram(message: str, markdown=True):
         tg.send(message, markdown)
 
 
-if settings.LOG_TG:
+if settings.PREFERENCES.LogTg:
     @sleep_after(1)
     def log_tg(*args):
         try:
