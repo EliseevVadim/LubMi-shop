@@ -1,6 +1,8 @@
 from pathlib import Path
 from dataclasses import dataclass
 
+from lms.d6y import D6Y
+
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = 'django-insecure-ndk$^6524i$_@bh($4-tudm^iou3i-#t*2tcuf%%85aptweu-p'
@@ -130,6 +132,16 @@ class Preferences:
     CashOnD6y: bool = True
     SetOrderStatusOnPaymentStatusCheck: bool = False
     LogTg: bool = True
+
+    @staticmethod
+    def c_o_d(d6y):
+        match d6y:
+            case D6Y.CD:
+                return True
+            case D6Y.CP:
+                return True
+            case D6Y.PR:
+                return False
 
 
 PREFERENCES = Preferences()
