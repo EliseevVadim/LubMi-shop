@@ -130,17 +130,21 @@ SLEEP_AFTER = 3
 class Preferences:
     D6yRequestSupplementsImmediately: bool = True
     SetOrderStatusOnPaymentStatusCheck: bool = False
-    LogTg: bool = True
+    CODModeEnabled: bool | None = False
+    LogTg: bool = False
 
     @staticmethod
     def CoD(d6y):
-        match d6y:
-            case D6Y.CD:
+        match Preferences.CODModeEnabled, d6y:
+            case None, D6Y.CD:
                 return True
-            case D6Y.CP:
+            case None, D6Y.CP:
                 return True
-            case D6Y.PR:
+            case None, D6Y.PR:
                 return False
+            case value, _:
+                return value
+
 
 
 PREFERENCES = Preferences()
