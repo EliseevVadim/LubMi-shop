@@ -37,7 +37,7 @@ class CdekP(Cdek):
                     cost=float(i.price.amount),
                     amount=i.quantity) for i in r.items.all()])],
             "print": "waybill",
-        } | opt(delivery_recipient_cost=Cdek.money(value=float(r.delivery_cost.amount)) if settings.PREFERENCES.c_o_d(self.key) else None)
+        } | opt(delivery_recipient_cost=Cdek.money(value=float(r.delivery_cost.amount)) if settings.PREFERENCES.CoD(self.key) else None)
 
     @staticmethod
     def validate_destination(arg):

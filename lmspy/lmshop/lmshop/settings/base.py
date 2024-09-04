@@ -129,12 +129,11 @@ SLEEP_AFTER = 3
 @dataclass(frozen=True)
 class Preferences:
     D6yRequestSupplementsImmediately: bool = True
-    CashOnD6y: bool = True
     SetOrderStatusOnPaymentStatusCheck: bool = False
     LogTg: bool = True
 
     @staticmethod
-    def c_o_d(d6y):
+    def CoD(d6y):
         match d6y:
             case D6Y.CD:
                 return True

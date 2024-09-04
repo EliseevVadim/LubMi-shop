@@ -479,7 +479,7 @@ class Service_EstimateSCart_View(APIView):
                 else:
                     for ds in D6Y:
                         d6y_cost, d6y_time, error = ds_factory(ds).delivery_cost(city.code, scart["weight"], price=scart['price'])
-                        result[ds] = {'cost': d6y_cost, 'days': d6y_time, 'cod': settings.PREFERENCES.c_o_d(ds), 'error': error}
+                        result[ds] = {'cost': d6y_cost, 'days': d6y_time, 'cod': settings.PREFERENCES.CoD(ds), 'error': error}
             except (TypeError, KeyError):
                 return Parameter.value_of('message_data_sending_error', 'Произошла ошибка при отправке данных, мы работаем над этим...')
             except ValueError:
