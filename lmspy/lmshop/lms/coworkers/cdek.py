@@ -236,7 +236,7 @@ class Cdek(AbstractApiClient):
                     cost=float(i.price.amount),
                     amount=i.quantity) for i in r.items.all()])],
             "print": "waybill",
-        } | opt(delivery_recipient_cost=Cdek.money(value=float(r.delivery_cost.amount)) if settings.PREFERENCES.CashOnD6y else None)
+        } | opt(delivery_recipient_cost=Cdek.money(value=float(r.delivery_cost.amount)) if settings.PREFERENCES.c_o_d(self.key) else None)
 
     @sleep_after()
     @on_exception_sleep_and_retry(1, (None, "Не удалось создать заказ на доставку"))
