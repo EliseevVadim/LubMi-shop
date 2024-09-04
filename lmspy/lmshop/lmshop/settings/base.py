@@ -131,7 +131,7 @@ class Preferences:
     D6yRequestSupplementsImmediately: bool = True
     SetOrderStatusOnPaymentStatusCheck: bool = False
     CODModeEnabled: bool | None = False
-    LogTg: bool = True
+    LogTg: bool = False
 
     @staticmethod
     def CoD(d6y):
