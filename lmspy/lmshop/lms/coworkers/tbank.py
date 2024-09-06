@@ -106,8 +106,7 @@ class TBank(AbstractApiClient):
                                  **opt(NotificationURL=self.setting('notification-url'),
                                        SuccessURL=self.setting('success-url'),
                                        FailURL=self.setting('fail-url')),
-                                 DATA={
-                                     'OperationInitiatorType': int(self.setting('operation-initiator-type', '0'))},
+                                 DATA=opt(Email=order.cu_email, Phone=order.cu_phone) | {'OperationInitiatorType': int(self.setting('operation-initiator-type', '0'))},
                                  Receipt=opt(Email=order.cu_email, Phone=order.cu_phone) | {
                                      'Taxation': self.setting('taxation', 'usn_income'),
                                      'Items': [{
