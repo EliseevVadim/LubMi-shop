@@ -3,6 +3,7 @@ import httpx
 from httpx import TransportError
 from lms.api.decorators import on_exception_sleep_and_retry, sleep_after
 from lms.coworkers.abstractapiclient import AbstractApiClient
+from lms.coworkers.surcharges import d6y_cost_with_surcharges
 from lms.deco import copy_result
 from lms.models import Coworker, Order, Parameter
 from urllib.parse import quote
@@ -190,6 +191,7 @@ class Cdek(AbstractApiClient):
         return self._post_json("calculator/tarifflist", from_location=from_location, to_location=to_location, packages=packages, **kwargs)
 
     def delivery_cost(self, dst_city_code, weight, **kwargs):
+        price = Decimal(str(kwargs['price']))
         tariff_code = int(self.setting("tariff_code"))
         src_city_code = int(self.setting("location_from_code"))
         try:
@@ -199,7 +201,7 @@ class Cdek(AbstractApiClient):
                 Cdek.location(code=dst_city_code),
                 [Cdek.package(weight=weight)],
                 [])
-            return (Decimal(tariff["delivery_sum"]), tariff["period_min"], None) if "delivery_sum" in tariff and "period_min" in tariff else (None, None, Cdek.extract_error(tariff))
+            return (d6y_cost_with_surcharges(self, Decimal(tariff["delivery_sum"]), price), tariff["period_min"], None) if "delivery_sum" in tariff and "period_min" in tariff else (None, None, Cdek.extract_error(tariff))
         except (KeyError, ValueError, TransportError):
             return None, None, "Не удалось определить параметры доставки"
 
