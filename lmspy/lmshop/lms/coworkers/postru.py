@@ -3,6 +3,7 @@ from httpx import TransportError
 from lms.api.decorators import on_exception_sleep_and_retry, sleep_after, on_exception_returns
 from lms.coworkers.abstractapiclient import AbstractApiClient
 from lms.coworkers.dadata import DaData
+from lms.coworkers.surcharges import d6y_cost_with_surcharges
 from lms.models import City, Order
 from lms.d6y import D6Y
 from lms.utils import log_tg
@@ -72,8 +73,8 @@ class PostRu(AbstractApiClient):
         return tf
 
     def delivery_cost(self, dst_city_code, weight, **kwargs):
-        price = str(kwargs['price'])
-        price = int(round(Decimal(price) * 100))
+        price = Decimal(str(kwargs['price']))
+        price_cents = int(round(price * 100))
         try:
             city = City.objects.get(code=dst_city_code)
         except City.DoesNotExist:
@@ -87,9 +88,10 @@ class PostRu(AbstractApiClient):
                 return None, None, "Доступные отделения не найдены"
         tariff = dict()
         try:
-            tariff = self.tariff(postal_code, price, weight)
+            tariff = self.tariff(postal_code, price_cents, weight)
             delay = tariff["delivery-time"]["min-days"] if "min-days" in tariff["delivery-time"] else tariff["delivery-time"]["max-days"]
-            return Decimal(tariff["total-rate"] + tariff["total-vat"]) / 100, delay, None
+            d6y_cost = Decimal(tariff["total-rate"] + tariff["total-vat"]) / 100
+            return d6y_cost_with_surcharges(self, d6y_cost, price), delay, None
         except (KeyError, ValueError, TransportError):
             return None, None, tariff['desc'] if 'desc' in tariff else "Не удалось определить параметры доставки"
 
