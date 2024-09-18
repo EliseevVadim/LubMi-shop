@@ -17,7 +17,7 @@ class CategoryAdmin(admin.ModelAdmin):
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['title', 'article', 'color', 'weight', 'actual_price', 'old_price', 'published_at', 'created_at', 'updated_at']
     list_filter = ['title', 'published_at', 'color']
-    search_fields = ['published_at', 'article', 'title']
+    search_fields = ['article', 'title']
     ordering = ['title', 'article']
     prepopulated_fields = {'slug': ('article', 'title')}
 
