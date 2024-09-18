@@ -16,7 +16,7 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['title', 'article', 'color', 'weight', 'actual_price', 'old_price', 'published_at', 'created_at', 'updated_at']
-    list_filter = ['title', 'published_at']
+    list_filter = ['title', 'published_at', 'color']
     search_fields = ['published_at', 'article', 'title']
     ordering = ['title', 'article']
     prepopulated_fields = {'slug': ('article', 'title')}
@@ -49,7 +49,7 @@ class ImageAdmin(admin.ModelAdmin):
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['cu_fullname', 'slug', 'status', 'total_price', 'details']
     list_filter = ['status', 'cu_fullname']
-    search_fields = ['cu_fullname']
+    search_fields = ['cu_fullname', 'slug']
     prepopulated_fields = {'slug': ('uuid',)}
 
     @staticmethod
