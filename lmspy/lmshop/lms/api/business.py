@@ -78,6 +78,8 @@ def set_order_paid_by_payment(payment_id, payment):
         message: str = f"""Заказ [{order.uuid}]({link1})
 Статус: `оплачен`
 Заказчик: `{order.cu_fullname}`
+Телефон: `{order.cu_phone if order.cu_phone else 'не указан'}`
+Email: `{order.cu_email if order.cu_email else 'не указана'}`
 Служба доставки: `{order.DeliveryService[order.delivery_service].label}`
 Адрес доставки: `{order.delivery_address}`
 Платеж: `{payment_id}`\n

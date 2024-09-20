@@ -24,6 +24,12 @@
         <tr><td>Закрыт:</td><td>{{order.completed_at}}</td></tr>
         {% endif %}
         <tr><td>Заказчик:</td><td>{{order.cu_fullname}}</td></tr>
+        {% if order.cu_phone %}
+        <tr><td>Телефон:</td><td>{{order.cu_phone}}</td></tr>
+        {% endif %}
+        {% if order.cu_email %}
+        <tr><td>Email:</td><td>{{order.cu_email}}</td></tr>
+        {% endif %}
         <tr><td>Служба доставки:</td><td>{{order.get_delivery_service_display}}</td></tr>
         <tr><td>Адрес доставки:</td><td>{{order.delivery_address}}</td></tr>
         {% if order.delivery_service == "cd" %}
