@@ -589,3 +589,17 @@ class AboutItem(DbItem):
 
     def __str__(self):
         return 'Элемент информации о бренде'
+
+
+class StuffAction(DbItem):
+    title = models.CharField(max_length=64)                                                     # -- название --
+    link = models.URLField(max_length=512, default="")                                          # -- ссылка --
+    description = models.TextField(null=True, blank=True)                                       # -- описание --
+
+    class Meta:
+        ordering = ["title"]
+        verbose_name = "Операция"
+        verbose_name_plural = "Операции"
+
+    def __str__(self):
+        return f'{self.title}'

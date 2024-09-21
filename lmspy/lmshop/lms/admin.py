@@ -104,4 +104,14 @@ class NotificationRequestAdmin(admin.ModelAdmin):
     list_filter = ['ppk']
 
 
+@admin.register(StuffAction)
+class StuffActionAdmin(admin.ModelAdmin):
+    list_display = ['action', 'description']
+
+    @staticmethod
+    def action(action):
+        return format_html('<a href="{}">{}</a>', action.link, action.title)
+
+
+
 admin.site.site_url = settings.SITE_URL
