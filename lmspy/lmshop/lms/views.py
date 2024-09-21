@@ -19,7 +19,7 @@ from .api.business import set_order_completed, ensure_order_delivery_supplements
 from .coworkers.dadata import DaData
 from .coworkers.yookassa import Yookassa
 from .forms import CheckoutForm
-from .models import Parameter, Product, City, AboutItem, Order
+from .models import Parameter, Product, City, AboutItem, Order, NotificationRequest
 from .utils import suffix, clipped_range, deep_unquote, untag
 from .d6y_factory import ds_factory
 from .d6y import D6Y
@@ -544,11 +544,20 @@ class Admin_Customers_View(View):
 @method_decorator(staff_member_required, name="get")
 @method_decorator(staff_member_required, name="post")
 class Admin_SelectNotifications_View(ListView):
+    queryset = NotificationRequest.objects.all().order_by('ppk').values('ppk').distinct()
+    context_object_name = 'articles'
+    template_name = 'admin/actions/select_notifications.html'
+
     def get(self, *args, **kwargs):
         return super().get(*args, **kwargs)  # TODO implement
 
-    def post(self, *args, **kwargs):
-        return super().get(*args, **kwargs)  # TODO implement
+    def post(self, request, *args, **kwargs):
+        print(request.POST.get("h_0", "??"))
+        print(request.POST.get("h_1", "??"))
+        print(request.POST.get("h_2", "??"))
+        print(request.POST.get("h_3", "??"))
+        print(request.POST.get("h_100", "??"))
+        return super().get(request,*args, **kwargs)  # TODO implement
 
 
 @method_decorator(staff_member_required, name="get")
