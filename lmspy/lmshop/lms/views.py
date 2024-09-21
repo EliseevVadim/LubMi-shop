@@ -543,45 +543,35 @@ class Admin_Customers_View(View):
 
 @method_decorator(staff_member_required, name="get")
 @method_decorator(staff_member_required, name="post")
-class Admin_SelectNotifications_View(ListView):
+class Admin_Notifications_View(ListView):
     queryset = NotificationRequest.objects.all().order_by('ppk').values('ppk').distinct()
     context_object_name = 'articles'
-    template_name = 'admin/actions/select_notifications.html'
+    template_name = 'admin/actions/notifications.html'
 
-    def get(self, *args, **kwargs):
-        return super().get(*args, **kwargs)  # TODO implement
-
-    def post(self, request, *args, **kwargs):
-        print(request.POST.get("h_0", "??"))
-        print(request.POST.get("h_1", "??"))
-        print(request.POST.get("h_2", "??"))
-        print(request.POST.get("h_3", "??"))
-        print(request.POST.get("h_100", "??"))
-        return super().get(request,*args, **kwargs)  # TODO implement
-
-
-@method_decorator(staff_member_required, name="get")
-class Admin_DownloadNotifications_View(View):
-    def get(self, request, articles: str):
-        customers = set()
-        for r in Order.objects.all():
-            customers.add((r.cu_fullname, r.cu_phone, r.cu_email))
-        customers = list(customers)
-        customers.sort(key=lambda x: x[0])
+    def post(self, request):
+        ix = 1
+        articles = []
+        while True:
+            match request.POST.get(f'hi_{ix}', ''), request.POST.get(f'ai_{ix}', ''):
+                case '', _:
+                    break
+                case article, 'on':
+                    articles.append(article)
+            ix += 1
         wb = Workbook()
         ws = wb.active
-        ws.title = 'Список клиентов'
-        ws.append(["ФИО", "Телефон", "Почта"])
-        for col, width in {'A': 60, 'B': 20, 'C': 40}.items():
+        ws.title = 'Список запросов на уведомление'
+        ws.append(['Артикул', 'Размер', 'Телефон', 'Почта'])
+        for col, width in {'A': 20, 'B': 10, 'C': 20, 'D': 40}.items():
             ws.column_dimensions[col].width = width
-        for fullname, phone, email in customers:
-            ws.append([fullname, phone or '', email or ''])
+        for nr in NotificationRequest.objects.filter(ppk__in=articles) if articles else NotificationRequest.objects.all():
+            ws.append([nr.ppk, nr.size or '', nr.phone or '', nr.email or ''])
         content = BytesIO()
         wb.save(content)
         content.seek(0)
         response = FileResponse(content)
         response['Content-Type'] = 'application/x-binary'
-        response['Content-Disposition'] = f'attachment; filename="customers.xlsx"'
+        response['Content-Disposition'] = f'attachment; filename="notifications.xlsx"'
         return response
 
 

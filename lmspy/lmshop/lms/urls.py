@@ -16,9 +16,8 @@ urlpatterns = [
     path('admin/order/<slug:slug>/', AdminOrderView.as_view(), name='admin_order_details'),
     path('admin/order/<slug:slug>/complete-order/', AdminCompleteOrderView.as_view(), name='admin_complete_order'),
     path('admin/order/<slug:slug>/delivery-documents/', Admin_DeliveryDocuments_View.as_view(), name='admin_order_delivery_documents'),
-    path('admin/action/customers/', Admin_Customers_View.as_view(), name='admin_customers'),
-    path('admin/action/select_notifications/', Admin_SelectNotifications_View.as_view(), name='admin_select_notifications'),
-    path('admin/action/download_notifications/<articles>/', Admin_DownloadNotifications_View.as_view(), name='admin_download_notifications'),
+    path('admin/action/customers/', Admin_Customers_View.as_view(), name='admin_action_customers'),
+    path('admin/action/notifications/', Admin_Notifications_View.as_view(), name='admin_action_notifications'),
     # -- backstage --
     path('backstage/product/<slug:slug>/', ProductView.as_view(), name='product_details'),
     path('backstage/sz-chart/', SzChartView.as_view(), name='sz_chart'),
