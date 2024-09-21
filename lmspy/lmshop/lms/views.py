@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse, FileResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.decorators import method_decorator
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 from django.views import View
 from django.template.defaultfilters import floatformat
 from httpx import TransportError
@@ -542,28 +542,13 @@ class Admin_Customers_View(View):
 
 
 @method_decorator(staff_member_required, name="get")
-class Admin_SelectNotifications_View(View):
-    def get(self, request):
-        customers = set()
-        for r in Order.objects.all():
-            customers.add((r.cu_fullname, r.cu_phone, r.cu_email))
-        customers = list(customers)
-        customers.sort(key=lambda x: x[0])
-        wb = Workbook()
-        ws = wb.active
-        ws.title = 'Список клиентов'
-        ws.append(["ФИО", "Телефон", "Почта"])
-        for col, width in {'A': 60, 'B': 20, 'C': 40}.items():
-            ws.column_dimensions[col].width = width
-        for fullname, phone, email in customers:
-            ws.append([fullname, phone or '', email or ''])
-        content = BytesIO()
-        wb.save(content)
-        content.seek(0)
-        response = FileResponse(content)
-        response['Content-Type'] = 'application/x-binary'
-        response['Content-Disposition'] = f'attachment; filename="customers.xlsx"'
-        return response
+@method_decorator(staff_member_required, name="post")
+class Admin_SelectNotifications_View(ListView):
+    def get(self, *args, **kwargs):
+        return super().get(*args, **kwargs)  # TODO implement
+
+    def post(self, *args, **kwargs):
+        return super().get(*args, **kwargs)  # TODO implement
 
 
 @method_decorator(staff_member_required, name="get")
