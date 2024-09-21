@@ -1,7 +1,6 @@
 import re
 from decimal import Decimal
 from io import BytesIO
-
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.exceptions import ValidationError
@@ -14,6 +13,7 @@ from django.views.generic import DetailView
 from django.views import View
 from django.template.defaultfilters import floatformat
 from httpx import TransportError
+from openpyxl.workbook import Workbook
 from customerinfo.customerinfo import CustomerInfo, with_actual_scart_records_and_price
 from .api.business import set_order_completed, ensure_order_delivery_supplements_exist
 from .coworkers.dadata import DaData
@@ -513,6 +513,31 @@ class Admin_DeliveryDocuments_View(View):
         response = FileResponse(BytesIO(order.delivery_supplements_file))
         response['Content-Type'] = 'application/x-binary'
         response['Content-Disposition'] = f'attachment; filename="{slug}.pdf"'
+        return response
+
+
+@method_decorator(staff_member_required, name="get")
+class Admin_Customers_View(View):
+    def get(self, request):
+        customers = set()
+        for r in Order.objects.all():
+            customers.add((r.cu_fullname, r.cu_phone, r.cu_email))
+        customers = list(customers)
+        customers.sort(key=lambda x: x[0])
+        wb = Workbook()
+        ws = wb.active
+        ws.title = 'Список клиентов'
+        ws.append(["ФИО", "Телефон", "Почта"])
+        for col, width in {'A': 60, 'B': 20, 'C': 40}.items():
+            ws.column_dimensions[col].width = width
+        for fullname, phone, email in customers:
+            ws.append([fullname, phone or '', email or ''])
+        content = BytesIO()
+        wb.save(content)
+        content.seek(0)
+        response = FileResponse(content)
+        response['Content-Type'] = 'application/x-binary'
+        response['Content-Disposition'] = f'attachment; filename="customers.xlsx"'
         return response
 
 
