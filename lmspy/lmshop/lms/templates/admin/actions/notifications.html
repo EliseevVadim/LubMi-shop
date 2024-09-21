@@ -1,0 +1,36 @@
+{% extends "admin/base_site.html" %}
+{% load custom_tags %}
+{% block title %}Скачать список запросов на уведомление{{ block.super }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url "admin:index" %}">Начало</a> &rsaquo; Скачать список запросов на уведомление
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="module">
+    {% if articles %}
+    {{"# Артикулы" | markdown}}
+    {{"Выберите **артикулы**, запросы на уведомление о которых хотите скачать.<br>Если не выбран **ни один артикул**, будут скачаны **все запросы**." | markdown}}
+    <form method="post" style="display:flex;flex-flow:column;">
+        {%csrf_token%}
+        <hr>
+        {% for a in articles %}
+        <div class="form-row">
+            <input id="hi_{{forloop.counter}}" name="hi_{{forloop.counter}}" type="hidden" value="{{a.ppk}}">
+            <input id="ai_{{forloop.counter}}" name="ai_{{forloop.counter}}" type="checkbox">
+            <label for="ai_{{forloop.counter}}" style="color:darkslategray;">{{a.ppk}}</label>
+        </div>
+        {% endfor %}
+        <hr>
+        <div class="sumbit-row" style="margin-top:1rem;">
+            <input type="submit" value="Скачать список запросов" style="margin:0;background:green;" />
+        </div>
+    </form>
+    {% else %}
+    <h1>Список артикулов в запросах на уведомление пуст</h1>
+    <a href="{% url "admin:index" %}" class="button cancel-link" style="display:inline-flex;place-items:center;margin:0;" >Назад</a>
+    {% endif %}
+</div>
+{% endblock %}

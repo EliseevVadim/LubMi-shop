@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse, FileResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.decorators import method_decorator
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 from django.views import View
 from django.template.defaultfilters import floatformat
 from httpx import TransportError
@@ -19,7 +19,7 @@ from .api.business import set_order_completed, ensure_order_delivery_supplements
 from .coworkers.dadata import DaData
 from .coworkers.yookassa import Yookassa
 from .forms import CheckoutForm
-from .models import Parameter, Product, City, AboutItem, Order
+from .models import Parameter, Product, City, AboutItem, Order, NotificationRequest
 from .utils import suffix, clipped_range, deep_unquote, untag
 from .d6y_factory import ds_factory
 from .d6y import D6Y
@@ -538,6 +538,40 @@ class Admin_Customers_View(View):
         response = FileResponse(content)
         response['Content-Type'] = 'application/x-binary'
         response['Content-Disposition'] = f'attachment; filename="customers.xlsx"'
+        return response
+
+
+@method_decorator(staff_member_required, name="get")
+@method_decorator(staff_member_required, name="post")
+class Admin_Notifications_View(ListView):
+    queryset = NotificationRequest.objects.all().order_by('ppk').values('ppk').distinct()
+    context_object_name = 'articles'
+    template_name = 'admin/actions/notifications.html'
+
+    def post(self, request):
+        ix = 1
+        articles = []
+        while True:
+            match request.POST.get(f'hi_{ix}', ''), request.POST.get(f'ai_{ix}', ''):
+                case '', _:
+                    break
+                case article, 'on':
+                    articles.append(article)
+            ix += 1
+        wb = Workbook()
+        ws = wb.active
+        ws.title = 'Список запросов на уведомление'
+        ws.append(['Артикул', 'Размер', 'Телефон', 'Почта'])
+        for col, width in {'A': 20, 'B': 10, 'C': 20, 'D': 40}.items():
+            ws.column_dimensions[col].width = width
+        for nr in NotificationRequest.objects.filter(ppk__in=articles) if articles else NotificationRequest.objects.all():
+            ws.append([nr.ppk, nr.size or '', nr.phone or '', nr.email or ''])
+        content = BytesIO()
+        wb.save(content)
+        content.seek(0)
+        response = FileResponse(content)
+        response['Content-Type'] = 'application/x-binary'
+        response['Content-Disposition'] = f'attachment; filename="notifications.xlsx"'
         return response
 
 
