@@ -541,6 +541,56 @@ class Admin_Customers_View(View):
         return response
 
 
+@method_decorator(staff_member_required, name="get")
+class Admin_SelectNotifications_View(View):
+    def get(self, request):
+        customers = set()
+        for r in Order.objects.all():
+            customers.add((r.cu_fullname, r.cu_phone, r.cu_email))
+        customers = list(customers)
+        customers.sort(key=lambda x: x[0])
+        wb = Workbook()
+        ws = wb.active
+        ws.title = 'Список клиентов'
+        ws.append(["ФИО", "Телефон", "Почта"])
+        for col, width in {'A': 60, 'B': 20, 'C': 40}.items():
+            ws.column_dimensions[col].width = width
+        for fullname, phone, email in customers:
+            ws.append([fullname, phone or '', email or ''])
+        content = BytesIO()
+        wb.save(content)
+        content.seek(0)
+        response = FileResponse(content)
+        response['Content-Type'] = 'application/x-binary'
+        response['Content-Disposition'] = f'attachment; filename="customers.xlsx"'
+        return response
+
+
+@method_decorator(staff_member_required, name="get")
+class Admin_DownloadNotifications_View(View):
+    def get(self, request, articles: str):
+        customers = set()
+        for r in Order.objects.all():
+            customers.add((r.cu_fullname, r.cu_phone, r.cu_email))
+        customers = list(customers)
+        customers.sort(key=lambda x: x[0])
+        wb = Workbook()
+        ws = wb.active
+        ws.title = 'Список клиентов'
+        ws.append(["ФИО", "Телефон", "Почта"])
+        for col, width in {'A': 60, 'B': 20, 'C': 40}.items():
+            ws.column_dimensions[col].width = width
+        for fullname, phone, email in customers:
+            ws.append([fullname, phone or '', email or ''])
+        content = BytesIO()
+        wb.save(content)
+        content.seek(0)
+        response = FileResponse(content)
+        response['Content-Type'] = 'application/x-binary'
+        response['Content-Disposition'] = f'attachment; filename="customers.xlsx"'
+        return response
+
+
 class ProductView(DetailView):
     model = Product
     template_name = 'lms/pcard.html'
