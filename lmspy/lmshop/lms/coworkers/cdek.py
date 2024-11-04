@@ -71,6 +71,10 @@ class Cdek(AbstractApiClient):
     def jti(self):
         return self.auth["jti"]
 
+    @property
+    def stickers_type(self):
+        return self.setting("stickers_type", "orders")
+
     @staticmethod
     def extract_error(response):
         errs = (er["message"] for er in response["errors"]) if "errors" in response else None
@@ -259,7 +263,7 @@ class Cdek(AbstractApiClient):
     @on_exception_sleep_and_retry(1, (None, "Не удалось создать документы к заказу на доставку"))
     def create_delivery_supplements(self, r):
         log_tg("Запрос на создание транспортных документов для:", r['entity']['uuid'])
-        result = self._post_json("print/orders", orders=[Cdek.order(order_uuid=r['entity']['uuid'])], copy_count=2)
+        result = self._post_json(f'print/{self.stickers_type}', orders=[Cdek.order(order_uuid=r['entity']['uuid'])], copy_count=2)
         log_tg("Результат:", result)
         if 'entity' not in result or 'uuid' not in result['entity']:
             log_tg("Запрос провален")
@@ -273,8 +277,8 @@ class Cdek(AbstractApiClient):
         @sleep_after()
         def wait():
             return None
-        log_tg("Запрос на URL транспортных документов:", f"""print/orders/{r['entity']['uuid']}""")
-        result = self._get(f"""print/orders/{r['entity']['uuid']}""")
+        log_tg("Запрос на URL транспортных документов:", f"""print/{self.stickers_type}/{r['entity']['uuid']}""")
+        result = self._get(f"""print/{self.stickers_type}/{r['entity']['uuid']}""")
         log_tg("Результат:", result)
         if 'entity' not in result or 'url' not in result['entity']:
             log_tg("Запрос провален")
