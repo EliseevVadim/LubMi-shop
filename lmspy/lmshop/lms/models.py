@@ -1,5 +1,4 @@
 import uuid
-
 from django.db import models
 from django.db.models import QuerySet, F, Sum
 from django.utils import timezone, text
@@ -59,7 +58,7 @@ class Tunable:
         Tunable._regex_validator(
             "regex_cloth_size",
             "message_invalid_cloth_size",
-            """^(\d*(?:M|X{0,2}[SL]))(?:$|\s+.*$)""",
+            """^(\\d*(?:M|X{0,2}[SL]))(?:$|\\s+.*$)""",
             "Размер не соответствует образцу")(value)
 
     @staticmethod
@@ -67,7 +66,7 @@ class Tunable:
         Tunable._regex_validator(
             "regex_article",
             "message_invalid_article",
-            """[А-Яа-яЁё\w\d\-]+""",
+            """[А-Яа-яЁё\\w\\d\\-]+""",
             "Артикул не соответствует образцу")(value)
 
     @staticmethod
@@ -75,7 +74,7 @@ class Tunable:
         Tunable._regex_validator(
             "regex_phone_number",
             "message_invalid_phone_number",
-            """^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$""",
+            """^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$""",
             "Номер телефона не соответствует образцу")(value)
 
 
@@ -105,6 +104,9 @@ class Product(DbItem):
     description = models.TextField(null=True, blank=True)                                                   # описание
     color = models.CharField(max_length=50, null=True, blank=True)                                          # цвет
     weight = models.BigIntegerField(validators=[MinValueValidator(0)])                                      # вес, в граммах
+    pack_length = models.IntegerField(verbose_name='Длина упаковки, см', default=0, validators=[MinValueValidator(0)])
+    pack_width = models.IntegerField(verbose_name='Ширина упаковки, см', default=0, validators=[MinValueValidator(0)])
+    pack_height = models.IntegerField(verbose_name='Высота упаковки, см', default=0, validators=[MinValueValidator(0)])
     actual_price = MoneyField(
         max_digits=14,
         decimal_places=2,
@@ -177,7 +179,7 @@ class Product(DbItem):
 
 
 class AvailableSize(DbItem):
-    size = models.CharField(max_length=30, validators=[Tunable.validate_size])                  # размер
+    size = models.CharField(max_length=30, validators=[Tunable.validate_size] if settings.PREFERENCES.ValidateSize else [])                  # размер
     order_value = models.IntegerField(default=0)                                                # поле для сортировки
     quantity = models.BigIntegerField(validators=[MinValueValidator(0)])                        # количество в наличии
     product = models.ForeignKey(Product, related_name="sizes", on_delete=models.CASCADE)        # товар
@@ -406,7 +408,7 @@ class Order(DbItem):
         return ", ".join(items)
 
     @property
-    def delivery_address_short(self):
+    def delivery_address_for_posru(self):
         def o(prefix, value):
             nonlocal items
             items += [f'{prefix}. {value}'] if value and value != str(None) else []
@@ -416,11 +418,11 @@ class Order(DbItem):
         return ", ".join(items)
 
     @property
-    def delivery_address_in_city(self):
+    def delivery_address_for_cdek(self):
         def o(prefix, value):
             nonlocal items
             items += [f'{prefix}. {value}'] if value and value != str(None) else []
-        items = [f'{self.cu_street}']
+        items = [f'{self.cu_street or ''}']
         o('д', self.cu_building)
         o('кв', self.cu_apartment)
         return ", ".join(items)
@@ -454,6 +456,9 @@ class OrderItem(DbItem):
     quantity = models.BigIntegerField(validators=[MinValueValidator(1)])                                    # -- количество --
     price = MoneyField(max_digits=14, decimal_places=2, default_currency='RUR')                             # -- цена на момент заказа --
     weight = models.BigIntegerField(validators=[MinValueValidator(0)])                                      # -- вес, в граммах --
+    pack_length = models.IntegerField(verbose_name='Длина упаковки, см', default=0, validators=[MinValueValidator(0)])
+    pack_width = models.IntegerField(verbose_name='Ширина упаковки, см', default=0, validators=[MinValueValidator(0)])
+    pack_height = models.IntegerField(verbose_name='Высота упаковки, см', default=0, validators=[MinValueValidator(0)])
 
     class Meta:
         constraints = [models.CheckConstraint(check=models.Q(quantity__gt=0), name="quantity_positive")]

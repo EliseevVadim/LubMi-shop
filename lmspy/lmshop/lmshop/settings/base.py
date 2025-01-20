@@ -132,6 +132,8 @@ class Preferences:
     SetOrderStatusOnPaymentStatusCheck: bool = False
     CODModeEnabled: bool | None = False
     LogTg: bool = False
+    ValidateSize: bool = False
+    StreetCanBeMissed: bool = True
 
     @staticmethod
     def CoD(d6y):
@@ -144,7 +146,6 @@ class Preferences:
                 return False
             case value, _:
                 return value
-
 
 
 PREFERENCES = Preferences()

@@ -600,7 +600,11 @@ class Service_Checkout_View(APIView):
                                          size=size.size,
                                          quantity=quantity,
                                          price=product.actual_price,
-                                         weight=product.weight)
+                                         weight=product.weight,
+                                         pack_length=product.pack_length,
+                                         pack_width=product.pack_width,
+                                         pack_height=product.pack_height)
+
                         item.save()
                         product.sales_quantity += quantity
                         product.save()
