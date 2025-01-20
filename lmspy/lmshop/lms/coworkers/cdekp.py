@@ -16,10 +16,7 @@ class CdekP(Cdek):
             "number": str(r.uuid),
             "tariff_code": int(self.setting("tariff_code")),
             "comment": str(r.uuid),
-            "recipient": Cdek.recipient(
-                name=r.cu_fullname,
-                phones=[Cdek.phone(number=r.cu_phone)],
-                **opt(email=r.cu_email)),
+            "recipient": Cdek.recipient(name=r.cu_fullname, phones=[Cdek.phone(number=r.cu_phone)], **opt(email=r.cu_email)),
             "shipment_point": self.setting("shipment_point"),
             "delivery_point": r.delivery_point,
             "packages": self._create_packages_by_order(r),
@@ -29,7 +26,5 @@ class CdekP(Cdek):
     @staticmethod
     def validate_destination(arg):
         match arg:
-            case {"delivery_point": d6y_point, **wtf} if d6y_point is not None and set(wtf.values()) == {None}:
-                return True
-            case _:
-                return False
+            case {"delivery_point": d6y_point, **wtf} if d6y_point is not None and set(wtf.values()) == {None}: return True
+            case _: return False

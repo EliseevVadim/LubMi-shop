@@ -222,13 +222,7 @@ class Cdek(AbstractApiClient):
             width=i.pack_width,
             height=i.pack_height,
             comment=f"Заказ {r.uuid}, пакет {n}",
-            items=[Cdek.item(
-                name=i.product.title,
-                ware_key=i.ppk[:50],
-                payment=Cdek.money(value=0.0),
-                weight=i.weight,
-                cost=float(i.price.amount),
-                amount=1)]) for i in items]
+            items=[Cdek.item(name=i.product.title, ware_key=i.ppk[:50], payment=Cdek.money(value=0.0), weight=i.weight, cost=float(i.price.amount), amount=1)]) for i in items]
 
     def _order_as_json(self, r: Order):
         opt = lambda **kwargs: {k: v for k, v in kwargs.items() if v is not None}
@@ -237,17 +231,9 @@ class Cdek(AbstractApiClient):
             "number": str(r.uuid),
             "tariff_code": int(self.setting("tariff_code")),
             "comment": str(r.uuid),
-            "recipient": Cdek.recipient(
-                name=r.cu_fullname,
-                phones=[Cdek.phone(number=r.cu_phone)],
-                **opt(email=r.cu_email)),
-            "from_location": Cdek.location(
-                code=int(self.setting("location_from_code")),
-                address=Parameter.value_of("value_return_address_cd")),
-            "to_location": Cdek.location(
-                country_code="RU",
-                code=r.city.code,
-                address=r.delivery_address_for_cdek),
+            "recipient": Cdek.recipient(name=r.cu_fullname, phones=[Cdek.phone(number=r.cu_phone)], **opt(email=r.cu_email)),
+            "from_location": Cdek.location(code=int(self.setting("location_from_code")), address=Parameter.value_of("value_return_address_cd")),
+            "to_location": Cdek.location(country_code="RU", code=r.city.code, address=r.delivery_address_for_cdek),
             "packages": self._create_packages_by_order(r),
             "print": "waybill",
         } | opt(delivery_recipient_cost=Cdek.money(value=float(r.delivery_cost.amount)) if settings.PREFERENCES.CoD(self.key) else None)
@@ -305,8 +291,10 @@ class Cdek(AbstractApiClient):
     @staticmethod
     def validate_destination(arg):
         match arg:
-            case {"street": street, "building": building, "delivery_point": d6y_point} if (street is not None or settings.PREFERENCES.StreetCanBeMissed) and building is not None and d6y_point is None:
-                return True
-            case _:
-                return False
+            case {
+                "street": street,
+                "building": building,
+                "delivery_point": d6y_point
+            } if (street is not None or settings.PREFERENCES.StreetCanBeMissed) and building is not None and d6y_point is None: return True
+            case _: return False
 
