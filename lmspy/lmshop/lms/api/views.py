@@ -4,7 +4,6 @@ from django.core.exceptions import ValidationError
 from django.utils.html import escape
 from django.shortcuts import get_object_or_404, Http404
 from django.db import transaction, IntegrityError
-from decimal import Decimal
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework import generics
