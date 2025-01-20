@@ -787,7 +787,7 @@ class TBank_PaymentsWebHook_View(APIView):
 
     @staticmethod
     @on_exception_returns(TBank.notification_response_bad)
-    def post(request, _=None):  # Проверялось только локально!
+    def post(request, _=None):
         data = request.data
         logging.info(f'Получено уведомление: {data}')
         TBank().check_signature(data)
