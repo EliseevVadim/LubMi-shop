@@ -4,7 +4,6 @@ from django.core.exceptions import ValidationError
 from django.utils.html import escape
 from django.shortcuts import get_object_or_404, Http404
 from django.db import transaction, IntegrityError
-from decimal import Decimal
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework import generics
@@ -600,7 +599,11 @@ class Service_Checkout_View(APIView):
                                          size=size.size,
                                          quantity=quantity,
                                          price=product.actual_price,
-                                         weight=product.weight)
+                                         weight=product.weight,
+                                         pack_length=product.pack_length,
+                                         pack_width=product.pack_width,
+                                         pack_height=product.pack_height)
+
                         item.save()
                         product.sales_quantity += quantity
                         product.save()
@@ -783,7 +786,7 @@ class TBank_PaymentsWebHook_View(APIView):
 
     @staticmethod
     @on_exception_returns(TBank.notification_response_bad)
-    def post(request, _=None):  # Проверялось только локально!
+    def post(request, _=None):
         data = request.data
         logging.info(f'Получено уведомление: {data}')
         TBank().check_signature(data)

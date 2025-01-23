@@ -117,12 +117,6 @@ CUSTOMER_INFO_SESSION_ID = 'customer-info-session-v1'
 
 SEARCH_INPUT_RGX = '^[А-Яа-яЁё0-9 -]+$'
 
-PACKAGE_WIDTH_CM = 30
-
-PACKAGE_LENGTH_CM = 40
-
-PACKAGE_UNIT_HEIGHT_CM = 5
-
 SLEEP_AFTER = 3
 
 
@@ -132,6 +126,8 @@ class Preferences:
     SetOrderStatusOnPaymentStatusCheck: bool = False
     CODModeEnabled: bool | None = None
     LogTg: bool = False
+    ValidateSize: bool = False
+    StreetCanBeMissed: bool = True
 
     @staticmethod
     def CoD(d6y):
@@ -144,7 +140,6 @@ class Preferences:
                 return False
             case value, _:
                 return value
-
 
 
 PREFERENCES = Preferences()
