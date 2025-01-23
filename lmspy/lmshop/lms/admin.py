@@ -19,6 +19,7 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ['article', 'title']
     ordering = ['title', 'article']
     prepopulated_fields = {'slug': ('article', 'title')}
+    readonly_fields = ['sales_quantity']
 
 
 @admin.register(AvailableSize)
