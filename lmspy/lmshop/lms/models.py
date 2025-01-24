@@ -431,6 +431,18 @@ class Order(DbItem):
     def delivery_cost_cents(self):
         return int(self.delivery_cost.amount * 100)
 
+    @property
+    def width(self):
+        return Parameter.construct_from_value_of("value_package_width", int, settings.PACKAGE_WIDTH_CM)
+
+    @property
+    def length(self):
+        return Parameter.construct_from_value_of("value_package_length", int, settings.PACKAGE_LENGTH_CM)
+
+    @property
+    def height(self):
+        return Parameter.construct_from_value_of("value_package_unit_height", int, settings.PACKAGE_UNIT_HEIGHT_CM) * self.total_units
+
     def __str__(self):
         return f'заказ #{self.slug} от {self.cu_first_name}'
 
