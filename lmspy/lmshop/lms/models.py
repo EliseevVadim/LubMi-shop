@@ -422,7 +422,7 @@ class Order(DbItem):
         def o(prefix, value):
             nonlocal items
             items += [f'{prefix}. {value}'] if value and value != str(None) else []
-        items = [f'{self.cu_street or ''}']
+        items = [f'{self.cu_street or ""}']
         o('д', self.cu_building)
         o('кв', self.cu_apartment)
         return ", ".join(items)
