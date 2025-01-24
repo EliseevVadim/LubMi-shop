@@ -211,18 +211,20 @@ class Cdek(AbstractApiClient):
 
     @staticmethod
     def _create_packages_by_order(r: Order):
-        items = []
-        for i in r.items.all():
-            items += [i] * int(i.quantity)
-        n = 0
         return [Cdek.package(
-            number=f'{r.uuid}/{(n := n+1)}'[:30],
-            weight=i.weight,
-            length=i.pack_length,
-            width=i.pack_width,
-            height=i.pack_height,
-            comment=f"Заказ {r.uuid}, пакет {n}",
-            items=[Cdek.item(name=i.product.title, ware_key=i.ppk[:50], payment=Cdek.money(value=0.0), weight=i.weight, cost=float(i.price.amount), amount=1)]) for i in items]
+                number=str(r.uuid)[:23],
+                weight=r.total_weight,
+                length=r.length,
+                width=r.width,
+                height=r.height,
+                comment=f"Заказ {r.uuid}",
+                items=[Cdek.item(
+                    name=i.product.title,
+                    ware_key=i.ppk[:50],
+                    payment=Cdek.money(value=0.0),
+                    weight=i.weight,
+                    cost=float(i.price.amount),
+                    amount=i.quantity) for i in r.items.all()])]
 
     def _order_as_json(self, r: Order):
         opt = lambda **kwargs: {k: v for k, v in kwargs.items() if v is not None}
